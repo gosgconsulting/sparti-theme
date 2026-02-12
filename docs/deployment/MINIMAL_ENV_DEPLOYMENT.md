@@ -37,7 +37,7 @@ When `DEPLOY_THEME_SLUG` is set, the theme build script runs instead of the full
 ## Deployment (Vercel)
 
 1. Set environment variables in the Vercel project dashboard.
-2. Deploy; Vercel runs `npm run build && npm run build:api` and serves `dist/` + serverless API.
+2. Deploy; Vercel runs `npm install` then `npm run build && npm run build:api` and serves `dist/` + serverless API.
 3. For per-tenant storage, set `STORAGE_{TENANT_ID}` (e.g. `STORAGE_TENANT_ACATR=storage-name`).
 
 ## Troubleshooting
@@ -45,4 +45,14 @@ When `DEPLOY_THEME_SLUG` is set, the theme build script runs instead of the full
 - **Database**: Ensure `DATABASE_URL` is set and the database is reachable (e.g. connection pooling for serverless).
 - **API base URL**: On Vercel, `VERCEL_URL` is used when `VITE_API_BASE_URL` is not set.
 - **Uploads**: On Vercel, set `BLOB_READ_WRITE_TOKEN` for file uploads. Never commit this token; use only in Vercel env or .env.
-- **Theme assets on Vercel**: Theme dirs are not bundled into the serverless function (to stay under size limits). To serve theme images and assets, run `npm run upload:theme-assets` (requires `BLOB_READ_WRITE_TOKEN`), then set the printed URL as `BLOB_THEME_MANIFEST_URL` in Vercel and optionally in .env.
+- **Theme assets on Vercel**: Theme dirs are not bundled into the serverless function (to stay under size limits). To serve theme images and assets, run the included theme asset uploader and configure `BLOB_THEME_MANIFEST_URL` in Vercel.
+
+## Vercel note: /theme/* rendering
+
+- `/theme/landingpage` (and other `/theme/*` routes) are handled by the SPA (React Router). `vercel.json` rewrites `/theme/*` to `/index.html`.
+- If you see **"Theme not loaded. Serve theme from Blob or include theme in deployment."** on Vercel, it means the build used **theme stubs**.
+
+To enable real themes on Vercel:
+- Do **not** set `VITE_SKIP_THEMES=1` (or `VERCEL_CMS_ONLY=1`) in Vercel env
+
+Only set those flags if you intentionally want a CMS-only deployment where themes are loaded from elsewhere.

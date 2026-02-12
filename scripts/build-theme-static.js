@@ -100,7 +100,7 @@ if (!fs.existsSync(themePath)) {
 const standaloneEntryPath = path.join(__dirname, '..', 'src', 'theme-standalone.tsx');
 const standaloneEntryContent = `import React, { lazy, Suspense } from 'react';
 import { createRoot } from 'react-dom/client';
-import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import { Toaster } from "@/components/ui/toaster";
 import { Toaster as Sonner } from "@/components/ui/sonner";
 import { TooltipProvider } from "@/components/ui/tooltip";
@@ -122,6 +122,23 @@ const themeNames: Record<string, string> = {
 
 const queryClient = new QueryClient();
 
+// Wrapper that passes pageSlug from current path so index (/) = theme home (same as /theme/${themeSlug})
+const ThemeWithPageSlug = ({ themeName }) => {
+  const location = useLocation();
+  const pathname = location.pathname || '/';
+  const pageSlug = pathname === '/' || pathname === '' ? '' : pathname.replace(/^\\//, '');
+  return (
+    <Suspense fallback={null}>
+      <ThemeComponent 
+        tenantName={themeName} 
+        tenantSlug="${themeSlug}"
+        tenantId={typeof window !== 'undefined' ? window.__CMS_TENANT__ : null}
+        pageSlug={pageSlug}
+      />
+    </Suspense>
+  );
+};
+
 const App = () => {
   const themeName = themeNames['${themeSlug}'] || '${themeSlug}';
   
@@ -132,16 +149,9 @@ const App = () => {
         <Sonner />
         <BrowserRouter>
           <Routes>
-            {/* All routes handled by theme component (theme handles internal routing) */}
             <Route path="*" element={
               <ErrorBoundary>
-                <Suspense fallback={null}>
-                  <ThemeComponent 
-                    tenantName={themeName} 
-                    tenantSlug="${themeSlug}"
-                    tenantId={typeof window !== 'undefined' ? window.__CMS_TENANT__ : null}
-                  />
-                </Suspense>
+                <ThemeWithPageSlug themeName={themeName} />
               </ErrorBoundary>
             } />
           </Routes>

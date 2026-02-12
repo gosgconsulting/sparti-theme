@@ -69,13 +69,13 @@ export default defineConfig(({ mode }) => {
     // IMPORTANT: Vite can sometimes attempt to load an aliased directory as a file.
     // Map top-level theme entry imports to the actual stub index file explicitly.
     resolveAlias.push({
-      find: /sparti-cms\\/theme\\/([^/]+)$/,
+      find: /sparti-cms\/theme\/([^/]+)$/,
       replacement: themeStubsPath + '/$1/index.tsx',
     });
 
     // Map deep imports (e.g. sparti-cms/theme/gosgconsulting/services/wordpressApi)
     // directly into the stubs folder.
-    resolveAlias.push({ find: /sparti-cms\\/theme(.*)/, replacement: themeStubsPath + '$1' });
+    resolveAlias.push({ find: /sparti-cms\/theme(.*)/, replacement: themeStubsPath + '$1' });
   }
 
   return {

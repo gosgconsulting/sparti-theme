@@ -37,7 +37,12 @@ interface Tenant {
   theme_id?: string | null;
 }
 
-const TenantsManager: React.FC = () => {
+interface TenantsManagerProps {
+  /** When true, only list tenants (no create, edit, delete, sync). */
+  viewOnly?: boolean;
+}
+
+const TenantsManager: React.FC<TenantsManagerProps> = ({ viewOnly = true }) => {
   const { currentTenantId, user } = useAuth();
   const [tenants, setTenants] = useState<Tenant[]>([]);
   const [showAddTenantModal, setShowAddTenantModal] = useState(false);
@@ -108,6 +113,10 @@ const TenantsManager: React.FC = () => {
 
   // Fetch tenants on component mount
   useEffect(() => {
+    if (viewOnly) {
+      fetchTenants();
+      return;
+    }
     if (!user?.is_super_admin) {
       if (currentTenantId) {
         // Fetch the single forced tenant
@@ -137,11 +146,11 @@ const TenantsManager: React.FC = () => {
     } else {
       fetchTenants();
     }
-  }, [currentTenantId]);
+  }, [currentTenantId, viewOnly]);
 
-  // Fetch all tenants from the API
+  // Fetch all tenants from the API (allowed when viewOnly or super admin)
   const fetchTenants = async () => {
-    if (!user?.is_super_admin) return;
+    if (!viewOnly && !user?.is_super_admin) return;
     try {
       setIsLoading(true);
       setFetchError(null);
@@ -167,20 +176,22 @@ const TenantsManager: React.FC = () => {
       }
       
       const data = await response.json();
+      const list = Array.isArray(data) ? data : (data?.data ?? []);
       
-      if (!Array.isArray(data)) {
+      if (!Array.isArray(list)) {
         console.error('Expected array of tenants but got:', data);
         setFetchError('Invalid response format. Expected array of tenants.');
         setTenants([]);
         return;
       }
       
-      console.log('[testing] Fetched tenants:', data);
+      console.log('[testing] Fetched tenants:', list);
       
-      // Ensure theme_id is included for all tenants
-      const tenantsWithTheme = data.map((tenant: Tenant) => ({
+      // Ensure theme_id and createdAt are included for all tenants (API uses created_at)
+      const tenantsWithTheme = list.map((tenant: Tenant & { created_at?: string }) => ({
         ...tenant,
-        theme_id: tenant.theme_id || null
+        theme_id: tenant.theme_id || null,
+        createdAt: tenant.createdAt ?? tenant.created_at ?? ''
       }));
       
       setTenants(tenantsWithTheme);
@@ -492,20 +503,22 @@ const TenantsManager: React.FC = () => {
     <div className="space-y-6">
       <div className="flex justify-between items-center">
         <div>
-          <h2 className="text-2xl font-bold text-foreground">Tenant Management</h2>
+          <h2 className="text-2xl font-bold text-foreground">Tenants</h2>
           <p className="text-sm text-muted-foreground mt-1">
-            Manage your tenants, databases, and API keys
+            {viewOnly ? 'View tenants and their themes' : 'Manage your tenants, databases, and API keys'}
           </p>
         </div>
-        <div className="flex gap-2">
-          <Button onClick={() => fetchTenants()} variant="outline" size="icon" title="Refresh" disabled={!user?.is_super_admin}>
-            <RefreshCw className="h-4 w-4" />
-          </Button>
-          <Button onClick={() => setShowAddTenantModal(true)} disabled={!user?.is_super_admin}>
-            <Plus className="h-4 w-4 mr-2" />
-            Add New Tenant
-          </Button>
-        </div>
+        {!viewOnly && (
+          <div className="flex gap-2">
+            <Button onClick={() => fetchTenants()} variant="outline" size="icon" title="Refresh" disabled={!user?.is_super_admin}>
+              <RefreshCw className="h-4 w-4" />
+            </Button>
+            <Button onClick={() => setShowAddTenantModal(true)} disabled={!user?.is_super_admin}>
+              <Plus className="h-4 w-4 mr-2" />
+              Add New Tenant
+            </Button>
+          </div>
+        )}
       </div>
 
       {/* Error Alert */}
@@ -526,16 +539,20 @@ const TenantsManager: React.FC = () => {
         <div className="text-center py-12 border rounded-lg bg-muted/20">
           <Building2 className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
           <h3 className="text-xl font-medium mb-2">No tenants found</h3>
-          <p className="text-muted-foreground mb-6">Create your first tenant to get started</p>
-          <div className="flex flex-col gap-2 items-center">
-            <Button onClick={() => setShowAddTenantModal(true)}>
-              <Plus className="h-4 w-4 mr-2" />
-              Add New Tenant
-            </Button>
-            <Button onClick={createDefaultTenant} variant="outline">
-              Create Default Tenant (GO SG CONSULTING)
-            </Button>
-          </div>
+          <p className="text-muted-foreground mb-6">
+            {viewOnly ? 'No tenants in the database.' : 'Create your first tenant to get started'}
+          </p>
+          {!viewOnly && (
+            <div className="flex flex-col gap-2 items-center">
+              <Button onClick={() => setShowAddTenantModal(true)}>
+                <Plus className="h-4 w-4 mr-2" />
+                Add New Tenant
+              </Button>
+              <Button onClick={createDefaultTenant} variant="outline">
+                Create Default Tenant (GO SG CONSULTING)
+              </Button>
+            </div>
+          )}
         </div>
       ) : (
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -552,7 +569,7 @@ const TenantsManager: React.FC = () => {
               <CardContent>
                 <div className="text-xs text-muted-foreground mb-4">
                   <div>
-                    <span className="font-medium">Created:</span> {tenant.createdAt}
+                    <span className="font-medium">Created:</span> {tenant.createdAt || '—'}
                   </div>
                   <div>
                     <span className="font-medium">ID:</span> {tenant.id}
@@ -562,57 +579,59 @@ const TenantsManager: React.FC = () => {
                   </div>
                 </div>
                 
-                <div className="flex flex-col gap-2">
-                  <div className="flex gap-2 mt-2">
+                {!viewOnly && (
+                  <div className="flex flex-col gap-2">
+                    <div className="flex gap-2 mt-2">
+                      <Button 
+                        variant="ghost" 
+                        size="sm" 
+                        className="flex-1"
+                        onClick={() => {
+                          setSelectedTenant(tenant);
+                          setNewTenant({ 
+                            name: tenant.name,
+                            template: tenant.theme_id || 'custom'
+                          });
+                          setShowAddTenantModal(true);
+                        }}
+                      >
+                        <Edit className="h-4 w-4 mr-2" />
+                        Edit
+                      </Button>
+                      <Button 
+                        variant="ghost" 
+                        size="sm"
+                        className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50"
+                        onClick={() => {
+                          setSelectedTenant(tenant);
+                          setShowDeleteConfirmModal(true);
+                        }}
+                      >
+                        <Trash2 className="h-4 w-4 mr-2" />
+                        Delete
+                      </Button>
+                    </div>
                     <Button 
-                      variant="ghost" 
-                      size="sm" 
-                      className="flex-1"
-                      onClick={() => {
-                        setSelectedTenant(tenant);
-                        setNewTenant({ 
-                          name: tenant.name,
-                          template: tenant.theme_id || 'custom'
-                        });
-                        setShowAddTenantModal(true);
-                      }}
-                    >
-                      <Edit className="h-4 w-4 mr-2" />
-                      Edit
-                    </Button>
-                    <Button 
-                      variant="ghost" 
+                      variant="outline" 
                       size="sm"
-                      className="flex-1 text-red-600 hover:text-red-700 hover:bg-red-50"
-                      onClick={() => {
-                        setSelectedTenant(tenant);
-                        setShowDeleteConfirmModal(true);
-                      }}
+                      className="w-full"
+                      onClick={() => handleSyncTenant(tenant.id)}
+                      disabled={syncingTenantId === tenant.id}
                     >
-                      <Trash2 className="h-4 w-4 mr-2" />
-                      Delete
+                      {syncingTenantId === tenant.id ? (
+                        <>
+                          <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+                          Syncing...
+                        </>
+                      ) : (
+                        <>
+                          <RefreshCw className="h-4 w-4 mr-2" />
+                          Sync
+                        </>
+                      )}
                     </Button>
                   </div>
-                  <Button 
-                    variant="outline" 
-                    size="sm"
-                    className="w-full"
-                    onClick={() => handleSyncTenant(tenant.id)}
-                    disabled={syncingTenantId === tenant.id}
-                  >
-                    {syncingTenantId === tenant.id ? (
-                      <>
-                        <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-                        Syncing...
-                      </>
-                    ) : (
-                      <>
-                        <RefreshCw className="h-4 w-4 mr-2" />
-                        Sync
-                      </>
-                    )}
-                  </Button>
-                </div>
+                )}
               </CardContent>
             </Card>
           ))}

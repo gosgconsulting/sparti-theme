@@ -8,17 +8,20 @@ type TabKey = "themes" | "tenants";
 
 interface MinimalCMSDashboardProps {
   defaultTab?: TabKey;
+  /** When true, hide create/edit/delete/sync for tenants and themes (view only). */
+  viewOnly?: boolean;
 }
 
 const MinimalCMSDashboard: React.FC<MinimalCMSDashboardProps> = ({
   defaultTab = "themes",
+  viewOnly = true,
 }) => {
   const [active, setActive] = useState<TabKey>(defaultTab);
 
   const content = useMemo(() => {
-    if (active === "tenants") return <TenantsManager />;
-    return <ThemesManager />;
-  }, [active]);
+    if (active === "tenants") return <TenantsManager viewOnly={viewOnly} />;
+    return <ThemesManager viewOnly={viewOnly} />;
+  }, [active, viewOnly]);
 
   return (
     <div className="min-h-screen bg-background">

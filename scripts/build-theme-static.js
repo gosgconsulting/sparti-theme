@@ -43,8 +43,8 @@ if (!viteApiBaseUrl && vercelUrl) {
   console.log(`[testing] VITE_API_BASE_URL: ${viteApiBaseUrl}`);
 }
 
-// Get CMS_TENANT for tenant-specific deployment
-const cmsTenant = process.env.CMS_TENANT;
+// Get CMS_TENANT for tenant-specific deployment (accept either env var)
+const cmsTenant = process.env.CMS_TENANT || process.env.VITE_DEPLOY_TENANT_ID;
 if (cmsTenant) {
   console.log(`[testing] CMS_TENANT: ${cmsTenant} - Theme will use this tenant ID`);
 } else {

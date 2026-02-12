@@ -120,10 +120,10 @@ app.use((req, res) => {
   if (existsSync(indexPath)) {
     res.sendFile(indexPath);
   } else {
-    res.status(200).json({ 
-      status: 'healthy', 
-      message: 'Server is running but app not built',
-      timestamp: new Date().toISOString() 
+    res.status(503).json({
+      status: 'app_not_built',
+      message: 'Server is running but app not built. Run: npm run build',
+      timestamp: new Date().toISOString()
     });
   }
 });

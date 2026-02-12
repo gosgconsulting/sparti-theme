@@ -22,34 +22,43 @@ import Kanban from "./pages/Kanban";
 import FeatureKanban from "./pages/FeatureKanban";
 import ProductPage from "./pages/ProductPage";
 
+// Known theme slugs (shared for /theme/:tenantSlug and /:themeSlug short URLs)
+const KNOWN_THEME_SLUGS = [
+  "sissonne",
+  "landingpage",
+  "sparti-seo-landing",
+  "gosgconsulting",
+  "gosgconsulting.com",
+  "storefront",
+  "moondk",
+  "str",
+  "optimalconsulting",
+  "master",
+  "e-shop",
+  "hotel",
+  "nail-queen",
+];
+
 // Component to handle theme sub-routes - checks if it's a known theme
 const ThemeRouteHandler: React.FC = () => {
   const { tenantSlug } = useParams<{ tenantSlug: string }>();
 
-  // Known themes that handle their own routing
-  const knownThemes = [
-    "sissonne",
-    "landingpage",
-    "sparti-seo-landing",
-    "gosgconsulting",
-    "gosgconsulting.com",
-    "storefront",
-    "moondk",
-    "str",
-    "optimalconsulting",
-    "master",
-    "e-shop",
-    "hotel",
-    "nail-queen",
-  ];
-
-  if (tenantSlug && knownThemes.includes(tenantSlug)) {
+  if (tenantSlug && KNOWN_THEME_SLUGS.includes(tenantSlug)) {
     // Route to theme component which handles sub-routes
     return <TenantLandingPage />;
   }
 
   // Otherwise, use TenantPage for database-driven pages
   return <TenantPage />;
+};
+
+// Short theme URL: /gosgconsulting or /gosgconsulting/services etc. - only when slug is a known theme
+const ShortThemeRoute: React.FC = () => {
+  const { themeSlug } = useParams<{ themeSlug: string }>();
+  if (themeSlug && KNOWN_THEME_SLUGS.includes(themeSlug)) {
+    return <TenantLandingPage />;
+  }
+  return <NotFound />;
 };
 
 // Simple alias route: /master/* -> /theme/master/*
@@ -89,8 +98,8 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   );
 };
 
-// Root redirect component
-const RootRedirect: React.FC = () => {
+// Root: dashboard at / (direct access, no redirect)
+const RootIndex: React.FC = () => {
   // Check if we're in theme deployment mode (standalone theme build)
   const isThemeDeployment =
     typeof window !== "undefined" &&
@@ -108,8 +117,7 @@ const RootRedirect: React.FC = () => {
     );
   }
 
-  // Index should show the dashboard directly
-  return <Navigate to="/dashboard" replace />;
+  return <PublicDashboard />;
 };
 
 // Create router with future flags to eliminate v7 warnings
@@ -119,7 +127,7 @@ export const router = createBrowserRouter(
       path: "/",
       element: (
         <RootLayout>
-          <RootRedirect />
+          <RootIndex />
         </RootLayout>
       ),
     },
@@ -140,10 +148,18 @@ export const router = createBrowserRouter(
       ),
     },
     {
+      path: "/dashboard",
+      element: (
+        <RootLayout>
+          <Navigate to="/" replace />
+        </RootLayout>
+      ),
+    },
+    {
       path: "/dashboard/*",
       element: (
         <RootLayout>
-          <PublicDashboard />
+          <Navigate to="/" replace />
         </RootLayout>
       ),
     },
@@ -368,6 +384,37 @@ export const router = createBrowserRouter(
         <RootLayout>
           <ErrorBoundary>
             <TenantLandingPage />
+          </ErrorBoundary>
+        </RootLayout>
+      ),
+    },
+    // Short theme URLs: /gosgconsulting, /gosgconsulting/services, /gosgconsulting/*
+    {
+      path: "/:themeSlug",
+      element: (
+        <RootLayout>
+          <ErrorBoundary>
+            <ShortThemeRoute />
+          </ErrorBoundary>
+        </RootLayout>
+      ),
+    },
+    {
+      path: "/:themeSlug/:pageSlug",
+      element: (
+        <RootLayout>
+          <ErrorBoundary>
+            <ShortThemeRoute />
+          </ErrorBoundary>
+        </RootLayout>
+      ),
+    },
+    {
+      path: "/:themeSlug/*",
+      element: (
+        <RootLayout>
+          <ErrorBoundary>
+            <ShortThemeRoute />
           </ErrorBoundary>
         </RootLayout>
       ),

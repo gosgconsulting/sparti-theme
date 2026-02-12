@@ -1,30 +1,12 @@
 import express from 'express';
-import { authenticateTenantApiKey } from '../middleware/tenantApiKey.js';
 import { authenticateWithAccessKey } from '../middleware/accessKey.js';
-import { renderPageBySlug } from '../../sparti-cms/render/pageRenderer.js';
-import { getPageCache, setPageCache } from '../../sparti-cms/cache/index.js';
 
-// Import all route modules
+// Import route modules (minimal: health, tenants, themes, theme SPA)
 import healthRoutes from './health.js';
-import authRoutes from './auth.js';
-import contentRoutes from './content.js';
-import formsRoutes from './forms.js';
-import crmRoutes from './crm.js';
-import settingsRoutes from './settings.js';
-import seoRoutes from './seo.js';
-import systemRoutes from './system.js';
-import publicRoutes from './public.js';
-import usersRoutes from './users.js';
 import themeRoutes from './theme.js';
 import themeAdminRoutes from './theme-admin.js';
 import themesApiRoutes from './themes.js';
 import tenantsApiRoutes from './tenants-api.js';
-import aiAssistantRoutes from './ai-assistant.js';
-import shopRoutes from './shop.js';
-import mediaRoutes from './media.js';
-import docsRoutes from './docs.js';
-import woocommerceSyncRoutes from './woocommerce-sync.js';
-import wordpressSyncRoutes from './wordpress-sync.js';
 
 const router = express.Router();
 
@@ -58,30 +40,11 @@ router.use('/api', (req, res, next) => {
 // Health check routes
 router.use('/', healthRoutes);
 
-// Public API v1 routes (requires tenant API key authentication)
-router.use('/api/v1', authenticateTenantApiKey, publicRoutes);
-
-// Public tenant API routes (no authentication required for by-slug endpoint)
+// Public tenant API routes (no authentication required for list and by-slug)
 router.use('/api/tenants', tenantsApiRoutes);
 
 // Public themes API routes
 router.use('/api/themes', themesApiRoutes);
-
-// All other API routes
-router.use('/api', authRoutes);
-router.use('/api', contentRoutes);
-router.use('/api', formsRoutes);
-router.use('/api', crmRoutes);
-router.use('/api', settingsRoutes);
-router.use('/api', seoRoutes);
-router.use('/api', systemRoutes);
-router.use('/api', usersRoutes);
-router.use('/api', aiAssistantRoutes);
-router.use('/api/shop', shopRoutes);
-router.use('/api/media', mediaRoutes);
-router.use('/api/woocommerce', woocommerceSyncRoutes);
-router.use('/api/wordpress', wordpressSyncRoutes);
-router.use('/api', docsRoutes);
 
 // Theme routes (mounted before other routes to catch /theme/* paths)
 // Theme auth routes (must come before general theme routes, but only handle specific paths)
@@ -130,34 +93,6 @@ Disallow: /
 # CMS Admin Interface - Not for public indexing
 `);
     console.log('[testing] Serving robots.txt for CMS admin - preventing indexing');
-  }
-});
-
-// Server-rendered page route (mounted at root, not under /api)
-router.get('/r/:slug', async (req, res) => {
-  try {
-    const slug = '/' + req.params.slug;
-    const cached = getPageCache(slug);
-    if (cached) {
-      res.setHeader('ETag', cached.etag);
-      res.setHeader('Cache-Control', 'public, max-age=30');
-      return res.status(200).send(cached.html);
-    }
-
-    const result = await renderPageBySlug(slug);
-    if (result.status === 404) {
-      return res.status(404).send('<h1>Not Found</h1>');
-    }
-
-    const etag = 'W/"' + Buffer.from(String(result.html.length)).toString('hex') + '"';
-    setPageCache(slug, { html: result.html, etag, renderedAt: Date.now() });
-
-    res.setHeader('ETag', etag);
-    res.setHeader('Cache-Control', 'public, max-age=30');
-    res.status(200).send(result.html);
-  } catch (error) {
-    console.error('[testing] Error rendering page:', error);
-    res.status(500).send('<h1>Internal Server Error</h1>');
   }
 });
 

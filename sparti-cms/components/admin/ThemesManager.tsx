@@ -60,7 +60,12 @@ interface Tenant {
   theme_id?: string | null;
 }
 
-const ThemesManager: React.FC = () => {
+interface ThemesManagerProps {
+  /** When true, only list themes (no create, sync, activate, edit tags). */
+  viewOnly?: boolean;
+}
+
+const ThemesManager: React.FC<ThemesManagerProps> = ({ viewOnly = true }) => {
   const { user } = useAuth();
   const navigate = useNavigate();
   const [themes, setThemes] = useState<Theme[]>([]);
@@ -114,7 +119,8 @@ const ThemesManager: React.FC = () => {
         const response = await api.get('/api/tenants');
         if (response.ok) {
           const data = await response.json();
-          return Array.isArray(data) ? data : [];
+          const list = Array.isArray(data) ? data : (data?.data ?? []);
+          return Array.isArray(list) ? list : [];
         } else {
           console.error('Failed to fetch tenants');
           return [];
@@ -124,7 +130,7 @@ const ThemesManager: React.FC = () => {
         return [];
       }
     },
-    enabled: !!user?.is_super_admin || showActivateModal,
+    enabled: !!user?.is_super_admin || showActivateModal || !viewOnly,
   });
 
   // Filter themes based on selected filter type
@@ -459,20 +465,21 @@ const ThemesManager: React.FC = () => {
         <div>
           <h1 className="text-3xl font-bold">Themes</h1>
           <p className="text-muted-foreground mt-1">
-            Manage your theme templates and folders
+            {viewOnly ? 'View theme templates and folders' : 'Manage your theme templates and folders'}
           </p>
         </div>
-        <div className="flex items-center gap-2">
-          <Button 
-            onClick={handleSyncThemes} 
-            variant="outline" 
-            disabled={isSyncing}
-            title="Sync themes from file system"
-          >
-            {isSyncing ? (
-              <Loader2 className="h-4 w-4 mr-2 animate-spin" />
-            ) : (
-              <RefreshCw className="h-4 w-4 mr-2" />
+        {!viewOnly && (
+          <div className="flex items-center gap-2">
+            <Button 
+              onClick={handleSyncThemes} 
+              variant="outline" 
+              disabled={isSyncing}
+              title="Sync themes from file system"
+            >
+              {isSyncing ? (
+                <Loader2 className="h-4 w-4 mr-2 animate-spin" />
+              ) : (
+                <RefreshCw className="h-4 w-4 mr-2" />
             )}
             Sync Themes
           </Button>
@@ -484,6 +491,7 @@ const ThemesManager: React.FC = () => {
             Add New Theme
           </Button>
         </div>
+        )}
       </div>
 
       {/* Error Alert */}
@@ -507,18 +515,26 @@ const ThemesManager: React.FC = () => {
             <Palette className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
             <h3 className="text-xl font-medium mb-2">No themes found</h3>
             <p className="text-muted-foreground mb-4">
-              Create theme folders in <code className="bg-muted px-2 py-1 rounded">sparti-cms/theme/</code> or sync from file system.
+              {viewOnly
+                ? 'Theme folders are in sparti-cms/theme/ and synced from the file system.'
+                : (
+                  <>
+                    Create theme folders in <code className="bg-muted px-2 py-1 rounded">sparti-cms/theme/</code> or sync from file system.
+                  </>
+                )}
             </p>
-            <div className="flex items-center gap-2 justify-center">
-              <Button onClick={handleSyncThemes} variant="outline">
-                <RefreshCw className="h-4 w-4 mr-2" />
-                Sync from File System
-              </Button>
-              <Button onClick={() => setShowAddThemeModal(true)}>
-                <Plus className="h-4 w-4 mr-2" />
-                Add New Theme
-              </Button>
-            </div>
+            {!viewOnly && (
+              <div className="flex items-center gap-2 justify-center">
+                <Button onClick={handleSyncThemes} variant="outline">
+                  <RefreshCw className="h-4 w-4 mr-2" />
+                  Sync from File System
+                </Button>
+                <Button onClick={() => setShowAddThemeModal(true)}>
+                  <Plus className="h-4 w-4 mr-2" />
+                  Add New Theme
+                </Button>
+              </div>
+            )}
           </CardContent>
         </Card>
       ) : (
@@ -635,25 +651,39 @@ const ThemesManager: React.FC = () => {
                     <Eye className="h-4 w-4 mr-2" />
                     View
                   </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleActivateTheme(theme)}
-                    className="flex-1 bg-brandPurple/10 hover:bg-brandPurple/20 text-brandPurple border-brandPurple/20"
-                  >
-                    <Zap className="h-4 w-4 mr-2" />
-                    Activate
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => setAssetsThemeSlug(theme.slug)}
-                    className="flex-1"
-                    title="Manage theme assets"
-                  >
-                    <ImageIcon className="h-4 w-4 mr-2" />
-                    Assets
-                  </Button>
+                  {!viewOnly && (
+                    <>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleActivateTheme(theme)}
+                        className="flex-1 bg-brandPurple/10 hover:bg-brandPurple/20 text-brandPurple border-brandPurple/20"
+                      >
+                        <Zap className="h-4 w-4 mr-2" />
+                        Activate
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => setAssetsThemeSlug(theme.slug)}
+                        className="flex-1"
+                        title="Manage theme assets"
+                      >
+                        <ImageIcon className="h-4 w-4 mr-2" />
+                        Assets
+                      </Button>
+                      <Button
+                        variant="outline"
+                        size="sm"
+                        onClick={() => handleEditTags(theme)}
+                        className="flex-1"
+                        title="Edit tags"
+                      >
+                        <Edit className="h-4 w-4 mr-2" />
+                        Tags
+                      </Button>
+                    </>
+                  )}
                   <Button
                     variant="outline"
                     size="sm"
@@ -667,16 +697,6 @@ const ThemesManager: React.FC = () => {
                   >
                     <Folder className="h-4 w-4 mr-2" />
                     Folder
-                  </Button>
-                  <Button
-                    variant="outline"
-                    size="sm"
-                    onClick={() => handleEditTags(theme)}
-                    className="flex-1"
-                    title="Edit tags"
-                  >
-                    <Edit className="h-4 w-4 mr-2" />
-                    Tags
                   </Button>
                 </div>
               </CardContent>

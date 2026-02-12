@@ -35,8 +35,8 @@ if (!process.env.CMS_BACKEND_URL && !process.env.VITE_API_BASE_URL) {
   console.warn(`[testing] WARNING: Using default backend URL. Set CMS_BACKEND_URL or VITE_API_BASE_URL for production.`);
 }
 
-// Get CMS_TENANT from environment variable
-const CMS_TENANT = process.env.CMS_TENANT;
+// Get CMS_TENANT from environment variable (accept either env var)
+const CMS_TENANT = process.env.CMS_TENANT || process.env.VITE_DEPLOY_TENANT_ID;
 if (CMS_TENANT) {
   console.log(`[testing] CMS_TENANT: ${CMS_TENANT} - Will inject into HTML`);
 } else {

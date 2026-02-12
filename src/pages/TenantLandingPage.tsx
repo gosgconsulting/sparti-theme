@@ -1,4 +1,4 @@
-import React, { lazy, Suspense, useMemo, useState, useEffect } from 'react';
+import React, { lazy, Suspense, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
@@ -86,66 +86,35 @@ const themeConfig: Record<string, { name: string; component: React.LazyExoticCom
  * - Can replace hardcoded values with database values when tenant is assigned
  */
 const TenantLandingPage: React.FC = () => {
-  const { tenantSlug, pageSlug, productname, slug: blogSlug } = useParams<{ tenantSlug?: string; pageSlug?: string; productname?: string; slug?: string }>();
+  const { tenantSlug, themeSlug, pageSlug, productname, slug: blogSlug } = useParams<{
+    tenantSlug?: string;
+    themeSlug?: string;
+    pageSlug?: string;
+    productname?: string;
+    slug?: string;
+  }>();
   const location = useLocation();
   
+  // Derive theme slug from pathname for short URLs (/gosgconsulting, /str, etc.) so we don't rely on params
+  const pathParts = useMemo(() => location.pathname.split('/').filter(Boolean), [location.pathname]);
+  const themeIndexInPath = pathParts.indexOf('theme');
+  const firstSegment = pathParts[0];
+  const slugFromShortPath =
+    themeIndexInPath < 0 && firstSegment && firstSegment in themeConfig ? firstSegment : null;
+  
   // Handle root-level blog routes (/blog or /blog/:slug)
-  // If there's no tenantSlug but pathname starts with /blog, use landingpage theme
-  const isRootBlogRoute = !tenantSlug && (location.pathname === '/blog' || location.pathname.startsWith('/blog/'));
+  const isRootBlogRoute = !tenantSlug && !themeSlug && !slugFromShortPath && (location.pathname === '/blog' || location.pathname.startsWith('/blog/'));
   
   // Handle root-level STR theme routes (booking, packages, etc.)
-  // If there's no tenantSlug but pathname starts with /booking or /packages, use str theme
-  const isRootSTRRoute = !tenantSlug && (
-    location.pathname === '/booking' || 
+  const isRootSTRRoute = !tenantSlug && !themeSlug && !slugFromShortPath && (
+    location.pathname === '/booking' ||
     location.pathname.startsWith('/booking/') ||
     location.pathname === '/packages' ||
     location.pathname.startsWith('/packages/')
   );
   
-  const slug = tenantSlug || (isRootSTRRoute ? 'str' : 'landingpage');
-  const [tenantId, setTenantId] = useState<string | undefined>(undefined);
-  
-  // Fetch tenant ID from database based on slug
-  useEffect(() => {
-    const fetchTenantId = async () => {
-      try {
-        // Try to find tenant by slug or theme_id
-        const response = await fetch(`/api/tenants/by-slug/${slug}`);
-        if (response.ok) {
-          const data = await response.json();
-          if (data.success && data.data) {
-            setTenantId(data.data.id);
-            return;
-          }
-        }
-        
-        // If not found by slug, try to find by theme_id
-        const themeResponse = await fetch(`/api/tenants/by-theme/${slug}`);
-        if (themeResponse.ok) {
-          const themeData = await themeResponse.json();
-          if (themeData.success && themeData.data?.tenants?.length > 0) {
-            // Use the first tenant with this theme
-            setTenantId(themeData.data.tenants[0].id);
-            return;
-          }
-        }
-        
-        // Fallback: check window.__CMS_TENANT__ (for theme deployments)
-        if (typeof window !== 'undefined' && (window as any).__CMS_TENANT__) {
-          setTenantId((window as any).__CMS_TENANT__);
-        }
-      } catch (error) {
-        console.error('[testing] Error fetching tenant ID:', error);
-        // Fallback to window variable
-        if (typeof window !== 'undefined' && (window as any).__CMS_TENANT__) {
-          setTenantId((window as any).__CMS_TENANT__);
-        }
-      }
-    };
-    
-    fetchTenantId();
-  }, [slug]);
-  
+  const slug = tenantSlug ?? themeSlug ?? slugFromShortPath ?? (isRootSTRRoute ? 'str' : 'landingpage');
+
   // Extract full page path from location for nested routes like /booking/classes
   // Always extract from pathname to handle both /theme/:tenantSlug/:pageSlug and /theme/:tenantSlug/* routes
   const fullPageSlug = useMemo(() => {
@@ -164,11 +133,16 @@ const TenantLandingPage: React.FC = () => {
     // Extract full path from pathname to handle nested routes
     const pathParts = location.pathname.split('/').filter(Boolean);
     const themeIndex = pathParts.indexOf('theme');
-    const tenantIndex = pathParts.indexOf(tenantSlug || slug);
+    const effectiveSlug = tenantSlug ?? themeSlug ?? slug;
+    const tenantIndex = pathParts.indexOf(effectiveSlug);
     
-    // Handle root-level routes (no /theme prefix)
+    // Short theme URL: /gosgconsulting or /gosgconsulting/services - first segment is theme slug, rest is page path
+    if (themeIndex < 0 && pathParts.length > 0 && pathParts[0] === effectiveSlug) {
+      return pathParts.slice(1).join('/');
+    }
+    
+    // Handle other root-level routes (e.g. /blog or /blog/slug)
     if (themeIndex < 0 && pathParts.length > 0) {
-      // Root-level route like /blog or /blog/slug
       return pathParts.join('/');
     }
     
@@ -180,7 +154,7 @@ const TenantLandingPage: React.FC = () => {
     
     // Fallback to pageSlug if pathname parsing didn't work
     return pageSlug || '';
-  }, [pageSlug, location.pathname, tenantSlug, productname, isRootBlogRoute, blogSlug, slug]);
+  }, [pageSlug, location.pathname, tenantSlug, themeSlug, productname, isRootBlogRoute, blogSlug, slug]);
   
   // Get theme config or fallback
   const currentTheme = useMemo(() => {
@@ -221,14 +195,14 @@ const TenantLandingPage: React.FC = () => {
     <div />
   );
 
-  // Pass pageSlug and tenantId if it exists so theme can handle sub-routes
+  // Pass pageSlug; tenantId omitted for portfolio (themes use internal fallbacks if needed)
   return (
     <Suspense fallback={<LoadingFallback />}>
       <ThemeComponent 
         tenantName={currentTheme.name} 
         tenantSlug={slug}
         pageSlug={fullPageSlug}
-        tenantId={tenantId}
+        tenantId={undefined}
       />
     </Suspense>
   );

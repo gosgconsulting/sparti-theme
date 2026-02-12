@@ -21,6 +21,55 @@ const errorResponse = (error, code = 'ERROR', status = 500) => ({
 });
 
 /**
+ * GET /api/tenants
+ * List all tenants (public, read-only). Used by the dashboard for view-only access.
+ * No authentication required.
+ */
+router.get('/', async (req, res) => {
+  try {
+    const { dbInitialized, dbInitializationError } = getDatabaseState();
+
+    if (!dbInitialized) {
+      if (dbInitializationError) {
+        return res.status(503).json({
+          success: false,
+          error: 'Database initialization failed',
+          message: 'Please try again later'
+        });
+      }
+      return res.status(503).json({
+        success: false,
+        error: 'Database is initializing',
+        message: 'Please try again in a moment'
+      });
+    }
+
+    const tenantResult = await query(`
+      SELECT id, name, slug, theme_id, created_at, updated_at
+      FROM tenants
+      ORDER BY created_at DESC
+    `);
+
+    res.json(successResponse(tenantResult.rows));
+  } catch (error) {
+    console.error('[testing] Error listing tenants:', error);
+
+    if (error.code === '42P01' || error.message?.includes('does not exist')) {
+      const { dbInitialized } = getDatabaseState();
+      if (!dbInitialized) {
+        return res.status(503).json({
+          success: false,
+          error: 'Database is initializing',
+          message: 'Please try again in a moment'
+        });
+      }
+    }
+
+    res.status(500).json(errorResponse(error, 'LIST_TENANTS_ERROR'));
+  }
+});
+
+/**
  * GET /api/tenants/by-slug/:slug
  * Get tenant by slug (public endpoint, no authentication required)
  * This is used by client-side to fetch tenant information

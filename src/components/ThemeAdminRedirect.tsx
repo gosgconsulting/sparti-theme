@@ -1,9 +1,7 @@
-import { Navigate, useParams } from "react-router-dom";
+import { Navigate } from "react-router-dom";
 
 const ThemeAdminRedirect = () => {
-  const { themeSlug } = useParams<{ themeSlug: string }>();
-  return <Navigate to={`/theme/${themeSlug}/auth`} replace />;
+  return <Navigate to="/dashboard" replace />;
 };
 
 export default ThemeAdminRedirect;
-

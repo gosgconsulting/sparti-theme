@@ -1,14 +1,14 @@
 import React from "react";
 import { CMSSettingsProvider } from "../../sparti-cms/context/CMSSettingsContext";
-import CMSDashboard from "../../sparti-cms/components/admin/CMSDashboard";
+import MinimalCMSDashboard from "../../sparti-cms/components/admin/MinimalCMSDashboard";
 
 /**
- * PublicDashboard component that renders the CMSDashboard without authentication requirements
+ * PublicDashboard renders the minimal CMS dashboard without any authentication.
  */
 const PublicDashboard = () => {
   return (
     <CMSSettingsProvider>
-      <CMSDashboard />
+      <MinimalCMSDashboard defaultTab="themes" />
     </CMSSettingsProvider>
   );
 };

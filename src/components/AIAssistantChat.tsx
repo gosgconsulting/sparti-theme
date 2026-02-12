@@ -3,7 +3,15 @@ import { MessageCircle, Loader2, ChevronRight, X, GripVertical } from "lucide-re
 import { PromptBox } from "@/components/ui/chatgpt-prompt-input";
 import { cn } from "@/lib/utils";
 import api from "../../sparti-cms/utils/api";
-import { useAuth } from "../../sparti-cms/components/auth/AuthProvider";
+
+// Tenant ID is no longer derived from auth; we keep a simple localStorage-based fallback.
+const getCurrentTenantId = () => {
+  try {
+    return localStorage.getItem("sparti-current-tenant-id");
+  } catch {
+    return null;
+  }
+};
 
 interface PageContext {
   slug: string;
@@ -39,21 +47,25 @@ interface SelectedComponent {
   lineNumber?: number;
 }
 
-export const AIAssistantChat: React.FC<AIAssistantChatProps & { onProposedComponents?: (components: any[]) => void }> = ({ 
-  className, 
-  pageContext, 
-  currentComponents, 
-  onUpdateComponents, 
-  onOpenJSONEditor, 
-  selectedComponentJSON, 
+export const AIAssistantChat: React.FC<
+  AIAssistantChatProps & { onProposedComponents?: (components: any[]) => void }
+> = ({
+  className,
+  pageContext,
+  currentComponents,
+  onUpdateComponents,
+  onOpenJSONEditor,
+  selectedComponentJSON,
   onComponentSelected,
   onProposedComponents,
   onClosedChange,
-  isCompact = false
+  isCompact = false,
 }) => {
-  const { currentTenantId } = useAuth();
+  const currentTenantId = getCurrentTenantId();
   // Always open - no collapse functionality
-  const [messages, setMessages] = useState<Array<{ id: string; content: string; role: 'user' | 'assistant' }>>([]);
+  const [messages, setMessages] = useState<
+    Array<{ id: string; content: string; role: "user" | "assistant" }>
+  >([]);
   const [isLoading, setIsLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [pageContextData, setPageContextData] = useState<PageContext | null>(null);
@@ -66,10 +78,14 @@ export const AIAssistantChat: React.FC<AIAssistantChatProps & { onProposedCompon
   const iframeRef = useRef<HTMLIFrameElement | null>(null);
   const messagesEndRef = useRef<HTMLDivElement>(null);
   const [copyWorkflowActive, setCopyWorkflowActive] = useState(false);
-  const [copyStep, setCopyStep] = useState<'idle' | 'asking' | 'received'>('idle');
+  const [copyStep, setCopyStep] = useState<"idle" | "asking" | "received">(
+    "idle"
+  );
   const [isBatchGenerating, setIsBatchGenerating] = useState(false);
   // Track last auto-generation to avoid repeats on re-renders
-  const lastAutoGenRef = useRef<{ type: 'page' | 'section'; key?: string } | null>(null);
+  const lastAutoGenRef = useRef<{ type: "page" | "section"; key?: string } | null>(
+    null
+  );
   // NEW: cancellation and abort controller refs
   const abortControllerRef = useRef<AbortController | null>(null);
   const cancelRequestedRef = useRef(false);
@@ -82,7 +98,7 @@ export const AIAssistantChat: React.FC<AIAssistantChatProps & { onProposedCompon
   // Remove JSON code blocks from assistant messages (keep friendly status line)
   const sanitizeAssistantMessage = (msg: string) => {
     if (/```[\s\S]*```/m.test(msg)) {
-      return 'Draft prepared. Review it in the Output tab.';
+      return "Draft prepared. Review it in the Output tab.";
     }
     return msg;
   };
@@ -108,7 +124,7 @@ export const AIAssistantChat: React.FC<AIAssistantChatProps & { onProposedCompon
 
   // Auto-scroll to bottom when new messages arrive
   useEffect(() => {
-    messagesEndRef.current?.scrollIntoView({ behavior: 'smooth' });
+    messagesEndRef.current?.scrollIntoView({ behavior: "smooth" });
   }, [messages, isLoading]);
 
   // Load page context when pageContext prop changes
@@ -122,7 +138,7 @@ export const AIAssistantChat: React.FC<AIAssistantChatProps & { onProposedCompon
       // Use tenantId from pageContext if provided, otherwise fall back to currentTenantId
       const effectiveTenantId = pageContext.tenantId || currentTenantId;
       if (!effectiveTenantId) {
-        console.warn('[testing] No tenant ID available for page context');
+        console.warn("[testing] No tenant ID available for page context");
         setPageContextData(null);
         return;
       }
@@ -131,14 +147,16 @@ export const AIAssistantChat: React.FC<AIAssistantChatProps & { onProposedCompon
         setLoadingPageContext(true);
         // Fetch page context from API (using query parameter for slug to handle slashes)
         const encodedSlug = encodeURIComponent(pageContext.slug);
-        const response = await api.get(`/api/ai-assistant/page-context?slug=${encodedSlug}&tenantId=${effectiveTenantId}`);
-        
+        const response = await api.get(
+          `/api/ai-assistant/page-context?slug=${encodedSlug}&tenantId=${effectiveTenantId}`
+        );
+
         if (response.ok) {
           const data = await response.json();
           if (data.success && data.pageContext) {
             setPageContextData(data.pageContext);
           } else {
-            console.warn('[testing] Failed to load page context:', data.error);
+            console.warn("[testing] Failed to load page context:", data.error);
             setPageContextData(null);
           }
         } else {
@@ -148,16 +166,20 @@ export const AIAssistantChat: React.FC<AIAssistantChatProps & { onProposedCompon
             const errorData = await response.json();
             errorMessage = errorData.error || errorMessage;
           } catch {
-            const errorText = await response.text().catch(() => '');
-            if (errorText.includes('<!DOCTYPE')) {
-              errorMessage = 'Page not found or authentication error';
+            const errorText = await response.text().catch(() => "");
+            if (errorText.includes("<!DOCTYPE")) {
+              errorMessage = "Page not found or authentication error";
             }
           }
-          console.error('[testing] Failed to load page context:', response.status, errorMessage);
+          console.error(
+            "[testing] Failed to load page context:",
+            response.status,
+            errorMessage
+          );
           setPageContextData(null);
         }
       } catch (error: any) {
-        console.error('[testing] Error loading page context:', error);
+        console.error("[testing] Error loading page context:", error);
         setPageContextData(null);
       } finally {
         setLoadingPageContext(false);

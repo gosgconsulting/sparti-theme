@@ -13,8 +13,17 @@ export function getThemeAssetUrl(
   relativePath: string,
   themeSlug: string
 ): string {
-  const base = basePath ?? `/theme/${themeSlug}`;
-  const normalizedBase = base.replace(/\/+$/, '');
-  const normalizedPath = relativePath.replace(/^\/+/, '');
+  // Deploy-at-root (Vercel): basePath is '' but assets live at dist/theme/<slug>/assets/
+  const deployAtRoot =
+    typeof import.meta !== "undefined" && !!import.meta.env?.DEPLOY_THEME_SLUG;
+  const base =
+    basePath !== undefined && basePath !== ""
+      ? basePath
+      : deployAtRoot
+        ? `/theme/${themeSlug}`
+        : (basePath ?? `/theme/${themeSlug}`);
+
+  const normalizedBase = base.replace(/\/+$/, "");
+  const normalizedPath = relativePath.replace(/^\/+/, "");
   return normalizedPath ? `${normalizedBase}/assets/${normalizedPath}` : `${normalizedBase}/assets`;
 }

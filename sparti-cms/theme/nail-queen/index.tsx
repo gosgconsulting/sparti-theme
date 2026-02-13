@@ -50,13 +50,7 @@ const NailQueenTheme: React.FC<NailQueenThemeProps> = ({
   const ctxBasePath = useContext(ThemeBasePathContext);
 
   const themeSlug = tenantSlug || "nail-queen";
-  // Static deploy at root: basePath is '' but assets are copied to dist/theme/<slug>/assets/, so use /theme/<slug> for assets
-  const isStaticDeploy =
-    typeof window !== "undefined" && !!(window as any).__THEME_DEPLOYMENT__;
-  const resolvedBasePath =
-    basePathProp ??
-    (isStaticDeploy && ctxBasePath === "" ? `/theme/${themeSlug}` : ctxBasePath) ??
-    `/theme/${themeSlug}`;
+  const resolvedBasePath = basePathProp ?? ctxBasePath ?? `/theme/${themeSlug}`;
 
   // Load branding settings from database
   const { branding, loading: brandingLoading, error: brandingError } = useThemeBranding('nail-queen', tenantId);

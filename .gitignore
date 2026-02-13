@@ -39,3 +39,4 @@ cookies.txt
 *.env.backup
 # Test database environment
 .env.test
+.env

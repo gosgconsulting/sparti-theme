@@ -6,7 +6,10 @@ import { SocialMediaSticky } from "./SocialMediaSticky";
 import { useEffect, useState } from "react";
 import ContactPanel from "./ContactPanel";
 import { useThemeBranding } from "../../../hooks/useThemeSettings";
+import { getThemeAssetUrl } from "../../../utils/themeAssets";
 import { getSiteName, getLogoSrc } from "../utils/settings";
+
+const THEME_SLUG = "nail-queen";
 
 interface LayoutProps {
   basePath: string;
@@ -29,6 +32,7 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
   // Get settings from database with fallback to defaults
   const siteName = getSiteName(branding, 'Nail Queen');
   const logoSrc = getLogoSrc(branding);
+  const defaultLogoSrc = getThemeAssetUrl(basePath, "nq-site-brand.png", THEME_SLUG);
 
   const [isContactOpen, setIsContactOpen] = useState(false);
   useEffect(() => {
@@ -59,31 +63,19 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
             <Link to={joinPath(basePath, "")} className="flex items-center space-x-2">
-              {brandingLoading ? (
-                <div className="w-10 h-10 rounded-full bg-primary flex items-center justify-center">
-                  <span className="text-white font-bold text-sm">NQ</span>
-                </div>
-              ) : (
-                <img 
-                  src={logoSrc} 
-                  alt={siteName} 
-                  className="h-12 w-auto"
-                  onError={(e) => {
-                    // Fallback to NQ badge if image not found
-                    const target = e.target as HTMLImageElement;
-                    if (target.dataset.fallbackAdded) return;
-                    target.style.display = 'none';
-                    target.dataset.fallbackAdded = 'true';
-                    const fallback = document.createElement('div');
-                    fallback.className = 'w-10 h-10 rounded-full bg-primary flex items-center justify-center';
-                    const text = document.createElement('span');
-                    text.className = 'text-white font-bold text-sm';
-                    text.textContent = 'NQ';
-                    fallback.appendChild(text);
-                    target.parentElement?.appendChild(fallback);
-                  }}
-                />
-              )}
+              <img
+                src={brandingLoading ? defaultLogoSrc : logoSrc}
+                alt={siteName}
+                className="h-12 w-auto"
+                onError={(e) => {
+                  const target = e.target as HTMLImageElement;
+                  if (target.dataset.fallbackAdded) return;
+                  target.dataset.fallbackAdded = "true";
+                  if (target.src !== defaultLogoSrc) {
+                    target.src = defaultLogoSrc;
+                  }
+                }}
+              />
             </Link>
 
             <div className="hidden md:flex items-center space-x-8">

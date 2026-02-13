@@ -1,8 +1,10 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import ModernHeroSection from './ModernHeroSection';
 import type { ComponentSchema } from '../../../types/schema';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
+import { getThemeAssetUrl } from '../../../utils/themeAssets';
 
 /**
  * Wrapper component for BannerSection (Hero)
@@ -17,8 +19,10 @@ const FlowbiteBannerSectionWrapper: React.FC<{ items?: any[]; onContactClick?: (
     return item?.src || "";
   };
   
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const defaultPersonImage = getThemeAssetUrl(ctxBasePath ?? undefined, "hero-person.png", "gosgconsulting");
   const personImage = getImage("personImage") || getImage("image") || getImage("heroImage") || "";
-  
+
   // Intercept clicks on buttons with #contact links to open modal
   useEffect(() => {
     const handleButtonClick = (e: MouseEvent) => {
@@ -49,7 +53,7 @@ const FlowbiteBannerSectionWrapper: React.FC<{ items?: any[]; onContactClick?: (
   const componentSchema: ComponentSchema = {
     type: 'banner-section',
     props: {
-      personImage: personImage || "/theme/gosgconsulting/assets/hero-person.png",
+      personImage: personImage || defaultPersonImage,
     },
     items: items,
   };

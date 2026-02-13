@@ -202,7 +202,7 @@ const TenantLandingPage: React.FC = () => {
     <div />
   );
 
-  // Pass pageSlug; tenantId omitted for portfolio (themes use internal fallbacks if needed)
+  // Pass pageSlug and basePath; tenantId omitted for portfolio (themes use internal fallbacks if needed)
   // ThemeBasePathContext: when basePath='', theme uses root paths for links
   return (
     <ThemeBasePathContext.Provider value={basePath}>
@@ -212,6 +212,7 @@ const TenantLandingPage: React.FC = () => {
           tenantSlug={slug}
           pageSlug={fullPageSlug}
           tenantId={undefined}
+          basePath={basePath}
         />
       </Suspense>
     </ThemeBasePathContext.Provider>

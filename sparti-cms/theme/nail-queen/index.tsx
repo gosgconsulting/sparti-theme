@@ -1,6 +1,7 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useContext, useEffect, useMemo } from "react";
 import { useLocation } from "react-router-dom";
 
+import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import "./theme.css";
 
 import HomePage from "./pages/HomePage";
@@ -39,16 +40,23 @@ const normalizeSlug = (slug?: string) => {
 };
 
 const NailQueenTheme: React.FC<NailQueenThemeProps> = ({
-  basePath,
+  basePath: basePathProp,
   pageSlug,
   tenantSlug,
   tenantName = "Nail Queen",
   tenantId = "tenant-nail-queen",
 }) => {
   const location = useLocation();
+  const ctxBasePath = useContext(ThemeBasePathContext);
 
   const themeSlug = tenantSlug || "nail-queen";
-  const resolvedBasePath = basePath || `/theme/${themeSlug}`;
+  // Static deploy at root: basePath is '' but assets are copied to dist/theme/<slug>/assets/, so use /theme/<slug> for assets
+  const isStaticDeploy =
+    typeof window !== "undefined" && !!(window as any).__THEME_DEPLOYMENT__;
+  const resolvedBasePath =
+    basePathProp ??
+    (isStaticDeploy && ctxBasePath === "" ? `/theme/${themeSlug}` : ctxBasePath) ??
+    `/theme/${themeSlug}`;
 
   // Load branding settings from database
   const { branding, loading: brandingLoading, error: brandingError } = useThemeBranding('nail-queen', tenantId);

@@ -1,5 +1,6 @@
 import express from 'express';
 import { authenticateWithAccessKey } from '../middleware/accessKey.js';
+import { authenticateTenantApiKey } from '../middleware/tenantApiKey.js';
 
 // Import route modules (minimal: health, tenants, themes, theme SPA)
 import healthRoutes from './health.js';
@@ -7,6 +8,7 @@ import themeRoutes from './theme.js';
 import themeAdminRoutes from './theme-admin.js';
 import themesApiRoutes from './themes.js';
 import tenantsApiRoutes from './tenants-api.js';
+import publicRoutes from './public.js';
 
 const router = express.Router();
 
@@ -45,6 +47,9 @@ router.use('/api/tenants', tenantsApiRoutes);
 
 // Public themes API routes
 router.use('/api/themes', themesApiRoutes);
+
+// Public v1 API (pages, blog, header/footer, settings, branding) – tenant via API key or tenantId query/header
+router.use('/api/v1', authenticateTenantApiKey, publicRoutes);
 
 // Theme routes (mounted before other routes to catch /theme/* paths)
 // Theme auth routes (must come before general theme routes, but only handle specific paths)

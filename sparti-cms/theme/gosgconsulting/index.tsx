@@ -1,5 +1,7 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useContext, useState, useEffect, useMemo } from 'react';
 import { useLocation, useParams } from 'react-router-dom';
+import { ThemeBasePathContext } from '../../context/ThemeBasePathContext';
+import { getThemeAssetUrl } from '../../utils/themeAssets';
 import './theme.css';
 import { DynamicPageRenderer } from './components/DynamicPageRenderer';
 import { SEOHead } from './components/SEOHead';
@@ -32,13 +34,16 @@ interface TenantLandingProps {
  * 
  * Complete GOSG homepage with dynamic page rendering
  */
-const GOSGContent: React.FC<TenantLandingProps> = ({ 
-  tenantName = 'GO SG Consulting', 
+const GOSGContent: React.FC<TenantLandingProps> = ({
+  tenantName = 'GO SG Consulting',
   tenantSlug = 'gosgconsulting',
   pageSlug
 }) => {
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const asset = (path: string) => getThemeAssetUrl(ctxBasePath ?? undefined, path, tenantSlug);
+
   const { contactModalOpen, setContactModalOpen, openPopup, initialEmail, setInitialEmail } = usePopup();
-  
+
   // Load branding settings from database
   // Note: The API expects tenantId in the query string, but the hook uses tenantSlug
   // We need to pass 'tenant-gosg' as the tenantSlug parameter
@@ -249,7 +254,7 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
           {
             key: "personImage",
             type: "image",
-            src: "/theme/gosgconsulting/assets/hero-person.png",
+            src: asset("hero-person.png"),
             alt: "Team member"
           }
         ]
@@ -319,7 +324,7 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
                   {
                     key: "screenshot",
                     type: "image",
-                    src: "/theme/gosgconsulting/assets/selenightco-meta-ads-results.png",
+                    src: asset("selenightco-meta-ads-results.png"),
                     alt: "Selenightco Meta Ads performance results",
                   },
                 ],
@@ -372,7 +377,7 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
                   {
                     key: "screenshot",
                     type: "image",
-                    src: "/theme/gosgconsulting/assets/elizabeth-little-meta-ads-results.png",
+                    src: asset("elizabeth-little-meta-ads-results.png"),
                     alt: "Elizabeth Little Meta Ads performance results",
                   },
                   {
@@ -436,7 +441,7 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
                   {
                     key: "screenshot",
                     type: "image",
-                    src: "/theme/gosgconsulting/assets/global-modul-results.png",
+                    src: asset("global-modul-results.png"),
                     alt: "Global Modul lead generation results",
                   },
                   {
@@ -492,7 +497,7 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
                   {
                     key: "screenshot",
                     type: "image",
-                    src: "/theme/gosgconsulting/assets/art-in-bloom-results.png",
+                    src: asset("art-in-bloom-results.png"),
                     alt: "Art in Bloom Meta Ads performance results",
                   },
                   {
@@ -548,7 +553,7 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
                   {
                     key: "screenshot",
                     type: "image",
-                    src: "/theme/gosgconsulting/assets/spirit-stretch-results.png",
+                    src: asset("spirit-stretch-results.png"),
                     alt: "Spirit Stretch lead generation results",
                   },
                   {
@@ -636,7 +641,7 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
           {
             key: "quoteImage",
             type: "image",
-            src: "/theme/gosgconsulting/assets/greg-quote.png",
+            src: asset("greg-quote.png"),
             alt: "Greg, founder of GO SG",
           },
           {
@@ -971,7 +976,7 @@ const mapHomepageToMasterSchemas = (homepageComponents: any[]): {
       type: "banner-section",
       props: {
         backgroundColor: "#2A2C2E",
-        backgroundImage: `/theme/gosgconsulting/assets/placeholder.svg`,
+        backgroundImage: asset("placeholder.svg"),
       },
       items: [
         {
@@ -1125,8 +1130,11 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
   tenantId = 'tenant-gosg',
   tenantSlug = 'gosgconsulting',
 }) => {
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const asset = (path: string) => getThemeAssetUrl(ctxBasePath ?? undefined, path, tenantSlug);
+
   const { contactModalOpen, setContactModalOpen, openPopup, initialEmail, setInitialEmail } = usePopup();
-  
+
   // Load branding settings from database
   const { branding, loading: brandingLoading, error: brandingError } = useThemeBranding('gosgconsulting', tenantId);
   
@@ -1332,7 +1340,7 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
           {
             key: "personImage",
             type: "image",
-            src: "/theme/gosgconsulting/assets/hero-person.png",
+            src: asset("hero-person.png"),
             alt: "Team member"
           }
         ]
@@ -1402,7 +1410,7 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
                   {
                     key: "screenshot",
                     type: "image",
-                    src: "/theme/gosgconsulting/assets/selenightco-meta-ads-results.png",
+                    src: asset("selenightco-meta-ads-results.png"),
                     alt: "Selenightco Meta Ads performance results",
                   },
                 ],
@@ -1455,7 +1463,7 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
                   {
                     key: "screenshot",
                     type: "image",
-                    src: "/theme/gosgconsulting/assets/elizabeth-little-meta-ads-results.png",
+                    src: asset("elizabeth-little-meta-ads-results.png"),
                     alt: "Elizabeth Little Meta Ads performance results",
                   },
                   {
@@ -1519,7 +1527,7 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
                   {
                     key: "screenshot",
                     type: "image",
-                    src: "/theme/gosgconsulting/assets/global-modul-results.png",
+                    src: asset("global-modul-results.png"),
                     alt: "Global Modul lead generation results",
                   },
                   {
@@ -1575,7 +1583,7 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
                   {
                     key: "screenshot",
                     type: "image",
-                    src: "/theme/gosgconsulting/assets/art-in-bloom-results.png",
+                    src: asset("art-in-bloom-results.png"),
                     alt: "Art in Bloom Meta Ads performance results",
                   },
                   {
@@ -1631,7 +1639,7 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
                   {
                     key: "screenshot",
                     type: "image",
-                    src: "/theme/gosgconsulting/assets/spirit-stretch-results.png",
+                    src: asset("spirit-stretch-results.png"),
                     alt: "Spirit Stretch lead generation results",
                   },
                   {
@@ -1744,7 +1752,7 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
           {
             key: "quoteImage",
             type: "image",
-            src: "/theme/gosgconsulting/assets/greg-quote.png",
+            src: asset("greg-quote.png"),
             alt: "Greg, founder of GO SG",
           },
           {

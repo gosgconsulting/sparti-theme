@@ -1,9 +1,12 @@
 import { useEffect } from "react";
+import { getThemeAssetUrl } from "../../../utils/themeAssets";
 import { Layout } from "../components/Layout";
 
+const THEME_SLUG = "nail-queen";
+
 export default function HomePage({ basePath, tenantId }: { basePath: string; tenantId?: string }) {
-  const asset = (path: string) => `${basePath.replace(/\/+$/, "")}/assets/${path.replace(/^\/+/, "")}`;
-  
+  const asset = (path: string) => getThemeAssetUrl(basePath, path, THEME_SLUG);
+
   // Adjustable gap between text and vertical line in "Our Services" section
   // Change these values to adjust spacing: mobile (default) and desktop (md breakpoint and up)
   const servicesTextToLineGap = {

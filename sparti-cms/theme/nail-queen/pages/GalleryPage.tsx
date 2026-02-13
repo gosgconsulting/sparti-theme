@@ -8,6 +8,7 @@ import {
 } from "@/components/ui/dialog";
 import { ThumbnailsCarousel } from "@/components/ui/thumbnails-carousel";
 
+import { getThemeAssetUrl } from "../../../utils/themeAssets";
 import { Layout } from "../components/Layout";
 
 type GalleryItem = {
@@ -17,11 +18,13 @@ type GalleryItem = {
   image: string;
 };
 
+const THEME_SLUG = "nail-queen";
+
 export default function GalleryPage({ basePath, tenantId }: { basePath: string; tenantId?: string }) {
   const [activeFilter, setActiveFilter] = useState("manicures");
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
 
-  const asset = (path: string) => `${basePath.replace(/\/+$/, "")}/assets/${path.replace(/^\/+/, "")}`;
+  const asset = (path: string) => getThemeAssetUrl(basePath, path, THEME_SLUG);
 
   const galleryItems = useMemo(
     () => [

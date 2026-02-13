@@ -1,8 +1,11 @@
 import React from "react";
+import { getThemeAssetUrl } from "../../../utils/themeAssets";
 import { Layout } from "../components/Layout";
 
+const THEME_SLUG = "nail-queen";
+
 export default function PricingPage({ basePath, tenantId }: { basePath: string; tenantId?: string }) {
-  const asset = (path: string) => `${basePath.replace(/\/+$/, "")}/assets/${path.replace(/^\/+/, "")}`;
+  const asset = (path: string) => getThemeAssetUrl(basePath, path, THEME_SLUG);
 
   return (
     <Layout basePath={basePath} tenantId={tenantId}>

@@ -340,13 +340,37 @@ function verifyBuildOutput() {
   console.log(`[testing] Build verification passed: ${distContents.length} files in dist/`);
 }
 
+// Copy theme assets to dist so /theme/<slug>/assets/* resolve when serving static build
+function copyThemeAssetsToDist() {
+  const projectRoot = path.join(__dirname, '..');
+  const sourceAssets = path.join(projectRoot, 'sparti-cms', 'theme', themeSlug, 'assets');
+  const destAssets = path.join(projectRoot, 'dist', 'theme', themeSlug, 'assets');
+
+  if (!fs.existsSync(sourceAssets)) {
+    console.log(`[testing] No assets folder at sparti-cms/theme/${themeSlug}/assets, skipping copy`);
+    return;
+  }
+
+  const stat = fs.statSync(sourceAssets);
+  if (!stat.isDirectory()) {
+    console.log(`[testing] sparti-cms/theme/${themeSlug}/assets is not a directory, skipping copy`);
+    return;
+  }
+
+  fs.mkdirSync(path.join(projectRoot, 'dist', 'theme', themeSlug), { recursive: true });
+  fs.cpSync(sourceAssets, destAssets, { recursive: true });
+  console.log(`[testing] Copied theme assets to dist/theme/${themeSlug}/assets/`);
+}
+
 // Build the theme
 (async () => {
   try {
     await build(buildConfig);
     // Verify build output
     verifyBuildOutput();
-    
+    // Copy theme assets so static deploy can serve /theme/<slug>/assets/*
+    copyThemeAssetsToDist();
+
     console.log(`[testing] ✅ Standalone theme build completed successfully!`);
     console.log(`[testing] Output directory: dist/`);
     console.log(`[testing] Theme: ${themeSlug}`);

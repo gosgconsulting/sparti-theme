@@ -1,9 +1,11 @@
 "use client";
 
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import Reveal from "@/libraries/flowbite/components/Reveal";
 import { useInViewOnce } from "@/libraries/flowbite/hooks/useInViewOnce";
 import type { ComponentSchema } from "../../../types/schema";
+import { ThemeBasePathContext } from "../../../context/ThemeBasePathContext";
+import { getThemeAssetUrl } from "../../../utils/themeAssets";
 import FloatingDataCard from './FloatingDataCard';
 import { Mail, Check } from 'lucide-react';
 
@@ -43,10 +45,13 @@ const ModernHeroSection: React.FC<ModernHeroSectionProps> = ({
     return item?.src || "";
   };
 
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const defaultPersonImage = getThemeAssetUrl(ctxBasePath ?? undefined, "hero-person.png", "gosgconsulting");
+
   const title = getText("title") || props.title || "You have Got Business We Have Brilliant Minds";
   const description = getText("description") || props.description || "Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur occaecat cupida.";
   const emailPlaceholder = getText("emailPlaceholder") || props.emailPlaceholder || "Enter your email";
-  const personImage = getImage("personImage") || props.personImage || "/theme/gosgconsulting/assets/hero-person.png";
+  const personImage = getImage("personImage") || props.personImage || defaultPersonImage;
 
   const handleGetStarted = () => {
     if (onPopupOpen) {

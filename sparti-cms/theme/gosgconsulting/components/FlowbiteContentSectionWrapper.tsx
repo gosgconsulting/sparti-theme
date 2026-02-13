@@ -1,14 +1,19 @@
 "use client";
 
-import React, { useEffect } from 'react';
+import React, { useContext, useEffect } from 'react';
 import FlowbiteContentSection from '@/libraries/flowbite/components/FlowbiteContentSection';
 import type { ComponentSchema } from '../../../types/schema';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
+import { getThemeAssetUrl } from '../../../utils/themeAssets';
 
 /**
  * Wrapper component for FlowbiteContentSection (About)
  * Adapts DynamicPageRenderer props (which passes items) to Flowbite component's expected format (component prop)
  */
 const FlowbiteContentSectionWrapper: React.FC<{ items?: any[]; onContactClick?: () => void; onPopupOpen?: (popupName: string) => void }> = ({ items = [], onContactClick, onPopupOpen }) => {
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const imageSrc = getThemeAssetUrl(ctxBasePath ?? undefined, "team-about.png", "gosgconsulting");
+
   // Intercept clicks on buttons with #contact links to open modal
   useEffect(() => {
     const handleButtonClick = (e: MouseEvent) => {
@@ -41,7 +46,7 @@ const FlowbiteContentSectionWrapper: React.FC<{ items?: any[]; onContactClick?: 
     props: {
       variant: "about",
       badge: "About us",
-      imageSrc: `/theme/gosgconsulting/assets/team-about.png`,
+      imageSrc,
       reviewLabel: "5 Star",
       reviewSub: "Review",
     },

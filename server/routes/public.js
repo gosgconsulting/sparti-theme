@@ -322,7 +322,9 @@ router.get('/blog/posts', async (req, res) => {
         'created_at',
         'updated_at',
         'published_at',
-        'view_count'
+        'view_count',
+        'featured_image_id',
+        'og_image'
       ]
     };
     
@@ -359,9 +361,12 @@ router.get('/blog/posts', async (req, res) => {
         }))
       ];
       
+      // Align with theme expectations: featured_image as URL (og_image or resolved later)
+      const featured_image = postJson.og_image || null;
       return {
         ...postJson,
-        terms: terms
+        terms: terms,
+        featured_image
       };
     });
     
@@ -422,7 +427,9 @@ router.get('/blog/posts/:slug', async (req, res) => {
         'created_at',
         'updated_at',
         'published_at',
-        'view_count'
+        'view_count',
+        'featured_image_id',
+        'og_image'
       ]
     });
     
@@ -448,9 +455,11 @@ router.get('/blog/posts/:slug', async (req, res) => {
       }))
     ];
     
+    const featured_image = postJson.og_image || null;
     const postWithTerms = {
       ...postJson,
-      terms: terms
+      terms: terms,
+      featured_image
     };
     
     res.json(successResponse(postWithTerms, tenantId));

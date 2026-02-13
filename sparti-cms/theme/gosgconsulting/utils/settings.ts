@@ -4,6 +4,7 @@
  */
 
 import { ThemeBrandingSettings, ThemeLocalizationSettings } from '../../../hooks/useThemeSettings';
+import { getThemeAssetUrl } from '../../../utils/themeAssets';
 
 /**
  * Get site name with fallback
@@ -40,7 +41,7 @@ export function getSiteDescription(
  */
 export function getLogoSrc(
   branding: ThemeBrandingSettings | null | undefined,
-  fallback: string = '/theme/gosgconsulting/assets/go-sg-logo-official.png'
+  fallback: string = getThemeAssetUrl(undefined, 'go-sg-logo-official.png', 'gosgconsulting')
 ): string {
   return branding?.site_logo || fallback;
 }

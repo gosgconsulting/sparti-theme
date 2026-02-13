@@ -1,6 +1,6 @@
 "use client";
 
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import {
   Carousel,
   CarouselContent,
@@ -8,6 +8,8 @@ import {
   type CarouselApi,
 } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { ThemeBasePathContext } from "../../../context/ThemeBasePathContext";
+import { getThemeAssetUrl } from "../../../utils/themeAssets";
 
 type Item = {
   key: string;
@@ -95,6 +97,10 @@ const ResultsCarouselSection: React.FC<ResultsCarouselSectionProps> = ({
   const [canScrollPrev, setCanScrollPrev] = useState(false);
   const [canScrollNext, setCanScrollNext] = useState(false);
 
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const themeSlug = "gosgconsulting";
+  const asset = (path: string) => getThemeAssetUrl(ctxBasePath ?? undefined, path, themeSlug);
+
   const caseStudies = parseCaseStudies(items);
 
   // Default case study if none provided
@@ -109,7 +115,7 @@ const ResultsCarouselSection: React.FC<ResultsCarouselSectionProps> = ({
         { value: "6.3k", label1: "Revenue", label2: "per 1k Ad Spend", color: "teal" },
       ],
       screenshot: {
-        src: "/theme/gosgconsulting/assets/selenightco-meta-ads-results.png",
+        src: asset("selenightco-meta-ads-results.png"),
         alt: "Selenightco Meta Ads performance results",
       },
     },
@@ -123,7 +129,7 @@ const ResultsCarouselSection: React.FC<ResultsCarouselSectionProps> = ({
         { value: "7k", label1: "Revenue", label2: "per 1k Ad Spend", color: "teal" },
       ],
       screenshot: {
-        src: "/theme/gosgconsulting/assets/elizabeth-little-meta-ads-results.png",
+        src: asset("elizabeth-little-meta-ads-results.png"),
         alt: "Elizabeth Little Meta Ads performance results",
       },
       deviceType: 'tablet',
@@ -139,7 +145,7 @@ const ResultsCarouselSection: React.FC<ResultsCarouselSectionProps> = ({
         { value: "7k€", label1: "Conversion", label2: "Value", color: "orange" },
       ],
       screenshot: {
-        src: "/theme/gosgconsulting/assets/global-modul-results.png",
+        src: asset("global-modul-results.png"),
         alt: "Global Modul lead generation results",
       },
       deviceType: 'tablet',
@@ -154,7 +160,7 @@ const ResultsCarouselSection: React.FC<ResultsCarouselSectionProps> = ({
         { value: "3k", label1: "Revenue", label2: "per 1k Ad Spend", color: "teal" },
       ],
       screenshot: {
-        src: "/theme/gosgconsulting/assets/art-in-bloom-results.png",
+        src: asset("art-in-bloom-results.png"),
         alt: "Art in Bloom Meta Ads performance results",
       },
       deviceType: 'tablet',
@@ -169,7 +175,7 @@ const ResultsCarouselSection: React.FC<ResultsCarouselSectionProps> = ({
         { value: "$14.50", label1: "Cost", label2: "per Lead", color: "teal" },
       ],
       screenshot: {
-        src: "/theme/gosgconsulting/assets/spirit-stretch-results.png",
+        src: asset("spirit-stretch-results.png"),
         alt: "Spirit Stretch lead generation results",
       },
       deviceType: 'tablet',

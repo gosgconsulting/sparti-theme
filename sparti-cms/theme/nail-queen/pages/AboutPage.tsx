@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/carousel";
 import { cn } from "@/lib/utils";
 
+import { getThemeAssetUrl } from "../../../utils/themeAssets";
 import { Layout } from "../components/Layout";
 
 // Team member data with roles and details
@@ -382,7 +383,7 @@ export default function AboutPage({ basePath, tenantId }: { basePath: string; te
     };
   }, [api]);
 
-  const asset = (path: string) => `${basePath.replace(/\/+$/, "")}/assets/${path.replace(/^\/+/, "")}`;
+  const asset = (path: string) => getThemeAssetUrl(basePath, path, "nail-queen");
 
   return (
     <Layout basePath={basePath} tenantId={tenantId}>

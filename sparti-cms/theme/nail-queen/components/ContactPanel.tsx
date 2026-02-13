@@ -14,6 +14,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
 import { MessageCircle, Camera, FileText, Phone, Loader2, Facebook } from "lucide-react";
 import { getTenantId } from "../../../utils/tenantConfig";
+import { getApiUrl } from "../../../utils/api";
 
 type ContactPanelProps = {
   open: boolean;
@@ -156,8 +157,8 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
       const tenantId = getTenantId();
       const finalMessage = `${message.trim()}\n\nPreferred contact method: Email`;
 
-      // Submit form data to API
-      const response = await fetch("/api/form-submissions", {
+      // Submit form data to API – use getApiUrl for static/Vercel deploy
+      const response = await fetch(getApiUrl("/api/form-submissions"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

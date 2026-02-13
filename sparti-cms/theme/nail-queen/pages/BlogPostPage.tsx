@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Layout } from "../components/Layout";
 import { Link } from "react-router-dom";
+import { getApiUrl } from "../../../utils/api";
 
 interface BlogPost {
   id: number;
@@ -151,10 +152,10 @@ export default function BlogPostPage({
         setIsLoading(true);
         setError(null);
 
-        const res = await fetch(
-          `/api/v1/blog/posts/${encodeURIComponent(slug)}?tenantId=${encodeURIComponent(effectiveTenantId)}`,
-          { headers: { Accept: "application/json" } }
+        const url = getApiUrl(
+          `/api/v1/blog/posts/${encodeURIComponent(slug)}?tenantId=${encodeURIComponent(effectiveTenantId)}`
         );
+        const res = await fetch(url, { headers: { Accept: "application/json" } });
 
         if (!res.ok) {
           if (res.status === 404) {
@@ -163,7 +164,17 @@ export default function BlogPostPage({
           throw new Error(`Failed to fetch post (${res.status})`);
         }
 
-        const json = await res.json();
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          throw new Error("Blog is temporarily unavailable. Please try again later.");
+        }
+
+        let json: { data?: BlogPost };
+        try {
+          json = await res.json();
+        } catch {
+          throw new Error("Blog is temporarily unavailable. Please try again later.");
+        }
         const data: BlogPost | null = json?.data ?? null;
 
         if (!cancelled) {
@@ -176,7 +187,11 @@ export default function BlogPostPage({
       } catch (err: any) {
         if (!cancelled) {
           console.error("[testing] Error fetching blog post:", err);
-          setError(err.message || "Failed to load blog post");
+          const message =
+            err.message?.toLowerCase().includes("json") || err instanceof SyntaxError
+              ? "Blog is temporarily unavailable. Please try again later."
+              : err.message || "Failed to load blog post";
+          setError(message);
         }
       } finally {
         if (!cancelled) {

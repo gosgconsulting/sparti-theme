@@ -2,6 +2,7 @@ import { useState, useEffect, useMemo } from "react";
 import { Layout } from "../components/Layout";
 import { Link } from "react-router-dom";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { getApiUrl } from "../../../utils/api";
 
 interface BlogPost {
   id: number;
@@ -54,17 +55,27 @@ export default function BlogPage({ basePath, tenantId }: { basePath: string; ten
         setIsLoading(true);
         setError(null);
 
-        // Fetch all posts (we'll paginate on client side)
-        const res = await fetch(
-          `/api/v1/blog/posts?tenantId=${encodeURIComponent(effectiveTenantId)}&limit=200&status=published&order=published_at DESC`,
-          { headers: { Accept: "application/json" } }
+        // Fetch all posts (we'll paginate on client side) – use getApiUrl for static/Vercel deploy
+        const url = getApiUrl(
+          `/api/v1/blog/posts?tenantId=${encodeURIComponent(effectiveTenantId)}&limit=200&status=published&order=published_at DESC`
         );
+        const res = await fetch(url, { headers: { Accept: "application/json" } });
 
         if (!res.ok) {
           throw new Error(`Failed to fetch posts (${res.status})`);
         }
 
-        const json = await res.json();
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          throw new Error("Blog is temporarily unavailable. Please try again later.");
+        }
+
+        let json: { data?: BlogPost[] };
+        try {
+          json = await res.json();
+        } catch {
+          throw new Error("Blog is temporarily unavailable. Please try again later.");
+        }
         const fetchedPosts: BlogPost[] = Array.isArray(json?.data) ? json.data : [];
 
         // Sort by published_at DESC (most recent first)
@@ -128,7 +139,11 @@ export default function BlogPage({ basePath, tenantId }: { basePath: string; ten
       } catch (err: any) {
         if (!cancelled) {
           console.error("[testing] Error fetching blog posts:", err);
-          setError(err.message || "Failed to load blog posts");
+          const message =
+            err.message?.toLowerCase().includes("json") || err instanceof SyntaxError
+              ? "Blog is temporarily unavailable. Please try again later."
+              : err.message || "Failed to load blog posts";
+          setError(message);
         }
       } finally {
         if (!cancelled) {

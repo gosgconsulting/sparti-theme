@@ -2,6 +2,7 @@ import React, { lazy, Suspense, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { ThemeBasePathContext } from '../../sparti-cms/context/ThemeBasePathContext';
 
 // Dynamic theme imports - themes with hardcoded content, ready for database integration
 const LandingPageTheme = lazy(() => import('../../sparti-cms/theme/landingpage'));
@@ -113,7 +114,13 @@ const TenantLandingPage: React.FC = () => {
     location.pathname.startsWith('/packages/')
   );
   
-  const slug = tenantSlug ?? themeSlug ?? slugFromShortPath ?? (isRootSTRRoute ? 'str' : 'landingpage');
+  // When DEPLOY_THEME_SLUG is set (Vercel/env), always use it so theme is served at root
+  const deploySlug = import.meta.env.DEPLOY_THEME_SLUG;
+  const slug = deploySlug ?? tenantSlug ?? themeSlug ?? slugFromShortPath ?? (isRootSTRRoute ? 'str' : 'landingpage');
+
+  // When deploy theme at root, basePath is '' so links use /services not /theme/gosgconsulting/services
+  const isDeployAtRoot = !!deploySlug && !location.pathname.startsWith('/theme/');
+  const basePath = isDeployAtRoot ? '' : undefined;
 
   // Extract full page path from location for nested routes like /booking/classes
   // Always extract from pathname to handle both /theme/:tenantSlug/:pageSlug and /theme/:tenantSlug/* routes
@@ -196,15 +203,18 @@ const TenantLandingPage: React.FC = () => {
   );
 
   // Pass pageSlug; tenantId omitted for portfolio (themes use internal fallbacks if needed)
+  // ThemeBasePathContext: when basePath='', theme uses root paths for links
   return (
-    <Suspense fallback={<LoadingFallback />}>
-      <ThemeComponent 
-        tenantName={currentTheme.name} 
-        tenantSlug={slug}
-        pageSlug={fullPageSlug}
-        tenantId={undefined}
-      />
-    </Suspense>
+    <ThemeBasePathContext.Provider value={basePath}>
+      <Suspense fallback={<LoadingFallback />}>
+        <ThemeComponent 
+          tenantName={currentTheme.name} 
+          tenantSlug={slug}
+          pageSlug={fullPageSlug}
+          tenantId={undefined}
+        />
+      </Suspense>
+    </ThemeBasePathContext.Provider>
   );
 };
 

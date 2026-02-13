@@ -1,5 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { Button } from './ui/button';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 
 interface SimpleHeaderProps {
   tenantName?: string;
@@ -14,9 +15,10 @@ const SimpleHeader: React.FC<SimpleHeaderProps> = ({
   logoSrc,
   onContactClick
 }) => {
+  const basePath = useContext(ThemeBasePathContext) ?? `/theme/${tenantSlug}`;
   const handleLogoClick = (e: React.MouseEvent) => {
     e.preventDefault();
-    window.location.href = `/theme/${tenantSlug}`;
+    window.location.href = basePath || '/';
   };
 
   const nav = [

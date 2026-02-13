@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useParams, useNavigate, useLocation } from 'react-router-dom';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 import { ShoppingCart, Star, Loader2, ArrowLeft } from 'lucide-react';
 import { getProductBySlug, getReviews, addToCart, getOrCreateGuestCart, addToGuestCart } from '../services/shopApi';
 
@@ -24,6 +25,7 @@ const Product: React.FC = () => {
   const { productname: productnameParam } = useParams<{ productname?: string }>();
   const navigate = useNavigate();
   const location = useLocation();
+  const basePath = useContext(ThemeBasePathContext) ?? '/theme/gosgconsulting';
   const [product, setProduct] = useState<Product | null>(null);
   const [reviews, setReviews] = useState<Review[]>([]);
   const [loading, setLoading] = useState(true);
@@ -123,7 +125,7 @@ const Product: React.FC = () => {
         // Logged in user - add via API
         await addToCart(userId, product.product_id, quantity, tenantId);
         alert('Item added to cart!');
-        navigate('/theme/gosgconsulting/cart');
+        navigate(`${basePath || ''}/cart`);
       } else {
         // Guest user - get or create cart, then add item
         let cartId = null;
@@ -146,7 +148,7 @@ const Product: React.FC = () => {
         await addToGuestCart(cartId, product.product_id, quantity, tenantId);
         console.log('[testing] Item added to guest cart:', { cartId, productId: product.product_id, quantity });
         alert('Item added to cart!');
-        navigate('/theme/gosgconsulting/cart');
+        navigate(`${basePath || ''}/cart`);
       }
     } catch (err: any) {
       console.error('[testing] Error adding to cart:', err);
@@ -203,7 +205,7 @@ const Product: React.FC = () => {
             </p>
           )}
           <button
-            onClick={() => navigate('/theme/gosgconsulting/shop')}
+            onClick={() => navigate(`${basePath || ''}/shop`)}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 mx-auto"
           >
             <ArrowLeft className="h-4 w-4" />
@@ -222,7 +224,7 @@ const Product: React.FC = () => {
     <div className="min-h-screen bg-background">
       <div className="max-w-7xl mx-auto px-4 py-8 md:px-6 md:py-12">
         <button
-          onClick={() => navigate('/theme/gosgconsulting/shop')}
+          onClick={() => navigate(`${basePath || ''}/shop`)}
           className="mb-6 flex items-center gap-2 text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="h-4 w-4" />

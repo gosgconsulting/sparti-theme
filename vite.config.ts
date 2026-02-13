@@ -78,7 +78,12 @@ export default defineConfig(({ mode }) => {
     resolveAlias.push({ find: /sparti-cms\/theme(.*)/, replacement: themeStubsPath + '$1' });
   }
 
+  const deployThemeSlug = envVars.DEPLOY_THEME_SLUG || envVars.VITE_DEPLOY_THEME_SLUG || '';
+
   return {
+  define: deployThemeSlug
+    ? { 'import.meta.env.DEPLOY_THEME_SLUG': JSON.stringify(deployThemeSlug) }
+    : { 'import.meta.env.DEPLOY_THEME_SLUG': JSON.stringify('') },
   server: {
     host: "::",
     port: 8080,

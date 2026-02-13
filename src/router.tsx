@@ -53,8 +53,13 @@ const ThemeRouteHandler: React.FC = () => {
 };
 
 // Short theme URL: /gosgconsulting or /gosgconsulting/services etc. - only when slug is a known theme
+// When DEPLOY_THEME_SLUG is set, /services etc. are page paths under the deploy theme - always render TenantLandingPage
 const ShortThemeRoute: React.FC = () => {
   const { themeSlug } = useParams<{ themeSlug: string }>();
+  const deployThemeSlug = import.meta.env.DEPLOY_THEME_SLUG;
+  if (deployThemeSlug) {
+    return <TenantLandingPage />;
+  }
   if (themeSlug && KNOWN_THEME_SLUGS.includes(themeSlug)) {
     return <TenantLandingPage />;
   }
@@ -99,7 +104,18 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 };
 
 // Root: dashboard at / (direct access, no redirect)
+// When DEPLOY_THEME_SLUG is set (Vercel env), serve theme at root (no /theme/ prefix)
 const RootIndex: React.FC = () => {
+  const deployThemeSlug = import.meta.env.DEPLOY_THEME_SLUG;
+
+  if (deployThemeSlug) {
+    return (
+      <ErrorBoundary>
+        <TenantLandingPage />
+      </ErrorBoundary>
+    );
+  }
+
   // Check if we're in theme deployment mode (standalone theme build)
   const isThemeDeployment =
     typeof window !== "undefined" &&
@@ -216,7 +232,11 @@ export const router = createBrowserRouter(
       element: (
         <RootLayout>
           <ErrorBoundary>
-            <ProductPage />
+            {import.meta.env.DEPLOY_THEME_SLUG ? (
+              <TenantLandingPage />
+            ) : (
+              <ProductPage />
+            )}
           </ErrorBoundary>
         </RootLayout>
       ),

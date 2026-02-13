@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { getCart, getCartById, getOrCreateGuestCart, createOrder } from '../services/shopApi';
 import { StripeCheckout } from '../../../components/checkout/StripeCheckout';
@@ -33,6 +34,7 @@ interface FormData {
 
 const Checkout: React.FC = () => {
   const navigate = useNavigate();
+  const basePath = useContext(ThemeBasePathContext) ?? '/theme/gosgconsulting';
   const [cart, setCart] = useState<Cart | null>(null);
   const [loading, setLoading] = useState(true);
   const [submitting, setSubmitting] = useState(false);
@@ -215,7 +217,7 @@ const Checkout: React.FC = () => {
 
       // Redirect to success page or show success message
       alert('Order placed successfully!');
-      navigate('/theme/gosgconsulting');
+      navigate(basePath || '/');
     } catch (err: any) {
       console.error('Error creating order:', err);
       setError(err.message || 'Failed to place order. Please try again.');
@@ -310,7 +312,7 @@ const Checkout: React.FC = () => {
           <h2 className="text-2xl font-bold mb-2">Checkout Error</h2>
           <p className="text-muted-foreground mb-6">{error || 'Your cart is empty'}</p>
           <button
-            onClick={() => navigate('/theme/gosgconsulting/shop')}
+            onClick={() => navigate(`${basePath || ''}/shop`)}
             className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             Go to Shop
@@ -566,7 +568,7 @@ const Checkout: React.FC = () => {
                 publishableKey={stripePublishableKey}
                 onSuccess={(paymentIntent) => {
                   console.log('[testing] Payment succeeded:', paymentIntent);
-                  navigate('/theme/gosgconsulting/checkout/success', {
+                  navigate(`${basePath || ''}/checkout/success`, {
                     state: { orderId, paymentIntentId: paymentIntent.id }
                   });
                 }}

@@ -1,9 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowLeft } from 'lucide-react';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 
 const NotFound: React.FC = () => {
   const navigate = useNavigate();
+  const basePath = useContext(ThemeBasePathContext) ?? '/theme/gosgconsulting';
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-background px-4">
@@ -14,7 +16,7 @@ const NotFound: React.FC = () => {
           The page you are looking for does not exist.
         </p>
         <button
-          onClick={() => navigate('/theme/gosgconsulting')}
+          onClick={() => navigate(basePath || '/')}
           className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center gap-2 mx-auto"
         >
           <ArrowLeft className="h-4 w-4" />

@@ -1,4 +1,5 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 
 interface FooterProps {
   tenantName?: string;
@@ -16,7 +17,10 @@ const Footer: React.FC<FooterProps> = ({
   onContactClick 
 }) => {
   const currentYear = new Date().getFullYear();
-  
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const basePath = ctxBasePath !== undefined ? ctxBasePath : `/theme/${tenantSlug}`;
+  const blogHref = basePath ? `${basePath}/blog` : '/blog';
+
   // Replace any instance of "sparti" (case-insensitive) with "GO SG"
   const displayName = tenantName?.replace(/sparti/gi, 'GO SG') || 'GO SG';
 
@@ -33,7 +37,7 @@ const Footer: React.FC<FooterProps> = ({
               <a href="/terms-conditions" className="hover:text-brandTeal transition-colors">
                 Terms of Service
               </a>
-              <a href={`/theme/${tenantSlug}/blog`} className="hover:text-brandTeal transition-colors">
+              <a href={blogHref} className="hover:text-brandTeal transition-colors">
                 Blog
               </a>
             </div>

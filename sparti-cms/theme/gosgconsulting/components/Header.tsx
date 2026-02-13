@@ -1,7 +1,8 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { ShoppingBag, ShoppingCart } from 'lucide-react';
 import gosgLogo from '../assets/go-sg-logo-official.png';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 
 interface HeaderProps {
   tenantName?: string;
@@ -19,7 +20,8 @@ const Header: React.FC<HeaderProps> = ({
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
-  const themeBasePath = `/theme/${tenantSlug}`;
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const themeBasePath = ctxBasePath !== undefined ? ctxBasePath : `/theme/${tenantSlug}`;
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 4);
@@ -37,6 +39,10 @@ const Header: React.FC<HeaderProps> = ({
   // Check if we're on a shop-related page (shop, cart, product, checkout)
   const isShopPage = () => {
     const pathParts = location.pathname.split('/').filter(Boolean);
+    // Deploy-at-root: path is /shop, /cart, etc. directly
+    if (themeBasePath === '') {
+      return ['shop', 'cart', 'product', 'checkout'].includes(pathParts[0] || '');
+    }
     const themeIndex = pathParts.indexOf(tenantSlug);
     if (themeIndex >= 0 && themeIndex < pathParts.length - 1) {
       const page = pathParts[themeIndex + 1];
@@ -47,17 +53,10 @@ const Header: React.FC<HeaderProps> = ({
 
   const showShopNavigation = isShopPage();
 
-  // Handle logo click - detect standalone vs theme mode
+  // Handle logo click - deploy-at-root (basePath='') or theme mode
   const handleLogoClick = () => {
-    const pathname = location.pathname;
-    // Detect standalone mode: pathname doesn't include /theme/gosgconsulting
-    const isStandaloneMode = !pathname.includes(`/theme/${tenantSlug}`);
-    
-    if (isStandaloneMode) {
-      navigate('/'); // Main domain - go to root
-    } else {
-      navigate(themeBasePath); // Theme mode - go to theme homepage
-    }
+    const path = themeBasePath || '/';
+    navigate(path);
   };
 
   return (

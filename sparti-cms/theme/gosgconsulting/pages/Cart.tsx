@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 import { ShoppingCart, Trash2, Plus, Minus, Loader2, ArrowRight } from 'lucide-react';
 import { getCart, getCartById, getOrCreateGuestCart, updateCartItem, updateGuestCartItem, removeFromCart, removeFromGuestCart, associateCartWithUser } from '../services/shopApi';
 
@@ -26,6 +27,7 @@ const Cart: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
   const [updating, setUpdating] = useState<number | null>(null);
   const navigate = useNavigate();
+  const basePath = useContext(ThemeBasePathContext) ?? '/theme/gosgconsulting';
 
   // Get user ID from session (if available)
   const getUserId = (): number | null => {
@@ -210,7 +212,7 @@ const Cart: React.FC = () => {
         <div className="text-center">
           <p className="text-red-600 mb-4">{error}</p>
           <button
-            onClick={() => navigate('/theme/gosgconsulting')}
+            onClick={() => navigate(basePath || '/')}
             className="px-4 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
           >
             Go to Homepage
@@ -231,7 +233,7 @@ const Cart: React.FC = () => {
               Start shopping to add items to your cart
             </p>
             <button
-              onClick={() => navigate('/theme/gosgconsulting/shop')}
+              onClick={() => navigate(`${basePath || ''}/shop`)}
               className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
             >
               Browse Products
@@ -335,14 +337,14 @@ const Cart: React.FC = () => {
                 </div>
               </div>
               <button
-                onClick={() => navigate('/theme/gosgconsulting/checkout')}
+                onClick={() => navigate(`${basePath || ''}/checkout`)}
                 className="w-full px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors flex items-center justify-center gap-2"
               >
                 Proceed to Checkout
                 <ArrowRight className="h-4 w-4" />
               </button>
               <button
-                onClick={() => navigate('/theme/gosgconsulting/shop')}
+                onClick={() => navigate(`${basePath || ''}/shop`)}
                 className="w-full mt-3 px-6 py-3 border border-border rounded-lg hover:bg-muted transition-colors"
               >
                 Continue Shopping

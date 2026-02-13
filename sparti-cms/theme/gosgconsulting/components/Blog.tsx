@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { Search, Calendar, Clock, ArrowRight, Loader2 } from 'lucide-react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
@@ -6,6 +6,7 @@ import { ScrollArea } from './ui/scroll-area';
 import Header from './Header';
 import Footer from './Footer';
 import ContactModal from './ContactModal';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 import { getPosts, getCategories, WordPressPost, WordPressCategory, getFeaturedImageUrl, calculateReadTime, getPostCategories } from '../services/wordpressApi';
 
 interface BlogProps {
@@ -17,6 +18,7 @@ const Blog: React.FC<BlogProps> = ({
   tenantName = 'GO SG Consulting',
   tenantSlug = 'gosgconsulting'
 }) => {
+  const basePath = useContext(ThemeBasePathContext) ?? `/theme/${tenantSlug}`;
   const [isContactOpen, setIsContactOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("all");
@@ -76,8 +78,8 @@ const Blog: React.FC<BlogProps> = ({
   });
 
   const handlePostClick = (slug: string) => {
-    // This would be handled by the CMS routing system
-    window.location.href = `/theme/${tenantSlug}/blog/${slug}`;
+    const prefix = basePath || '';
+    window.location.href = `${prefix}/blog/${slug}`;
   };
 
   return (

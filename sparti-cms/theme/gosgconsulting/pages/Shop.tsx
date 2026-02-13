@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useContext } from 'react';
 import { useNavigate } from 'react-router-dom';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 import { ShoppingBag, Search, Loader2, ChevronDown } from 'lucide-react';
 import { getProducts, getCategories } from '../services/shopApi';
 
@@ -29,6 +30,7 @@ const Shop: React.FC = () => {
   const [selectedCategory, setSelectedCategory] = useState<number | 'all'>('all');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const navigate = useNavigate();
+  const basePath = useContext(ThemeBasePathContext) ?? '/theme/gosgconsulting';
 
   useEffect(() => {
     const fetchData = async () => {
@@ -85,7 +87,8 @@ const Shop: React.FC = () => {
   });
 
   const handleProductClick = (slug: string) => {
-    navigate(`/theme/gosgconsulting/product/${slug}`);
+    const prefix = basePath || '';
+    navigate(`${prefix}/product/${slug}`);
   };
 
   if (loading) {

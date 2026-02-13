@@ -1,10 +1,12 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircle } from 'lucide-react';
+import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 
 const CheckoutSuccess: React.FC = () => {
   const location = useLocation();
   const navigate = useNavigate();
+  const basePath = useContext(ThemeBasePathContext) ?? '/theme/gosgconsulting';
   const { orderId, paymentIntentId } = location.state || {};
 
   return (
@@ -26,7 +28,7 @@ const CheckoutSuccess: React.FC = () => {
           </p>
         )}
         <button
-          onClick={() => navigate('/theme/gosgconsulting')}
+          onClick={() => navigate(basePath || '/')}
           className="px-6 py-3 bg-blue-600 text-white rounded-lg hover:bg-blue-700"
         >
           Continue Shopping

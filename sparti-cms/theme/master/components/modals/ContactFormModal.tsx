@@ -4,6 +4,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Dialog, DialogContent } from "@/components/ui/dialog";
 import { ArrowLeft, ArrowRight, Loader2, MessageCircle, Send } from "lucide-react";
 import { getTenantId } from "../../../../utils/tenantConfig";
+import { getApiUrl } from "../../../../utils/api";
 
 type ContactFormModalProps = {
   isOpen: boolean;
@@ -155,7 +156,7 @@ const ContactFormModal: React.FC<ContactFormModalProps> = ({
         method === "whatsapp" ? "WhatsApp" : "Contact form"
       }`;
 
-      const response = await fetch("/api/form-submissions", {
+      const response = await fetch(getApiUrl("/api/form-submissions"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

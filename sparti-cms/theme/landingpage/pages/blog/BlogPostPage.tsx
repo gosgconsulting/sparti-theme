@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Badge } from "@/components/ui/badge";
 import { AspectRatio } from "@/components/ui/aspect-ratio";
+import { getApiUrl } from "../../../../utils/api";
 import { BLOG_POSTS } from "../../data/blog";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -92,16 +93,26 @@ export default function BlogPostPage({
 
     (async () => {
       try {
-        const res = await fetch(
-          `/api/v1/blog/posts/${encodeURIComponent(slug)}?tenantId=${encodeURIComponent(effectiveTenantId)}`,
-          { headers: { Accept: "application/json" } }
+        const url = getApiUrl(
+          `/api/v1/blog/posts/${encodeURIComponent(slug)}?tenantId=${encodeURIComponent(effectiveTenantId)}`
         );
+        const res = await fetch(url, { headers: { Accept: "application/json" } });
 
         if (!res.ok) {
           throw new Error(`Failed to fetch post (${res.status})`);
         }
 
-        const json = await res.json();
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          throw new Error("Blog is temporarily unavailable. Please try again later.");
+        }
+
+        let json: { data?: CmsPost };
+        try {
+          json = await res.json();
+        } catch {
+          throw new Error("Blog is temporarily unavailable. Please try again later.");
+        }
         const data: CmsPost | null = json?.data ?? null;
 
         if (!cancelled) {

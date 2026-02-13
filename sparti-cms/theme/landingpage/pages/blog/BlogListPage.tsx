@@ -2,6 +2,7 @@ import React, { useEffect, useMemo, useState } from "react";
 import { Tabs, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import { Badge } from "@/components/ui/badge";
 import { Calendar, Clock, User } from "lucide-react";
+import { getApiUrl } from "../../../../utils/api";
 import { BLOG_CATEGORIES, BLOG_POSTS, type BlogCategory, type BlogPost } from "../../data/blog";
 import Header from "../../components/Header";
 import Footer from "../../components/Footer";
@@ -140,16 +141,26 @@ export default function BlogListPage({
 
     (async () => {
       try {
-        const res = await fetch(
-          `/api/v1/blog/posts?tenantId=${encodeURIComponent(effectiveTenantId)}&limit=30`,
-          { headers: { Accept: "application/json" } }
+        const url = getApiUrl(
+          `/api/v1/blog/posts?tenantId=${encodeURIComponent(effectiveTenantId)}&limit=30`
         );
+        const res = await fetch(url, { headers: { Accept: "application/json" } });
 
         if (!res.ok) {
           throw new Error(`Failed to fetch posts (${res.status})`);
         }
 
-        const json = await res.json();
+        const contentType = res.headers.get("content-type") || "";
+        if (!contentType.includes("application/json")) {
+          throw new Error("Blog is temporarily unavailable. Please try again later.");
+        }
+
+        let json: { data?: CmsPost[] };
+        try {
+          json = await res.json();
+        } catch {
+          throw new Error("Blog is temporarily unavailable. Please try again later.");
+        }
         const rows: CmsPost[] = Array.isArray(json?.data) ? json.data : [];
         const mapped = rows.map(toThemePost);
 

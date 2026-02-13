@@ -11,6 +11,7 @@ import {
 } from "./ui/select";
 import { ArrowLeft, ArrowRight, Loader2, MessageCircle, Send } from "lucide-react";
 import { getTenantId } from "../../../utils/tenantConfig";
+import { getApiUrl } from "../../../utils/api";
 
 type ModalContactFormProps = {
   className?: string;
@@ -129,7 +130,7 @@ const ModalContactForm: React.FC<ModalContactFormProps> = ({ className = "" }) =
       const tenantId = getTenantId();
       const finalMessage = `${message.trim()}\n\nClass: ${classType}\nDate: ${date}\nPreferred contact method: ${method === "whatsapp" ? "WhatsApp" : "Email"}`;
 
-      const response = await fetch("/api/form-submissions", {
+      const response = await fetch(getApiUrl("/api/form-submissions"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

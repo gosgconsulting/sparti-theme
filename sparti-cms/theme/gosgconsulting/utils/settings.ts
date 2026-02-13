@@ -4,6 +4,7 @@
  */
 
 import { ThemeBrandingSettings, ThemeLocalizationSettings } from '../../../hooks/useThemeSettings';
+import { resolveBackendAssetUrl } from '../../../utils/api';
 import { getThemeAssetUrl } from '../../../utils/themeAssets';
 
 /**
@@ -43,7 +44,8 @@ export function getLogoSrc(
   branding: ThemeBrandingSettings | null | undefined,
   fallback: string = getThemeAssetUrl(undefined, 'go-sg-logo-official.png', 'gosgconsulting')
 ): string {
-  return branding?.site_logo || fallback;
+  const raw = branding?.site_logo || fallback;
+  return resolveBackendAssetUrl(raw);
 }
 
 /**
@@ -53,7 +55,9 @@ export function getFaviconSrc(
   branding: ThemeBrandingSettings | null | undefined,
   fallback: string | null = null
 ): string | null {
-  return branding?.site_favicon || fallback;
+  const raw = branding?.site_favicon || fallback;
+  if (raw == null) return null;
+  return resolveBackendAssetUrl(raw);
 }
 
 /**

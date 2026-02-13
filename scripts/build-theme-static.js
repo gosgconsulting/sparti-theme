@@ -214,10 +214,16 @@ async function createStandaloneHtml() {
   }
 
   // Get favicon from branding or use default
-  const faviconUrl = (brandingData && brandingData.site_favicon) 
-    ? brandingData.site_favicon 
+  let faviconUrl = (brandingData && brandingData.site_favicon)
+    ? brandingData.site_favicon
     : '/favicon.png';
-  
+  // Resolve /uploads/ paths to API base URL for static deploy so favicon loads from backend
+  const apiBase = process.env.VITE_API_BASE_URL && String(process.env.VITE_API_BASE_URL).trim();
+  if (faviconUrl.startsWith('/uploads/') && apiBase) {
+    const base = apiBase.replace(/\/$/, '');
+    faviconUrl = base + faviconUrl;
+  }
+
   // Get title from branding or use theme title
   // Escape HTML entities for safety
   const getPageTitle = () => {

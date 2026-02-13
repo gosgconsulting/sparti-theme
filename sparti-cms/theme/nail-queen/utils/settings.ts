@@ -4,6 +4,7 @@
  */
 
 import { ThemeBrandingSettings, ThemeLocalizationSettings } from '../../../hooks/useThemeSettings';
+import { resolveBackendAssetUrl } from '../../../utils/api';
 
 /**
  * Get site name with fallback
@@ -42,7 +43,8 @@ export function getLogoSrc(
   branding: ThemeBrandingSettings | null | undefined,
   fallback: string = '/theme/nail-queen/assets/nq-site-brand.png'
 ): string {
-  return branding?.site_logo || fallback;
+  const raw = branding?.site_logo || fallback;
+  return resolveBackendAssetUrl(raw);
 }
 
 /**
@@ -52,7 +54,9 @@ export function getFaviconSrc(
   branding: ThemeBrandingSettings | null | undefined,
   fallback: string | null = '/theme/nail-queen/assets/favicon.ico'
 ): string | null {
-  return branding?.site_favicon || fallback;
+  const raw = branding?.site_favicon || fallback;
+  if (raw == null) return null;
+  return resolveBackendAssetUrl(raw);
 }
 
 /**

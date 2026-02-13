@@ -75,6 +75,17 @@ export const getApiUrl = (path: string): string => {
   return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
 };
 
+/**
+ * Resolve backend asset paths (e.g. /uploads/...) to full URLs using the API base.
+ * Use for branding images (logo, favicon) so they load from the backend on static deploy.
+ */
+export const resolveBackendAssetUrl = (path: string): string => {
+  if (!path || typeof path !== 'string') return path;
+  if (path.startsWith('http://') || path.startsWith('https://')) return path;
+  if (path.startsWith('/uploads/')) return getApiUrl(path);
+  return path;
+};
+
 export const api = {
   // Get the base URL (empty in dev for proxy, VITE_API_BASE_URL in production when set)
   getBaseUrl: () => API_BASE_URL,

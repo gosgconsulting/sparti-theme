@@ -2,6 +2,7 @@
  * Client-side Analytics Tracking Utility
  * Provides easy-to-use functions for tracking page views and events
  */
+import { getApiUrl } from '../../sparti-cms/utils/api';
 
 // Generate a unique session ID
 const generateSessionId = (): string => {
@@ -87,7 +88,7 @@ export const trackPageView = async (options: {
       user_agent: navigator.userAgent
     };
 
-    const response = await fetch('/api/analytics/track/pageview', {
+    const response = await fetch(getApiUrl('/api/analytics/track/pageview'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -134,7 +135,7 @@ export const trackEvent = async (
       user_agent: navigator.userAgent
     };
 
-    const response = await fetch('/api/analytics/track/event', {
+    const response = await fetch(getApiUrl('/api/analytics/track/event'), {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -274,7 +275,7 @@ window.addEventListener('beforeunload', () => {
     };
 
     if (navigator.sendBeacon) {
-      navigator.sendBeacon('/api/analytics/track/pageview', JSON.stringify(data));
+      navigator.sendBeacon(getApiUrl('/api/analytics/track/pageview'), JSON.stringify(data));
     }
   }
 });

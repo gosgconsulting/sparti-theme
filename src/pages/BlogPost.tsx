@@ -7,6 +7,7 @@ import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import ContactModal from "@/components/ContactModal";
+import api from "../../sparti-cms/utils/api";
 
 // Import placeholder images for fallback
 const placeholderImage = "/placeholder.svg";
@@ -222,7 +223,7 @@ const BlogPost = () => {
       try {
         setIsLoading(true);
         // Fetch post data from API
-        const response = await fetch(`/api/blog/posts/${slug}`);
+        const response = await fetch(api.getApiUrl(`/api/blog/posts/${slug}`));
         
         if (!response.ok) {
           if (response.status === 404) {

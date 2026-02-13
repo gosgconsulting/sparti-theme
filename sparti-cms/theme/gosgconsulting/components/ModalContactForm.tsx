@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { getApiUrl } from "../../../utils/api";
 import { Button } from "./ui/button";
 import { Input } from "./ui/input";
 import { Textarea } from "./ui/textarea";
@@ -122,7 +123,7 @@ const ModalContactForm: React.FC<ModalContactFormProps> = ({ className = "", ini
       const tenantId = getTenantId();
       const finalMessage = `${message.trim()}\n\nPreferred contact method: ${method === "whatsapp" ? "WhatsApp" : "Contact form"}`;
 
-      const response = await fetch("/api/form-submissions", {
+      const response = await fetch(getApiUrl("/api/form-submissions"), {
         method: "POST",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({

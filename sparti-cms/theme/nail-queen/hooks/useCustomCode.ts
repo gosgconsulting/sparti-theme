@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getApiUrl } from '../../../utils/api';
 
 export interface CustomCodeSettings {
   head: string;
@@ -35,7 +36,7 @@ export const useCustomCode = (tenantId?: string): {
       try {
         // Try to fetch from public API endpoint
         // If this endpoint requires auth, you may need to use server-side injection instead
-        const response = await fetch(`/api/custom-code?tenantId=${encodeURIComponent(tenantId)}`, {
+        const response = await fetch(getApiUrl(`/api/custom-code?tenantId=${encodeURIComponent(tenantId)}`), {
           method: 'GET',
           headers: {
             Accept: 'application/json',

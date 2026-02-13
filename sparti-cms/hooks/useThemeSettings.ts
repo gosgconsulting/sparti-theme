@@ -1,4 +1,5 @@
 import { useState, useEffect } from 'react';
+import { getApiUrl } from '../utils/api';
 
 // Type definitions for theme settings
 export interface ThemeBrandingSettings {
@@ -76,11 +77,11 @@ export const useThemeSettings = (themeSlug: string, tenantSlug?: string): UseThe
     setError(null);
 
     try {
-      const apiUrl = tenantSlug
+      const path = tenantSlug
         ? `/api/v1/theme/${themeSlug}/settings?tenantId=${encodeURIComponent(tenantSlug)}`
         : `/api/v1/theme/${themeSlug}/settings`;
 
-      const response = await fetch(apiUrl, {
+      const response = await fetch(getApiUrl(path), {
         method: 'GET',
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
@@ -201,11 +202,11 @@ export const useThemeBranding = (
       const effectiveTenantId =
         tenantId || (typeof window !== 'undefined' && (window as any).__CMS_TENANT__) || null;
 
-      const apiUrl = effectiveTenantId
+      const path = effectiveTenantId
         ? `/api/v1/theme/${themeSlug}/branding?tenantId=${encodeURIComponent(effectiveTenantId)}`
         : `/api/v1/theme/${themeSlug}/branding`;
 
-      fetch(apiUrl, {
+      fetch(getApiUrl(path), {
         method: 'GET',
         headers: {
           Accept: 'application/json',
@@ -297,7 +298,7 @@ export const useThemeStyles = (
       ? `/api/v1/theme/${themeSlug}/styles?tenantId=${encodeURIComponent(tenantSlug)}`
       : `/api/v1/theme/${themeSlug}/styles`;
 
-    fetch(apiUrl, {
+    fetch(getApiUrl(apiUrl), {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json; charset=utf-8',

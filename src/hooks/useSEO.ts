@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { getApiUrl } from '../../sparti-cms/utils/api';
 
 interface SEOSettings {
   site_name?: string;
@@ -58,11 +59,9 @@ export const useSEO = (options: SEOOptions = {}) => {
 
     const fetchSEOSettings = async () => {
       try {
-        // In development, use relative URLs to leverage Vite proxy
-        const API_BASE_URL = import.meta.env.DEV 
-          ? '' // Use relative URLs in development (Vite proxy handles /api)
-          : (import.meta.env.VITE_API_BASE_URL || 'http://localhost:4173');
-        const response = await fetch(`${API_BASE_URL}/api/seo`);
+        const seoUrl = getApiUrl('/api/seo');
+        console.log('[testing] SEO URL:', seoUrl);
+        const response = await fetch(getApiUrl('/api/seo'));
         
         if (!response.ok) {
           throw new Error('Failed to fetch SEO settings');

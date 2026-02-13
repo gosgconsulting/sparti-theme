@@ -2,10 +2,7 @@
 // In development, use relative URLs to leverage Vite proxy
 // In production, default to same-origin unless VITE_API_BASE_URL is explicitly set
 const getApiBaseUrl = () => {
-  if (import.meta.env.DEV) return '';
-
-  const raw = String(import.meta.env.VITE_API_BASE_URL || '').trim();
-  if (!raw) return '';
+  const raw = String(import.meta.env.VITE_API_BASE_URL || 'https://cms.sparti.ai').trim();
 
   // If a domain is provided without protocol, assume https
   if (!raw.startsWith('http://') && !raw.startsWith('https://')) {
@@ -73,9 +70,16 @@ const getAuthHeaders = (additionalHeaders: Record<string, string> = {}, tenantId
   return headers;
 };
 
+/** Build full API URL for use with fetch - prepends VITE_API_BASE_URL when set */
+export const getApiUrl = (path: string): string => {
+  return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
+};
+
 export const api = {
-  // Get the base URL
+  // Get the base URL (empty in dev for proxy, VITE_API_BASE_URL in production when set)
   getBaseUrl: () => API_BASE_URL,
+  // Build full URL for a path - use with fetch() when api.get/post aren't suitable
+  getApiUrl,
   
   // Get tenant API key (exported for external use)
   getTenantApiKey: (tenantId?: string) => getTenantApiKey(tenantId),

@@ -3,6 +3,7 @@ import { X, MessageCircle } from 'lucide-react';
 import { Button } from '@/components/ui/button';
 import { getPageUrl } from './utils/urls';
 import { getTenantId } from '../../utils/tenantConfig';
+import { getApiUrl } from '../../utils/api';
 
 interface ContactModalProps {
   isOpen: boolean;
@@ -40,7 +41,7 @@ const ContactModal: React.FC<ContactModalProps> = ({ isOpen, onClose }) => {
     try {
       const tenantId = getTenantId();
 
-      const response = await fetch('/api/form-submissions', {
+      const response = await fetch(getApiUrl('/api/form-submissions'), {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({

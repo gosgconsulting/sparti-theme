@@ -1,5 +1,5 @@
-
 import { useState } from "react";
+import { getApiUrl } from "../../sparti-cms/utils/api";
 import { motion } from "framer-motion";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -37,7 +37,7 @@ const ContactForm = () => {
       console.log("Submitting contact form:", formData);
 
       // Submit to form submissions API
-      const response = await fetch('/api/form-submissions', {
+      const response = await fetch(getApiUrl('/api/form-submissions'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ const ContactForm = () => {
 
       // Also send email notification
       try {
-        await fetch('/api/send-contact-email', {
+        await fetch(getApiUrl('/api/send-contact-email'), {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',

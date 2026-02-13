@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { getTenantId } from '../../../utils/tenantConfig';
+import { getApiUrl } from '../../../utils/api';
 
 interface ContactFormSidebarProps {
   children: React.ReactNode;
@@ -50,7 +51,7 @@ export const ContactFormDialog: React.FC<ContactFormSidebarProps> = ({
       const tenantId = getTenantId();
       
       // Submit to backend API
-      const response = await fetch('/api/form-submissions', {
+      const response = await fetch(getApiUrl('/api/form-submissions'), {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',

@@ -24,7 +24,7 @@ export default function CheckoutPage() {
     address: "",
     city: "",
     postalCode: "",
-    country: "",
+    country: "Singapore",
   });
   const [hasSeparateBilling, setHasSeparateBilling] = useState(false);
   const [billingDetails, setBillingDetails] = useState({
@@ -35,7 +35,7 @@ export default function CheckoutPage() {
     address: "",
     city: "",
     postalCode: "",
-    country: "",
+    country: "Singapore",
   });
   const [shippingOption, setShippingOption] = useState("standard");
   const [paymentDetails, setPaymentDetails] = useState({
@@ -259,7 +259,10 @@ export default function CheckoutPage() {
                   </div>
 
                   <div className="border-t border-border-light pt-6 mt-8">
-                    <h3 className="text-base font-heading font-medium text-foreground mb-4">Shipping Address</h3>
+                    <h3 className="text-base font-heading font-medium text-foreground mb-2">Shipping Address</h3>
+                    <p className="text-sm font-body font-light text-foreground/70 mb-4">
+                      Delivery is only available to Singapore addresses.
+                    </p>
 
                     <div className="space-y-4">
                       <div>
@@ -272,7 +275,7 @@ export default function CheckoutPage() {
                           value={shippingAddress.address}
                           onChange={(e) => handleShippingAddressChange("address", e.target.value)}
                           className="mt-2 rounded-card"
-                          placeholder="Street address"
+                          placeholder="e.g., 123 Orchard Road, #05-10"
                         />
                       </div>
 
@@ -284,10 +287,10 @@ export default function CheckoutPage() {
                           <Input
                             id="shippingCity"
                             type="text"
-                            value={shippingAddress.city}
-                            onChange={(e) => handleShippingAddressChange("city", e.target.value)}
-                            className="mt-2 rounded-card"
-                            placeholder="City"
+                            value="Singapore"
+                            disabled
+                            className="mt-2 rounded-card bg-muted/50 cursor-not-allowed"
+                            placeholder="Singapore"
                           />
                         </div>
                         <div>
@@ -300,23 +303,9 @@ export default function CheckoutPage() {
                             value={shippingAddress.postalCode}
                             onChange={(e) => handleShippingAddressChange("postalCode", e.target.value)}
                             className="mt-2 rounded-card"
-                            placeholder="Postal code"
+                            placeholder="e.g., 238801"
                           />
                         </div>
-                      </div>
-
-                      <div>
-                        <Label htmlFor="shippingCountry" className="text-sm font-body font-light text-foreground">
-                          Country *
-                        </Label>
-                        <Input
-                          id="shippingCountry"
-                          type="text"
-                          value={shippingAddress.country}
-                          onChange={(e) => handleShippingAddressChange("country", e.target.value)}
-                          className="mt-2 rounded-card"
-                          placeholder="Country"
-                        />
                       </div>
                     </div>
                   </div>
@@ -408,7 +397,7 @@ export default function CheckoutPage() {
                           value={billingDetails.address}
                           onChange={(e) => handleBillingDetailsChange("address", e.target.value)}
                           className="mt-2 rounded-card"
-                          placeholder="Street address"
+                          placeholder="e.g., 123 Orchard Road, #05-10"
                         />
                       </div>
 
@@ -420,10 +409,10 @@ export default function CheckoutPage() {
                           <Input
                             id="billingCity"
                             type="text"
-                            value={billingDetails.city}
-                            onChange={(e) => handleBillingDetailsChange("city", e.target.value)}
-                            className="mt-2 rounded-card"
-                            placeholder="City"
+                            value="Singapore"
+                            disabled
+                            className="mt-2 rounded-card bg-muted/50 cursor-not-allowed"
+                            placeholder="Singapore"
                           />
                         </div>
                         <div>
@@ -436,23 +425,9 @@ export default function CheckoutPage() {
                             value={billingDetails.postalCode}
                             onChange={(e) => handleBillingDetailsChange("postalCode", e.target.value)}
                             className="mt-2 rounded-card"
-                            placeholder="Postal code"
+                            placeholder="e.g., 238801"
                           />
                         </div>
-                      </div>
-
-                      <div>
-                        <Label htmlFor="billingCountry" className="text-sm font-body font-light text-foreground">
-                          Country *
-                        </Label>
-                        <Input
-                          id="billingCountry"
-                          type="text"
-                          value={billingDetails.country}
-                          onChange={(e) => handleBillingDetailsChange("country", e.target.value)}
-                          className="mt-2 rounded-card"
-                          placeholder="Country"
-                        />
                       </div>
                     </div>
                   )}

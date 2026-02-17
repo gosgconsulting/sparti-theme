@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeLink } from "../ThemeLink";
 
-import slide1 from "../../assets/green_hero.jpeg";
+import slide1 from "../../assets/hero_new.png";
 import slide2 from "../../assets/20240514_161154.jpg";
 import slide3 from "../../assets/roof.png";
 

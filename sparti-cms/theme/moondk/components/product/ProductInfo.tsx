@@ -151,6 +151,9 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
               <Plus className="h-4 w-4" />
             </Button>
           </div>
+          {product?.stock !== undefined && product.stock < 5 && (
+            <span className="text-sm font-body font-light text-foreground">* Limited stock left</span>
+          )}
         </div>
 
         <Button 

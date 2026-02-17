@@ -23,26 +23,27 @@ export interface Product {
   price: string;
   image: string;
   isNew?: boolean;
+  stock?: number;
 }
 
 export const products: Product[] = [
   // Tea products
   { id: 1, name: "Hovenia Dulcis Extract (헛개수)", category: "Tea", price: "$37", image: hoveniaDulcisImage, isNew: true },
-  { id: 2, name: "Corn Silk Tea Extract", category: "Tea", price: "$58", image: cornExtractImage, isNew: true },
+  { id: 2, name: "Corn Silk Tea Extract", category: "Tea", price: "$58", image: cornExtractImage, isNew: true, stock: 3 },
   { id: 3, name: "Black Bean Tea Extract (검은콩차 진액)", category: "Tea", price: "$58", image: blackBeanTeaImage, isNew: true },
-  { id: 4, name: "Barley Tea Extract (보리차 진액)", category: "Tea", price: "$32", image: barleyTeaImage, isNew: true },
+  { id: 4, name: "Barley Tea Extract (보리차 진액)", category: "Tea", price: "$32", image: barleyTeaImage, isNew: true, stock: 2 },
   
   // Oil products
-  { id: 5, name: "Cold Pressed Sesame Oil", category: "Oil", price: "$36", image: sesameOilImage },
-  { id: 7, name: "Cold Pressed Perilla Oil", category: "Oil", price: "$36", image: perillaOilImage },
+  { id: 5, name: "Cold Pressed Sesame Oil", category: "Oil", price: "$36", image: sesameOilImage, stock: 4 },
+  { id: 7, name: "Cold Pressed Perilla Oil", category: "Oil", price: "$36", image: perillaOilImage, stock: 1 },
   { id: 8, name: "Cold Pressed Oil Gift Set", category: "Oil", price: "$68", image: saucesImage },
   
   // Soju products
-  { id: 9, name: "Seoriju", category: "Soju", price: "$58", image: seorijuImage },
+  { id: 9, name: "Seoriju", category: "Soju", price: "$58", image: seorijuImage, stock: 3 },
   
   // Noodles products
   { id: 10, name: "Myeongawon Hand-Stretched Red Rice Noodle", category: "Noodles", price: "$12", image: wheatNoodleImage },
-  { id: 11, name: "Myeongawon 5 Color Noodle Gift Set", category: "Noodles", price: "$26", image: giftSetImage },
+  { id: 11, name: "Myeongawon 5 Color Noodle Gift Set", category: "Noodles", price: "$26", image: giftSetImage, stock: 2 },
   { id: 12, name: "Potato Noodle", category: "Noodles", price: "$22", image: potatoNoodleImage },
 ];
 

@@ -1,10 +1,11 @@
 import { X } from "lucide-react";
-import { useEffect, useState, useRef } from "react";
+import { useEffect, useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 
 import { ThemeLink } from "../ThemeLink";
 import ShoppingBag from "./ShoppingBag";
 import { useCart } from "../../contexts/CartContext";
+import ContactFormSheet from "../ContactFormSheet";
 
 import logoSrc from "../../assets/moondk_logo.png";
 
@@ -19,7 +20,10 @@ const Navigation = () => {
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [offCanvasType, setOffCanvasType] = useState<"favorites" | null>(null);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
+  const dropdownRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const menuItemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   
   const { cartItems, updateQuantity, totalItems, isCartOpen, openCart, closeCart } = useCart();
 
@@ -42,6 +46,50 @@ const Navigation = () => {
     };
   }, []);
 
+  // ESC key handler to close dropdown
+  useEffect(() => {
+    const handleEscKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape" && activeDropdown) {
+        setActiveDropdown(null);
+      }
+    };
+
+    if (activeDropdown) {
+      window.addEventListener("keydown", handleEscKey);
+      return () => window.removeEventListener("keydown", handleEscKey);
+    }
+  }, [activeDropdown]);
+
+  // Position dropdown below header
+  useEffect(() => {
+    if (activeDropdown) {
+      const menuItem = menuItemRefs.current.get(activeDropdown);
+      const dropdown = dropdownRefs.current.get(activeDropdown);
+      const navElement = document.querySelector('nav');
+      
+      if (menuItem && dropdown && navElement) {
+        const updatePosition = () => {
+          const navRect = navElement.getBoundingClientRect();
+          // Position directly below the entire nav/header (no gap) and align to left edge
+          dropdown.style.top = `${navRect.bottom}px`;
+          dropdown.style.left = `0px`;
+        };
+        
+        // Use requestAnimationFrame to ensure DOM is ready
+        requestAnimationFrame(updatePosition);
+        
+        // Update on scroll/resize
+        window.addEventListener('scroll', updatePosition, true);
+        window.addEventListener('resize', updatePosition);
+        
+        return () => {
+          window.removeEventListener('scroll', updatePosition, true);
+          window.removeEventListener('resize', updatePosition);
+        };
+      }
+    }
+  }, [activeDropdown]);
+
   // Helper function to handle delayed dropdown close
   const handleDropdownClose = () => {
     if (closeTimeoutRef.current) {
@@ -49,7 +97,7 @@ const Navigation = () => {
     }
     closeTimeoutRef.current = setTimeout(() => {
       setActiveDropdown(null);
-    }, 250); // 250ms delay for better UX
+    }, 150); // 150ms delay to prevent flicker
   };
 
   // Helper function to cancel dropdown close
@@ -101,6 +149,7 @@ const Navigation = () => {
       style={{
         backgroundColor: "rgba(242, 242, 242, 0.95)",
         backdropFilter: "blur(10px)",
+        zIndex: 40,
       }}
     >
       {/* Topbar */}
@@ -116,7 +165,7 @@ const Navigation = () => {
       </div>
 
       {/* Main Header */}
-      <div className="bg-white">
+      <div className="bg-white relative">
         <div className="relative flex items-center justify-between h-20 px-6">
           {/* Left: Menu */}
           <div className="flex items-center">
@@ -151,6 +200,9 @@ const Navigation = () => {
                 <div
                   key={item.name}
                   className="relative"
+                  ref={(el) => {
+                    if (el) menuItemRefs.current.set(item.name, el);
+                  }}
                   onMouseEnter={() => {
                     if (item.submenuItems && item.submenuItems.length > 0) {
                       handleDropdownOpen(item.name);
@@ -163,6 +215,7 @@ const Navigation = () => {
                   <ThemeLink
                     to={item.href}
                     className="text-nav-foreground hover:text-primary transition-colors duration-200 text-sm font-body font-light py-2 flex items-center gap-1"
+                    aria-expanded={item.submenuItems && item.submenuItems.length > 0 && activeDropdown === item.name}
                   >
                     {item.name}
                     {item.submenuItems && item.submenuItems.length > 0 && (
@@ -183,18 +236,30 @@ const Navigation = () => {
                     )}
                   </ThemeLink>
                   
-                  {/* Simple dropdown below menu item */}
+                  {/* Compact horizontal dropdown below header */}
                   {activeDropdown === item.name && item.submenuItems && item.submenuItems.length > 0 && (
                     <div
-                      className="absolute top-full left-0 mt-2 bg-white border border-border/30 shadow-xl rounded-2xl z-50 min-w-[200px] py-2 overflow-hidden transition-all duration-300 ease-out"
+                      ref={(el) => {
+                        if (el) dropdownRefs.current.set(item.name, el);
+                      }}
+                      className="fixed z-50 py-4 px-8 transition-all duration-300 ease-out"
+                      style={{
+                        width: 'max-content',
+                        maxWidth: 'min(90vw, 800px)',
+                        backgroundColor: '#F2F2F2',
+                        borderRadius: '0',
+                        boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
+                      }}
                       onMouseEnter={() => handleDropdownOpen(item.name)}
                       onMouseLeave={handleDropdownClose}
-                      style={{
-                        backdropFilter: 'blur(10px)',
-                        boxShadow: '0 10px 40px rgba(0, 0, 0, 0.08)',
-                      }}
                     >
-                      <ul className="space-y-0">
+                      <div 
+                        className="flex flex-nowrap gap-2 overflow-x-auto [&::-webkit-scrollbar]:hidden"
+                        style={{
+                          scrollbarWidth: 'none',
+                          msOverflowStyle: 'none',
+                        }}
+                      >
                         {item.submenuItems.map((subItem, index) => {
                           const to =
                             item.name === "SHOP"
@@ -202,21 +267,27 @@ const Navigation = () => {
                               : `/category/${subItem.toLowerCase().replace(/\s+/g, "-")}`;
 
                           return (
-                            <li key={index}>
-                              <ThemeLink
-                                to={to}
-                                className="text-nav-foreground hover:text-primary transition-all duration-300 ease-out text-sm font-body font-light block px-5 py-2.5 hover:bg-muted/30 rounded-lg mx-1"
-                              >
-                                {subItem}
-                              </ThemeLink>
-                            </li>
+                            <ThemeLink
+                              key={index}
+                              to={to}
+                              className="rounded-full px-4 py-2 text-sm font-body border transition-colors bg-background text-primary border-primary/30 hover:border-primary/60 hover:bg-primary hover:text-white whitespace-nowrap flex-shrink-0"
+                            >
+                              {subItem}
+                            </ThemeLink>
                           );
                         })}
-                      </ul>
+                      </div>
                     </div>
                   )}
                 </div>
               ))}
+              {/* Contact Us button */}
+              <button
+                onClick={() => setIsContactFormOpen(true)}
+                className="text-nav-foreground hover:text-primary transition-colors duration-200 text-sm font-body font-light py-2"
+              >
+                Contact Us
+              </button>
             </div>
           </div>
 
@@ -373,6 +444,16 @@ const Navigation = () => {
                   )}
                 </div>
               ))}
+              {/* Contact Us button for mobile */}
+              <button
+                onClick={() => {
+                  setIsContactFormOpen(true);
+                  setIsMobileMenuOpen(false);
+                }}
+                className="text-nav-foreground hover:text-primary transition-colors duration-200 text-lg font-body font-light block py-2 w-full text-left"
+              >
+                Contact Us
+              </button>
             </div>
           </div>
         </div>
@@ -438,6 +519,12 @@ const Navigation = () => {
           </div>
         </div>
       )}
+
+      {/* Contact Form Sheet */}
+      <ContactFormSheet
+        open={isContactFormOpen}
+        onOpenChange={setIsContactFormOpen}
+      />
     </nav>
   );
 };

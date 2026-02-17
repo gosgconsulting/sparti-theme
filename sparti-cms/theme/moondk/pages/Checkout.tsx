@@ -9,6 +9,7 @@ import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function CheckoutPage() {
   const { cartItems, updateQuantity, clearCart } = useCart();
@@ -38,6 +39,8 @@ export default function CheckoutPage() {
     country: "Singapore",
   });
   const [shippingOption, setShippingOption] = useState("standard");
+  const [agreeToDoorstep, setAgreeToDoorstep] = useState(false);
+  const [shippingComments, setShippingComments] = useState("");
   const [paymentDetails, setPaymentDetails] = useState({
     cardNumber: "",
     expiryDate: "",
@@ -57,16 +60,20 @@ export default function CheckoutPage() {
   const getShippingCost = () => {
     switch (shippingOption) {
       case "express":
-        return 15;
-      case "overnight":
         return 35;
-      default:
+      case "standard":
+        return subtotal >= 150 ? 0 : 15;
+      case "self-pickup":
         return 0;
+      default:
+        return subtotal >= 150 ? 0 : 15;
     }
   };
 
   const shipping = getShippingCost();
   const total = subtotal + shipping;
+  const freeShippingThreshold = 150;
+  const amountNeededForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
 
   const handleDiscountSubmit = () => {
     console.log("Discount code submitted:", discountCode);
@@ -187,10 +194,60 @@ export default function CheckoutPage() {
                 </div>
 
                 <div className="border-t border-border-light mt-4 pt-6">
-                  <div className="flex justify-between text-sm font-body font-light">
+                  <div className="flex justify-between text-sm font-body font-light mb-4">
                     <span className="text-foreground/70">Subtotal</span>
                     <span className="text-foreground">${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
+                  
+                  {subtotal < freeShippingThreshold && (
+                    <div className="mt-4 p-4 bg-white rounded-lg border-2 border-[#2F5C3E]/20">
+                      <div className="flex items-center justify-between mb-2">
+                        <p className="text-sm font-body font-medium text-foreground">
+                          Free Standard Shipping
+                        </p>
+                        <span className="text-xs font-body font-light text-foreground/60">
+                          ${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })} / ${freeShippingThreshold}
+                        </span>
+                      </div>
+                      
+                      {/* Progress Bar */}
+                      <div className="w-full h-2 bg-[#E8E6E0] rounded-full overflow-hidden mb-3">
+                        <div 
+                          className="h-full bg-[#2F5C3E] transition-all duration-300 ease-out rounded-full"
+                          style={{ 
+                            width: `${Math.min((subtotal / freeShippingThreshold) * 100, 100)}%` 
+                          }}
+                        />
+                      </div>
+                      
+                      <p className="text-sm font-body font-light text-foreground text-center">
+                        Add <span className="font-medium text-[#2F5C3E]">${amountNeededForFreeShipping.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> more to get free standard shipping
+                      </p>
+                    </div>
+                  )}
+                  
+                  {subtotal >= freeShippingThreshold && (
+                    <div className="mt-4 p-4 bg-[#2F5C3E]/5 rounded-lg border-2 border-[#2F5C3E]/30">
+                      <div className="flex items-center justify-center gap-2">
+                        <svg 
+                          className="w-5 h-5 text-[#2F5C3E]" 
+                          fill="none" 
+                          stroke="currentColor" 
+                          viewBox="0 0 24 24"
+                        >
+                          <path 
+                            strokeLinecap="round" 
+                            strokeLinejoin="round" 
+                            strokeWidth={2} 
+                            d="M5 13l4 4L19 7" 
+                          />
+                        </svg>
+                        <p className="text-sm font-body font-medium text-[#2F5C3E]">
+                          You qualify for free standard shipping!
+                        </p>
+                      </div>
+                    </div>
+                  )}
                 </div>
               </div>
             </div>
@@ -438,36 +495,91 @@ export default function CheckoutPage() {
                 <h2 className="text-lg font-heading font-medium text-foreground mb-6">Shipping Options</h2>
 
                 <RadioGroup value={shippingOption} onValueChange={setShippingOption} className="space-y-4">
-                  <div className="flex items-center justify-between p-4 border border-border-light rounded-card">
+                  <Label
+                    htmlFor="standard"
+                    className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
+                      shippingOption === "standard"
+                        ? "border-[#2F5C3E] bg-[#2F5C3E]/5"
+                        : "border-border-light hover:border-[#2F5C3E]/30 hover:bg-[#F2EFDC]/30"
+                    }`}
+                  >
                     <div className="flex items-center space-x-3">
                       <RadioGroupItem value="standard" id="standard" />
-                      <Label htmlFor="standard" className="font-body font-light text-foreground">
+                      <span className="font-body font-light text-foreground">
                         Standard Shipping
-                      </Label>
+                      </span>
                     </div>
-                    <div className="text-sm font-body font-light text-foreground/70">Free • 3-5 business days</div>
-                  </div>
+                    <div className="text-sm font-body font-light text-foreground/70">
+                      {subtotal >= 150 ? "Free" : "$15"} • 3-5 business days
+                    </div>
+                  </Label>
 
-                  <div className="flex items-center justify-between p-4 border border-border-light rounded-card">
+                  <Label
+                    htmlFor="express"
+                    className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
+                      shippingOption === "express"
+                        ? "border-[#2F5C3E] bg-[#2F5C3E]/5"
+                        : "border-border-light hover:border-[#2F5C3E]/30 hover:bg-[#F2EFDC]/30"
+                    }`}
+                  >
                     <div className="flex items-center space-x-3">
                       <RadioGroupItem value="express" id="express" />
-                      <Label htmlFor="express" className="font-body font-light text-foreground">
+                      <span className="font-body font-light text-foreground">
                         Express Shipping
-                      </Label>
+                      </span>
                     </div>
-                    <div className="text-sm font-body font-light text-foreground/70">$15 • 1-2 business days</div>
-                  </div>
+                    <div className="text-sm font-body font-light text-foreground/70">$35 • 1-2 business days</div>
+                  </Label>
 
-                  <div className="flex items-center justify-between p-4 border border-border-light rounded-card">
+                  <Label
+                    htmlFor="self-pickup"
+                    className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
+                      shippingOption === "self-pickup"
+                        ? "border-[#2F5C3E] bg-[#2F5C3E]/5"
+                        : "border-border-light hover:border-[#2F5C3E]/30 hover:bg-[#F2EFDC]/30"
+                    }`}
+                  >
                     <div className="flex items-center space-x-3">
-                      <RadioGroupItem value="overnight" id="overnight" />
-                      <Label htmlFor="overnight" className="font-body font-light text-foreground">
-                        Overnight Delivery
+                      <RadioGroupItem value="self-pickup" id="self-pickup" />
+                      <span className="font-body font-light text-foreground">
+                        Self Pickup
+                      </span>
+                    </div>
+                    <div className="text-sm font-body font-light text-foreground/70">Free • Pickup available immediately</div>
+                  </Label>
+                </RadioGroup>
+
+                {/* Conditional fields for Standard and Express Shipping */}
+                {(shippingOption === "standard" || shippingOption === "express") && (
+                  <div className="mt-6 pt-6 border-t border-border-light space-y-6">
+                    <div className="flex items-center space-x-2">
+                      <Checkbox
+                        id="agreeToDoorstep"
+                        checked={agreeToDoorstep}
+                        onCheckedChange={(checked) => setAgreeToDoorstep(checked === true)}
+                      />
+                      <Label
+                        htmlFor="agreeToDoorstep"
+                        className="text-sm font-body font-light text-foreground cursor-pointer"
+                      >
+                        Agree to place at doorsteps
                       </Label>
                     </div>
-                    <div className="text-sm font-body font-light text-foreground/70">$35 • Next business day</div>
+
+                    <div>
+                      <Label htmlFor="shippingComments" className="text-sm font-body font-light text-foreground">
+                        Comments
+                      </Label>
+                      <Textarea
+                        id="shippingComments"
+                        value={shippingComments}
+                        onChange={(e) => setShippingComments(e.target.value)}
+                        className="mt-2 rounded-card min-h-[100px] resize-none"
+                        placeholder="Please provide any additional delivery instructions or information..."
+                      />
+                    </div>
                   </div>
-                </RadioGroup>
+                )}
               </div>
 
               <div className="bg-white p-8 rounded-card border border-border-light">
@@ -564,7 +676,9 @@ export default function CheckoutPage() {
                         <span className="text-foreground">${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                       </div>
                       <div className="flex justify-between text-sm font-body font-light">
-                        <span className="text-foreground/70">Shipping</span>
+                        <span className="text-foreground/70">
+                          {shippingOption === "self-pickup" ? "Self Pickup" : "Shipping"}
+                        </span>
                         <span className="text-foreground">
                           {shipping === 0 ? "Free" : `$${shipping}`}
                         </span>

@@ -3,8 +3,7 @@ import { ArrowRight, Heart } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import ContactFormSheet from "../ContactFormSheet";
 
-import imgMain from "../../assets/IMG_20240521_161614_496_1.jpg";
-import imgStack from "../../assets/about_small.jpg";
+import imgMain from "../../assets/moondk_logo.png";
 
 export default function HomeAboutSection() {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
@@ -36,30 +35,20 @@ export default function HomeAboutSection() {
                   onClick={() => setIsContactFormOpen(true)}
                   className="rounded-full px-6 bg-primary hover:bg-primary-hover !text-white"
                 >
-                  Learn more
+                  Contact Us
                   <ArrowRight className="ml-2 h-4 w-4" />
                 </Button>
               </div>
             </div>
 
-            {/* Right: stacked images */}
-            <div className="relative md:order-2">
-              <div className="rounded-[1.5rem] overflow-hidden bg-white shadow-md">
+            {/* Right: image */}
+            <div className="relative md:order-2 flex justify-center items-center">
+              <div className="rounded-[1.5rem] overflow-hidden max-w-md w-full">
                 <img
                   src={imgMain}
-                  alt="Home dining comfort"
-                  className="w-full h-auto object-cover aspect-[4/3]"
+                  alt="MOONDK Logo"
+                  className="w-full h-auto object-contain aspect-[4/3]"
                 />
-              </div>
-
-              <div className="hidden sm:block absolute -bottom-6 -left-6 w-40">
-                <div className="rounded-[1.25rem] overflow-hidden bg-white shadow-md">
-                  <img
-                    src={imgStack}
-                    alt="Everyday Korean flavours"
-                    className="w-full h-28 object-cover"
-                  />
-                </div>
               </div>
             </div>
           </div>

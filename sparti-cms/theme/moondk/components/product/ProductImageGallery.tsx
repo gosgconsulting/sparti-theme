@@ -24,9 +24,6 @@ import giftSetImage from "../../assets/noodles/IMG_1700.jpg";
 import potatoNoodleImage from "../../assets/noodles/BEOK-Potatonoodle3.jpg";
 import potatoNoodleImage4 from "../../assets/noodles/BEOK-Potatonoodle4.jpg";
 import potatoNoodleImage5 from "../../assets/noodles/BEOK-Potatonoodle5.jpg";
-import hanrabongNoodleImage from "../../assets/noodles/BEOK-Hanrabongnoodle3.jpg";
-import hanrabongNoodleImage2 from "../../assets/noodles/BEOK-Hanrabongnoodle2.jpg";
-import hanrabongNoodleImage5 from "../../assets/noodles/BEOK-Hanrabongnoodle5.jpg";
 
 interface ProductImageGalleryProps {
   productId?: string;
@@ -46,7 +43,6 @@ const productImageMap: Record<string, string> = {
   "10": wheatNoodleImage,
   "11": giftSetImage,
   "12": potatoNoodleImage,
-  "13": hanrabongNoodleImage,
 };
 
 const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
@@ -58,7 +54,7 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
   const [selectedImage, setSelectedImage] = useState(getDefaultImage());
 
   // For products with multiple images, show all available images
-  // For other products 1-13, only show their specific image
+  // For other products 1-12, only show their specific image
   // Otherwise, show all default images
   const specificImage = productImageMap[productId || ""];
   const images = productId === "4"
@@ -73,8 +69,6 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
     ? [seorijuImage, seorijuImage1, seorijuImage2]
     : productId === "12"
     ? [potatoNoodleImage, potatoNoodleImage4, potatoNoodleImage5]
-    : productId === "13"
-    ? [hanrabongNoodleImage, hanrabongNoodleImage2, hanrabongNoodleImage5]
     : specificImage
     ? [specificImage]
     : [hoveniaDulcisImage, cornExtractImage, blackBeanTeaImage, barleyTeaImage];

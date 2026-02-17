@@ -49,7 +49,7 @@ export default function CheckoutPage() {
 
   const subtotal = useMemo(() => {
     return cartItems.reduce((sum, item) => {
-      const price = parseFloat(item.price.replace("€", "").replace(",", ""));
+      const price = parseFloat(item.price.replace("$", "").replace(",", ""));
       return sum + price * item.quantity;
     }, 0);
   }, [cartItems]);
@@ -189,7 +189,7 @@ export default function CheckoutPage() {
                 <div className="border-t border-border-light mt-4 pt-6">
                   <div className="flex justify-between text-sm font-body font-light">
                     <span className="text-foreground/70">Subtotal</span>
-                    <span className="text-foreground">€{subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                    <span className="text-foreground">${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
                 </div>
               </div>
@@ -480,7 +480,7 @@ export default function CheckoutPage() {
                         Express Shipping
                       </Label>
                     </div>
-                    <div className="text-sm font-body font-light text-foreground/70">€15 • 1-2 business days</div>
+                    <div className="text-sm font-body font-light text-foreground/70">$15 • 1-2 business days</div>
                   </div>
 
                   <div className="flex items-center justify-between p-4 border border-border-light rounded-card">
@@ -490,7 +490,7 @@ export default function CheckoutPage() {
                         Overnight Delivery
                       </Label>
                     </div>
-                    <div className="text-sm font-body font-light text-foreground/70">€35 • Next business day</div>
+                    <div className="text-sm font-body font-light text-foreground/70">$35 • Next business day</div>
                   </div>
                 </RadioGroup>
               </div>
@@ -586,17 +586,17 @@ export default function CheckoutPage() {
                     <div className="bg-[#F2EFDC] p-6 rounded-card border border-border-light space-y-3">
                       <div className="flex justify-between text-sm font-body font-light">
                         <span className="text-foreground/70">Subtotal</span>
-                        <span className="text-foreground">€{subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        <span className="text-foreground">${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                       </div>
                       <div className="flex justify-between text-sm font-body font-light">
                         <span className="text-foreground/70">Shipping</span>
                         <span className="text-foreground">
-                          {shipping === 0 ? "Free" : `€${shipping}`}
+                          {shipping === 0 ? "Free" : `$${shipping}`}
                         </span>
                       </div>
                       <div className="flex justify-between text-lg font-heading font-medium border-t border-border-light pt-3">
                         <span className="text-foreground">Total</span>
-                        <span className="text-foreground">€{total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
+                        <span className="text-foreground">${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                       </div>
                     </div>
 
@@ -612,7 +612,7 @@ export default function CheckoutPage() {
                       }
                       className="w-full rounded-full h-12 text-base bg-primary hover:bg-primary-hover text-white font-body font-medium"
                     >
-                      {isProcessing ? "Processing..." : `Complete Order • €${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                      {isProcessing ? "Processing..." : `Complete Order • $${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                     </Button>
                   </div>
                 ) : (

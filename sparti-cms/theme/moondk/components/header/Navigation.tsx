@@ -6,7 +6,7 @@ import { ThemeLink } from "../ThemeLink";
 import ShoppingBag from "./ShoppingBag";
 import { useCart } from "../../contexts/CartContext";
 
-import logoSrc from "../../assets/logo.png";
+import logoSrc from "../../assets/moondk_logo.png";
 
 // Placeholder images - replace with actual product images
 import pantheonImage from "../../../e-shop/assets/pantheon.jpg";

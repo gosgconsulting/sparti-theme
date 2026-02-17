@@ -1,4 +1,4 @@
-import logoSrc from "../../assets/logo.png";
+import logoSrc from "../../assets/moondk_logo.png";
 import { useThemeBasePath, themeHref } from "../ThemeLink";
 
 const Footer = () => {
@@ -10,7 +10,7 @@ const Footer = () => {
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
           {/* Brand - Left side */}
           <div>
-            <img src={logoSrc} alt="MOONDK" className="mb-6 h-10 w-auto object-contain block" />
+            <img src={logoSrc} alt="MOONDK" className="mb-6 h-16 w-auto object-contain block" />
             <p className="text-sm font-body font-light text-foreground/70 leading-relaxed max-w-md mb-6">
               Korean home dining, chef-led, curated products. Cook like a chef at home with our premium selection of ingredients, tools, and recipe collections.
             </p>
@@ -18,11 +18,7 @@ const Footer = () => {
             {/* Contact Information */}
             <div className="space-y-3 text-sm font-body font-light text-foreground/70">
               <div>
-                <p className="font-heading font-medium text-foreground mb-1">Visit Us</p>
-                <p>Seoul, South Korea</p>
-              </div>
-              <div>
-                <p className="font-heading font-medium text-foreground mb-1 mt-4">Contact</p>
+                <p className="font-heading font-medium text-foreground mb-1">Contact</p>
                 <p>hello@moondk.com</p>
               </div>
             </div>

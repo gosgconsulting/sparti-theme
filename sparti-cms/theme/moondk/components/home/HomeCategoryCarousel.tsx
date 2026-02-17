@@ -96,12 +96,10 @@ export default function HomeCategoryCarousel() {
                         />
                       </div>
 
-                      <div className="absolute bottom-3 left-3 right-3">
-                        <div className="rounded-2xl bg-white/85 backdrop-blur px-4 py-3 border border-white/50">
-                          <p className="text-lg font-body tracking-tight text-foreground">
-                            {c.title}
-                          </p>
-                        </div>
+                      <div className="absolute top-6 left-8 right-3">
+                        <p className="text-lg font-body tracking-tight text-foreground">
+                          {c.title}
+                        </p>
                       </div>
                     </div>
                   </ThemeLink>

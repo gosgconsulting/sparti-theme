@@ -24,7 +24,7 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
   // Get product data from products array
   const product = products.find((p) => p.id.toString() === productId);
   const productName = product?.name || "Hovenia Dulcis Extract (헛개수)";
-  const productPrice = product?.price || "€37";
+  const productPrice = product?.price || "$37";
   const productImage = product?.image || "";
   const productCategory = product?.category || "Product";
 

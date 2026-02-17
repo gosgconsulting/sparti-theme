@@ -1,12 +1,12 @@
 import { ChevronLeft } from "lucide-react";
 import { ThemeLink } from "../ThemeLink";
 
-import logoSrc from "../../assets/logo.png";
+import logoSrc from "../../assets/moondk_logo.png";
 
 const CheckoutHeader = () => {
   return (
     <header className="w-full bg-background border-b border-border-light">
-      <div className="max-w-7xl mx-auto px-6 py-4">
+      <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="relative flex items-center justify-between">
           {/* Left side - Continue Shopping */}
           <ThemeLink
@@ -22,7 +22,7 @@ const CheckoutHeader = () => {
             <img
               src={logoSrc}
               alt="MOONDK"
-              className="h-10 w-auto object-contain block"
+              className="h-12 w-auto object-contain block"
             />
           </ThemeLink>
 

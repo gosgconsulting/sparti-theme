@@ -52,11 +52,17 @@ export default function HomeFineDiningSection() {
 
               <div className="mt-6 flex flex-wrap gap-3">
                 <Button 
-                  onClick={() => setIsContactFormOpen(true)}
+                  asChild
                   className="rounded-full px-6 bg-primary hover:bg-primary-hover !text-white"
                 >
-                  Book a table
-                  <ArrowRight className="ml-2 h-4 w-4" />
+                  <a 
+                    href="https://www.instagram.com/beok.sg/?hl=en" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                  >
+                    Instagram
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </a>
                 </Button>
                 <Button asChild variant="outline" className="rounded-full px-6">
                   <ThemeLink to="/beok-private-dinning">Learn more</ThemeLink>

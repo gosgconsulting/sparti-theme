@@ -29,7 +29,7 @@ const ShoppingBag = ({
   if (!isOpen) return null;
 
   const subtotal = cartItems.reduce((sum, item) => {
-    const price = parseFloat(item.price.replace("€", "").replace(",", ""));
+    const price = parseFloat(item.price.replace("$", "").replace(",", ""));
     return sum + price * item.quantity;
   }, 0);
 
@@ -164,17 +164,17 @@ const ShoppingBag = ({
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-light text-foreground">Item total</span>
                     <span className="text-sm font-light text-foreground">
-                      €{subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-light text-foreground">Delivery fee</span>
-                    <span className="text-sm font-light text-foreground">€30</span>
+                    <span className="text-sm font-light text-foreground">$30</span>
                   </div>
                   <div className="flex justify-between items-center pt-2 border-t border-border-light">
                     <span className="text-base font-semibold text-foreground">Total</span>
                     <span className="text-base font-semibold text-foreground">
-                      €{(subtotal + 30).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ${(subtotal + 30).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>

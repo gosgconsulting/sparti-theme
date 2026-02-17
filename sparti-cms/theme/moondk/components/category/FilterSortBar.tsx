@@ -29,10 +29,10 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
 
   const categories = ["Curated Sets", "Ingredients", "Tools", "Essentials", "Recipe Collections"];
   const priceRanges = [
-    "Under €20",
-    "€20 - €40",
-    "€40 - €60",
-    "Over €60",
+    "Under $20",
+    "$20 - $40",
+    "$40 - $60",
+    "Over $60",
   ];
   const types = ["Chef's Pick", "New Arrival", "Best Seller", "Limited Edition"];
 

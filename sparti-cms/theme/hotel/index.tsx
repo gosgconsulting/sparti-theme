@@ -1,5 +1,6 @@
-import React, { useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useMemo, useContext } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import { RoomContext } from "./context/RoomContext";
 import { useThemeBranding } from "../../hooks/useThemeSettings";
 import Header from "./components/layout/Header";
@@ -38,7 +39,7 @@ const normalizeSlug = (slug?: string) => {
  * - Responsive design optimized for mobile and desktop
  */
 const HotelTheme: React.FC<HotelThemeProps> = ({
-  basePath = "/theme/hotel",
+  basePath: basePathProp = "/theme/hotel",
   pageSlug,
   tenantName = "Hotel Adina",
   tenantSlug = "hotel",
@@ -46,11 +47,12 @@ const HotelTheme: React.FC<HotelThemeProps> = ({
   designSystemTheme,
 }) => {
   const location = useLocation();
+  const params = useParams<{ pageSlug?: string }>();
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const resolvedBasePath = basePathProp ?? ctxBasePath ?? `/theme/${tenantSlug}`;
 
-  // Use the current theme slug (tenantSlug) for asset paths and routing
   const themeSlug = tenantSlug || "hotel";
 
-  // Fetch branding colors from database
   const { branding } = useThemeBranding(themeSlug, tenantId);
 
   // Apply branding colors as CSS variables
@@ -94,18 +96,32 @@ const HotelTheme: React.FC<HotelThemeProps> = ({
     }
   }, [branding]);
 
-  const normalizedPageSlug = normalizeSlug(pageSlug);
-  const slugParts = normalizedPageSlug.split("/").filter(Boolean);
+  const resolvedPageSlug = useMemo(() => {
+    const n = (s?: string) => (s && String(s).trim()) ? normalizeSlug(s) : '';
+    if (n(pageSlug)) return n(pageSlug);
+    if (params.pageSlug) return params.pageSlug;
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    const themeIndex = pathParts.indexOf('theme');
+    const tenantIndex = pathParts.indexOf(tenantSlug);
+    if (themeIndex < 0 || tenantIndex !== themeIndex + 1) {
+      return pathParts.length ? pathParts.join('/') : '';
+    }
+    if (tenantIndex >= 0 && tenantIndex < pathParts.length - 1) {
+      return pathParts.slice(tenantIndex + 1).join('/');
+    }
+    return '';
+  }, [location.pathname, tenantSlug, params.pageSlug, pageSlug]);
+
+  const slugParts = resolvedPageSlug.split("/").filter(Boolean);
   const topLevelSlug = slugParts[0] || "";
 
   const renderMain = () => {
-    // Room details page: /room/:id
     if (topLevelSlug === "room") {
       const roomId = slugParts[1] || "";
       return (
         <RoomDetailsPage
           roomId={roomId}
-          basePath={basePath}
+          basePath={resolvedBasePath}
           tenantId={tenantId}
           tenantName={tenantName}
           themeSlug={themeSlug}
@@ -113,10 +129,9 @@ const HotelTheme: React.FC<HotelThemeProps> = ({
       );
     }
 
-    // Homepage
     return (
       <HomePage
-        basePath={basePath}
+        basePath={resolvedBasePath}
         tenantId={tenantId}
         tenantName={tenantName}
         themeSlug={themeSlug}
@@ -130,7 +145,7 @@ const HotelTheme: React.FC<HotelThemeProps> = ({
         <Header
           tenantName={tenantName}
           tenantSlug={themeSlug}
-          basePath={basePath}
+          basePath={resolvedBasePath}
         />
 
         <main className="flex-1">{renderMain()}</main>

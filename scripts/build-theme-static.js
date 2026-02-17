@@ -110,14 +110,27 @@ import './index.css';
 import '../sparti-cms/styles/modal-sparti-fix.css';
 import '../sparti-cms/styles/rich-text-editor.css';
 
-// Import the theme component
+// Import the theme component and ThemeBasePathContext for deploy-at-root
+import { ThemeBasePathContext } from '../sparti-cms/context/ThemeBasePathContext';
+
 const ThemeComponent = React.lazy(() => import('../sparti-cms/theme/${themeSlug}'));
 
-// Theme name mapping
+// Theme name mapping (all themes deployable via DEPLOY_THEME_SLUG)
 const themeNames: Record<string, string> = {
   'landingpage': 'ACATR Business Services',
   'sparti-seo-landing': 'Sparti SEO Landing',
-  'gosgconsulting': 'GO SG Consulting'
+  'gosgconsulting': 'GO SG Consulting',
+  'gosgconsulting.com': 'GO SG Consulting',
+  'sissonne': 'Sissonne Dance Academy',
+  'storefront': 'Storefront',
+  'moondk': 'Moondk',
+  'str': 'STR',
+  'optimalconsulting': 'Optimal Consulting',
+  'master': 'Master Template',
+  'e-shop': 'E-shop',
+  'hotel': 'Hotel Adina',
+  'nail-queen': 'Nail Queen',
+  'custom': 'Custom'
 };
 
 const queryClient = new QueryClient();
@@ -128,14 +141,16 @@ const ThemeWithPageSlug = ({ themeName }) => {
   const pathname = location.pathname || '/';
   const pageSlug = pathname === '/' || pathname === '' ? '' : pathname.replace(/^\\//, '');
   return (
-    <Suspense fallback={null}>
-      <ThemeComponent 
-        tenantName={themeName} 
-        tenantSlug="${themeSlug}"
-        tenantId={typeof window !== 'undefined' ? window.__CMS_TENANT__ : null}
-        pageSlug={pageSlug}
-      />
-    </Suspense>
+    <ThemeBasePathContext.Provider value="">
+      <Suspense fallback={null}>
+        <ThemeComponent 
+          tenantName={themeName} 
+          tenantSlug="${themeSlug}"
+          tenantId={typeof window !== 'undefined' ? window.__CMS_TENANT__ : null}
+          pageSlug={pageSlug}
+        />
+      </Suspense>
+    </ThemeBasePathContext.Provider>
   );
 };
 

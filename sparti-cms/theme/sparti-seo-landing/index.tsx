@@ -1,4 +1,6 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { ThemeBasePathContext } from '../../context/ThemeBasePathContext';
+import { getThemeAssetUrl } from '../../utils/themeAssets';
 import './theme.css';
 import HeroSection from './components/HeroSection';
 import WorkflowSection from './components/WorkflowSection';
@@ -14,6 +16,7 @@ interface TenantLandingProps {
   tenantName?: string;
   tenantSlug?: string;
   tenantId?: string;
+  pageSlug?: string;
 }
 
 /**
@@ -21,40 +24,41 @@ interface TenantLandingProps {
  * A modern, conversion-optimized landing page for AI-powered SEO automation
  * with interactive features, pricing tables, and compelling testimonials
  */
-const TenantLanding: React.FC<TenantLandingProps> = ({ 
-  tenantName = 'Sparti', 
-  tenantSlug = 'sparti-seo-landing' 
+const TenantLanding: React.FC<TenantLandingProps> = ({
+  tenantName = 'Sparti',
+  tenantSlug = 'sparti-seo-landing',
+  tenantId,
+  pageSlug,
 }) => {
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const asset = (path: string) => getThemeAssetUrl(ctxBasePath ?? undefined, path, tenantSlug);
+
   const handleGetStarted = () => {
-    // Redirect to external Sparti app
     window.location.href = 'https://app.sparti.ai/seo-copilot-trial';
   };
 
-  // Asset paths for the theme - using tenantSlug for flexibility
-  const logoSrc = `/theme/${tenantSlug}/assets/logos/sparti-logo-light.png`;
-  const heroBackgroundSrc = `/theme/${tenantSlug}/assets/hero-background.jpg`;
-  
-  // Workflow section images
+  const logoSrc = asset('logos/sparti-logo-light.png');
+  const heroBackgroundSrc = asset('hero-background.jpg');
+
   const keywordImages = [
-    { src: `/theme/${tenantSlug}/assets/keywords-explorer.png`, alt: 'Keywords Explorer Interface' },
-    { src: `/theme/${tenantSlug}/assets/keyword-table.png`, alt: 'Keywords Table with Search Volume' }
+    { src: asset('keywords-explorer.png'), alt: 'Keywords Explorer Interface' },
+    { src: asset('keyword-table.png'), alt: 'Keywords Table with Search Volume' }
   ];
 
   const topicsImages = [
-    { src: `/theme/${tenantSlug}/assets/topics-research.png`, alt: 'Topics Research Management' },
-    { src: `/theme/${tenantSlug}/assets/source-information.png`, alt: 'Source Information from Google Results' }
+    { src: asset('topics-research.png'), alt: 'Topics Research Management' },
+    { src: asset('source-information.png'), alt: 'Source Information from Google Results' }
   ];
 
   const imageGenerationImages = [
-    { src: `/theme/${tenantSlug}/assets/featured-image-placeholder.png`, alt: 'Featured Image Management Modal' },
-    { src: `/theme/${tenantSlug}/assets/article-preview-placeholder.png`, alt: 'Article Preview with Generated Image' }
+    { src: asset('featured-image-placeholder.png'), alt: 'Featured Image Management Modal' },
+    { src: asset('article-preview-placeholder.png'), alt: 'Article Preview with Generated Image' }
   ];
 
-  // Interactive SEO section images
   const seoFeatureImages = {
-    keywordAnalysis: `/theme/${tenantSlug}/assets/keyword-analysis.png`,
-    editTopicAI: `/theme/${tenantSlug}/assets/edit-topic-ai.png`,
-    articleGeneration: `/theme/${tenantSlug}/assets/article-generation.png`
+    keywordAnalysis: asset('keyword-analysis.png'),
+    editTopicAI: asset('edit-topic-ai.png'),
+    articleGeneration: asset('article-generation.png')
   };
 
   return (

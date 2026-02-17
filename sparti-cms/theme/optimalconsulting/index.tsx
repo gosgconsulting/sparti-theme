@@ -1,5 +1,6 @@
-import React, { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useEffect, useState, useMemo, useContext } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import type { ComponentSchema } from "../../../sparti-cms/types/schema";
 import FlowbiteHeroSection from "@/libraries/flowbite/components/FlowbiteHeroSection";
 import FlowbiteTestimonialsSection from "@/libraries/flowbite/components/FlowbiteTestimonialsSection";
@@ -56,7 +57,7 @@ const normalizeSlug = (slug?: string) => {
  * Based on Master theme structure with Optimal Consulting content
  */
 const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
-  basePath = "/theme/optimalconsulting",
+  basePath: basePathProp = "/theme/optimalconsulting",
   pageSlug,
   tenantName = "Optimal Consulting",
   tenantSlug = "optimalconsulting",
@@ -64,6 +65,9 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
   designSystemTheme = "default",
 }) => {
   const location = useLocation();
+  const params = useParams<{ pageSlug?: string }>();
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const resolvedBasePath = basePathProp ?? ctxBasePath ?? `/theme/${tenantSlug}`;
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
   const themeSlug = tenantSlug || "optimalconsulting";
@@ -122,8 +126,23 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
     };
   }, []);
 
-  const normalizedPageSlug = normalizeSlug(pageSlug);
-  const slugParts = normalizedPageSlug.split("/").filter(Boolean);
+  const resolvedPageSlug = useMemo(() => {
+    const n = (s?: string) => (s && String(s).trim()) ? normalizeSlug(s) : '';
+    if (n(pageSlug)) return n(pageSlug);
+    if (params.pageSlug) return params.pageSlug;
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    const themeIndex = pathParts.indexOf('theme');
+    const tenantIndex = pathParts.indexOf(tenantSlug);
+    if (themeIndex < 0 || tenantIndex !== themeIndex + 1) {
+      return pathParts.length ? pathParts.join('/') : '';
+    }
+    if (tenantIndex >= 0 && tenantIndex < pathParts.length - 1) {
+      return pathParts.slice(tenantIndex + 1).join('/');
+    }
+    return '';
+  }, [location.pathname, tenantSlug, params.pageSlug, pageSlug]);
+
+  const slugParts = resolvedPageSlug.split("/").filter(Boolean);
   const topLevelSlug = slugParts[0] || "";
 
   const isThankYouPage =
@@ -142,7 +161,7 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
         tenantName={tenantName}
         tenantSlug={themeSlug}
         tenantId={tenantId}
-        basePath={basePath}
+        basePath={resolvedBasePath}
       />
     );
   }
@@ -513,11 +532,11 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
   const renderMain = () => {
     if (topLevelSlug === "blog") {
       if (slugParts.length === 1) {
-        return <BlogListPage basePath={basePath} tenantId={tenantId} />;
+        return <BlogListPage basePath={resolvedBasePath} tenantId={tenantId} />;
       }
       return (
         <BlogPostPage
-          basePath={basePath}
+          basePath={resolvedBasePath}
           slug={slugParts[1] || ""}
           tenantId={tenantId}
         />
@@ -607,13 +626,13 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
         tenantName={tenantName}
         tenantSlug={themeSlug}
         logoSrc={logoSrc}
-        basePath={basePath}
+        basePath={resolvedBasePath}
         onContactClick={handleContactClick}
       />
 
       <main className="flex-1">{renderMain()}</main>
 
-      <Footer tenantName={tenantName} tenantSlug={themeSlug} basePath={basePath} />
+      <Footer tenantName={tenantName} tenantSlug={themeSlug} basePath={resolvedBasePath} />
 
       <ContactFormModal
         isOpen={isContactModalOpen}

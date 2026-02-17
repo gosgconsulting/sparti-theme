@@ -4,15 +4,19 @@ interface CustomThemeProps {
   tenantName?: string;
   tenantSlug?: string;
   tenantId?: string;
+  pageSlug?: string;
 }
 
 /**
  * Custom Theme
  * Minimal placeholder theme used by the visual builder when a tenant selects "custom".
+ * Accepts same props as other themes for Vercel/standalone build compatibility.
  */
 const CustomTheme: React.FC<CustomThemeProps> = ({
   tenantName = 'Custom',
   tenantSlug = 'custom',
+  tenantId,
+  pageSlug,
 }) => {
   return (
     <div className="min-h-screen bg-background flex items-center justify-center px-6">

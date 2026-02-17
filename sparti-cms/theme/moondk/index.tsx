@@ -1,4 +1,6 @@
-import React, { useEffect, useMemo } from "react";
+import React, { useEffect, useMemo, useContext } from "react";
+import { useLocation, useParams } from "react-router-dom";
+import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import "./theme.css";
 import { ThemeBasePathProvider } from "./components/ThemeLink";
 import { CartProvider } from "./contexts/CartContext";
@@ -21,6 +23,7 @@ import BrokPrivateDinningPage from "./pages/BrokPrivateDinning";
 interface MoondkThemeProps {
   tenantName?: string;
   tenantSlug?: string;
+  tenantId?: string;
   pageSlug?: string;
 }
 
@@ -32,10 +35,29 @@ function normalizeSlug(slug?: string) {
 const MoondkTheme: React.FC<MoondkThemeProps> = ({
   tenantName = "Moondk",
   tenantSlug = "moondk",
+  tenantId,
   pageSlug,
 }) => {
-  const basePath = useMemo(() => `/theme/${tenantSlug}`, [tenantSlug]);
-  const current = normalizeSlug(pageSlug);
+  const location = useLocation();
+  const params = useParams<{ pageSlug?: string }>();
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const basePath = ctxBasePath ?? `/theme/${tenantSlug}`;
+
+  const current = useMemo(() => {
+    const n = normalizeSlug(pageSlug);
+    if (n) return n;
+    if (params.pageSlug) return normalizeSlug(params.pageSlug);
+    const pathParts = location.pathname.split("/").filter(Boolean);
+    const themeIndex = pathParts.indexOf("theme");
+    const tenantIndex = pathParts.indexOf(tenantSlug);
+    if (themeIndex < 0 || tenantIndex !== themeIndex + 1) {
+      return pathParts.length ? pathParts.join("/") : "";
+    }
+    if (tenantIndex >= 0 && tenantIndex < pathParts.length - 1) {
+      return pathParts.slice(tenantIndex + 1).join("/");
+    }
+    return "";
+  }, [location.pathname, tenantSlug, params.pageSlug, pageSlug]);
 
   // Scroll restoration for theme navigation
   useEffect(() => {

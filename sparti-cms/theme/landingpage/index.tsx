@@ -1,6 +1,8 @@
-import React, { useState, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import React, { useState, useEffect, useMemo, useContext } from 'react';
+import { useLocation, useParams } from 'react-router-dom';
 import './theme.css';
+import { ThemeBasePathContext } from '../../context/ThemeBasePathContext';
+import { getThemeAssetUrl } from '../../utils/themeAssets';
 import Header from './components/Header';
 import HeroSection from './components/HeroSection';
 import ServicesSection from './components/ServicesSection';
@@ -39,10 +41,13 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
   tenantName = 'ACATR Business Services', 
   tenantSlug = 'landingpage',
   tenantId,
-  basePath = `/theme/${tenantSlug || 'landingpage'}`,
+  basePath: basePathProp = `/theme/${tenantSlug || 'landingpage'}`,
   pageSlug
 }) => {
   const location = useLocation();
+  const params = useParams<{ pageSlug?: string }>();
+  const ctxBasePath = useContext(ThemeBasePathContext);
+  const resolvedBasePath = basePathProp ?? ctxBasePath ?? `/theme/${tenantSlug}`;
   
   // Get tenant ID from props or environment
   const effectiveTenantId = tenantId || (typeof window !== 'undefined' && (window as any).__CMS_TENANT__) || null;
@@ -53,26 +58,35 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
   }
   
   // Fetch branding settings from database
-  // Pass tenantId (not tenantSlug) to the hook
   const { branding, loading: brandingLoading, error: brandingError } = useThemeBranding(tenantSlug, 'tenant-2960b682'); // TODO: fix this
   
   const [isContactDialogOpen, setIsContactDialogOpen] = useState(false);
   
-  // Parse the page slug to determine which page to render
-  // For root-level routes like /blog, pageSlug might be undefined, so we also check pathname
-  const normalizedPageSlug = normalizeSlug(pageSlug || location.pathname);
-  const slugParts = normalizedPageSlug.split("/").filter(Boolean);
+  // Page resolution: supports standalone/Vercel (pathname without /theme/slug)
+  const resolvedPageSlug = useMemo(() => {
+    const n = (s?: string) => (s && String(s).trim()) ? String(s).replace(/^\/+/, '').replace(/\/+$/, '') : '';
+    if (n(pageSlug)) return n(pageSlug);
+    if (params.pageSlug) return params.pageSlug;
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    const themeIndex = pathParts.indexOf('theme');
+    const tenantIndex = pathParts.indexOf(tenantSlug);
+    if (themeIndex < 0 || tenantIndex !== themeIndex + 1) {
+      return pathParts.length ? pathParts.join('/') : '';
+    }
+    if (tenantIndex >= 0 && tenantIndex < pathParts.length - 1) {
+      return pathParts.slice(tenantIndex + 1).join('/');
+    }
+    return '';
+  }, [location.pathname, tenantSlug, params.pageSlug, pageSlug]);
+
+  const slugParts = resolvedPageSlug.split("/").filter(Boolean);
   const topLevelSlug = slugParts[0] || "";
   
-  // Check if we're on the thank you page
-  // Match /thank-you exactly or as a path segment (e.g., /thank-you or /theme/landingpage/thank-you)
   const isThankYouPage = topLevelSlug === "thank-you" ||
                          location.pathname === '/thank-you' || 
                          location.pathname.endsWith('/thank-you') ||
                          location.pathname.includes('/thank-you');
   
-  // Check if we're on a blog page
-  // Match /blog exactly or as a path segment (e.g., /blog or /theme/landingpage/blog or /blog/post-slug)
   const isBlogPage = topLevelSlug === "blog" ||
                      location.pathname === '/blog' ||
                      location.pathname.startsWith('/blog/') ||
@@ -88,7 +102,7 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
   const siteDescription = branding?.site_description || '';
   const logoSrc = getLogoSrc(branding);
   const faviconSrc = getFaviconSrc(branding);
-  const heroImageSrc = '/theme/landingpage/assets/hero-business.jpg';
+  const heroImageSrc = getThemeAssetUrl(ctxBasePath ?? undefined, 'hero-business.jpg', tenantSlug);
   
   // Apply favicon when branding loads
   useEffect(() => {
@@ -129,11 +143,11 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
     console.warn('[testing] Error loading branding settings, using defaults:', brandingError);
   }
   
-  // Service images
+  const asset = (p: string) => getThemeAssetUrl(ctxBasePath ?? undefined, p, tenantSlug);
   const serviceImages = [
-    '/theme/landingpage/assets/incorporation-services.jpg',
-    '/theme/landingpage/assets/accounting-dashboard.jpg',
-    '/theme/landingpage/assets/corporate-secretarial.jpg'
+    asset('incorporation-services.jpg'),
+    asset('accounting-dashboard.jpg'),
+    asset('corporate-secretarial.jpg')
   ];
 
   // Professional services data
@@ -187,7 +201,7 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
 
   // Render blog pages
   if (isBlogPage) {
-    console.log('[testing] Blog page detected:', { pageSlug, normalizedPageSlug, slugParts, topLevelSlug, pathname: location.pathname });
+    console.log('[testing] Blog page detected:', { pageSlug, resolvedPageSlug, slugParts, topLevelSlug, pathname: location.pathname });
     
     // Determine if it's a blog post or blog list page
     // Check pathname directly for more reliable detection
@@ -199,7 +213,7 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
     if (isBlogPost && postSlug) {
       return (
         <BlogPostPage
-          basePath={basePath}
+          basePath={resolvedBasePath}
           slug={postSlug}
           tenantId={effectiveTenantId}
           tenantName={siteName}
@@ -213,7 +227,7 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
     // Blog list page
     return (
       <BlogListPage 
-        basePath={basePath} 
+        basePath={resolvedBasePath} 
         tenantId={effectiveTenantId}
         tenantName={siteName}
         tenantSlug={tenantSlug}

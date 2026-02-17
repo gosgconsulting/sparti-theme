@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useMemo } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useParams } from "react-router-dom";
 
 import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import "./theme.css";
@@ -47,6 +47,7 @@ const NailQueenTheme: React.FC<NailQueenThemeProps> = ({
   tenantId = "tenant-nail-queen",
 }) => {
   const location = useLocation();
+  const params = useParams<{ pageSlug?: string }>();
   const ctxBasePath = useContext(ThemeBasePathContext);
 
   const themeSlug = tenantSlug || "nail-queen";
@@ -96,8 +97,23 @@ const NailQueenTheme: React.FC<NailQueenThemeProps> = ({
     }
   }, [branding, brandingError]);
 
-  const normalized = normalizeSlug(pageSlug);
-  const slugParts = normalized.split("/").filter(Boolean);
+  const resolvedPageSlug = useMemo(() => {
+    const n = (s?: string) => (s && String(s).trim()) ? normalizeSlug(s) : '';
+    if (n(pageSlug)) return n(pageSlug);
+    if (params.pageSlug) return params.pageSlug;
+    const pathParts = location.pathname.split('/').filter(Boolean);
+    const themeIndex = pathParts.indexOf('theme');
+    const tenantIndex = pathParts.indexOf(themeSlug);
+    if (themeIndex < 0 || tenantIndex !== themeIndex + 1) {
+      return pathParts.length ? pathParts.join('/') : '';
+    }
+    if (tenantIndex >= 0 && tenantIndex < pathParts.length - 1) {
+      return pathParts.slice(tenantIndex + 1).join('/');
+    }
+    return '';
+  }, [location.pathname, themeSlug, params.pageSlug, pageSlug]);
+
+  const slugParts = resolvedPageSlug.split("/").filter(Boolean);
   const topLevel = slugParts[0] || "";
 
   // Determine current page meta data

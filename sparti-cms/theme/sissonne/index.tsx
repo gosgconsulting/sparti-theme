@@ -38,27 +38,26 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
   const location = useLocation();
   const params = useParams<{ pageSlug?: string }>();
   
-  // Determine which page to render
+  // Determine which page to render (supports standalone/Vercel deploy: pathname without /theme/slug)
   // Priority: 1) pageSlug prop, 2) params.pageSlug, 3) extract from pathname, 4) homepage
   const currentPage = useMemo(() => {
-    // Check pageSlug prop first (passed from TenantLandingPage)
-    if (pageSlug) {
-      return pageSlug;
-    }
-    
-    // Check if we have a pageSlug param (from /theme/:tenantSlug/:pageSlug route)
-    if (params.pageSlug) {
-      return params.pageSlug;
-    }
-    
-    // Otherwise, extract from pathname
+    const normalized = (s?: string) => (s && s.trim()) ? String(s).replace(/^\/+/, '').replace(/\/+$/, '') : '';
+    if (normalized(pageSlug)) return normalized(pageSlug);
+    if (params.pageSlug) return params.pageSlug;
+
     const pathParts = location.pathname.split('/').filter(Boolean);
-    const themeIndex = pathParts.indexOf(tenantSlug);
-    if (themeIndex >= 0 && themeIndex < pathParts.length - 1) {
-      return pathParts[themeIndex + 1];
+    const themeIndex = pathParts.indexOf('theme');
+    const tenantIndex = pathParts.indexOf(tenantSlug);
+
+    // Standalone deploy: pathname has no /theme/tenantSlug (e.g. /programs, /thank-you)
+    if (themeIndex < 0 || tenantIndex !== themeIndex + 1) {
+      return pathParts.length ? pathParts.join('/') : '';
     }
-    
-    return ''; // Homepage
+    // CMS mode: pathname like /theme/sissonne/programs
+    if (tenantIndex >= 0 && tenantIndex < pathParts.length - 1) {
+      return pathParts.slice(tenantIndex + 1).join('/');
+    }
+    return '';
   }, [location.pathname, tenantSlug, params.pageSlug, pageSlug]);
 
   // Render the appropriate page component based on current route

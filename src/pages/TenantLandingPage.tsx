@@ -115,8 +115,14 @@ const TenantLandingPage: React.FC = () => {
   );
   
   // When DEPLOY_THEME_SLUG is set (Vercel/env), always use it so theme is served at root
+  // Treat empty string as missing so /theme/ and /theme resolve to default theme on localhost
   const deploySlug = import.meta.env.DEPLOY_THEME_SLUG;
-  const slug = deploySlug ?? tenantSlug ?? themeSlug ?? slugFromShortPath ?? (isRootSTRRoute ? 'str' : 'landingpage');
+  const slug =
+    (deploySlug && deploySlug.trim()) ||
+    (tenantSlug && tenantSlug.trim()) ||
+    (themeSlug && themeSlug.trim()) ||
+    slugFromShortPath ||
+    (isRootSTRRoute ? 'str' : 'landingpage');
 
   // When deploy theme at root, basePath is '' so links use /services not /theme/gosgconsulting/services
   const isDeployAtRoot = !!deploySlug && !location.pathname.startsWith('/theme/');
@@ -140,7 +146,7 @@ const TenantLandingPage: React.FC = () => {
     // Extract full path from pathname to handle nested routes
     const pathParts = location.pathname.split('/').filter(Boolean);
     const themeIndex = pathParts.indexOf('theme');
-    const effectiveSlug = tenantSlug ?? themeSlug ?? slug;
+    const effectiveSlug = (tenantSlug && tenantSlug.trim()) || (themeSlug && themeSlug.trim()) || slug;
     const tenantIndex = pathParts.indexOf(effectiveSlug);
     
     // Short theme URL: /gosgconsulting or /gosgconsulting/services - first segment is theme slug, rest is page path

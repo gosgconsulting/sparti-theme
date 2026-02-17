@@ -27,19 +27,19 @@ export default defineConfig(({ mode }) => {
       configureServer(server) {
         server.middlewares.use((req, res, next) => {
           const url = req.url || '';
-          
-          // Only handle /theme/* paths
-          if (url.startsWith('/theme/')) {
+          const pathname = url.split('?')[0];
+          const isThemePath = pathname === '/theme' || pathname.startsWith('/theme/');
+
+          if (isThemePath) {
             // Check if it's an asset request (has file extension)
-            const hasExtension = /\.([a-zA-Z0-9]+)$/.test(url);
-            
-            // If it's not an asset, serve index.html for SPA routing
+            const hasExtension = /\.([a-zA-Z0-9]+)$/.test(pathname);
+
+            // If it's not an asset, serve index.html for SPA routing (including exact /theme)
             if (!hasExtension) {
-              // Rewrite to index.html to let React Router handle it
               req.url = '/index.html';
             }
           }
-          
+
           next();
         });
       }

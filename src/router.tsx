@@ -200,6 +200,10 @@ export const router = createBrowserRouter(
       ),
     },
     {
+      path: "/theme",
+      element: <Navigate to="/theme/landingpage" replace />,
+    },
+    {
       path: "/embed/pages",
       element: (
         <RootLayout>

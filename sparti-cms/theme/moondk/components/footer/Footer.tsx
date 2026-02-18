@@ -1,8 +1,11 @@
+import { useState } from "react";
 import logoSrc from "../../assets/moondk_logo.png";
 import { useThemeBasePath, themeHref } from "../ThemeLink";
+import ContactFormSheet from "../ContactFormSheet";
 
 const Footer = () => {
   const basePath = useThemeBasePath();
+  const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
   return (
     <footer className="w-full bg-background text-foreground pt-16 pb-8 px-6 border-t border-border-light mt-24">
@@ -32,42 +35,42 @@ const Footer = () => {
               <ul className="space-y-2">
                 <li>
                   <a
-                    href={themeHref(basePath, "/category/new-in")}
+                    href={themeHref(basePath, "/#new-arrivals")}
                     className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
                   >
-                    New In
+                    New Arrivals
                   </a>
                 </li>
                 <li>
                   <a
-                    href={themeHref(basePath, "/category/curated-sets")}
+                    href={themeHref(basePath, "/category/shop?filter=Tea")}
                     className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
                   >
-                    Curated Sets
+                    Tea
                   </a>
                 </li>
                 <li>
                   <a
-                    href={themeHref(basePath, "/category/ingredients")}
+                    href={themeHref(basePath, "/category/shop?filter=Oil")}
                     className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
                   >
-                    Ingredients
+                    Oil
                   </a>
                 </li>
                 <li>
                   <a
-                    href={themeHref(basePath, "/category/tools")}
+                    href={themeHref(basePath, "/category/shop?filter=Noodles")}
                     className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
                   >
-                    Tools
+                    Noodles
                   </a>
                 </li>
                 <li>
                   <a
-                    href={themeHref(basePath, "/category/recipe-collections")}
+                    href={themeHref(basePath, "/category/shop?filter=Soju")}
                     className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
                   >
-                    Recipe Collections
+                    Soju
                   </a>
                 </li>
               </ul>
@@ -93,9 +96,12 @@ const Footer = () => {
                   </span>
                 </li>
                 <li>
-                  <span className="text-sm font-body font-light text-foreground/50">
+                  <button
+                    onClick={() => setIsContactFormOpen(true)}
+                    className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors cursor-pointer"
+                  >
                     Contact
-                  </span>
+                  </button>
                 </li>
               </ul>
             </div>
@@ -105,7 +111,12 @@ const Footer = () => {
               <h4 className="text-sm font-heading font-medium mb-4 text-foreground">Connect</h4>
               <ul className="space-y-2">
                 <li>
-                  <a href="#" className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors">
+                  <a 
+                    href="https://www.instagram.com/beok.sg/?hl=en" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
+                  >
                     Instagram
                   </a>
                 </li>
@@ -142,6 +153,12 @@ const Footer = () => {
           </div>
         </div>
       </div>
+
+      {/* Contact Form Sheet */}
+      <ContactFormSheet
+        open={isContactFormOpen}
+        onOpenChange={setIsContactFormOpen}
+      />
     </footer>
   );
 };

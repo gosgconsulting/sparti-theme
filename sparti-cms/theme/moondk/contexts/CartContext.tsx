@@ -62,7 +62,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     saveCartToStorage(cartItems);
   }, [cartItems]);
 
-  const addToCart = (item: Omit<CartItem, "id">) => {
+  const addToCart = (item: Omit<CartItem, "id">, openCartAfterAdd: boolean = false) => {
     // Check if item already exists in cart
     const existingItemIndex = cartItems.findIndex(
       (cartItem) => cartItem.name === item.name
@@ -83,8 +83,10 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       setCartItems((items) => [...items, { ...item, id: newId }]);
     }
 
-    // Open cart after adding item
-    setIsCartOpen(true);
+    // Only open cart if explicitly requested
+    if (openCartAfterAdd) {
+      setIsCartOpen(true);
+    }
   };
 
   const updateQuantity = (id: number, newQuantity: number) => {

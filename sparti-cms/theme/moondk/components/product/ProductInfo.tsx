@@ -12,6 +12,7 @@ import {
 import { ThemeLink } from "../ThemeLink";
 import { useCart } from "../../contexts/CartContext";
 import { products } from "../category/products";
+import { AddToBagNotification } from "../ui/AddToBagNotification";
 
 interface ProductInfoProps {
   productId?: string;
@@ -19,6 +20,7 @@ interface ProductInfoProps {
 
 const ProductInfo = ({ productId }: ProductInfoProps) => {
   const [quantity, setQuantity] = useState(1);
+  const [showNotification, setShowNotification] = useState(false);
   const { addToCart } = useCart();
 
   // Get product data from products array
@@ -59,11 +61,18 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
       image: productImage,
       quantity: quantity,
       category: productCategory,
-    });
+    }, false); // Don't open cart, show notification instead
+    setShowNotification(true);
   };
 
   return (
-    <div className="space-y-8">
+    <>
+      <AddToBagNotification
+        isVisible={showNotification}
+        onClose={() => setShowNotification(false)}
+        productName={productName}
+      />
+      <div className="space-y-8">
       <div className="hidden lg:block">
         <Breadcrumb>
           <BreadcrumbList>
@@ -164,6 +173,7 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
         </Button>
       </div>
     </div>
+    </>
   );
 };
 

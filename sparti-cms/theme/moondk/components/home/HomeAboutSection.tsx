@@ -12,7 +12,7 @@ export default function HomeAboutSection() {
     <section className="px-6 py-16">
       <div className="mx-auto max-w-6xl">
         <div className="mb-6">
-          <h2 className="text-3xl md:text-4xl font-body tracking-tight">about and Experience</h2>
+          <h2 className="text-3xl md:text-4xl font-body tracking-tight">About and Experience</h2>
         </div>
         <div className="rounded-[2rem] bg-[#F2EFDC] p-6 md:p-8 border-none shadow-md">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-center">

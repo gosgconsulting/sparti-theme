@@ -24,6 +24,8 @@ const Navigation = () => {
   const closeTimeoutRef = useRef<NodeJS.Timeout | null>(null);
   const dropdownRefs = useRef<Map<string, HTMLDivElement>>(new Map());
   const menuItemRefs = useRef<Map<string, HTMLDivElement>>(new Map());
+  const searchOverlayRef = useRef<HTMLDivElement>(null);
+  const searchButtonRef = useRef<HTMLButtonElement>(null);
   
   const { cartItems, updateQuantity, totalItems, isCartOpen, openCart, closeCart } = useCart();
 
@@ -90,6 +92,43 @@ const Navigation = () => {
     }
   }, [activeDropdown]);
 
+  // Close search overlay when clicking outside
+  useEffect(() => {
+    if (isSearchOpen) {
+      const handleClickOutside = (event: MouseEvent) => {
+        const target = event.target as Node;
+        
+        // Check if click is outside search overlay
+        if (searchOverlayRef.current && !searchOverlayRef.current.contains(target)) {
+          // Check if click is on any search button (desktop or mobile)
+          const allSearchButtons = document.querySelectorAll('[aria-label="Search"]');
+          let clickedOnSearchButton = false;
+          
+          allSearchButtons.forEach((button) => {
+            if (button.contains(target)) {
+              clickedOnSearchButton = true;
+            }
+          });
+          
+          // Close search if clicked outside both overlay and buttons
+          if (!clickedOnSearchButton) {
+            setIsSearchOpen(false);
+          }
+        }
+      };
+
+      // Add event listener with a slight delay to avoid immediate closure
+      const timeoutId = setTimeout(() => {
+        document.addEventListener('mousedown', handleClickOutside);
+      }, 100);
+
+      return () => {
+        clearTimeout(timeoutId);
+        document.removeEventListener('mousedown', handleClickOutside);
+      };
+    }
+  }, [isSearchOpen]);
+
   // Helper function to handle delayed dropdown close
   const handleDropdownClose = () => {
     if (closeTimeoutRef.current) {
@@ -111,26 +150,19 @@ const Navigation = () => {
 
   const navItems = [
     {
-      name: "HOME",
+      name: "Home",
       href: "/",
       submenuItems: [],
       images: [],
     },
     {
-      name: "SHOP",
+      name: "Shop",
       href: "/category/shop",
-      submenuItems: [
-        "All products",
-        "Tea",
-        "Oil",
-        "Noodles",
-        "Alcohol",
-        "Personal care",
-      ],
+      submenuItems: [],
       images: [],
     },
     {
-      name: "RECIPES",
+      name: "Recipes",
       href: "/recipes",
       submenuItems: [],
       images: [],
@@ -167,12 +199,19 @@ const Navigation = () => {
       {/* Main Header */}
       <div className="bg-white relative">
         <div className="relative flex items-center justify-between h-20 px-6">
-          {/* Left: Menu */}
+          {/* Left: Hamburger menu on mobile, Menu on desktop */}
           <div className="flex items-center">
-            {/* Mobile hamburger button */}
+            {/* Mobile hamburger button - shown on left for mobile only */}
             <button
               className="lg:hidden p-2 mt-0.5 text-nav-foreground hover:text-primary transition-colors duration-200"
-              onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
+              onClick={() => {
+                const willClose = isMobileMenuOpen;
+                setIsMobileMenuOpen(!isMobileMenuOpen);
+                // Close search overlay when closing mobile menu
+                if (willClose) {
+                  setIsSearchOpen(false);
+                }
+              }}
               aria-label="Toggle menu"
             >
               <div className="w-5 h-5 relative">
@@ -291,20 +330,50 @@ const Navigation = () => {
             </div>
           </div>
 
-          {/* Center: Logo */}
+          {/* Center: Logo - Mobile (centered and smaller) and Desktop (centered) */}
           <div className="absolute left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2">
             <ThemeLink to="/" className="block">
               <img
                 src={logoSrc}
                 alt="MOONDK"
-                className="block h-14 md:h-16 w-auto object-contain"
+                className="block h-10 md:h-12 lg:h-14 xl:h-16 w-auto object-contain"
               />
             </ThemeLink>
           </div>
 
-          {/* Right: Utility icons */}
+          {/* Right: Shopping bag on mobile, Utility icons on desktop */}
           <div className="flex items-center space-x-2">
+            {/* Mobile Shopping bag - shown on right for mobile only */}
             <button
+              className="lg:hidden p-2 mr-2 lg:mr-0 text-nav-foreground hover:text-primary transition-colors duration-200 relative"
+              aria-label="Shopping bag"
+              onClick={openCart}
+            >
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                strokeWidth="1.5"
+                stroke="currentColor"
+                className="w-5 h-5"
+              >
+                <path
+                  strokeLinecap="round"
+                  strokeLinejoin="round"
+                  d="M15.75 10.5V6a3.75 3.75 0 1 0-7.5 0v4.5m11.356-1.993 1.263 12c.07.665-.45 1.243-1.119 1.243H4.25a1.125 1.125 0 0 1-1.12-1.243l1.264-12A1.125 1.125 0 0 1 5.513 7.5h12.974c.576 0 1.059.435 1.119 1.007ZM8.625 10.5a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm7.5 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z"
+                />
+              </svg>
+              {totalItems > 0 && (
+                <span className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-[30%] text-[0.5rem] font-semibold text-primary pointer-events-none">
+                  {totalItems}
+                </span>
+              )}
+            </button>
+
+            {/* Desktop Utility icons - Hidden on mobile, shown on desktop */}
+            <div className="hidden lg:flex items-center space-x-2">
+            <button
+              ref={searchButtonRef}
               className="p-2 text-nav-foreground hover:text-primary transition-colors duration-200"
               aria-label="Search"
               onClick={() => setIsSearchOpen(!isSearchOpen)}
@@ -368,6 +437,7 @@ const Navigation = () => {
                 </span>
               )}
             </button>
+            </div>
           </div>
         </div>
       </div>
@@ -375,7 +445,7 @@ const Navigation = () => {
 
       {/* Search overlay */}
       {isSearchOpen && (
-        <div className="absolute top-full left-0 right-0 bg-white border-b border-border z-50">
+        <div ref={searchOverlayRef} className="absolute top-full left-0 right-0 bg-white border-b border-border z-50">
           <div className="px-6 py-8">
             <div className="max-w-2xl mx-auto">
               <div className="relative">
@@ -454,6 +524,53 @@ const Navigation = () => {
               >
                 Contact Us
               </button>
+
+              {/* Utility icons for mobile */}
+              <div className="flex items-center gap-4 pt-4 border-t border-border mt-4">
+                <button
+                  className="p-2 text-nav-foreground hover:text-primary transition-colors duration-200"
+                  aria-label="Search"
+                  onClick={() => {
+                    setIsSearchOpen(!isSearchOpen);
+                    setIsMobileMenuOpen(false);
+                  }}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="m21 21-5.197-5.197m0 0A7.5 7.5 0 1 0 5.196 5.196a7.5 7.5 0 0 0 10.607 10.607Z"
+                    />
+                  </svg>
+                </button>
+                <button
+                  className="p-2 text-nav-foreground hover:text-primary transition-colors duration-200"
+                  aria-label="Account"
+                  onClick={() => setIsMobileMenuOpen(false)}
+                >
+                  <svg
+                    xmlns="http://www.w3.org/2000/svg"
+                    fill="none"
+                    viewBox="0 0 24 24"
+                    strokeWidth="1.5"
+                    stroke="currentColor"
+                    className="w-6 h-6"
+                  >
+                    <path
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M15.75 6a3.75 3.75 0 1 1-7.5 0 3.75 3.75 0 0 1 7.5 0ZM4.501 20.118a7.5 7.5 0 0 1 14.998 0A17.933 17.933 0 0 1 12 21.75c-2.676 0-5.216-.584-7.499-1.632Z"
+                    />
+                  </svg>
+                </button>
+              </div>
             </div>
           </div>
         </div>

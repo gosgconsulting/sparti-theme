@@ -180,7 +180,7 @@ export default function CheckoutPage() {
                           value={discountCode}
                           onChange={(e) => setDiscountCode(e.target.value)}
                           placeholder="Enter discount code"
-                          className="flex-1 rounded-card"
+                          className="flex-1 rounded-card text-sm md:text-base"
                         />
                         <button
                           onClick={handleDiscountSubmit}
@@ -267,7 +267,7 @@ export default function CheckoutPage() {
                       type="email"
                       value={customerDetails.email}
                       onChange={(e) => handleCustomerDetailsChange("email", e.target.value)}
-                      className="mt-2 rounded-card"
+                      className="mt-2 rounded-card text-sm md:text-base"
                       placeholder="Enter your email"
                     />
                   </div>
@@ -282,7 +282,7 @@ export default function CheckoutPage() {
                         type="text"
                         value={customerDetails.firstName}
                         onChange={(e) => handleCustomerDetailsChange("firstName", e.target.value)}
-                        className="mt-2 rounded-card"
+                        className="mt-2 rounded-card text-sm md:text-base"
                         placeholder="First name"
                       />
                     </div>
@@ -295,7 +295,7 @@ export default function CheckoutPage() {
                         type="text"
                         value={customerDetails.lastName}
                         onChange={(e) => handleCustomerDetailsChange("lastName", e.target.value)}
-                        className="mt-2 rounded-card"
+                        className="mt-2 rounded-card text-sm md:text-base"
                         placeholder="Last name"
                       />
                     </div>
@@ -310,7 +310,7 @@ export default function CheckoutPage() {
                       type="tel"
                       value={customerDetails.phone}
                       onChange={(e) => handleCustomerDetailsChange("phone", e.target.value)}
-                      className="mt-2 rounded-card"
+                      className="mt-2 rounded-card text-sm md:text-base"
                       placeholder="Enter your phone number"
                     />
                   </div>
@@ -331,7 +331,7 @@ export default function CheckoutPage() {
                           type="text"
                           value={shippingAddress.address}
                           onChange={(e) => handleShippingAddressChange("address", e.target.value)}
-                          className="mt-2 rounded-card"
+                          className="mt-2 rounded-card text-sm md:text-base"
                           placeholder="e.g., 123 Orchard Road, #05-10"
                         />
                       </div>
@@ -346,7 +346,7 @@ export default function CheckoutPage() {
                             type="text"
                             value="Singapore"
                             disabled
-                            className="mt-2 rounded-card bg-muted/50 cursor-not-allowed"
+                            className="mt-2 rounded-card bg-muted/50 cursor-not-allowed text-sm md:text-base"
                             placeholder="Singapore"
                           />
                         </div>
@@ -359,7 +359,7 @@ export default function CheckoutPage() {
                             type="text"
                             value={shippingAddress.postalCode}
                             onChange={(e) => handleShippingAddressChange("postalCode", e.target.value)}
-                            className="mt-2 rounded-card"
+                            className="mt-2 rounded-card text-sm md:text-base"
                             placeholder="e.g., 238801"
                           />
                         </div>
@@ -396,7 +396,7 @@ export default function CheckoutPage() {
                           type="email"
                           value={billingDetails.email}
                           onChange={(e) => handleBillingDetailsChange("email", e.target.value)}
-                          className="mt-2 rounded-card"
+                          className="mt-2 rounded-card text-sm md:text-base"
                           placeholder="Enter billing email"
                         />
                       </div>
@@ -411,7 +411,7 @@ export default function CheckoutPage() {
                             type="text"
                             value={billingDetails.firstName}
                             onChange={(e) => handleBillingDetailsChange("firstName", e.target.value)}
-                            className="mt-2 rounded-card"
+                            className="mt-2 rounded-card text-sm md:text-base"
                             placeholder="First name"
                           />
                         </div>
@@ -424,7 +424,7 @@ export default function CheckoutPage() {
                             type="text"
                             value={billingDetails.lastName}
                             onChange={(e) => handleBillingDetailsChange("lastName", e.target.value)}
-                            className="mt-2 rounded-card"
+                            className="mt-2 rounded-card text-sm md:text-base"
                             placeholder="Last name"
                           />
                         </div>
@@ -439,7 +439,7 @@ export default function CheckoutPage() {
                           type="tel"
                           value={billingDetails.phone}
                           onChange={(e) => handleBillingDetailsChange("phone", e.target.value)}
-                          className="mt-2 rounded-card"
+                          className="mt-2 rounded-card text-sm md:text-base"
                           placeholder="Enter billing phone number"
                         />
                       </div>
@@ -453,7 +453,7 @@ export default function CheckoutPage() {
                           type="text"
                           value={billingDetails.address}
                           onChange={(e) => handleBillingDetailsChange("address", e.target.value)}
-                          className="mt-2 rounded-card"
+                          className="mt-2 rounded-card text-sm md:text-base"
                           placeholder="e.g., 123 Orchard Road, #05-10"
                         />
                       </div>
@@ -468,7 +468,7 @@ export default function CheckoutPage() {
                             type="text"
                             value="Singapore"
                             disabled
-                            className="mt-2 rounded-card bg-muted/50 cursor-not-allowed"
+                            className="mt-2 rounded-card bg-muted/50 cursor-not-allowed text-sm md:text-base"
                             placeholder="Singapore"
                           />
                         </div>
@@ -481,7 +481,7 @@ export default function CheckoutPage() {
                             type="text"
                             value={billingDetails.postalCode}
                             onChange={(e) => handleBillingDetailsChange("postalCode", e.target.value)}
-                            className="mt-2 rounded-card"
+                            className="mt-2 rounded-card text-sm md:text-base"
                             placeholder="e.g., 238801"
                           />
                         </div>
@@ -509,7 +509,7 @@ export default function CheckoutPage() {
                         Standard Shipping
                       </span>
                     </div>
-                    <div className="text-sm font-body font-light text-foreground/70">
+                    <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">
                       {subtotal >= 150 ? "Free" : "$15"} • 3-5 business days
                     </div>
                   </Label>
@@ -528,7 +528,7 @@ export default function CheckoutPage() {
                         Express Shipping
                       </span>
                     </div>
-                    <div className="text-sm font-body font-light text-foreground/70">$35 • 1-2 business days</div>
+                    <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">$35 • 1-2 business days</div>
                   </Label>
 
                   <Label
@@ -545,7 +545,7 @@ export default function CheckoutPage() {
                         Self Pickup
                       </span>
                     </div>
-                    <div className="text-sm font-body font-light text-foreground/70">Free • Pickup available immediately</div>
+                    <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">Free • Pickup available immediately</div>
                   </Label>
                 </RadioGroup>
 
@@ -574,7 +574,7 @@ export default function CheckoutPage() {
                         id="shippingComments"
                         value={shippingComments}
                         onChange={(e) => setShippingComments(e.target.value)}
-                        className="mt-2 rounded-card min-h-[100px] resize-none"
+                        className="mt-2 rounded-card min-h-[100px] resize-none text-sm md:text-base"
                         placeholder="Please provide any additional delivery instructions or information..."
                       />
                     </div>
@@ -596,7 +596,7 @@ export default function CheckoutPage() {
                         type="text"
                         value={paymentDetails.cardholderName}
                         onChange={(e) => handlePaymentDetailsChange("cardholderName", e.target.value)}
-                        className="mt-2 rounded-card"
+                        className="mt-2 rounded-card text-sm md:text-base"
                         placeholder="Name on card"
                       />
                     </div>
@@ -619,7 +619,7 @@ export default function CheckoutPage() {
                               handlePaymentDetailsChange("cardNumber", value);
                             }
                           }}
-                          className="rounded-card pl-10"
+                          className="rounded-card pl-10 text-sm md:text-base"
                           placeholder="4242 4242 4242 4242"
                           maxLength={19}
                         />
@@ -644,7 +644,7 @@ export default function CheckoutPage() {
                               handlePaymentDetailsChange("expiryDate", value);
                             }
                           }}
-                          className="mt-2 rounded-card"
+                          className="mt-2 rounded-card text-sm md:text-base"
                           placeholder="MM/YY"
                           maxLength={5}
                         />
@@ -663,7 +663,7 @@ export default function CheckoutPage() {
                               handlePaymentDetailsChange("cvv", value);
                             }
                           }}
-                          className="mt-2 rounded-card"
+                          className="mt-2 rounded-card text-sm md:text-base"
                           placeholder="123"
                           maxLength={3}
                         />

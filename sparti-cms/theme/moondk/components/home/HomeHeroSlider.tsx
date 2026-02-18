@@ -119,9 +119,9 @@ export default function HomeHeroSlider() {
         </div>
       ))}
 
-      <div className="relative mx-auto max-w-6xl px-6 py-14 md:py-20 min-h-[600px] flex items-center z-20">
+      <div className="relative mx-auto max-w-6xl px-4 sm:px-6 py-10 sm:py-14 md:py-20 min-h-[500px] sm:min-h-[600px] flex items-center z-20">
         <div className="max-w-xl transition-opacity duration-500 ease-in-out">
-          <h1 className="font-body text-5xl md:text-6xl leading-[0.95] tracking-tight text-[#1A1A1A]">
+          <h1 className="font-body text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.1] sm:leading-[0.95] tracking-tight text-[#1A1A1A]">
             {slide.id === 3 ? (
               <>
                 <span className="whitespace-nowrap">{slide.titleStart} <span className="font-heading italic font-normal text-black">{slide.emphasized}</span> {slide.titleEnd.split(' ')[0]}</span>
@@ -135,14 +135,14 @@ export default function HomeHeroSlider() {
             )}
           </h1>
 
-          <p className="mt-6 text-base md:text-lg font-body text-[#1A1A1A]/80 max-w-md">
+          <p className={`mt-4 sm:mt-6 text-sm sm:text-base md:text-lg font-body text-[#1A1A1A]/80 leading-relaxed ${slide.id === 3 ? 'max-w-[75%] sm:max-w-md' : 'max-w-md'}`}>
             {slide.description}
           </p>
 
-          <div className="mt-8">
+          <div className="mt-6 sm:mt-8">
             <Button
               asChild
-              className="rounded-full px-10 h-12 text-base uppercase tracking-wide bg-primary hover:bg-primary-hover !text-white"
+              className="rounded-full px-6 sm:px-8 md:px-10 h-10 sm:h-11 md:h-12 text-sm sm:text-base uppercase tracking-wide bg-primary hover:bg-primary-hover !text-white"
             >
               <ThemeLink to={slide.ctaTo} className="!text-white">{slide.ctaText}</ThemeLink>
             </Button>
@@ -169,10 +169,10 @@ export default function HomeHeroSlider() {
         </div>
       </div>
 
-      {/* Slide Navigation Buttons - Positioned on left and right edges */}
+      {/* Slide Navigation Buttons - Positioned on left and right edges - Hidden on mobile */}
       <button
         type="button"
-        className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/60 hover:bg-white/80 border border-white/40 flex items-center justify-center transition-colors z-10"
+        className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/60 hover:bg-white/80 border border-white/40 items-center justify-center transition-colors z-10"
         onClick={prev}
         aria-label="Previous slide"
       >
@@ -180,7 +180,7 @@ export default function HomeHeroSlider() {
       </button>
       <button
         type="button"
-        className="absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/60 hover:bg-white/80 border border-white/40 flex items-center justify-center transition-colors z-10"
+        className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/60 hover:bg-white/80 border border-white/40 items-center justify-center transition-colors z-10"
         onClick={next}
         aria-label="Next slide"
       >

@@ -16,12 +16,11 @@ export type { CMSSettings, TypographySettings, ColorSettings, LogoSettings, Medi
 export { UniversalElementDetector } from './core/universal-detector';
 export * from './types';
 
+
 // Component Registry
 export { componentRegistry, ComponentRegistry } from './registry';
 export type { ComponentDefinition, ComponentProperty } from './registry/types';
 
-// Database API
-// Database API removed for demo
 
 // Hooks
 export { default as useDatabase } from './hooks/useDatabase';

@@ -4,7 +4,7 @@ import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { getCart, getCartById, getOrCreateGuestCart, createOrder } from '../services/shopApi';
 import { StripeCheckout } from '../../../components/checkout/StripeCheckout';
-import { getStripePublishableKey, createOrderWithPayment } from '../../../services/stripeCheckout';
+import { getStripePublishableKey, createOrderWithPayment } from '../services/stripeCheckout';
 
 interface CartItem {
   id: number;
@@ -90,12 +90,12 @@ const Checkout: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        
+
         let cartData;
         if (userId) {
           // Logged in user - fetch from API
           cartData = await getCart(userId, tenantId);
-          
+
           // Pre-fill form with user data if available
           try {
             const session = localStorage.getItem('sparti-user-session');
@@ -117,7 +117,7 @@ const Checkout: React.FC = () => {
         } else {
           // Guest user - get or create cart, then fetch by cart_id
           let cartId = getGuestCartId();
-          
+
           if (!cartId) {
             // Create new guest cart
             const newCart = await getOrCreateGuestCart(tenantId);
@@ -126,7 +126,7 @@ const Checkout: React.FC = () => {
               localStorage.setItem('sparti-guest-cart-id', cartId.toString());
             }
           }
-          
+
           if (cartId) {
             // Fetch cart by ID
             cartData = await getCartById(cartId, tenantId);
@@ -140,7 +140,7 @@ const Checkout: React.FC = () => {
           setLoading(false);
           return;
         }
-        
+
         setCart(cartData);
       } catch (err: any) {
         console.error('[testing] Error fetching cart:', err);
@@ -281,7 +281,7 @@ const Checkout: React.FC = () => {
     const { name, value } = e.target;
     setFormData((prev) => {
       const updated = { ...prev, [name]: value };
-      
+
       // If payment method changed to Stripe, initialize Stripe form
       if (name === 'payment_method' && value === 'STRIPE' && !showStripeCheckout) {
         initializeStripePayment();
@@ -291,7 +291,7 @@ const Checkout: React.FC = () => {
         setClientSecret(null);
         setOrderId(null);
       }
-      
+
       return updated;
     });
   };
@@ -487,7 +487,7 @@ const Checkout: React.FC = () => {
                     <span className="font-medium">Paystack</span>
                   </label>
                 </div>
-                
+
                 {/* Loading state for Stripe */}
                 {formData.payment_method === 'STRIPE' && loadingStripeForm && (
                   <div className="mt-4 p-4 bg-blue-50 border border-blue-200 rounded-lg">

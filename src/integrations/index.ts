@@ -3,40 +3,14 @@
  * Centralized exports for all API integrations
  */
 
-// OpenRouter AI Integration
-export { 
-  OpenRouterClient, 
-  openRouterClient,
-  type OpenRouterMessage,
-  type OpenRouterResponse 
-} from './openrouter/client';
-
 // Google API Integration (Maps, Reviews, Translator)
-export { 
-  GoogleAPIClient, 
+export {
+  GoogleAPIClient,
   googleAPIClient,
   type GooglePlace,
   type GoogleReview,
-  type TranslationResult 
+  type TranslationResult
 } from './google/client';
-
-// SMTP Integration (Resend)
-export { 
-  SMTPClient, 
-  smtpClient,
-  type EmailMessage,
-  type EmailResponse 
-} from './smtp/client';
-
-// Resend Domain Management
-export {
-  ResendDomainsClient,
-  resendDomainsClient,
-  type ResendDomain,
-  type DNSRecord,
-  type SMTPConfig,
-  type CreateDomainRequest
-} from './smtp/resend-domains';
 
 
 /**
@@ -45,9 +19,7 @@ export {
  */
 export const checkIntegrationStatus = () => {
   const status = {
-    openrouter: !!import.meta.env.VITE_OPENROUTER_API_KEY,
     google: !!import.meta.env.VITE_GOOGLE_API_KEY,
-    smtp: !!import.meta.env.VITE_RESEND_API_KEY
   };
 
   console.log('[testing] Integration Status:', status);

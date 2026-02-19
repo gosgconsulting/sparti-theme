@@ -1,26 +1,13 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { useParams, useLocation } from "react-router-dom";
 import React from "react";
-import AdminTopBar from "@/components/AdminTopBar";
+// import AdminTopBar from "@/components/AdminTopBar"; // Removing AdminTopBar as it's likely not needed for public view
 import { useSEO } from "@/hooks/useSEO";
 import ErrorBoundary from "./components/ErrorBoundary";
-import EmbedPagesManager from "../sparti-cms/components/embed/EmbedPagesManager";
 import NotFound from "./pages/NotFound";
-import Admin from "./pages/Admin";
-import DatabaseViewer from "./pages/DatabaseViewer";
 import PublicDashboard from "./pages/PublicDashboard";
 import TenantLandingPage from "./pages/TenantLandingPage";
 import TenantPage from "./pages/TenantPage";
-import ThankYou from "./pages/ThankYou";
-import Shop from "./pages/Shop";
-import DemoHero from "./pages/DemoHero";
-import TemplateDynamic from "./pages/TemplateDynamic";
-import Privacy from "./pages/Privacy";
-import Terms from "./pages/Terms";
-import DesignSystems from "./pages/DesignSystems";
-import Kanban from "./pages/Kanban";
-import FeatureKanban from "./pages/FeatureKanban";
-import ProductPage from "./pages/ProductPage";
 
 // Known theme slugs (shared for /theme/:tenantSlug and /:themeSlug short URLs)
 const KNOWN_THEME_SLUGS = [
@@ -97,7 +84,7 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
   return (
     <>
       <ConditionalSEO />
-      <AdminTopBar />
+      {/* <AdminTopBar /> - Removed */}
       {children}
     </>
   );
@@ -156,14 +143,6 @@ export const router = createBrowserRouter(
       ),
     },
     {
-      path: "/admin/*",
-      element: (
-        <RootLayout>
-          <Admin />
-        </RootLayout>
-      ),
-    },
-    {
       path: "/dashboard",
       element: (
         <RootLayout>
@@ -180,36 +159,8 @@ export const router = createBrowserRouter(
       ),
     },
     {
-      path: "/theme/template/:templateName",
-      element: (
-        <RootLayout>
-          <ErrorBoundary>
-            <TemplateDynamic />
-          </ErrorBoundary>
-        </RootLayout>
-      ),
-    },
-    {
-      path: "/theme/template/:templateName/*",
-      element: (
-        <RootLayout>
-          <ErrorBoundary>
-            <TemplateDynamic />
-          </ErrorBoundary>
-        </RootLayout>
-      ),
-    },
-    {
       path: "/theme",
       element: <Navigate to="/theme/landingpage" replace />,
-    },
-    {
-      path: "/embed/pages",
-      element: (
-        <RootLayout>
-          <EmbedPagesManager />
-        </RootLayout>
-      ),
     },
     {
       path: "/blog",
@@ -236,11 +187,7 @@ export const router = createBrowserRouter(
       element: (
         <RootLayout>
           <ErrorBoundary>
-            {import.meta.env.DEPLOY_THEME_SLUG ? (
-              <TenantLandingPage />
-            ) : (
-              <ProductPage />
-            )}
+            <TenantLandingPage />
           </ErrorBoundary>
         </RootLayout>
       ),
@@ -306,88 +253,10 @@ export const router = createBrowserRouter(
       ),
     },
     {
-      path: "/privacy",
-      element: (
-        <RootLayout>
-          <Privacy />
-        </RootLayout>
-      ),
-    },
-    {
-      path: "/terms",
-      element: (
-        <RootLayout>
-          <Terms />
-        </RootLayout>
-      ),
-    },
-    {
       path: "/thank-you",
       element: (
         <RootLayout>
-          <ThankYou />
-        </RootLayout>
-      ),
-    },
-    {
-      path: "/shop",
-      element: (
-        <RootLayout>
-          <ErrorBoundary>
-            <Shop />
-          </ErrorBoundary>
-        </RootLayout>
-      ),
-    },
-    {
-      path: "/database-viewer",
-      element: (
-        <RootLayout>
-          <DatabaseViewer />
-        </RootLayout>
-      ),
-    },
-    {
-      path: "/design-systems",
-      element: (
-        <RootLayout>
-          <DesignSystems />
-        </RootLayout>
-      ),
-    },
-    {
-      path: "/components-viewer",
-      element: (
-        <RootLayout>
-          <Navigate to="/design-systems" replace />
-        </RootLayout>
-      ),
-    },
-    {
-      path: "/dev",
-      element: (
-        <RootLayout>
-          <ErrorBoundary>
-            <Kanban />
-          </ErrorBoundary>
-        </RootLayout>
-      ),
-    },
-    {
-      path: "/dev/:featureId",
-      element: (
-        <RootLayout>
-          <ErrorBoundary>
-            <FeatureKanban />
-          </ErrorBoundary>
-        </RootLayout>
-      ),
-    },
-    {
-      path: "/demo-hero",
-      element: (
-        <RootLayout>
-          <DemoHero />
+          <TenantLandingPage />
         </RootLayout>
       ),
     },

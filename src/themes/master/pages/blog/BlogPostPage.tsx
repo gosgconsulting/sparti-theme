@@ -234,7 +234,7 @@ export default function BlogPostPage({
 
               {(!staticPost?.content || staticPost.content.length === 0) && (
                 <p>
-                  This is a sample post. Add content blocks to <code>sparti-cms/theme/master/data/blog.ts</code> to
+                  This is a sample post. Add content blocks to <code>src/themes/master/data/blog.ts</code> to
                   expand it.
                 </p>
               )}

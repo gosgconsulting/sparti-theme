@@ -1,5 +1,13 @@
-import type { ComponentSchema } from "../../sparti-cms/types/schema";
-import type { DesignSystemComponent } from "../config/designSystemMetadata";
+import type { ComponentSchema } from "../types/schema";
+// import type { DesignSystemComponent } from "../config/designSystemMetadata";
+
+export interface DesignSystemComponent {
+  id: string;
+  name: string;
+  description: string;
+  sampleSchema: ComponentSchema;
+  componentFile: string;
+}
 
 /**
  * Extract component name from filename
@@ -9,17 +17,17 @@ import type { DesignSystemComponent } from "../config/designSystemMetadata";
 export function extractComponentName(filename: string, designSystemPrefix: string): string {
   // Remove extension
   const withoutExt = filename.replace(/\.tsx?$/, "");
-  
+
   // Remove design system prefix (e.g., "Flowbite" or "DaisyUI")
   const withoutPrefix = withoutExt.replace(new RegExp(`^${designSystemPrefix}`, "i"), "");
-  
+
   // Remove "Section" suffix if present
   const withoutSuffix = withoutPrefix.replace(/Section$/, "");
-  
+
   // Convert camelCase/PascalCase to "Title Case"
   // Split on capital letters and join with spaces
   const spaced = withoutSuffix.replace(/([A-Z])/g, " $1").trim();
-  
+
   return spaced || withoutSuffix;
 }
 
@@ -28,7 +36,7 @@ export function extractComponentName(filename: string, designSystemPrefix: strin
  */
 export function generateSampleSchema(componentName: string, componentId: string, componentType: string): ComponentSchema {
   const nameLower = componentName.toLowerCase();
-  
+
   // Base schema structure
   const baseSchema: ComponentSchema = {
     key: `${componentId}-section`,
@@ -47,20 +55,24 @@ export function generateSampleSchema(componentName: string, componentId: string,
   } else if (nameLower.includes("header") || nameLower.includes("navbar")) {
     baseSchema.items = [
       { key: "brandName", type: "text", content: "Brand Name" },
-      { key: "menuItems", type: "array", items: [
-        { label: "Home", link: "/" },
-        { label: "About", link: "/about" },
-        { label: "Services", link: "/services" },
-      ]},
+      {
+        key: "menuItems", type: "array", items: [
+          { label: "Home", link: "/" },
+          { label: "About", link: "/about" },
+          { label: "Services", link: "/services" },
+        ]
+      },
       { key: "cta", type: "button", content: "Contact", link: "/contact" },
     ];
   } else if (nameLower.includes("footer")) {
     baseSchema.items = [
       { key: "brandName", type: "text", content: "Brand Name" },
       { key: "description", type: "text", content: "Your company description here" },
-      { key: "sections", type: "array", items: [
-        { title: "Links", links: [{ label: "About", link: "/about" }, { label: "Contact", link: "/contact" }] },
-      ]},
+      {
+        key: "sections", type: "array", items: [
+          { title: "Links", links: [{ label: "About", link: "/about" }, { label: "Contact", link: "/contact" }] },
+        ]
+      },
       { key: "copyright", type: "text", content: "© 2024 All rights reserved." },
     ];
   } else if (nameLower.includes("feature")) {
@@ -168,7 +180,7 @@ export function discoverComponents(
       const componentName = extractComponentName(filename, designSystemPrefix);
       const componentId = componentName.toLowerCase().replace(/\s+/g, "-");
       const componentType = componentName.replace(/\s+/g, "") + "Section";
-      
+
       const component: DesignSystemComponent = {
         id: componentId,
         name: componentName,

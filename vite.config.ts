@@ -38,13 +38,13 @@ export default defineConfig(({ mode }) => {
             if (!hasExtension) {
               req.url = '/index.html';
             } else {
-              // If it IS an asset, rewrite /theme/... to /sparti-cms/theme/... for dev serving
-              // Only do this if the file exists in sparti-cms/theme, but simplest is to just rewrite
+              // If it IS an asset, rewrite /theme/... to /src/theme/... for dev serving
+              // Only do this if the file exists in src/theme, but simplest is to just rewrite
               // since /theme/ doesn't exist in root anyway.
-              // Note: We only rewrite /theme/ to /sparti-cms/theme/
-              // The request might be /theme/landingpage/assets/logo.png -> /sparti-cms/theme/landingpage/assets/logo.png
+              // Note: We only rewrite /theme/ to /src/theme/
+              // The request might be /theme/landingpage/assets/logo.png -> /src/theme/landingpage/assets/logo.png
               if (pathname.startsWith('/theme/')) {
-                req.url = req.url?.replace('/theme/', '/sparti-cms/theme/');
+                req.url = req.url?.replace('/theme/', '/src/themes/');
               }
             }
           }
@@ -57,8 +57,8 @@ export default defineConfig(({ mode }) => {
     {
       name: 'copy-theme-assets',
       closeBundle() {
-        const themeDir = path.resolve(process.cwd(), 'sparti-cms/theme');
-        const distDir = path.resolve(process.cwd(), 'dist/theme');
+        const themeDir = path.resolve(process.cwd(), 'src/themes');
+        const distDir = path.resolve(process.cwd(), 'dist/themes');
 
         if (!fs.existsSync(themeDir)) return;
 
@@ -108,7 +108,7 @@ export default defineConfig(({ mode }) => {
     plugins.push(themeDevPlugin(themeSlug, tenantId));
   }
 
-  // When theme folder is excluded (CMS-only deployments), resolve sparti-cms/theme to stubs so build succeeds.
+  // When theme folder is excluded (CMS-only deployments), resolve src/theme to stubs so build succeeds.
   // NOTE: Vercel sets process.env.VERCEL=1 automatically, but we still want themes to work on Vercel.
   // Use VITE_SKIP_THEMES=1 (or VERCEL_CMS_ONLY=1) explicitly to enable stubs.
   const useThemeStubs = envVars.VITE_SKIP_THEMES === '1' || envVars.VERCEL_CMS_ONLY === '1';
@@ -120,13 +120,13 @@ export default defineConfig(({ mode }) => {
     // IMPORTANT: Vite can sometimes attempt to load an aliased directory as a file.
     // Map top-level theme entry imports to the actual stub index file explicitly.
     resolveAlias.push({
-      find: /sparti-cms\/theme\/([^/]+)$/,
+      find: /src\/themes\/([^/]+)$/,
       replacement: themeStubsPath + '/$1/index.tsx',
     });
 
-    // Map deep imports (e.g. sparti-cms/theme/gosgconsulting/services/wordpressApi)
+    // Map deep imports (e.g. src/themes/gosgconsulting/services/wordpressApi)
     // directly into the stubs folder.
-    resolveAlias.push({ find: /sparti-cms\/theme(.*)/, replacement: themeStubsPath + '$1' });
+    resolveAlias.push({ find: /src\/themes(.*)/, replacement: themeStubsPath + '$1' });
   }
 
   const deployThemeSlug = envVars.DEPLOY_THEME_SLUG || envVars.VITE_DEPLOY_THEME_SLUG || '';

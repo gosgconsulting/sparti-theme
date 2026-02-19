@@ -27,7 +27,7 @@ const CustomTheme: React.FC<CustomThemeProps> = ({
         </p>
         <p className="mt-4 text-sm text-muted-foreground">
           Add your implementation under{' '}
-          <code className="px-1 py-0.5 rounded bg-muted">sparti-cms/theme/custom/</code> (export a default React component).
+          <code className="px-1 py-0.5 rounded bg-muted">src/themes/custom/</code> (export a default React component).
         </p>
       </div>
     </div>

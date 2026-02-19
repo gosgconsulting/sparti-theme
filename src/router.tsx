@@ -3,7 +3,7 @@ import { useParams, useLocation } from "react-router-dom";
 import React from "react";
 // import AdminTopBar from "@/components/AdminTopBar"; // Removing AdminTopBar as it's likely not needed for public view
 import { useSEO } from "@/hooks/useSEO";
-import ErrorBoundary from "./components/ErrorBoundary";
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 import NotFound from "./pages/NotFound";
 import PublicDashboard from "./pages/PublicDashboard";
 import TenantLandingPage from "./pages/TenantLandingPage";

@@ -2,7 +2,7 @@
  * Client-side Analytics Tracking Utility
  * Provides easy-to-use functions for tracking page views and events
  */
-import { getApiUrl } from '../../sparti-cms/utils/api';
+import { getApiUrl } from '../utils/api';
 
 // Generate a unique session ID
 const generateSessionId = (): string => {
@@ -74,7 +74,7 @@ export const trackPageView = async (options: {
   try {
     const sessionId = getSessionId();
     const userId = getUserId();
-    
+
     const data = {
       page_path: options.page_path || window.location.pathname,
       page_title: options.page_title || document.title,
@@ -120,7 +120,7 @@ export const trackEvent = async (
   try {
     const sessionId = getSessionId();
     const userId = getUserId();
-    
+
     const data = {
       event_name,
       event_category,
@@ -261,7 +261,7 @@ window.addEventListener('beforeunload', () => {
     // Use sendBeacon for reliable tracking on page unload
     const sessionId = getSessionId();
     const userId = getUserId();
-    
+
     const data = {
       page_path: window.location.pathname,
       page_title: document.title,
@@ -286,10 +286,10 @@ const trackScrollDepth = () => {
   const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
   const docHeight = document.documentElement.scrollHeight - window.innerHeight;
   const scrollPercentage = Math.round((scrollTop / docHeight) * 100);
-  
+
   if (scrollPercentage > maxScrollPercentage) {
     maxScrollPercentage = scrollPercentage;
-    
+
     // Track milestone scroll depths
     if (scrollPercentage >= 75 && maxScrollPercentage < 75) {
       trackPageScroll(75);
@@ -312,11 +312,11 @@ window.addEventListener('scroll', () => {
 export const initializeAnalytics = () => {
   // Track initial page view
   trackPageView();
-  
+
   // Reset page start time
   pageStartTime = Date.now();
   maxScrollPercentage = 0;
-  
+
   console.log('[testing] Analytics initialized for:', window.location.pathname);
 };
 

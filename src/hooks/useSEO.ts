@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { getApiUrl } from '../../sparti-cms/utils/api';
+import { getApiUrl } from '../utils/api';
 
 interface SEOSettings {
   site_name?: string;
@@ -62,18 +62,18 @@ export const useSEO = (options: SEOOptions = {}) => {
         const seoUrl = getApiUrl('/api/seo');
         console.log('[testing] SEO URL:', seoUrl);
         const response = await fetch(getApiUrl('/api/seo'));
-        
+
         if (!response.ok) {
           throw new Error('Failed to fetch SEO settings');
         }
-        
+
         const settings = await response.json();
         setSeoSettings(settings);
         console.log('[testing] SEO settings loaded:', settings);
       } catch (err) {
         console.error('[testing] Error loading SEO settings:', err);
         setError(err instanceof Error ? err.message : 'Failed to load SEO settings');
-        
+
         // Fallback to default settings
         setSeoSettings({
           site_name: 'GO SG',
@@ -113,7 +113,7 @@ export const useSEO = (options: SEOOptions = {}) => {
     // Helper function to update or create meta tags
     const updateMetaTag = (selector: string, content: string, attribute: string = 'content') => {
       if (!content) return;
-      
+
       let element = document.querySelector(selector) as HTMLMetaElement;
       if (element) {
         element.setAttribute(attribute, content);
@@ -138,10 +138,10 @@ export const useSEO = (options: SEOOptions = {}) => {
 
     // Handle robots meta tag based on deployment type
     // Check if this is a theme deployment (not CMS admin)
-    const isThemeDeployment = typeof window !== 'undefined' && 
-      ((window as any).__THEME_DEPLOYMENT__ === true || 
-       (window as any).__CMS_TENANT__ !== undefined);
-    
+    const isThemeDeployment = typeof window !== 'undefined' &&
+      ((window as any).__THEME_DEPLOYMENT__ === true ||
+        (window as any).__CMS_TENANT__ !== undefined);
+
     if (isThemeDeployment) {
       // Allow indexing for theme deployments
       updateMetaTag('meta[name="robots"]', 'index, follow');

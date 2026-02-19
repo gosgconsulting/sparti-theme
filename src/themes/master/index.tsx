@@ -1,8 +1,8 @@
 import React, { useEffect, useState, useMemo, useContext } from "react";
 import { useLocation, useParams } from "react-router-dom";
 import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
-import type { ComponentSchema } from "../../../sparti-cms/types/schema";
-import FlowbiteHeroSection from "@/libraries/flowbite/components/FlowbiteHeroSection";
+import type { ComponentSchema } from "@/types/schema";
+import BannerSection from "./components/BannerSection";
 import FlowbiteTestimonialsSection from "@/libraries/flowbite/components/FlowbiteTestimonialsSection";
 import FlowbitePainPointSection from "@/libraries/flowbite/components/FlowbitePainPointSection";
 import FlowbiteContentSection from "@/libraries/flowbite/components/FlowbiteContentSection";
@@ -11,18 +11,15 @@ import FlowbiteFAQSection from "@/libraries/flowbite/components/FlowbiteFAQSecti
 import FlowbiteCTASection from "@/libraries/flowbite/components/FlowbiteCTASection";
 import { initFlowbiteTheme } from "@/utils/flowbiteThemeManager";
 import { useThemeBranding } from "../../hooks/useThemeSettings";
-import Header from "./components/Header";
-import Footer from "../master/components/layout/Footer";
-import ContactFormModal from "../master/components/modals/ContactFormModal";
+import Header from "./components/layout/Header";
+import Footer from "./components/layout/Footer";
+import ContactFormModal from "./components/modals/ContactFormModal";
 import OurServicesSection from "./components/OurServicesSection";
-import { ThankYouPage } from "../master/pages/ThankYouPage";
-import PrivacyPolicyPage from "../master/pages/PrivacyPolicyPage";
-import TermsAndConditionsPage from "../master/pages/TermsAndConditionsPage";
-import BlogListPage from "../master/pages/blog/BlogListPage";
-import BlogPostPage from "../master/pages/blog/BlogPostPage";
-import { HeroSection } from "@/components/ui/hero-section-2";
-import StatisticsSection from "./components/StatisticsSection";
-import AnniversarySection from "./components/AnniversarySection";
+import { ThankYouPage } from "./pages/ThankYouPage";
+import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
+import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
+import BlogListPage from "./pages/blog/BlogListPage";
+import BlogPostPage from "./pages/blog/BlogPostPage";
 import "./theme.css";
 
 // Helper function to adjust color brightness
@@ -35,13 +32,21 @@ const adjustColorBrightness = (hex: string, percent: number): string => {
   return "#" + (0x1000000 + R * 0x10000 + G * 0x100 + B).toString(16).slice(1);
 };
 
-interface OptimalConsultingThemeProps {
+interface MasterThemeProps {
   basePath?: string;
   pageSlug?: string;
   tenantName?: string;
   tenantSlug?: string;
   tenantId?: string;
   designSystemTheme?: "default" | "minimal" | "enterprise" | "playful" | "mono";
+  logoSrc?: string;
+  heroSchemaOverride?: ComponentSchema;
+  challengeSchemaOverride?: ComponentSchema;
+  aboutSchemaOverride?: ComponentSchema;
+  servicesSchemaOverride?: ComponentSchema;
+  faqSchemaOverride?: ComponentSchema;
+  ctaSchemaOverride?: ComponentSchema;
+  testimonialsSchemaOverride?: ComponentSchema;
 }
 
 const normalizeSlug = (slug?: string) => {
@@ -53,16 +58,32 @@ const normalizeSlug = (slug?: string) => {
 };
 
 /**
- * Optimal Consulting Theme
- * Based on Master theme structure with Optimal Consulting content
+ * Master Theme
+ *
+ * This theme is meant to be the best-practice reference implementation for:
+ * - folder structure
+ * - CMS connection patterns
+ * - deployable front-end theme output
+ *
+ * Asset convention:
+ * - Put hard-coded assets under: sparti-cms/theme/master/assets
+ * - Reference them as: /theme/<themeSlug>/assets/<file>
  */
-const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
-  basePath: basePathProp = "/theme/optimalconsulting",
+const MasterTheme: React.FC<MasterThemeProps> = ({
+  basePath: basePathProp = "/theme/master",
   pageSlug,
-  tenantName = "Optimal Consulting",
-  tenantSlug = "optimalconsulting",
+  tenantName = "Master Template",
+  tenantSlug = "master",
   tenantId,
   designSystemTheme = "default",
+  logoSrc: logoSrcProp,
+  heroSchemaOverride,
+  challengeSchemaOverride,
+  aboutSchemaOverride,
+  servicesSchemaOverride,
+  faqSchemaOverride,
+  ctaSchemaOverride,
+  testimonialsSchemaOverride,
 }) => {
   const location = useLocation();
   const params = useParams<{ pageSlug?: string }>();
@@ -70,35 +91,70 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
   const resolvedBasePath = basePathProp ?? ctxBasePath ?? `/theme/${tenantSlug}`;
   const [isContactModalOpen, setIsContactModalOpen] = useState(false);
 
-  const themeSlug = tenantSlug || "optimalconsulting";
+  const themeSlug = tenantSlug || "master";
 
   // Fetch branding colors from database
   const { branding } = useThemeBranding(themeSlug, tenantId);
 
-  // Set Optimal Consulting brand colors
+  // Extract logo from branding if not provided as prop
+  const logoSrc = logoSrcProp || (branding as any)?.site_logo || undefined;
+
+  // Apply branding colors as CSS variables
   useEffect(() => {
-    const root = document.documentElement;
-    root.style.setProperty("--brand-primary", "#145598");
-    root.style.setProperty("--brand-secondary", "#4ED1CE");
-    root.style.setProperty("--brand-primary-dark", adjustColorBrightness("#145598", -10));
-    root.style.setProperty("--brand-primary-light", adjustColorBrightness("#145598", 20));
-    root.style.setProperty("--brand-secondary-dark", adjustColorBrightness("#4ED1CE", -10));
-    root.style.setProperty("--brand-secondary-light", adjustColorBrightness("#4ED1CE", 20));
-    
-    // Override with DB branding if available
     if (branding) {
+      const root = document.documentElement;
       const brandingColors = branding as any;
+
       if (brandingColors.color_primary) {
         const primaryColor = String(brandingColors.color_primary);
         root.style.setProperty("--brand-primary", primaryColor);
-        root.style.setProperty("--brand-primary-dark", adjustColorBrightness(primaryColor, -10));
-        root.style.setProperty("--brand-primary-light", adjustColorBrightness(primaryColor, 20));
+        const darker = adjustColorBrightness(primaryColor, -10);
+        root.style.setProperty("--brand-primary-dark", darker);
+        const lighter = adjustColorBrightness(primaryColor, 20);
+        root.style.setProperty("--brand-primary-light", lighter);
       }
+
       if (brandingColors.color_secondary) {
         const secondaryColor = String(brandingColors.color_secondary);
         root.style.setProperty("--brand-secondary", secondaryColor);
-        root.style.setProperty("--brand-secondary-dark", adjustColorBrightness(secondaryColor, -10));
-        root.style.setProperty("--brand-secondary-light", adjustColorBrightness(secondaryColor, 20));
+        const darker = adjustColorBrightness(secondaryColor, -10);
+        root.style.setProperty("--brand-secondary-dark", darker);
+        const lighter = adjustColorBrightness(secondaryColor, 20);
+        root.style.setProperty("--brand-secondary-light", lighter);
+      }
+
+      if (brandingColors.color_accent) {
+        const accentColor = String(brandingColors.color_accent);
+        root.style.setProperty("--brand-accent", accentColor);
+        const darker = adjustColorBrightness(accentColor, -10);
+        root.style.setProperty("--brand-accent-dark", darker);
+        const lighter = adjustColorBrightness(accentColor, 20);
+        root.style.setProperty("--brand-accent-light", lighter);
+      }
+
+      if (brandingColors.color_text) {
+        root.style.setProperty("--brand-text", String(brandingColors.color_text));
+      }
+
+      if (brandingColors.color_background) {
+        root.style.setProperty(
+          "--brand-background",
+          String(brandingColors.color_background)
+        );
+      }
+
+      if (brandingColors.color_gradient_start) {
+        root.style.setProperty(
+          "--brand-gradient-start",
+          String(brandingColors.color_gradient_start)
+        );
+      }
+
+      if (brandingColors.color_gradient_end) {
+        root.style.setProperty(
+          "--brand-gradient-end",
+          String(brandingColors.color_gradient_end)
+        );
       }
     }
   }, [branding]);
@@ -166,57 +222,52 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
     );
   }
 
-  // Optimal Consulting Landing page schemas
-  const heroSchema: ComponentSchema = {
-    type: "flowbite-hero-section",
+  // Landing page schemas - use overrides if provided, otherwise use defaults
+  const heroSchema: ComponentSchema = heroSchemaOverride || {
+    type: "banner-section",
     props: {
-      showCarousel: false,
-      backgroundImage: `/theme/${themeSlug}/Assets/Field.jpg`,
+      backgroundColor: "#2A2C2E",
+      backgroundImage: `/theme/${themeSlug}/assets/placeholder.svg`,
     },
     items: [
-      {
-        key: "motto",
-        type: "text",
-        content: "Singapore HQ • Asia delivery",
-      },
       {
         key: "title",
         type: "heading",
         level: 1,
-        content: "Developing Leaders, Optimising Performance",
+        content: "Your Business Needs More Than a Website — It Needs Growth.",
       },
       {
         key: "description",
         type: "text",
         content:
-          "We deliver comprehensive consulting services aimed at transforming talent into strategic impact and translating organisational strategy into success. Optimal Consulting has been partnering clients across the globe since 2002 to deliver people solutions for businesses, with a focus on: Assessments and Prediction of Leadership Potential and Succession Readiness, Talent and Leadership Development Interventions, and High-performing Team Assessments and Development Interventions.",
+          "We craft high‑performance pages using Flowbite components, strong messaging, and conversion-first UX — so every visit has a clear path to revenue.",
       },
       {
         key: "cta",
         type: "button",
-        content: "Book consultation",
+        content: "Get Started",
         link: "#contact",
       },
     ],
   };
 
-  const testimonialsSchema: ComponentSchema = {
+  const testimonialsSchema: ComponentSchema = testimonialsSchemaOverride || {
     type: "flowbite-testimonials-section",
     props: {
-      title: "Client impact",
-      subtitle: "Specific outcomes—clear signals—credible decisions.",
+      title: "Loved by founders",
+      subtitle: "Short, sharp feedback from teams we've helped convert more visitors.",
     },
     items: [
       {
         key: "title",
         type: "heading",
         level: 2,
-        content: "Client impact",
+        content: "Loved by founders",
       },
       {
         key: "subtitle",
         type: "text",
-        content: "Specific outcomes—clear signals—credible decisions.",
+        content: "Short, sharp feedback from teams we've helped convert more visitors.",
       },
       {
         key: "reviews",
@@ -227,19 +278,18 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
             type: "review",
             props: {
               content:
-                "We reduced promotion risk by introducing validated potential indicators and a calibrated success profile for critical roles.",
-              name: "Regional HR Director",
-              title: "Financial Services",
+                "Our landing page went from 'nice' to 'high converting' in a week. The new hero + sections are super clean.",
+              name: "Sarah C.",
+              title: "Founder",
             },
           },
           {
             key: "r2",
             type: "review",
             props: {
-              content:
-                "The Academy enabled our HR team to interpret assessment outputs consistently and coach leaders with confidence.",
-              name: "Head of Talent",
-              title: "Technology",
+              content: "The design looks premium, and the slider helped us show proof instantly.",
+              name: "Marcus T.",
+              title: "Marketing Lead",
             },
           },
           {
@@ -247,9 +297,18 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
             type: "review",
             props: {
               content:
-                "We aligned leadership behaviours to strategy and built a practical pipeline plan that business leaders could sponsor.",
-              name: "Chief People Officer",
-              title: "Consumer",
+                "We finally have a consistent design system we can iterate on without redoing everything.",
+              name: "Priya S.",
+              title: "Operations",
+            },
+          },
+          {
+            key: "r4",
+            type: "review",
+            props: {
+              content: "The layout feels modern and fast. Great UX on mobile.",
+              name: "David L.",
+              title: "CEO",
             },
           },
         ],
@@ -257,20 +316,20 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
     ],
   };
 
-  const challengeSchema: ComponentSchema = {
+  const challengeSchema: ComponentSchema = challengeSchemaOverride || {
     type: "flowbite-pain-point-section",
     props: {},
     items: [
       {
         key: "hint",
         type: "text",
-        content: "Need to make better talent decisions?",
+        content: "You have a great business but struggle online?",
       },
       {
         key: "heading",
         type: "heading",
         level: 2,
-        content: "Your Leadership Pipeline Needs Predictable Outcomes",
+        content: "Your Business Works… Your Marketing Doesn't",
       },
       {
         key: "bullets",
@@ -279,19 +338,19 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
           {
             key: "b1",
             type: "text",
-            content: "Promotion risks are costly and hard to predict",
+            content: "You know your craft — but not SEO, ads, funnels",
             icon: "x",
           },
           {
             key: "b2",
             type: "text",
-            content: "Succession planning lacks data-driven insights",
+            content: "Leads don't grow month after month",
             icon: "sparkles",
           },
           {
             key: "b3",
             type: "text",
-            content: "Leadership development needs measurable impact",
+            content: "Ad money burns without profit",
             icon: "barChart3",
           },
         ],
@@ -299,57 +358,57 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
     ],
   };
 
-  const aboutSchema: ComponentSchema = {
+  const aboutSchema: ComponentSchema = aboutSchemaOverride || {
     type: "flowbite-content-section",
     props: {
       variant: "about",
       badge: "About us",
-      imageSrc: `/theme/optimalconsulting/Assets/Plant.jpg`,
-      reviewLabel: "20+ Years",
-      reviewSub: "Experience",
+      imageSrc: `/theme/${themeSlug}/assets/placeholder.svg`,
+      reviewLabel: "5 Star",
+      reviewSub: "Review",
     },
     items: [
       {
         key: "title",
         type: "heading",
         level: 2,
-        content: "We Are Your Strategic Talent Partner",
+        content: "We Are Your Growth Team And We Will Take You Further",
       },
       {
         key: "content",
         type: "text",
         content:
-          "Optimal Consulting has been partnering clients across the globe since 2002 to deliver people solutions for businesses. We are headquartered in Singapore, with a physical presence in Kuala Lumpur, Hong Kong, Shanghai and Tokyo.\n\nWe help organisational leaders make talent decisions with validated assessments, scalable capability building, and pragmatic consulting—so you can strengthen succession and improve performance outcomes.",
+          "We handle the full funnel end-to-end: positioning, website conversion, SEO, paid ads, creatives, and tracking—so every channel works together to drive revenue.\n\nOur proven systems generate leads and revenue month after month, while you stay focused on running the business.",
       },
       {
         key: "button",
         type: "button",
-        content: "Learn more",
+        content: "Get Started",
         link: "#contact",
       },
     ],
   };
 
-  const servicesSchema: ComponentSchema = {
+  const servicesSchema: ComponentSchema = servicesSchemaOverride || {
     type: "flowbite-whats-included-section",
     props: {},
     items: [
       {
         key: "badge",
         type: "text",
-        content: "Business Units",
+        content: "Services",
       },
       {
         key: "title",
         type: "heading",
         level: 2,
-        content: "Three connected offerings to assess potential, build capability, and deliver outcomes",
+        content: "Increase your revenue with a full‑stack growth package",
       },
       {
         key: "description",
         type: "text",
         content:
-          "A focused breakdown of our core services, each tailored to your talent and leadership goals.",
+          "A focused breakdown of the core areas driving results, each tailored to your goals.",
       },
       {
         key: "features",
@@ -359,17 +418,12 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
             key: "s1",
             type: "feature",
             items: [
-              {
-                key: "title",
-                type: "heading",
-                level: 3,
-                content: "Assessments",
-              },
+              { key: "title", type: "heading", level: 3, content: "Website & Conversion" },
               {
                 key: "description",
                 type: "text",
                 content:
-                  "Explore world-class psychometric assessment tools to gain insights into your current and to-be talent.",
+                  "High‑converting landing pages, A/B test ideas, and conversion tracking.",
               },
             ],
           },
@@ -377,17 +431,11 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
             key: "s2",
             type: "feature",
             items: [
-              {
-                key: "title",
-                type: "heading",
-                level: 3,
-                content: "Academy",
-              },
+              { key: "title", type: "heading", level: 3, content: "Acquisition" },
               {
                 key: "description",
                 type: "text",
-                content:
-                  "Equip your organisation with the skills to administer assessment tools, interpret profiling outcomes and bridge performance gaps with development intervention programmes.",
+                content: "SEM + social ads, plus smart retargeting that doesn't waste spend.",
               },
             ],
           },
@@ -395,17 +443,11 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
             key: "s3",
             type: "feature",
             items: [
-              {
-                key: "title",
-                type: "heading",
-                level: 3,
-                content: "Services",
-              },
+              { key: "title", type: "heading", level: 3, content: "Creative & Content" },
               {
                 key: "description",
                 type: "text",
-                content:
-                  "Entrust the prediction of leadership potential and succession readiness for your organisation to our trained and experienced consultants.",
+                content: "Creative assets and copy that match your brand and convert.",
               },
             ],
           },
@@ -414,13 +456,13 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
       {
         key: "cta",
         type: "button",
-        content: "Explore services",
+        content: "Get free consultation",
         link: "#contact",
       },
     ],
   };
 
-  const faqSchema: ComponentSchema = {
+  const faqSchema: ComponentSchema = faqSchemaOverride || {
     type: "flowbite-faq-section",
     props: {},
     items: [
@@ -437,13 +479,13 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
           {
             key: "question",
             type: "text",
-            content: "What services does Optimal Consulting offer?",
+            content: "What does 'full‑stack growth' mean?",
           },
           {
             key: "answer",
             type: "text",
             content:
-              "We offer three main services: Assessments (psychometric tools for talent insights), Academy (training to administer assessments and interpret outcomes), and Services (consulting for leadership potential prediction and succession readiness).",
+              "We handle the full funnel end-to-end: positioning, website conversion, SEO, paid ads, creatives, and tracking—so every channel works together to drive revenue.",
           },
         ],
       },
@@ -454,13 +496,13 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
           {
             key: "question",
             type: "text",
-            content: "Where does Optimal Consulting operate?",
+            content: "How fast will I see results?",
           },
           {
             key: "answer",
             type: "text",
             content:
-              "We are headquartered in Singapore, with a physical presence in Kuala Lumpur, Hong Kong, Shanghai and Tokyo. We serve clients across 38 locations globally.",
+              "Paid ads can generate leads quickly, while SEO compounds over time. We'll align the plan to your goals and share clear performance reporting month-to-month.",
           },
         ],
       },
@@ -471,13 +513,13 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
           {
             key: "question",
             type: "text",
-            content: "How long has Optimal Consulting been in business?",
+            content: "Do you work with my existing website?",
           },
           {
             key: "answer",
             type: "text",
             content:
-              "Optimal Consulting has been partnering clients across the globe since 2002. In 2022, we celebrated twenty years of predicting leadership potential and delivering talent development interventions across Asia.",
+              "Yes. We can optimize your current site for conversions and SEO, or rebuild key pages where needed—without disrupting your brand.",
           },
         ],
       },
@@ -488,22 +530,23 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
           {
             key: "question",
             type: "text",
-            content: "What results can I expect?",
+            content: "Is this a good fit for small businesses?",
           },
           {
             key: "answer",
             type: "text",
             content:
-              "We have assessed over 70,000 professionals, predicted over 7,000 high potentials, certified over 3,000 licensed users, and delivered over 100,000 assessments. Our data-driven approach helps reduce promotion risk and accelerate leadership development.",
+              "Yes. We tailor scopes to your stage—whether you need a consistent lead pipeline, better conversion rates, or a complete growth system.",
           },
         ],
       },
     ],
   };
 
-  const ctaSchema: ComponentSchema = {
+  const ctaSchema: ComponentSchema = ctaSchemaOverride || {
     type: "flowbite-cta-section",
     props: {
+      // Use the master theme's standard CTA styling (green button) and keep it a normal size
       ctaVariant: "primary",
       ctaFullWidth: false,
     },
@@ -512,18 +555,17 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
         key: "title",
         type: "heading",
         level: 2,
-        content: "Ready to partner with us?",
+        content: "Ready to turn traffic into revenue?",
       },
       {
         key: "description",
         type: "text",
-        content:
-          "Tell us what you're trying to achieve. We'll propose a practical approach—assessment, academy enablement, and/or consulting—aligned to your context.",
+        content: "Get a clear growth plan tailored to your business in a free strategy call.",
       },
       {
         key: "cta",
         type: "button",
-        content: "Book consultation",
+        content: "Get free consultation",
         link: "#contact",
       },
     ],
@@ -551,36 +593,10 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
       return <TermsAndConditionsPage tenantName={tenantName} />;
     }
 
-    // Extract hero data from schema for new HeroSection component
-    const getTextByKey = (items: any[], key: string) => {
-      const item = items.find((i) => i.key === key);
-      return item?.content || "";
-    };
-
-    const heroMotto = getTextByKey(heroSchema.items || [], "motto");
-    const heroTitle = getTextByKey(heroSchema.items || [], "title");
-    const heroDescription = getTextByKey(heroSchema.items || [], "description");
-    const heroCTA = heroSchema.items?.find((i) => i.key === "cta");
-    const heroBackgroundImage = heroSchema.props?.backgroundImage || `/theme/${themeSlug}/Assets/hero.svg`;
-
     return (
       <>
         <div id="hero">
-          <HeroSection
-            slogan={heroMotto}
-            title={heroTitle}
-            subtitle={heroDescription}
-            callToAction={{
-              text: heroCTA?.content || "Book consultation",
-              href: heroCTA?.link || "#contact"
-            }}
-            backgroundImage={heroBackgroundImage}
-            contactInfo={{
-              website: "optimalconsulting.com",
-              phone: "+65 1234 5678",
-              address: "Singapore HQ • Asia delivery"
-            }}
-          />
+          <BannerSection component={heroSchema} />
         </div>
 
         <div id="challenge" className="scroll-mt-20">
@@ -589,6 +605,10 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
 
         <div id="about" className="scroll-mt-20">
           <FlowbiteContentSection component={aboutSchema} />
+        </div>
+
+        <div id="services" className="scroll-mt-20">
+          <FlowbiteWhatsIncludedSection component={servicesSchema} />
         </div>
 
         <div id="testimonials" className="scroll-mt-20">
@@ -603,14 +623,6 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
           <FlowbiteFAQSection component={faqSchema} />
         </div>
 
-        <div id="statistics" className="scroll-mt-20">
-          <StatisticsSection />
-        </div>
-
-        <div id="anniversary" className="scroll-mt-20">
-          <AnniversarySection themeSlug={themeSlug} />
-        </div>
-
         <div id="contact" className="scroll-mt-20">
           <FlowbiteCTASection component={ctaSchema} />
         </div>
@@ -618,15 +630,13 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
     );
   };
 
-  const logoSrc = branding?.site_logo || `/theme/${themeSlug}/assets/logo-white.svg`;
-
   return (
     <div className="min-h-screen flex flex-col bg-(--brand-background)">
       <Header
         tenantName={tenantName}
         tenantSlug={themeSlug}
-        logoSrc={logoSrc}
         basePath={resolvedBasePath}
+        logoSrc={logoSrc}
         onContactClick={handleContactClick}
       />
 
@@ -644,4 +654,4 @@ const OptimalConsultingTheme: React.FC<OptimalConsultingThemeProps> = ({
   );
 };
 
-export default OptimalConsultingTheme;
+export default MasterTheme;

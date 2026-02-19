@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { api } from '../../sparti-cms/utils/api';
+import { api } from '@/utils/api';
 import { Loader2, AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import ErrorBoundary from '@/components/ErrorBoundary';
+import ErrorBoundary from '@/components/common/ErrorBoundary';
 import FlowbiteHeader from '@/libraries/flowbite/components/FlowbiteHeader';
 import FlowbiteFooter from '@/libraries/flowbite/components/FlowbiteFooter';
 
@@ -49,7 +49,7 @@ const TenantPage: React.FC = () => {
 
         // First, fetch tenant to get tenant ID
         const tenantResponse = await api.get(`/api/tenants/by-slug/${tenantSlug}`);
-        
+
         if (!tenantResponse.ok) {
           if (tenantResponse.status === 404) {
             setError('Tenant not found');
@@ -73,7 +73,7 @@ const TenantPage: React.FC = () => {
         // Fetch page by slug with tenant context
         // Ensure slug starts with /
         const normalizedSlug = pageSlug.startsWith('/') ? pageSlug : `/${pageSlug}`;
-        
+
         // Send X-Tenant-Id header for authentication (required by /api/v1/* endpoints)
         const pageResponse = await api.get(
           `/api/v1/pages${normalizedSlug}?tenantId=${tenantInfo.id}`,
@@ -154,7 +154,7 @@ const TenantPage: React.FC = () => {
           {page.meta_description && (
             <p className="text-xl text-muted-foreground mb-8">{page.meta_description}</p>
           )}
-          
+
           {/* TODO: Render page.layout components here when layout rendering is implemented */}
           <div className="prose max-w-none">
             <p className="text-muted-foreground">

@@ -2,21 +2,21 @@ import React, { lazy, Suspense, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { ThemeBasePathContext } from '../../sparti-cms/context/ThemeBasePathContext';
+import { ThemeBasePathContext } from '@/context/ThemeBasePathContext';
 
 // Dynamic theme imports - themes with hardcoded content, ready for database integration
-const LandingPageTheme = lazy(() => import('../../sparti-cms/theme/landingpage'));
-const SpartiSEOLandingTheme = lazy(() => import('../../sparti-cms/theme/sparti-seo-landing'));
-const GosgConsultingTheme = lazy(() => import('../../sparti-cms/theme/gosgconsulting'));
-const SissonneTheme = lazy(() => import('../../sparti-cms/theme/sissonne'));
-const StorefrontTheme = lazy(() => import('../../sparti-cms/theme/storefront'));
-const MoondkTheme = lazy(() => import('../../sparti-cms/theme/moondk'));
-const StrTheme = lazy(() => import('../../sparti-cms/theme/str'));
-const OptimalConsultingTheme = lazy(() => import('../../sparti-cms/theme/optimalconsulting'));
-const MasterTheme = lazy(() => import('../../sparti-cms/theme/master'));
-const EShopTheme = lazy(() => import('../../sparti-cms/theme/e-shop'));
-const HotelTheme = lazy(() => import('../../sparti-cms/theme/hotel'));
-const NailQueenTheme = lazy(() => import('../../sparti-cms/theme/nail-queen'));
+const LandingPageTheme = lazy(() => import('@/themes/landingpage'));
+const SpartiSEOLandingTheme = lazy(() => import('@/themes/sparti-seo-landing'));
+const GosgConsultingTheme = lazy(() => import('@/themes/gosgconsulting'));
+const SissonneTheme = lazy(() => import('@/themes/sissonne'));
+const StorefrontTheme = lazy(() => import('@/themes/storefront'));
+const MoondkTheme = lazy(() => import('@/themes/moondk'));
+const StrTheme = lazy(() => import('@/themes/str'));
+const OptimalConsultingTheme = lazy(() => import('@/themes/optimalconsulting'));
+const MasterTheme = lazy(() => import('@/themes/master'));
+const EShopTheme = lazy(() => import('@/themes/e-shop'));
+const HotelTheme = lazy(() => import('@/themes/hotel'));
+const NailQueenTheme = lazy(() => import('@/themes/nail-queen'));
 
 /**
  * Map theme slugs to their display names and components
@@ -95,17 +95,17 @@ const TenantLandingPage: React.FC = () => {
     slug?: string;
   }>();
   const location = useLocation();
-  
+
   // Derive theme slug from pathname for short URLs (/gosgconsulting, /str, etc.) so we don't rely on params
   const pathParts = useMemo(() => location.pathname.split('/').filter(Boolean), [location.pathname]);
   const themeIndexInPath = pathParts.indexOf('theme');
   const firstSegment = pathParts[0];
   const slugFromShortPath =
     themeIndexInPath < 0 && firstSegment && firstSegment in themeConfig ? firstSegment : null;
-  
+
   // Handle root-level blog routes (/blog or /blog/:slug)
   const isRootBlogRoute = !tenantSlug && !themeSlug && !slugFromShortPath && (location.pathname === '/blog' || location.pathname.startsWith('/blog/'));
-  
+
   // Handle root-level STR theme routes (booking, packages, etc.)
   const isRootSTRRoute = !tenantSlug && !themeSlug && !slugFromShortPath && (
     location.pathname === '/booking' ||
@@ -113,7 +113,7 @@ const TenantLandingPage: React.FC = () => {
     location.pathname === '/packages' ||
     location.pathname.startsWith('/packages/')
   );
-  
+
   // When DEPLOY_THEME_SLUG is set (Vercel/env), always use it so theme is served at root
   // Treat empty string as missing so /theme/ and /theme resolve to default theme on localhost
   const deploySlug = import.meta.env.DEPLOY_THEME_SLUG;
@@ -134,7 +134,7 @@ const TenantLandingPage: React.FC = () => {
     if (productname) {
       return `product/${productname}`;
     }
-    
+
     // Handle root-level blog routes (/blog or /blog/:slug)
     if (isRootBlogRoute) {
       if (blogSlug) {
@@ -142,38 +142,38 @@ const TenantLandingPage: React.FC = () => {
       }
       return 'blog';
     }
-    
+
     // Extract full path from pathname to handle nested routes
     const pathParts = location.pathname.split('/').filter(Boolean);
     const themeIndex = pathParts.indexOf('theme');
     const effectiveSlug = (tenantSlug && tenantSlug.trim()) || (themeSlug && themeSlug.trim()) || slug;
     const tenantIndex = pathParts.indexOf(effectiveSlug);
-    
+
     // Short theme URL: /gosgconsulting or /gosgconsulting/services - first segment is theme slug, rest is page path
     if (themeIndex < 0 && pathParts.length > 0 && pathParts[0] === effectiveSlug) {
       return pathParts.slice(1).join('/');
     }
-    
+
     // Handle other root-level routes (e.g. /blog or /blog/slug)
     if (themeIndex < 0 && pathParts.length > 0) {
       return pathParts.join('/');
     }
-    
+
     if (themeIndex >= 0 && tenantIndex === themeIndex + 1 && tenantIndex + 1 < pathParts.length) {
       // Get all parts after tenant slug (handles both single and nested paths)
       const remainingParts = pathParts.slice(tenantIndex + 1);
       return remainingParts.join('/');
     }
-    
+
     // Fallback to pageSlug if pathname parsing didn't work
     return pageSlug || '';
   }, [pageSlug, location.pathname, tenantSlug, themeSlug, productname, isRootBlogRoute, blogSlug, slug]);
-  
+
   // Get theme config or fallback
   const currentTheme = useMemo(() => {
     return themeConfig[slug] || themeConfig['landingpage'];
   }, [slug]);
-  
+
   const ThemeComponent = currentTheme.component;
   const isKnownTheme = slug in themeConfig;
 
@@ -213,8 +213,8 @@ const TenantLandingPage: React.FC = () => {
   return (
     <ThemeBasePathContext.Provider value={basePath}>
       <Suspense fallback={<LoadingFallback />}>
-        <ThemeComponent 
-          tenantName={currentTheme.name} 
+        <ThemeComponent
+          tenantName={currentTheme.name}
           tenantSlug={slug}
           pageSlug={fullPageSlug}
           tenantId={undefined}

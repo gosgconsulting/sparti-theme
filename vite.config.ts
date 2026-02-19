@@ -58,7 +58,7 @@ export default defineConfig(({ mode }) => {
       name: 'copy-theme-assets',
       closeBundle() {
         const themeDir = path.resolve(process.cwd(), 'src/themes');
-        const distDir = path.resolve(process.cwd(), 'dist/themes');
+        const distDir = path.resolve(process.cwd(), 'dist/theme');
 
         if (!fs.existsSync(themeDir)) return;
 

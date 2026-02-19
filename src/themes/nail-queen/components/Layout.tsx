@@ -28,7 +28,7 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
 
   // Load branding settings from database
   const { branding, loading: brandingLoading } = useThemeBranding('nail-queen', tenantId);
-  
+
   // Get settings from database with fallback to defaults
   const siteName = getSiteName(branding, 'Nail Queen');
   const logoSrc = getLogoSrc(branding);
@@ -42,7 +42,7 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
   }, []);
 
   const navItems = [
-    { label: "Home", path: "" },
+    { label: "Home", path: "/" },
     { label: "Pricing", path: "/pricing" },
     { label: "Find us", path: "/find-us" },
     { label: "Gallery", path: "/gallery" },

@@ -617,10 +617,10 @@ const LIBRARY_MAPPINGS: Record<string, Record<string, string>> = {
 
 ### Theme Integration
 
-Themes in `sparti-cms/theme/{theme-name}/` import and use Flowbite components:
+Themes in `src/themes/{theme-name}/` import and use Flowbite components:
 
 ```typescript
-// sparti-cms/theme/my-theme/index.tsx
+// src/themes/my-theme/index.tsx
 import FlowbiteHeroSection from '@/libraries/flowbite/components/FlowbiteHeroSection';
 import FlowbiteFeaturesSection from '@/libraries/flowbite/components/FlowbiteFeaturesSection';
 
@@ -645,7 +645,7 @@ src/styles/flowbite/
 Themes can override Flowbite styles in their `theme.css`:
 
 ```css
-/* sparti-cms/theme/my-theme/theme.css */
+/* src/themes/my-theme/theme.css */
 /* Override Flowbite styles */
 .btn-primary {
   @apply bg-purple-600 hover:bg-purple-700;
@@ -763,7 +763,7 @@ When creating a new Flowbite component, ensure you:
 
 - **Flowbite Documentation**: `docs/development/flowbite-component-creation-sop.md`
 - **Flowbite Official Docs**: https://flowbite-react.com/
-- **Theme System**: `sparti-cms/theme/README.md`
+- **Theme System**: `src/themes/README.md`
 - **Library Registry**: `src/config/libraryRegistry.ts`
 - **Component Key Mapper**: `src/utils/componentKeyMapper.ts`
 - **Component Preview**: `/design-systems` route in app

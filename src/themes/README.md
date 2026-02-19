@@ -10,7 +10,7 @@ You have two valid starting points depending on what you need:
 
 1) **Minimal scaffold** (fastest): start from a template under `sparti-cms/template/`.
 
-2) **Full working reference** (recommended for production themes): **duplicate the Master Theme** at `sparti-cms/theme/master/`.
+2) **Full working reference** (recommended for production themes): **duplicate the Master Theme** at `src/themes/master/`.
 
 Avoid duplicating business-specific themes (they contain client branding/content).
 
@@ -21,14 +21,14 @@ Avoid duplicating business-specific themes (they contain client branding/content
 - **Structure**: Simple, minimal components
 - **Usage**: Used as a foundation when creating a minimal theme quickly
 
-### Theme (`sparti-cms/theme/`)
+### Theme (`src/themes/`)
 - **Purpose**: Full-featured, production-ready themes
 - **Structure**: Complete component ecosystem with assets, styling, and configuration
 - **Usage**: Applied to tenants for their websites
 
 ## Master Theme (reference)
 
-`sparti-cms/theme/master/` is a deliberately generic theme meant to be duplicated 1:1.
+`src/themes/master/` is a deliberately generic theme meant to be duplicated 1:1.
 
 It demonstrates:
 - best-practice folder structure
@@ -36,14 +36,14 @@ It demonstrates:
 - CMS integration patterns
 - assets conventions
 
-See: `sparti-cms/theme/master/README.md`
+See: `src/themes/master/README.md`
 
 ## Theme Structure
 
 Every theme must follow this standardized structure:
 
 ```
-sparti-cms/theme/{theme-slug}/
+src/themes/{theme-slug}/
 ├── index.tsx                 # Main theme component (REQUIRED)
 ├── theme.json               # Theme metadata (REQUIRED)
 ├── pages.json               # Page definitions (REQUIRED)

@@ -191,7 +191,7 @@ const TenantLandingPage: React.FC = () => {
             Available themes: {Object.keys(themeConfig).join(', ')}
           </p>
           <p className="text-sm mt-2">
-            To add a new theme, create a folder at <code className="bg-muted px-1 py-0.5 rounded">sparti-cms/theme/{slug}/</code> with an <code className="bg-muted px-1 py-0.5 rounded">index.tsx</code> file.
+            To add a new theme, create a folder at <code className="bg-muted px-1 py-0.5 rounded">src/themes/{slug}/</code> with an <code className="bg-muted px-1 py-0.5 rounded">index.tsx</code> file.
           </p>
         </AlertDescription>
       </Alert>

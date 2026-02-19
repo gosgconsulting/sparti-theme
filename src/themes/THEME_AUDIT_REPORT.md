@@ -39,7 +39,7 @@
 
 ### ✅ Best Practice: STR Theme
 
-**File:** `sparti-cms/theme/str/theme.css`
+**File:** `src/themes/str/theme.css`
 
 ```css
 @import url('https://fonts.googleapis.com/...');
@@ -58,7 +58,7 @@
 
 ### ⚠️ Potential Issues: Master Theme
 
-**File:** `sparti-cms/theme/master/theme.css`
+**File:** `src/themes/master/theme.css`
 
 ```css
 @import "tailwindcss";  // ⚠️ Redundant import
@@ -70,7 +70,7 @@
 
 ### ⚠️ Potential Issues: gosgconsulting Theme
 
-**File:** `sparti-cms/theme/gosgconsulting/theme.css`
+**File:** `src/themes/gosgconsulting/theme.css`
 
 ```css
 @import "tailwindcss";  // ⚠️ Redundant import
@@ -82,7 +82,7 @@
 
 ### ⚠️ Potential Issues: storefront Theme
 
-**File:** `sparti-cms/theme/storefront/theme.css`
+**File:** `src/themes/storefront/theme.css`
 
 ```css
 @import "tailwindcss";  // ⚠️ Redundant import
@@ -94,7 +94,7 @@
 
 ### ⚠️ Potential Issues: sissonne Theme
 
-**File:** `sparti-cms/theme/sissonne/theme.css`
+**File:** `src/themes/sissonne/theme.css`
 
 ```css
 @import "tailwindcss";  // ⚠️ Redundant import

@@ -344,7 +344,7 @@ If you need custom utilities, define them as regular CSS classes without `@layer
 
 ### ✅ STR Theme (Best Practice)
 
-**File:** `sparti-cms/theme/str/theme.css`
+**File:** `src/themes/str/theme.css`
 
 ```css
 @import url('https://fonts.googleapis.com/css2?family=Bebas+Neue&display=swap');

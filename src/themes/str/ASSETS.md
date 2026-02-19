@@ -23,7 +23,7 @@ Assets are stored in two locations for redundancy:
    - Used for direct file serving during development and production
 
 2. **Theme Source Directory** (source of truth):
-   - `sparti-cms/theme/str/assets/`
+   - `src/themes/str/assets/`
    - Used as the primary source for theme assets
 
 ## Current Assets
@@ -34,7 +34,7 @@ Assets are stored in two locations for redundancy:
   - Path: `/theme/str/assets/logos/str-logo-1-1024x604.png`
   - Format: PNG with transparency
   - Dimensions: 1024x604px
-  - **Location**: Already uploaded in `sparti-cms/theme/str/assets/logos/` and `public/theme/str/assets/logos/`
+  - **Location**: Already uploaded in `src/themes/str/assets/logos/` and `public/theme/str/assets/logos/`
 
 ### Hero Background
 - **hero-background.jpg**: Hero section background image
@@ -43,24 +43,24 @@ Assets are stored in two locations for redundancy:
   - Format: JPG (optimized for web)
   - Dimensions: Recommended 1920px width
   - **Current**: Black and white gym interior photo with dynamic lighting
-  - **To replace**: Place your hero image in `public/theme/str/assets/hero/hero-background.jpg` and `sparti-cms/theme/str/assets/hero/hero-background.jpg`
+  - **To replace**: Place your hero image in `public/theme/str/assets/hero/hero-background.jpg` and `src/themes/str/assets/hero/hero-background.jpg`
 
 ## Usage in Components
 
 ### Header Logo
-- **Component**: `sparti-cms/theme/str/index.tsx` (line ~201)
+- **Component**: `src/themes/str/index.tsx` (line ~201)
 - **Path**: `/theme/str/assets/logos/str-logo-1-1024x604.png`
 - **Size**: `h-8` (32px height, auto width)
 - **Fallback**: Text "STR" if image fails to load
 
 ### Footer Logo
-- **Component**: `sparti-cms/theme/str/index.tsx` (line ~742)
+- **Component**: `src/themes/str/index.tsx` (line ~742)
 - **Path**: `/theme/str/assets/logos/str-logo-1-1024x604.png`
 - **Size**: `h-12` (48px height, auto width)
 - **Fallback**: Text "STR" if image fails to load
 
 ### Hero Background Image
-- **Component**: `sparti-cms/theme/str/index.tsx` (line ~265)
+- **Component**: `src/themes/str/index.tsx` (line ~265)
 - **Path**: `/theme/str/assets/hero/hero-background.jpg`
 - **Size**: Full width, covers entire hero section
 - **Fallback**: Falls back to placeholder image if not found
@@ -68,7 +68,7 @@ Assets are stored in two locations for redundancy:
 ## Adding New Images
 
 ### For Content Images (Hero, Backgrounds, etc.)
-1. Place image in: `public/theme/str/assets/images/` and `sparti-cms/theme/str/assets/images/`
+1. Place image in: `public/theme/str/assets/images/` and `src/themes/str/assets/images/`
 2. Reference in code: `/theme/str/assets/images/your-image.jpg`
 3. Use appropriate format:
    - **JPG**: For photographs

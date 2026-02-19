@@ -12,36 +12,36 @@ const __dirname = dirname(__filename);
 export async function generateReactComponent(componentDefinitionPath) {
   // Read component definition
   const componentDef = JSON.parse(readFileSync(componentDefinitionPath, 'utf-8'));
-  
+
   // Determine component directory based on category
   const isLayoutComponent = componentDef.category === 'layout';
   const componentDir = isLayoutComponent
-    ? join(__dirname, '../../sparti-cms/theme/gosgconsulting/components')
-    : join(__dirname, '../../sparti-cms/theme/gosgconsulting/components');
-  
+    ? join(__dirname, '../../src/themes/gosgconsulting/components')
+    : join(__dirname, '../../src/themes/gosgconsulting/components');
+
   // Ensure directory exists
   if (!existsSync(componentDir)) {
     mkdirSync(componentDir, { recursive: true });
   }
-  
+
   // Generate component file name
   const componentName = toPascalCase(componentDef.id);
   const componentFileName = `${componentName}.tsx`;
   const componentPath = join(componentDir, componentFileName);
-  
+
   // Check if component already exists
   if (existsSync(componentPath)) {
     console.warn(`[testing] Component ${componentFileName} already exists, skipping...`);
     return { skipped: true, path: componentPath };
   }
-  
+
   // Generate component code
   const componentCode = generateComponentCode(componentDef, componentName);
-  
+
   // Write component file
   writeFileSync(componentPath, componentCode);
   console.log(`[testing] Created React component: ${componentPath}`);
-  
+
   return {
     success: true,
     path: componentPath,
@@ -66,21 +66,21 @@ function toPascalCase(str) {
 function generatePropsInterface(componentDef) {
   const props = componentDef.properties || {};
   const propNames = Object.keys(props);
-  
+
   if (propNames.length === 0) {
     return 'interface ' + toPascalCase(componentDef.id) + 'Props {\n  // No properties defined\n}';
   }
-  
+
   let interfaceCode = `interface ${toPascalCase(componentDef.id)}Props {\n`;
-  
+
   for (const [key, prop] of Object.entries(props)) {
     const tsType = mapToTypeScriptType(prop.type);
     const optional = prop.required ? '' : '?';
     const defaultValue = prop.default !== undefined ? ` = ${formatDefaultValue(prop.default)}` : '';
-    
+
     interfaceCode += `  ${key}${optional}: ${tsType}${defaultValue ? `; // default: ${JSON.stringify(prop.default)}` : ''}\n`;
   }
-  
+
   interfaceCode += '}';
   return interfaceCode;
 }
@@ -130,16 +130,16 @@ function formatDefaultValue(value) {
 function generateComponentJSX(componentDef) {
   const props = componentDef.properties || {};
   const propNames = Object.keys(props);
-  
+
   // Generate basic component structure
   let jsx = `  return (\n`;
   jsx += `    <section className="py-12 px-4">\n`;
   jsx += `      <div className="container mx-auto max-w-6xl">\n`;
-  
+
   // Add content based on property types
   for (const [key, prop] of Object.entries(props)) {
     const lowerKey = key.toLowerCase();
-    
+
     if (lowerKey.includes('title') || lowerKey.includes('heading') || lowerKey.includes('headline')) {
       jsx += `        {${key} && (\n`;
       jsx += `          <h2 className="text-3xl font-bold mb-6">{${key}}</h2>\n`;
@@ -170,18 +170,18 @@ function generateComponentJSX(componentDef) {
       jsx += `        )}\n`;
     }
   }
-  
+
   // If no specific properties, add a generic content area
   if (propNames.length === 0) {
     jsx += `        <div className="text-center">\n`;
     jsx += `          <p className="text-gray-500">${componentDef.name} Component</p>\n`;
     jsx += `        </div>\n`;
   }
-  
+
   jsx += `      </div>\n`;
   jsx += `    </section>\n`;
   jsx += `  );\n`;
-  
+
   return jsx;
 }
 
@@ -191,32 +191,32 @@ function generateComponentJSX(componentDef) {
 function generateComponentCode(componentDef, componentName) {
   const propsInterface = generatePropsInterface(componentDef);
   const jsx = generateComponentJSX(componentDef);
-  
+
   // Get default props
   const defaultProps = generateDefaultProps(componentDef);
-  
+
   let code = `import React from 'react';\n\n`;
   code += `${propsInterface}\n\n`;
   code += `const ${componentName}: React.FC<${toPascalCase(componentDef.id)}Props> = ({\n`;
-  
+
   // Add props with defaults
   const props = componentDef.properties || {};
   const propEntries = Object.entries(props);
-  
+
   if (propEntries.length > 0) {
     for (const [key, prop] of propEntries) {
-      const defaultValue = prop.default !== undefined 
+      const defaultValue = prop.default !== undefined
         ? formatDefaultValue(prop.default)
         : prop.type === 'array' ? '[]' : prop.type === 'object' ? '{}' : 'undefined';
       code += `  ${key}${prop.required ? '' : ` = ${defaultValue}`},\n`;
     }
   }
-  
+
   code += `}) => {\n`;
   code += jsx;
   code += `};\n\n`;
   code += `export default ${componentName};\n`;
-  
+
   return code;
 }
 
@@ -226,13 +226,13 @@ function generateComponentCode(componentDef, componentName) {
 function generateDefaultProps(componentDef) {
   const props = componentDef.properties || {};
   const defaults = {};
-  
+
   for (const [key, prop] of Object.entries(props)) {
     if (prop.default !== undefined) {
       defaults[key] = prop.default;
     }
   }
-  
+
   return defaults;
 }
 
@@ -243,15 +243,15 @@ export async function generateAllReactComponents(componentDefinitions) {
   console.log('[testing] ============================================');
   console.log('[testing] Generating React Components');
   console.log('[testing] ============================================');
-  
+
   const results = [];
-  
+
   for (const compDef of componentDefinitions) {
     try {
       // Find the component definition file
       const registryPath = join(__dirname, '../../sparti-cms/registry/components');
       const componentDefPath = join(registryPath, `${compDef.id}.json`);
-      
+
       if (!existsSync(componentDefPath)) {
         console.warn(`[testing] Component definition not found: ${componentDefPath}`);
         results.push({
@@ -260,13 +260,13 @@ export async function generateAllReactComponents(componentDefinitions) {
         });
         continue;
       }
-      
+
       const result = await generateReactComponent(componentDefPath);
       results.push({
         componentId: compDef.id,
         ...result
       });
-      
+
     } catch (error) {
       console.error(`[testing] Error generating React component for ${compDef.id}:`, error.message);
       results.push({
@@ -275,16 +275,16 @@ export async function generateAllReactComponents(componentDefinitions) {
       });
     }
   }
-  
+
   const successCount = results.filter(r => r.success).length;
   const skippedCount = results.filter(r => r.skipped).length;
   const errorCount = results.filter(r => r.error).length;
-  
+
   console.log(`[testing] ============================================`);
   console.log(`[testing] React Component Generation Complete`);
   console.log(`[testing] Success: ${successCount}, Skipped: ${skippedCount}, Errors: ${errorCount}`);
   console.log(`[testing] ============================================`);
-  
+
   return {
     timestamp: new Date().toISOString(),
     results,

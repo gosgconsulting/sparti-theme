@@ -94,7 +94,7 @@ Assets are served through multiple mechanisms for reliability:
 - **Base URL**: `/theme/landingpage/assets/`
 - **Full Path**: `/theme/landingpage/assets/{filename}`
 - **Middleware**: Express static middleware in `server/app.js`
-- **Source**: `sparti-cms/theme/landingpage/assets/`
+- **Source**: `src/themes/landingpage/assets/`
 
 ### Fallback Serving (Public Directory)
 - **Base URL**: `/theme/landingpage/assets/`

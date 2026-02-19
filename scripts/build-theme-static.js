@@ -72,7 +72,7 @@ async function fetchBrandingForBuild(themeSlug, tenantId) {
       const { getBrandingSettings } = await import('../sparti-cms/db/modules/branding.js');
       const settings = await getBrandingSettings(tenantId);
       const brandingData = settings.branding || {};
-      
+
       if (brandingData && Object.keys(brandingData).length > 0) {
         console.log(`[testing] Fetched branding from database:`, Object.keys(brandingData));
         return brandingData;
@@ -113,7 +113,7 @@ import '../sparti-cms/styles/rich-text-editor.css';
 // Import the theme component and ThemeBasePathContext for deploy-at-root
 import { ThemeBasePathContext } from '../sparti-cms/context/ThemeBasePathContext';
 
-const ThemeComponent = React.lazy(() => import('../sparti-cms/theme/${themeSlug}'));
+const ThemeComponent = React.lazy(() => import('../src/themes/${themeSlug}'));
 
 // Theme name mapping (all themes deployable via DEPLOY_THEME_SLUG)
 const themeNames: Record<string, string> = {
@@ -193,7 +193,7 @@ console.log(`[testing] Created standalone entry point: ${standaloneEntryPath}`);
 // Backup original index.html and create hybrid version
 const originalIndexPath = path.join(__dirname, '..', 'index.html');
 const backupIndexPath = path.join(__dirname, '..', 'index.html.backup');
-const themeTitle = themeSlug.split('-').map(word => 
+const themeTitle = themeSlug.split('-').map(word =>
   word.charAt(0).toUpperCase() + word.slice(1)
 ).join(' ');
 
@@ -253,7 +253,7 @@ async function createStandaloneHtml() {
     return themeTitle;
   };
   const pageTitle = getPageTitle();
-  
+
   if (brandingData && brandingData.site_favicon) {
     console.log(`[testing] Using favicon from branding: ${faviconUrl}`);
   }
@@ -283,7 +283,7 @@ async function createStandaloneHtml() {
 
   fs.writeFileSync(originalIndexPath, standaloneHtmlContent);
   console.log(`[testing] Created standalone HTML with theme at /`);
-  
+
   return brandingData;
 }
 
@@ -368,13 +368,13 @@ function copyThemeAssetsToDist() {
   const destAssets = path.join(projectRoot, 'dist', 'theme', themeSlug, 'assets');
 
   if (!fs.existsSync(sourceAssets)) {
-    console.log(`[testing] No assets folder at sparti-cms/theme/${themeSlug}/assets, skipping copy`);
+    console.log(`[testing] No assets folder at src/themes/${themeSlug}/assets, skipping copy`);
     return;
   }
 
   const stat = fs.statSync(sourceAssets);
   if (!stat.isDirectory()) {
-    console.log(`[testing] sparti-cms/theme/${themeSlug}/assets is not a directory, skipping copy`);
+    console.log(`[testing] src/themes/${themeSlug}/assets is not a directory, skipping copy`);
     return;
   }
 
@@ -397,7 +397,7 @@ function copyThemeAssetsToDist() {
     console.log(`[testing] Theme: ${themeSlug}`);
     console.log(`[testing] Theme available at: /`);
     console.log(`[testing] Standalone deployment - no admin/CMS routes`);
-    
+
     // Clean up temporary files and restore original index.html
     try {
       fs.unlinkSync(standaloneEntryPath);

@@ -21,12 +21,12 @@ echo "=========================================="
 echo ""
 
 # Check if theme exists
-THEME_PATH="sparti-cms/theme/$THEME_SLUG"
+THEME_PATH="src/themes/$THEME_SLUG"
 if [ ! -d "$THEME_PATH" ]; then
   echo "❌ Error: Theme '$THEME_SLUG' not found at $THEME_PATH"
   echo ""
   echo "Available themes:"
-  ls -1 sparti-cms/theme/ | grep -v "^custom$" || echo "  (none found)"
+  ls -1 src/themes/ | grep -v "^custom$" || echo "  (none found)"
   exit 1
 fi
 

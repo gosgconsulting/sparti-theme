@@ -135,7 +135,7 @@ export default function BlogPostPage({
   if (!post) {
     return (
       <div className="min-h-screen bg-background">
-        <Header 
+        <Header
           tenantName={tenantName}
           tenantSlug={tenantSlug}
           logoSrc={logoSrc}
@@ -153,7 +153,7 @@ export default function BlogPostPage({
             </a>
           </div>
         </div>
-        <Footer 
+        <Footer
           tenantName={tenantName}
           tenantSlug={tenantSlug}
           logoSrc={logoSrc}
@@ -178,13 +178,13 @@ export default function BlogPostPage({
 
   return (
     <div className="min-h-screen bg-background">
-      <Header 
+      <Header
         tenantName={tenantName}
         tenantSlug={tenantSlug}
         logoSrc={logoSrc}
         onContactClick={onContactClick}
       />
-      
+
       <div className="bg-background">
         {/* 1) Hero image (editorial, no overlays) */}
         {heroImage ? (
@@ -266,7 +266,7 @@ export default function BlogPostPage({
 
                 {(!staticPost?.content || staticPost.content.length === 0) && (
                   <p className="text-muted-foreground">
-                    This is a sample post. Add content blocks to <code className="bg-secondary px-1 py-0.5 rounded text-foreground">sparti-cms/theme/landingpage/data/blog.ts</code> to
+                    This is a sample post. Add content blocks to <code className="bg-secondary px-1 py-0.5 rounded text-foreground">src/themes/landingpage/data/blog.ts</code> to
                     expand it.
                   </p>
                 )}
@@ -283,7 +283,7 @@ export default function BlogPostPage({
         </section>
       </div>
 
-      <Footer 
+      <Footer
         tenantName={tenantName}
         tenantSlug={tenantSlug}
         logoSrc={logoSrc}

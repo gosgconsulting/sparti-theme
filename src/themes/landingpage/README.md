@@ -107,7 +107,7 @@ Theme assets are located in the `assets/` directory:
 ## File Structure
 
 ```
-sparti-cms/theme/landingpage/
+src/themes/landingpage/
 ├── index.tsx                 # Main theme component
 ├── components/               # Component directory
 │   ├── Header.tsx

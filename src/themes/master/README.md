@@ -1,4 +1,4 @@
-# Master Theme (`sparti-cms/theme/master`)
+# Master Theme (`src/themes/master`)
 
 This theme is the **master reference** you can **duplicate 1:1** to create new themes.
 
@@ -22,7 +22,7 @@ It is structured so it:
 ## Folder structure
 
 ```txt
-sparti-cms/theme/master/
+src/themes/master/
   assets/                 # Static assets served at /theme/master/assets/*
   components/
     layout/               # Header/Footer, layout primitives
@@ -41,7 +41,7 @@ sparti-cms/theme/master/
 
 ### Static (git) assets
 
-- Put static assets in: `sparti-cms/theme/<themeSlug>/assets/`
+- Put static assets in: `src/themes/<themeSlug>/assets/`
 - They are served at: `/theme/<themeSlug>/assets/<file>`
 
 Example:
@@ -100,5 +100,5 @@ So after duplication, most of the time you only need to adjust **metadata** + **
 - Prefer CSS variables + Tailwind over hardcoded colors.
 
 See also:
-- `sparti-cms/theme/master/STYLE_RULES.md`
-- `sparti-cms/theme/README.md` (global theme system docs)
+- `src/themes/master/STYLE_RULES.md`
+- `src/themes/README.md` (global theme system docs)

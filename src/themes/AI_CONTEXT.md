@@ -146,7 +146,7 @@ When asked to create or modify a theme, follow this process:
 4. ✅ Note any missing components that need custom implementation
 
 #### Step 3: Create Theme Structure
-1. ✅ Create theme folder: `sparti-cms/theme/{theme-slug}/`
+1. ✅ Create theme folder: `src/themes/{theme-slug}/`
 2. ✅ Create required files:
    - `index.tsx` - Main theme component
    - `theme.json` - Theme metadata
@@ -195,7 +195,7 @@ When asked to create or modify a theme, follow this process:
 
 ### Theme Structure Checklist
 
-- [ ] Theme folder follows structure: `sparti-cms/theme/{theme-slug}/`
+- [ ] Theme folder follows structure: `src/themes/{theme-slug}/`
 - [ ] Required files exist: `index.tsx`, `theme.json`, `pages.json`
 - [ ] Theme structure matches master template patterns
 - [ ] Components are organized in `components/` folder (if needed)
@@ -329,8 +329,8 @@ const tagline = branding?.site_tagline || 'Default Tagline';
 
 1. **Master Template**: `sparti-cms/templates/master` - Reference implementation
 2. **Design Systems**: `src/libraries/README.md` - Design system documentation
-3. **Theme System**: `sparti-cms/theme/README.md` - Complete theme documentation
-4. **Theme Settings**: `sparti-cms/theme/THEME-SETTINGS-DB.md` - Database settings guide
+3. **Theme System**: `src/themes/README.md` - Complete theme documentation
+4. **Theme Settings**: `src/themes/THEME-SETTINGS-DB.md` - Database settings guide
 5. **Design System Components**: `/design-systems` route - Component reference
 
 ### Key Files to Review
@@ -338,7 +338,7 @@ const tagline = branding?.site_tagline || 'Default Tagline';
 - `sparti-cms/templates/master/index.tsx` - Master template implementation
 - `sparti-cms/hooks/useThemeSettings.ts` - Theme settings hook
 - `src/libraries/flowbite/components/` - Flowbite component examples
-- `sparti-cms/theme/landingpage/index.tsx` - Example theme implementation
+- `src/themes/landingpage/index.tsx` - Example theme implementation
 
 ---
 
@@ -361,7 +361,7 @@ import FlowbiteHeroSection from '@/libraries/flowbite/components/FlowbiteHeroSec
 
 ### Theme Structure
 ```
-sparti-cms/theme/{theme-slug}/
+src/themes/{theme-slug}/
 ├── index.tsx          # Main component (REQUIRED)
 ├── theme.json         # Metadata (REQUIRED)
 ├── pages.json         # Page definitions (REQUIRED)

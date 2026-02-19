@@ -14,7 +14,7 @@ The STR theme is a fitness/gym website theme with:
 
 ### Image Assets Location
 All theme assets are stored in:
-- `sparti-cms/theme/str/assets/` (source)
+- `src/themes/str/assets/` (source)
 - `public/theme/str/assets/` (served)
 
 ### Key Asset Paths
@@ -27,13 +27,13 @@ All theme assets are stored in:
 
 ### When User Provides an Image:
 1. **Save the image** to the appropriate asset directory:
-   - Hero backgrounds → `sparti-cms/theme/str/assets/hero/` and `public/theme/str/assets/hero/`
-   - Logos → `sparti-cms/theme/str/assets/logos/` and `public/theme/str/assets/logos/`
-   - Gallery images → `sparti-cms/theme/str/assets/gallery/` and `public/theme/str/assets/gallery/`
-   - Team photos → `sparti-cms/theme/str/assets/team/` and `public/theme/str/assets/team/`
+   - Hero backgrounds → `src/themes/str/assets/hero/` and `public/theme/str/assets/hero/`
+   - Logos → `src/themes/str/assets/logos/` and `public/theme/str/assets/logos/`
+   - Gallery images → `src/themes/str/assets/gallery/` and `public/theme/str/assets/gallery/`
+   - Team photos → `src/themes/str/assets/team/` and `public/theme/str/assets/team/`
 
 2. **Update the code** to reference the new image:
-   - For Hero Section: Update `sparti-cms/theme/str/components/HeroSection.tsx`
+   - For Hero Section: Update `src/themes/str/components/HeroSection.tsx`
    - The component accepts `imageSrc` prop or extracts from `items` schema
    - Default path: `/theme/str/assets/hero/hero-background.jpg`
    - Use the format: `/theme/str/assets/[category]/[filename]`
@@ -58,14 +58,14 @@ All theme assets are stored in:
 ## Component Structure
 
 ### Main Theme File
-- `sparti-cms/theme/str/index.tsx` - Homepage with all sections
+- `src/themes/str/index.tsx` - Homepage with all sections
 
 ### Page Files
-- `sparti-cms/theme/str/booking.tsx` - Booking flow
-- `sparti-cms/theme/str/packages.tsx` - Packages page
-- `sparti-cms/theme/str/classes.tsx` - Classes booking page
-- `sparti-cms/theme/str/thank-you.tsx` - Thank you page
-- `sparti-cms/theme/str/ContactModal.tsx` - Contact sidebar modal
+- `src/themes/str/booking.tsx` - Booking flow
+- `src/themes/str/packages.tsx` - Packages page
+- `src/themes/str/classes.tsx` - Classes booking page
+- `src/themes/str/thank-you.tsx` - Thank you page
+- `src/themes/str/ContactModal.tsx` - Contact sidebar modal
 
 ### Sections in Homepage (index.tsx)
 1. **Hero Section** - Background image, heading, CTA
@@ -111,6 +111,6 @@ All theme assets are stored in:
 
 - The STR theme uses **hardcoded components** (not schema-based like go sg consulting)
 - Changes require direct code edits to component files
-- Images must be saved to both `sparti-cms/theme/str/assets/` and `public/theme/str/assets/`
+- Images must be saved to both `src/themes/str/assets/` and `public/theme/str/assets/`
 - Always maintain the dark theme aesthetic
 - Keep the red primary color consistent throughout

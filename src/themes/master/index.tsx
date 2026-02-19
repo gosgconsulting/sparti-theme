@@ -66,7 +66,7 @@ const normalizeSlug = (slug?: string) => {
  * - deployable front-end theme output
  *
  * Asset convention:
- * - Put hard-coded assets under: sparti-cms/theme/master/assets
+ * - Put hard-coded assets under: src/themes/master/assets
  * - Reference them as: /theme/<themeSlug>/assets/<file>
  */
 const MasterTheme: React.FC<MasterThemeProps> = ({

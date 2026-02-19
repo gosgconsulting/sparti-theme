@@ -26,7 +26,7 @@ The Theme Styles system allows you to manage and customize the visual appearance
 Every theme must have a `theme.css` file in its root directory:
 
 ```
-sparti-cms/theme/{theme-slug}/
+src/themes/{theme-slug}/
 ├── index.tsx
 ├── theme.json
 ├── pages.json
@@ -148,7 +148,7 @@ Reference these variables in your theme components:
 Create `theme.css` in your theme directory:
 
 ```bash
-sparti-cms/theme/your-theme-slug/theme.css
+src/themes/your-theme-slug/theme.css
 ```
 
 ### Step 2: Define CSS Variables
@@ -168,7 +168,7 @@ Add CSS custom properties following the structure above:
 Import the CSS file in your theme's main component:
 
 ```typescript
-// sparti-cms/theme/your-theme-slug/index.tsx
+// src/themes/your-theme-slug/index.tsx
 import React from 'react';
 import './theme.css';  // ← Import theme styles
 
@@ -421,7 +421,7 @@ body {
 
 **Solutions**:
 1. Check file path: `/theme/{theme-slug}/theme.css`
-2. Verify file exists in `sparti-cms/theme/{theme-slug}/`
+2. Verify file exists in `src/themes/{theme-slug}/`
 3. Check server static file serving configuration
 4. Ensure theme slug matches directory name
 

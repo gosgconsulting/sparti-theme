@@ -1,4 +1,4 @@
-# Hotel Theme (`sparti-cms/theme/hotel`)
+# Hotel Theme (`src/themes/hotel`)
 
 This theme provides a complete hotel booking experience with room listings, filtering, and reservation functionality.
 
@@ -15,7 +15,7 @@ This theme provides a complete hotel booking experience with room listings, filt
 ## Structure
 
 ```
-sparti-cms/theme/hotel/
+src/themes/hotel/
 ├── index.tsx                      # Main theme entry
 ├── theme.json                     # Theme metadata
 ├── pages.json                     # Page definitions

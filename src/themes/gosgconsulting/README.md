@@ -14,7 +14,7 @@ A full-stack digital growth solution theme with integrated blog functionality, m
 ## Theme Structure
 
 ```
-sparti-cms/theme/gosgconsulting/
+src/themes/gosgconsulting/
 ├── index.tsx                 # Main theme component
 ├── theme.json               # Theme metadata and configuration
 ├── pages.json              # Page definitions and routing

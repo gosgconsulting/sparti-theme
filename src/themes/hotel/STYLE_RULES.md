@@ -630,5 +630,5 @@ When creating or modifying any component, verify ALL of the following:
 
 - Design System Guidelines: `sparti-cms/docs/ux-ui-guidelines.md`
 - Branding Schema: `sparti-cms/db/schemas/brandingSchema.js`
-- Theme CSS: `sparti-cms/theme/master/theme.css`
-- Theme Component: `sparti-cms/theme/master/index.tsx`
+- Theme CSS: `src/themes/master/theme.css`
+- Theme Component: `src/themes/master/index.tsx`

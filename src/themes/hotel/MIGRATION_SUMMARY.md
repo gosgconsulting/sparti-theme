@@ -127,7 +127,7 @@ Created comprehensive `theme.css`:
 ## File Structure
 
 ```
-sparti-cms/theme/hotel/
+src/themes/hotel/
 ├── index.tsx                      # Main theme entry (155 lines)
 ├── theme.json                     # Theme metadata
 ├── pages.json                     # Page definitions

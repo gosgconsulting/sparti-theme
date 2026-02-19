@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getApiUrl } from '../utils/api';
+import { getApiUrl, api } from '../utils/api';
 
 // Type definitions for theme settings
 export interface ThemeBrandingSettings {
@@ -81,12 +81,12 @@ export const useThemeSettings = (themeSlug: string, tenantSlug?: string): UseThe
         ? `/api/v1/theme/${themeSlug}/settings?tenantId=${encodeURIComponent(tenantSlug)}`
         : `/api/v1/theme/${themeSlug}/settings`;
 
-      const response = await fetch(getApiUrl(path), {
-        method: 'GET',
+      const response = await api.get(path, {
         headers: {
           'Content-Type': 'application/json; charset=utf-8',
           Accept: 'application/json',
         },
+        tenantId: tenantSlug
       });
 
       if (!response.ok) {
@@ -206,11 +206,11 @@ export const useThemeBranding = (
         ? `/api/v1/theme/${themeSlug}/branding?tenantId=${encodeURIComponent(effectiveTenantId)}`
         : `/api/v1/theme/${themeSlug}/branding`;
 
-      fetch(getApiUrl(path), {
-        method: 'GET',
+      api.get(path, {
         headers: {
           Accept: 'application/json',
         },
+        tenantId: effectiveTenantId || undefined
       })
         .then(async (res) => {
           const contentType = res.headers.get('content-type') || '';
@@ -298,12 +298,12 @@ export const useThemeStyles = (
       ? `/api/v1/theme/${themeSlug}/styles?tenantId=${encodeURIComponent(tenantSlug)}`
       : `/api/v1/theme/${themeSlug}/styles`;
 
-    fetch(getApiUrl(apiUrl), {
-      method: 'GET',
+    api.get(apiUrl, {
       headers: {
         'Content-Type': 'application/json; charset=utf-8',
         Accept: 'application/json',
       },
+      tenantId: tenantSlug
     })
       .then((res) => {
         if (!res.ok) throw new Error(`Failed to fetch styles: ${res.statusText}`);

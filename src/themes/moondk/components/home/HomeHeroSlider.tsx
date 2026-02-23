@@ -35,7 +35,7 @@ const slides: Slide[] = [
     image: slide1,
     bg: "#F6B7C1",
     accent: "#B2458A",
-    gradient: "linear-gradient(90deg, rgba(246,183,193,0.55) 0%, rgba(246,183,193,0.40) 40%, rgba(246,183,193,0.12) 70%, rgba(246,183,193,0.00) 100%)",
+    gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
   },
   {
     id: 2,
@@ -49,7 +49,7 @@ const slides: Slide[] = [
     image: slide2,
     bg: "#F3C3B4",
     accent: "#2F5C3E",
-    gradient: "linear-gradient(90deg, rgba(243,195,180,0.55) 0%, rgba(243,195,180,0.40) 40%, rgba(243,195,180,0.12) 70%, rgba(243,195,180,0.00) 100%)",
+    gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
   },
   {
     id: 3,
@@ -63,7 +63,7 @@ const slides: Slide[] = [
     image: slide3,
     bg: "#E9C5C9",
     accent: "#2F5C3E",
-    gradient: "linear-gradient(90deg, rgba(233,197,201,0.55) 0%, rgba(233,197,201,0.40) 40%, rgba(233,197,201,0.12) 70%, rgba(233,197,201,0.00) 100%)",
+    gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
   },
 ];
 

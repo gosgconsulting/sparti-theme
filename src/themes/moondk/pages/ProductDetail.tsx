@@ -57,7 +57,7 @@ export default function ProductDetailPage({ productId }: { productId: string }) 
 
             <div className="lg:pl-12 mt-8 lg:mt-0 lg:sticky lg:top-6 lg:h-fit">
               <ProductInfo productId={productId} />
-              <ProductDescription />
+              <ProductDescription productId={productId} />
             </div>
           </div>
         </section>

@@ -3,7 +3,7 @@ import { CartItem } from "../components/header/ShoppingBag";
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (item: Omit<CartItem, "id">) => void;
+  addToCart: (item: Omit<CartItem, "id">, openCartAfterAdd?: boolean) => void;
   updateQuantity: (id: number, newQuantity: number) => void;
   removeFromCart: (id: number) => void;
   clearCart: () => void;

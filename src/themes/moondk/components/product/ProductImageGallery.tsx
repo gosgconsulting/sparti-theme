@@ -19,7 +19,7 @@ import saucesImageAlt from "../../assets/oil/BEOK-sauces.jpg";
 import seorijuImage from "../../assets/alcohol/BEOK-seoriju3.jpg";
 import seorijuImage1 from "../../assets/alcohol/BEOK-seoriju1.jpg";
 import seorijuImage2 from "../../assets/alcohol/BEOK-seoriju2.jpg";
-import wheatNoodleImage from "../../assets/noodles/IMG_1701.png";
+import wheatNoodleImage from "../../assets/IMG_1701.jpg";
 import giftSetImage from "../../assets/noodles/IMG_1700.jpg";
 import potatoNoodleImage from "../../assets/noodles/BEOK-Potatonoodle3.jpg";
 import potatoNoodleImage4 from "../../assets/noodles/BEOK-Potatonoodle4.jpg";

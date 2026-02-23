@@ -12,7 +12,7 @@ import saucesImage from "../../assets/oil/BEOK-sauces2.jpg";
   import seorijuImage from "../../assets/alcohol/BEOK-seoriju3.jpg";
 
 // Noodles products
-import wheatNoodleImage from "../../assets/noodles/IMG_1701.png";
+import wheatNoodleImage from "../../assets/IMG_1701.jpg";
 import giftSetImage from "../../assets/noodles/IMG_1700.jpg";
 import potatoNoodleImage from "../../assets/noodles/BEOK-Potatonoodle3.jpg";
 

@@ -108,15 +108,15 @@ function BlogCard({ post, basePath }: { post: BlogPost; basePath: string }) {
   );
 }
 
-export default function BlogListPage({ 
-  basePath, 
+export default function BlogListPage({
+  basePath,
   tenantId,
   tenantName,
   tenantSlug,
   logoSrc,
   onContactClick
-}: { 
-  basePath: string; 
+}: {
+  basePath: string;
   tenantId?: string;
   tenantName?: string;
   tenantSlug?: string;
@@ -128,8 +128,7 @@ export default function BlogListPage({
   const [categories, setCategories] = useState(BLOG_CATEGORIES);
 
   useEffect(() => {
-    const effectiveTenantId =
-      tenantId || (typeof window !== "undefined" ? (window as any).__CMS_TENANT__ : undefined);
+    const effectiveTenantId = tenantId || import.meta.env.VITE_DEPLOY_TENANT_ID;
 
     if (!effectiveTenantId) {
       setPosts(BLOG_POSTS);
@@ -196,7 +195,7 @@ export default function BlogListPage({
     return () => {
       cancelled = true;
     };
-  }, [tenantId]);
+  }, []);
 
   const filtered = useMemo(() => {
     return posts.filter((p) => (category === "all" ? true : p.category === category));
@@ -204,13 +203,13 @@ export default function BlogListPage({
 
   return (
     <div className="min-h-screen bg-background">
-      <Header 
+      <Header
         tenantName={tenantName}
         tenantSlug={tenantSlug}
         logoSrc={logoSrc}
         onContactClick={onContactClick}
       />
-      
+
       <div className="bg-background">
         <section className="border-b border-border bg-card">
           <div className="container mx-auto px-4 sm:px-6 lg:px-8 py-12">
@@ -254,7 +253,7 @@ export default function BlogListPage({
         </section>
       </div>
 
-      <Footer 
+      <Footer
         tenantName={tenantName}
         tenantSlug={tenantSlug}
         logoSrc={logoSrc}

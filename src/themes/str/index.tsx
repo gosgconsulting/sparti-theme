@@ -25,6 +25,8 @@ import { GTM } from './components/GTM';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { useCustomCode } from './hooks/useCustomCode';
 import { getThemeUrl, getPageUrl, getHomeUrl } from './utils/urls';
+import { usePageLayout, getComponentByType } from '../../hooks/usePageLayout';
+import { getTextByKey, getHeading, getImage, getArrayItems, getButton } from './utils/schemaHelpers';
 
 interface TenantLandingProps {
   tenantName?: string;
@@ -47,7 +49,105 @@ const STRTheme: React.FC<TenantLandingProps> = ({
   
   // Load custom code settings (for GTM, GA, etc.)
   const { customCode } = useCustomCode(tenantId || undefined);
-  
+
+  // Fetch page layout from CMS (slug matches the CMS page slug "/home")
+  const { data: pageData } = usePageLayout({ slug: '/home', tenantId: tenantId || undefined });
+  const pageLayout = pageData?.layout;
+
+  // Extract sections by component type
+  const heroSection         = getComponentByType(pageLayout, 'HeroSection');
+  const aboutSection        = getComponentByType(pageLayout, 'AboutSection');
+  const programmesSection   = getComponentByType(pageLayout, 'ProgrammesSection');
+  const gallerySection      = getComponentByType(pageLayout, 'GallerySection');
+  const testimonialsSection = getComponentByType(pageLayout, 'TestimonialsSection');
+  const teamSection         = getComponentByType(pageLayout, 'TeamSection');
+  const faqSection          = getComponentByType(pageLayout, 'FAQSection');
+  const ctaSection          = getComponentByType(pageLayout, 'CTASection');
+
+  // --- About Us: schema values with hardcoded fallbacks ---
+  const aboutTitle       = getHeading(aboutSection?.items, 'title') || 'About Us';
+  const aboutDescription = getTextByKey(aboutSection?.items, 'description') ||
+    'Our space is dedicated to cultivating an environment to guide individuals on a transformative journey that balances the physical and mental aspects of health. By integrating personalized training and evidence-based rehabilitation, we empower anyone to unlock their full potential. Through a focus on mental resilience, self-belief, and holistic well-being, we cultivate a space where individuals overcome challenges, enhance performance, and achieve a sustainable, confident lifestyle.';
+  const aboutBgImage   = getImage(aboutSection?.items, 'background');
+  const aboutBgSrc     = aboutBgImage?.src || STR_ASSETS.backgrounds.aboutUs;
+  const aboutBgAlt     = aboutBgImage?.alt || 'STR Fitness Gym Training';
+  const aboutFeaturesRaw = getArrayItems(aboutSection?.items, 'features');
+  const featureCards = aboutFeaturesRaw.length > 0
+    ? aboutFeaturesRaw.map(f => ({ title: f.title || '', description: f.description || '' }))
+    : [
+        { title: 'EXPERT COACHING',      description: 'Train With Experienced Coaches Who Guide Every Workout With Proper Form And Purpose.' },
+        { title: 'Structured Programs',  description: 'Follow Proven Training Programs Designed To Deliver Real, Measurable Results.' },
+        { title: 'SUPPORTIVE COMMUNITY', description: 'Train In A Motivating Environment That Helps You Stay Consistent And Reach Your Goals.' },
+      ];
+
+  // --- Programmes: schema values with hardcoded fallbacks ---
+  const programmesTitle       = getHeading(programmesSection?.items, 'title') || 'OUR PROGRAMMES';
+  const programmesDescription = getTextByKey(programmesSection?.items, 'description') ||
+    'Discover our comprehensive range of fitness and wellness programmes designed to help you achieve your goals, from personal training to group classes and rehabilitation.';
+  const programmesImg    = getImage(programmesSection?.items, 'image');
+  const programmesImgSrc = programmesImg?.src || STR_ASSETS.images.programmes;
+  const programmesImgAlt = programmesImg?.alt || 'STR Fitness Gym Facilities - Rowing Machines, Training Area, and Weightlifting Equipment';
+
+  // --- Gallery: schema values with hardcoded fallbacks ---
+  const galleryTitle       = getHeading(gallerySection?.items, 'title') || 'GALLERY';
+  const gallerySubtitle    = getTextByKey(gallerySection?.items, 'description') || 'Training sessions, facility photos and videos';
+  const galleryTabsRaw     = getArrayItems(gallerySection?.items, 'tabs');
+  const galleryTabLabels   = {
+    all:             galleryTabsRaw[0]?.content || 'All',
+    groupClass:      galleryTabsRaw[1]?.content || 'Group Class',
+    physiotherapy:   galleryTabsRaw[2]?.content || 'Physiotherapy',
+    personalTraining: galleryTabsRaw[3]?.content || 'Personal Training',
+  };
+
+  // --- Testimonials: schema values with hardcoded fallbacks ---
+  const testimonialsTitle   = getHeading(testimonialsSection?.items, 'title') || 'RESULT YOU CAN FEEL & SEE';
+  const testimonialsBtn     = getButton(testimonialsSection?.items, 'button');
+  const testimonialsBtnText = testimonialsBtn?.text || 'START YOUR JOURNEY';
+  const testimonialsBtnUrl  = testimonialsBtn?.url || getPageUrl('booking');
+
+  // --- FAQ: schema values with hardcoded fallbacks ---
+  const faqTitle    = getHeading(faqSection?.items, 'title') || 'FREQUENTLY ASKED QUESTIONS';
+  const faqBtn      = getButton(faqSection?.items, 'button');
+  const faqBtnText  = faqBtn?.text || 'GET STARTED TODAY';
+  const faqBtnUrl   = faqBtn?.url || getPageUrl('booking');
+  const faqItemsRaw = getArrayItems(faqSection?.items, 'faqs');
+  const faqItems    = faqItemsRaw.length > 0
+    ? faqItemsRaw.map(f => ({ question: f.title || '', answer: f.description || '' }))
+    : [
+        { question: 'What experience level do I need to train at STR?',  answer: 'STR welcomes clients of all experience levels, from complete beginners to elite athletes. Our coaches tailor programs to your current fitness level and goals, ensuring safe and effective progression.' },
+        { question: 'How do I know if STR is right for me?',              answer: "STR is ideal if you're looking for evidence-based coaching, personalized attention, and long-term physical development. We focus on building strength, improving performance, and supporting rehabilitation needs." },
+        { question: 'What should I expect in my first session?',          answer: 'Your first session includes a comprehensive assessment of your movement patterns, strength levels, and goals. This allows us to design a program specifically tailored to your needs and objectives.' },
+        { question: 'How often should I train?',                          answer: 'Training frequency depends on your goals, experience level, and schedule. Our coaches will recommend an optimal training schedule during your initial consultation, typically ranging from 2-5 sessions per week.' },
+        { question: 'Do you offer group training sessions?',              answer: 'Yes, we offer both individual and small group training options. Group sessions provide a supportive environment while maintaining personalized coaching attention.' },
+        { question: 'What results can I expect?',                         answer: 'Results vary based on individual goals, consistency, and commitment. Our evidence-based approach focuses on sustainable, long-term improvements in strength, performance, and overall physical health.' },
+      ];
+
+  // --- CTA: schema values with hardcoded fallbacks ---
+  const ctaTitle       = getHeading(ctaSection?.items, 'title') || 'READY TO TRANSFORM YOUR TRAINING?';
+  const ctaDescription = getTextByKey(ctaSection?.items, 'description') ||
+    'Join STR today and experience evidence-based coaching that delivers real, lasting results. Your journey to better strength, performance, and rehabilitation starts here.';
+  const ctaBtn         = getButton(ctaSection?.items, 'button');
+  const ctaBtnText     = ctaBtn?.text || 'EXPLORE OUR PROGRAMMES';
+  const ctaBtnUrl      = ctaBtn?.url || getThemeUrl('#programmes');
+
+  // --- Team: schema values with hardcoded fallbacks ---
+  const teamTitle      = getHeading(teamSection?.items, 'title') || 'OUR TEAM';
+  const teamMembersRaw = getArrayItems(teamSection?.items, 'members');
+  const teamMembers    = teamMembersRaw.length > 0
+    ? teamMembersRaw.map(m => ({
+        name:        m.title || '',
+        role:        m.props?.role || '',
+        description: m.description || '',
+        image:       m.src || '',
+      }))
+    : [
+        { name: 'JJ',           role: 'Head Coach | Founder | Physiotherapist', description: 'JJ, a former National Youth Wushu Athlete, earned a Physiotherapy degree from Trinity College Dublin and specialized in sports physiotherapy at Sengkang General Hospital. He competes in endurance events like Hyrox — ranking top 6 Singaporean in 2024 — and volunteers with the Special Olympics and Wushu community.',          image: '/theme/str/assets/team/JJ-Head-Coach-scaled-e1743491665639.jpg' },
+        { name: 'Brandon Khoo', role: 'PT Coach',                               description: 'Brandon Khoo is an experienced strength and conditioning coach specializing in kettlebell and barbell training. He has designed and led both individualized and group training programs, focusing on strength, endurance, mobility, and injury prevention. He is passionate about helping clients build functional strength through structured progression.',    image: '/theme/str/assets/team/Brandon-Khoo-Coach-scaled-e1743491558663.jpg' },
+        { name: 'Jing Yong',    role: 'Group Class Coach',                      description: 'Jing Yong earned an Accountancy degree from Nanyang Technological University and currently holds a managerial position at a local investment firm. A former competitive athlete in triathlons, track and field and cross-country running, he now focuses on endurance events such as Hyrox, marathons, and team-based functional fitness races.',      image: '/theme/str/assets/team/Jing-Yong-Coach-e1743491534837.jpg' },
+        { name: 'Jessica',      role: 'Group Class Coach | PT Coach',           description: 'Jessica is an experienced and versatile personal trainer with expertise in both strength and hybrid training. She has helped numerous clients achieve both fitness and aesthetic goals, while ensuring that they train safely and efficiently. She competes in half marathons and HYROX, ranking as the top Singaporean woman in both Open (2nd overall, first in AG) and Pro (3rd overall, first in AG) categories in HYROX 2024 races.', image: '/theme/str/assets/team/Jessica-e1744082680759.jpeg' },
+        { name: 'Jacqueline',   role: 'Group Class Coach',                      description: 'Jacqueline is a passionate fitness trainer dedicated to helping others feel strong, confident, and empowered through movement. While she works as an HR professional by day, her true energy comes from the world of fitness—especially spin and pilates. She believes fitness should be fun, approachable, and inclusive, regardless of experience level. Her mission is to create a supportive space where members are encouraged to grow, challenge themselves, and celebrate progress.', image: '/theme/str/assets/team/Jacqueline-e1744082763597.jpeg' },
+      ];
+
   // Get settings from database with fallback to defaults using utility functions
   const siteName = getSiteName(branding, tenantName);
   const siteDescription = getSiteDescription(branding, 'STR Fitness Club - Evidence-based strength training, personal training, physiotherapy, and group classes in Singapore.');
@@ -248,16 +348,19 @@ const STRTheme: React.FC<TenantLandingProps> = ({
     { name: 'FAQ', href: '#faq' },
   ];
 
-  // Programmes data
-  const programmes = [
-    { title: 'PERSONAL TRAINING', description: 'Designed specifically for your own personal goals, work with a professional coach with fully guided and supervised sessions to ensure maximal success in achieving your goals.', content: '' },
-    { title: 'SPORTS MASSAGE', description: 'Sports massage focuses on preventing and treating sports-related injuries by improving muscle flexibility and reducing tension.', content: '' },
-    { title: 'STR MEMBERSHIP PROGRAMME', description: 'Unlimited access to group classes and open gym access, here at STR Fitness club', content: '' },
-    { title: 'PHYSIOTHERAPY', description: 'Our fully equipped gym with state-of-the-art rehabilitation equipment ensures that your recovery is optimised all the way, from symptom relief, restoration of function, all the way to performance.', content: '' },
-    { title: 'GROUP CLASSES', description: 'We offer classes of different intensity, ranging from beginners-friendly to more advanced levels, to help you build the strength and speed needed for your next race. Whether you are looking to start your HYROX journey, maintain your fitness during the off-season or train for your next podium win, we have just the right class for you.', content: '' },
-    { title: 'OPEN GYM', description: 'Open Gym Access. Capped at 5 pax per hourly slot, train with our official HYROX Center Equipment and state of the art equipment. Unwind, relax and connect afterwards at our outdoor terrace! Open Gym Hours: Monday - Friday 10am - 5pm, Saturday - Sunday 12pm - 5pm', content: '' },
-    { title: 'YOUTH STRENGTH & CONDITIONING', description: 'Engaging the youth and propelling them for long term athletic development while developing lifelong habits and values. Our coaches are specially equipped with the right skillset to motivate and teach the youth population.', content: '' },
-  ];
+  // Programmes data — driven by CMS schema, falls back to hardcoded defaults
+  const programmesRaw = getArrayItems(programmesSection?.items, 'programmes');
+  const programmes = programmesRaw.length > 0
+    ? programmesRaw.map(p => ({ title: p.title || '', description: p.description || '', content: '' }))
+    : [
+        { title: 'PERSONAL TRAINING',          description: 'Designed specifically for your own personal goals, work with a professional coach with fully guided and supervised sessions to ensure maximal success in achieving your goals.', content: '' },
+        { title: 'SPORTS MASSAGE',             description: 'Sports massage focuses on preventing and treating sports-related injuries by improving muscle flexibility and reducing tension.', content: '' },
+        { title: 'STR MEMBERSHIP PROGRAMME',   description: 'Unlimited access to group classes and open gym access, here at STR Fitness club', content: '' },
+        { title: 'PHYSIOTHERAPY',              description: 'Our fully equipped gym with state-of-the-art rehabilitation equipment ensures that your recovery is optimised all the way, from symptom relief, restoration of function, all the way to performance.', content: '' },
+        { title: 'GROUP CLASSES',              description: 'We offer classes of different intensity, ranging from beginners-friendly to more advanced levels, to help you build the strength and speed needed for your next race. Whether you are looking to start your HYROX journey, maintain your fitness during the off-season or train for your next podium win, we have just the right class for you.', content: '' },
+        { title: 'OPEN GYM',                  description: 'Open Gym Access. Capped at 5 pax per hourly slot, train with our official HYROX Center Equipment and state of the art equipment. Unwind, relax and connect afterwards at our outdoor terrace! Open Gym Hours: Monday - Friday 10am - 5pm, Saturday - Sunday 12pm - 5pm', content: '' },
+        { title: 'YOUTH STRENGTH & CONDITIONING', description: 'Engaging the youth and propelling them for long term athletic development while developing lifelong habits and values. Our coaches are specially equipped with the right skillset to motivate and teach the youth population.', content: '' },
+      ];
 
   // Gallery images - loaded from centralized asset config
   const galleryImages = getGalleryImages();
@@ -449,7 +552,7 @@ const STRTheme: React.FC<TenantLandingProps> = ({
       <HeroSection
         tenantName={siteName}
         tenantSlug={tenantSlug}
-        items={undefined}
+        items={heroSection?.items}
         showHeader={isHomepage}
         navItems={navItems}
         isMenuOpen={isMenuOpen}
@@ -463,8 +566,8 @@ const STRTheme: React.FC<TenantLandingProps> = ({
       <section id="about" className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 min-h-[90vh] flex items-center overflow-hidden">
         <div className="absolute inset-0">
           <img
-            src={STR_ASSETS.backgrounds.aboutUs}
-            alt="STR Fitness Gym Training"
+            src={aboutBgSrc}
+            alt={aboutBgAlt}
             className="w-full h-full object-cover"
             onError={(e) => {
               const target = e.target as HTMLImageElement;
@@ -478,41 +581,25 @@ const STRTheme: React.FC<TenantLandingProps> = ({
         <div className="container mx-auto relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <div className="w-full">
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-6 text-foreground leading-tight">
-              About Us
+              {aboutTitle}
             </h2>
             <p className="text-lg md:text-xl text-foreground mb-16 max-w-3xl leading-relaxed">
-              Our space is dedicated to cultivating an environment to guide individuals on a transformative journey that balances the physical and mental aspects of health. By integrating personalized training and evidence-based rehabilitation, we empower anyone to unlock their full potential. Through a focus on mental resilience, self-belief, and holistic well-being, we cultivate a space where individuals overcome challenges, enhance performance, and achieve a sustainable, confident lifestyle.
+              {aboutDescription}
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Wrench className="h-6 w-6 text-black" />
-                </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">EXPERT COACHING</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  Train With Experienced Coaches Who Guide Every Workout With Proper Form And Purpose.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Award className="h-6 w-6 text-black" />
-                </div>
-                <h3 className="text-xl font-bold text-black mb-3">Structured Programs</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  Follow Proven Training Programs Designed To Deliver Real, Measurable Results.
-                </p>
-              </div>
-
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Users className="h-6 w-6 text-black" />
-                </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">SUPPORTIVE COMMUNITY</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  Train In A Motivating Environment That Helps You Stay Consistent And Reach Your Goals.
-                </p>
-              </div>
+              {featureCards.map((card, idx) => {
+                const icons = [Wrench, Award, Users];
+                const Icon = icons[idx] || Wrench;
+                return (
+                  <div key={idx} className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
+                    <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
+                      <Icon className="h-6 w-6 text-black" />
+                    </div>
+                    <h3 className="text-xl font-bold uppercase text-black mb-3">{card.title}</h3>
+                    <p className="text-black/80 text-sm leading-relaxed grow">{card.description}</p>
+                  </div>
+                );
+              })}
             </div>
           </div>
         </div>
@@ -525,19 +612,18 @@ const STRTheme: React.FC<TenantLandingProps> = ({
             {/* Left Column - Big Title */}
             <div className="flex flex-col justify-center">
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase text-foreground leading-tight mb-6">
-                OUR PROGRAMMES
+                {programmesTitle}
               </h2>
               <p className="text-lg md:text-xl text-foreground/80 leading-relaxed max-w-xl mb-8">
-                Discover our comprehensive range of fitness and wellness programmes designed to help you achieve your goals, from personal training to group classes and rehabilitation.
+                {programmesDescription}
               </p>
               {/* Programmes Image */}
               <div className="w-full max-w-xl">
                 <img 
-                  src={STR_ASSETS.images.programmes}
-                  alt="STR Fitness Gym Facilities - Rowing Machines, Training Area, and Weightlifting Equipment"
+                  src={programmesImgSrc}
+                  alt={programmesImgAlt}
                   className="w-full h-auto rounded-lg object-cover shadow-lg"
                   onError={(e) => {
-                    // Fallback if image not found
                     const target = e.target as HTMLImageElement;
                     target.style.display = 'none';
                   }}
@@ -629,9 +715,9 @@ const STRTheme: React.FC<TenantLandingProps> = ({
       {/* Gallery Section */}
       <section id="gallery" className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="container mx-auto max-w-7xl">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-6 text-center text-foreground leading-tight">GALLERY</h2>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-6 text-center text-foreground leading-tight">{galleryTitle}</h2>
           <p className="text-sm text-muted-foreground text-center mb-12">
-            Training sessions, facility photos and videos
+            {gallerySubtitle}
           </p>
 
           {/* Gallery Tabs */}
@@ -642,25 +728,25 @@ const STRTheme: React.FC<TenantLandingProps> = ({
                   value="all" 
                   className="data-[state=active]:bg-[#E00000] data-[state=active]:text-white uppercase font-bold whitespace-nowrap flex-shrink-0 px-6 py-2 md:px-4"
                 >
-                  All
+                  {galleryTabLabels.all}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="group-class" 
                   className="data-[state=active]:bg-[#E00000] data-[state=active]:text-white uppercase font-bold whitespace-nowrap flex-shrink-0 px-6 py-2 md:px-4"
                 >
-                  Group Class
+                  {galleryTabLabels.groupClass}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="physiotherapy" 
                   className="data-[state=active]:bg-[#E00000] data-[state=active]:text-white uppercase font-bold whitespace-nowrap flex-shrink-0 px-6 py-2 md:px-4"
                 >
-                  Physiotherapy
+                  {galleryTabLabels.physiotherapy}
                 </TabsTrigger>
                 <TabsTrigger 
                   value="personal-training" 
                   className="data-[state=active]:bg-[#E00000] data-[state=active]:text-white uppercase font-bold whitespace-nowrap flex-shrink-0 px-6 py-2 md:px-4"
                 >
-                  Personal Training
+                  {galleryTabLabels.personalTraining}
                 </TabsTrigger>
               </TabsList>
             </div>
@@ -949,7 +1035,7 @@ const STRTheme: React.FC<TenantLandingProps> = ({
         <div className="container mx-auto max-w-7xl">
           <div className="mb-12">
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase text-foreground leading-tight mb-8">
-              RESULT YOU CAN FEEL & SEE
+              {testimonialsTitle}
             </h2>
 
             {placeInfo && placeInfo.rating > 0 && (
@@ -1110,9 +1196,9 @@ const STRTheme: React.FC<TenantLandingProps> = ({
             <Button
               size="lg"
               className="bg-[#E00000] text-white hover:bg-[#E00000]/90 text-lg px-10 py-6 font-bold uppercase rounded-lg transition-all duration-300 hover:scale-105"
-              onClick={() => window.location.href = getPageUrl('booking')}
+              onClick={() => window.location.href = testimonialsBtnUrl}
             >
-              START YOUR JOURNEY
+              {testimonialsBtnText}
             </Button>
           </div>
         </div>
@@ -1121,15 +1207,9 @@ const STRTheme: React.FC<TenantLandingProps> = ({
       {/* Our Team Section */}
       <section id="team" className="py-16 sm:py-20 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="container mx-auto max-w-7xl">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-12 text-center text-foreground leading-tight">OUR TEAM</h2>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-12 text-center text-foreground leading-tight">{teamTitle}</h2>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            {[
-              { name: 'JJ', role: 'Head Coach | Founder | Physiotherapist', description: 'JJ, a former National Youth Wushu Athlete, earned a Physiotherapy degree from Trinity College Dublin and specialized in sports physiotherapy at Sengkang General Hospital. He competes in endurance events like Hyrox — ranking top 6 Singaporean in 2024 — and volunteers with the Special Olympics and Wushu community.', image: '/theme/str/assets/team/JJ-Head-Coach-scaled-e1743491665639.jpg' },
-              { name: 'Brandon Khoo', role: 'PT Coach', description: 'Brandon Khoo is an experienced strength and conditioning coach specializing in kettlebell and barbell training. He has designed and led both individualized and group training programs, focusing on strength, endurance, mobility, and injury prevention. He is passionate about helping clients build functional strength through structured progression.', image: '/theme/str/assets/team/Brandon-Khoo-Coach-scaled-e1743491558663.jpg' },
-              { name: 'Jing Yong', role: 'Group Class Coach', description: 'Jing Yong earned an Accountancy degree from Nanyang Technological University and currently holds a managerial position at a local investment firm. A former competitive athlete in triathlons, track and field and cross-country running, he now focuses on endurance events such as Hyrox, marathons, and team-based functional fitness races.', image: '/theme/str/assets/team/Jing-Yong-Coach-e1743491534837.jpg' },
-              { name: 'Jessica', role: 'Group Class Coach | PT Coach', description: 'Jessica is an experienced and versatile personal trainer with expertise in both strength and hybrid training. She has helped numerous clients achieve both fitness and aesthetic goals, while ensuring that they train safely and efficiently. She competes in half marathons and HYROX, ranking as the top Singaporean woman in both Open (2nd overall, first in AG) and Pro (3rd overall, first in AG) categories in HYROX 2024 races.', image: '/theme/str/assets/team/Jessica-e1744082680759.jpeg' },
-              { name: 'Jacqueline', role: 'Group Class Coach', description: 'Jacqueline is a passionate fitness trainer dedicated to helping others feel strong, confident, and empowered through movement. While she works as an HR professional by day, her true energy comes from the world of fitness—especially spin and pilates. She believes fitness should be fun, approachable, and inclusive, regardless of experience level. Her mission is to create a supportive space where members are encouraged to grow, challenge themselves, and celebrate progress.', image: '/theme/str/assets/team/Jacqueline-e1744082763597.jpeg' },
-            ].map((member, index) => (
+            {teamMembers.map((member, index) => (
               <div key={index} className="relative rounded-2xl overflow-hidden transition-all duration-300 border border-gray-700/50 flex flex-col h-full">
                 <div className="relative h-64 md:h-72 overflow-hidden shrink-0">
                   <img src={member.image} alt={member.name} className="w-full h-full object-cover" loading="lazy" />
@@ -1150,16 +1230,9 @@ const STRTheme: React.FC<TenantLandingProps> = ({
       {/* FAQ Section */}
       <section id="faq" className="py-20 px-4 sm:px-6 lg:px-8 bg-background">
         <div className="container mx-auto max-w-4xl">
-          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-12 text-center text-foreground leading-tight">FREQUENTLY ASKED QUESTIONS</h2>
+          <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-12 text-center text-foreground leading-tight">{faqTitle}</h2>
           <Accordion type="single" collapsible className="w-full space-y-4">
-            {[
-              { question: 'What experience level do I need to train at STR?', answer: 'STR welcomes clients of all experience levels, from complete beginners to elite athletes. Our coaches tailor programs to your current fitness level and goals, ensuring safe and effective progression.' },
-              { question: 'How do I know if STR is right for me?', answer: 'STR is ideal if you\'re looking for evidence-based coaching, personalized attention, and long-term physical development. We focus on building strength, improving performance, and supporting rehabilitation needs.' },
-              { question: 'What should I expect in my first session?', answer: 'Your first session includes a comprehensive assessment of your movement patterns, strength levels, and goals. This allows us to design a program specifically tailored to your needs and objectives.' },
-              { question: 'How often should I train?', answer: 'Training frequency depends on your goals, experience level, and schedule. Our coaches will recommend an optimal training schedule during your initial consultation, typically ranging from 2-5 sessions per week.' },
-              { question: 'Do you offer group training sessions?', answer: 'Yes, we offer both individual and small group training options. Group sessions provide a supportive environment while maintaining personalized coaching attention.' },
-              { question: 'What results can I expect?', answer: 'Results vary based on individual goals, consistency, and commitment. Our evidence-based approach focuses on sustainable, long-term improvements in strength, performance, and overall physical health.' },
-            ].map((faq, index) => (
+            {faqItems.map((faq, index) => (
               <AccordionItem key={index} value={`item-${index}`} className="border-0 rounded-xl px-6 py-4 bg-[#2C2C2C] data-[state=open]:bg-[#2C2C2C]">
                 <AccordionTrigger className="text-left hover:no-underline py-0 [&>svg]:hidden">
                   <span className="text-foreground text-lg font-medium pr-4 flex-1">{faq.question}</span>
@@ -1179,9 +1252,9 @@ const STRTheme: React.FC<TenantLandingProps> = ({
             <Button
               size="lg"
               className="bg-[#E00000] text-white hover:bg-[#E00000]/90 text-lg px-10 py-6 font-bold uppercase rounded-lg transition-all duration-300 hover:scale-105"
-              onClick={() => window.location.href = getPageUrl('booking')}
+              onClick={() => window.location.href = faqBtnUrl}
             >
-              GET STARTED TODAY
+              {faqBtnText}
             </Button>
           </div>
         </div>
@@ -1196,17 +1269,17 @@ const STRTheme: React.FC<TenantLandingProps> = ({
         <div className="container mx-auto max-w-4xl relative z-10">
           <div className="text-center">
             <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-bold uppercase mb-6 text-foreground leading-tight">
-              READY TO TRANSFORM YOUR TRAINING?
+              {ctaTitle}
             </h2>
             <p className="text-lg md:text-xl text-foreground/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-              Join STR today and experience evidence-based coaching that delivers real, lasting results. Your journey to better strength, performance, and rehabilitation starts here.
+              {ctaDescription}
             </p>
             <Button
               size="lg"
               className="bg-[#E00000] text-white hover:bg-[#E00000]/90 text-lg px-10 py-6 font-bold uppercase rounded-lg transition-all duration-300 hover:scale-105"
-              onClick={() => window.location.href = getThemeUrl('#programmes')}
+              onClick={() => window.location.href = ctaBtnUrl}
             >
-              EXPLORE OUR PROGRAMMES
+              {ctaBtnText}
             </Button>
           </div>
         </div>

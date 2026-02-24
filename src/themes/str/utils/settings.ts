@@ -4,6 +4,7 @@
  */
 
 import { ThemeBrandingSettings, ThemeLocalizationSettings } from '../../../hooks/useThemeSettings';
+import { resolveBackendAssetUrl } from '../../../utils/api';
 
 /**
  * Get site name with fallback
@@ -42,7 +43,7 @@ export function getLogoSrc(
   branding: ThemeBrandingSettings | null | undefined,
   fallback: string = '/theme/str/assets/logos/logo.png'
 ): string {
-  return branding?.site_logo || fallback;
+  return resolveBackendAssetUrl(branding?.site_logo || fallback);
 }
 
 /**
@@ -50,9 +51,10 @@ export function getLogoSrc(
  */
 export function getFaviconSrc(
   branding: ThemeBrandingSettings | null | undefined,
-  fallback: string | null = null
+  fallback: string | null = '/theme/str/assets/logos/favicon.png'
 ): string | null {
-  return branding?.site_favicon || fallback;
+  const src = branding?.site_favicon || fallback;
+  return src ? resolveBackendAssetUrl(src) : null;
 }
 
 /**

@@ -1,6 +1,6 @@
-import hoveniaDulcisImage from "../../../e-shop/assets/hovenia-dulcis.png";
-import cornExtractImage from "../../../e-shop/assets/corn-extract.png";
-import blackBeanTeaImage from "../../../e-shop/assets/black-bean-tea.png";
+import hoveniaDulcisImage from "../../assets/tea/Dulcis_extract.jpg";
+import cornExtractImage from "../../assets/tea/corn_tea.jpg";
+import blackBeanTeaImage from "../../assets/tea/black_bean_tea_extract.jpg";
 import barleyTeaImage from "../../../e-shop/assets/barley-tea.png";
 
 // Oil products

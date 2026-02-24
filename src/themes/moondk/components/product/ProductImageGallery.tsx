@@ -1,9 +1,8 @@
 import { useState, useEffect } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import hoveniaDulcisImage from "../../../e-shop/assets/hovenia-dulcis.png";
-import cornExtractImage from "../../../e-shop/assets/corn-extract.png";
-import blackBeanTeaImage from "../../../e-shop/assets/black-bean-tea.png";
-import barleyTeaImage from "../../../e-shop/assets/barley-tea.png";
+import hoveniaDulcisImage from "../../assets/tea/Dulcis_extract.jpg";
+import cornExtractImage from "../../assets/tea/corn_tea.jpg";
+import blackBeanTeaImage from "../../assets/tea/black_bean_tea_extract.jpg";
 import barleyTeaImage1 from "../../assets/tea/BEOK-Barleytea1.jpg";
 import barleyTeaImage2 from "../../assets/tea/BEOK-Barleytea2.jpg";
 import barleyTeaImage7 from "../../assets/tea/BEOK-Barleytea7.jpg";
@@ -13,6 +12,7 @@ import sesameOilImage4 from "../../assets/oil/BEOK-sesameoil4.jpg";
 import meatImage from "../../assets/oil/BEOK-meat1.jpg";
 import perillaOilImage from "../../assets/oil/BEOK-perillaoil3.jpg";
 import perillaOilImage2 from "../../assets/oil/BEOK-perillaoil2.jpg";
+import perillaOilImage4 from "../../assets/oil/BEOK-perillaoil4.jpg";
 import perillaOilImage5 from "../../assets/oil/BEOK-perillaoil5.jpg";
 import saucesImage from "../../assets/oil/BEOK-sauces2.jpg";
 import saucesImageAlt from "../../assets/oil/BEOK-sauces.jpg";
@@ -34,7 +34,7 @@ const productImageMap: Record<string, string> = {
   "1": hoveniaDulcisImage,
   "2": cornExtractImage,
   "3": blackBeanTeaImage,
-  "4": barleyTeaImage,
+  "4": barleyTeaImage1,
   "5": sesameOilImage,
   "6": meatImage,
   "7": perillaOilImage,
@@ -58,11 +58,11 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
   // Otherwise, show all default images
   const specificImage = productImageMap[productId || ""];
   const images = productId === "4"
-    ? [barleyTeaImage, barleyTeaImage1, barleyTeaImage2, barleyTeaImage7]
+    ? [barleyTeaImage1, barleyTeaImage2, barleyTeaImage7]
     : productId === "5"
     ? [sesameOilImage, sesameOilImage2, sesameOilImage4]
     : productId === "7"
-    ? [perillaOilImage, perillaOilImage2, perillaOilImage5]
+    ? [perillaOilImage, perillaOilImage2, perillaOilImage4, perillaOilImage5]
     : productId === "8"
     ? [saucesImage, saucesImageAlt]
     : productId === "9"
@@ -71,7 +71,7 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
     ? [potatoNoodleImage, potatoNoodleImage4, potatoNoodleImage5]
     : specificImage
     ? [specificImage]
-    : [hoveniaDulcisImage, cornExtractImage, blackBeanTeaImage, barleyTeaImage];
+    : [hoveniaDulcisImage, cornExtractImage, blackBeanTeaImage];
 
   // Update selected image when productId changes
   useEffect(() => {

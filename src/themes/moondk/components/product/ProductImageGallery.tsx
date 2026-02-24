@@ -22,8 +22,9 @@ import seorijuImage2 from "../../assets/alcohol/BEOK-seoriju2.jpg";
 import wheatNoodleImage from "../../assets/IMG_1701.jpg";
 import giftSetImage from "../../assets/noodles/IMG_1700.jpg";
 import potatoNoodleImage from "../../assets/noodles/BEOK-Potatonoodle3.jpg";
+import potatoNoodleImage1 from "../../assets/noodles/BEOK-Potatonoodle1.jpg";
+import potatoNoodleImage2 from "../../assets/noodles/BEOK-Potatonoodle2.jpg";
 import potatoNoodleImage4 from "../../assets/noodles/BEOK-Potatonoodle4.jpg";
-import potatoNoodleImage5 from "../../assets/noodles/BEOK-Potatonoodle5.jpg";
 
 interface ProductImageGalleryProps {
   productId?: string;
@@ -68,7 +69,7 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
     : productId === "9"
     ? [seorijuImage, seorijuImage1, seorijuImage2]
     : productId === "12"
-    ? [potatoNoodleImage, potatoNoodleImage4, potatoNoodleImage5]
+    ? [potatoNoodleImage, potatoNoodleImage1, potatoNoodleImage2, potatoNoodleImage4]
     : specificImage
     ? [specificImage]
     : [hoveniaDulcisImage, cornExtractImage, blackBeanTeaImage];

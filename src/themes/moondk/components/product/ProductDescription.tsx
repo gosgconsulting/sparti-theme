@@ -11,6 +11,11 @@ const ProductDescription = ({ productId }: ProductDescriptionProps) => {
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isCareOpen, setIsCareOpen] = useState(false);
 
+  // Determine label based on productId (1-12 should show "Brand Story", others show "Description")
+  const descriptionLabel = productId && parseInt(productId) >= 1 && parseInt(productId) <= 12 
+    ? "Brand Story" 
+    : "Description";
+
   return (
     <div className="space-y-0 mt-8 border-t border-border-light">
       <div className="border-b border-border-light">
@@ -19,7 +24,7 @@ const ProductDescription = ({ productId }: ProductDescriptionProps) => {
           onClick={() => setIsDescriptionOpen(!isDescriptionOpen)}
           className="w-full h-14 px-0 justify-between hover:bg-transparent font-body font-light rounded-none"
         >
-          <span>Description</span>
+          <span>{descriptionLabel}</span>
           {isDescriptionOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </Button>
         {isDescriptionOpen && (

@@ -43,34 +43,10 @@ const Footer = () => {
                 </li>
                 <li>
                   <a
-                    href={themeHref(basePath, "/category/shop?filter=Tea")}
+                    href={themeHref(basePath, "/category/shop")}
                     className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
                   >
-                    Tea
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={themeHref(basePath, "/category/shop?filter=Oil")}
-                    className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
-                  >
-                    Oil
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={themeHref(basePath, "/category/shop?filter=Noodles")}
-                    className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
-                  >
-                    Noodles
-                  </a>
-                </li>
-                <li>
-                  <a
-                    href={themeHref(basePath, "/category/shop?filter=Soju")}
-                    className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
-                  >
-                    Soju
+                    All Products
                   </a>
                 </li>
               </ul>
@@ -80,11 +56,6 @@ const Footer = () => {
             <div>
               <h4 className="text-sm font-heading font-medium mb-4 text-foreground">Support</h4>
               <ul className="space-y-2">
-                <li>
-                  <span className="text-sm font-body font-light text-foreground/50">
-                    Customer Care
-                  </span>
-                </li>
                 <li>
                   <span className="text-sm font-body font-light text-foreground/50">
                     Returns

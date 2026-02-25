@@ -331,7 +331,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
               <div className="bg-white rounded-lg overflow-hidden shadow-lg">
                 <div className="aspect-[4/3] bg-gray-200">
                   <img
-                    src="https://images.unsplash.com/photo-1516975080664-ed2fc6a32937?ixlib=rb-4.0.3&auto=format&fit=crop&w=400&q=80"
+                    src={asset("browshaping/13.png")}
                     alt="Eyebrows"
                     className="w-full h-full object-cover"
                   />

@@ -257,8 +257,8 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
               }
             }
           `}</style>
-          <div className="flex flex-col md:flex-row gap-20 items-start">
-            <div className="relative w-90 md:w-1/5 md:-mr-10 services-text-wrapper">
+          <div className="flex flex-col md:flex-row gap-12 items-start">
+            <div className="relative w-90 md:w-1/3 md:-mr-10 services-text-wrapper">
               <h2 className="text-4xl font-bold text-black mb-8">
                 Our
                 <br />
@@ -276,7 +276,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
               <div className="absolute right-0 top-0 bottom-0 w-0.5 bg-nail-queen-brown hidden md:block"></div>
             </div>
 
-            <div className="w-full md:w-[42%] grid grid-cols-2 gap-3">
+            <div className="w-full md:w-[calc(55%+20px)] md:ml-24 grid grid-cols-2 gap-3">
               <div className="bg-white rounded-lg overflow-hidden shadow-lg">
                 <div className="aspect-[4/3] bg-gray-200">
                   <img

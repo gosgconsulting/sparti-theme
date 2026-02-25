@@ -60,6 +60,18 @@ export const ThankYouPage: React.FC<ThankYouPageProps> = ({
       return () => window.clearTimeout(t);
     }
 
+    if (isFacebookRedirect) {
+      // Redirect to Facebook page
+      const url = FACEBOOK_URL;
+      
+      // Small delay so the thank-you page is registered (tracking) before leaving.
+      const t = window.setTimeout(() => {
+        window.location.href = url;
+      }, 1000);
+
+      return () => window.clearTimeout(t);
+    }
+
     if (isCallRedirect) {
       // Redirect to phone dialer
       const url = `tel:+${callPhone}`;

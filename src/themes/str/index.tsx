@@ -16,7 +16,7 @@ import GroupClassPage from './group-class';
 import PhysiotherapyPage from './physiotherapy';
 import ContactModal from './ContactModal';
 import HeroSection from './components/HeroSection';
-import { STR_ASSETS, getGalleryImages, getPersonalTrainingGalleryImages, getGroupClassGalleryImages, getPhysiotherapyGalleryImages } from './config/assets';
+import { STR_ASSETS, getPersonalTrainingGalleryImages, getGroupClassGalleryImages, getPhysiotherapyGalleryImages } from './config/assets';
 import { fetchSTRReviews, type STRTestimonial, type STRPlaceInfo, formatReviewDate, getInitials } from './services/googleReviews';
 import { useThemeBranding } from '../../hooks/useThemeSettings';
 import { getSiteName, getSiteDescription, getLogoSrc, getFaviconSrc, applyFavicon } from './utils/settings';
@@ -68,7 +68,7 @@ const STRTheme: React.FC<TenantLandingProps> = ({
   const aboutTitle       = getHeading(aboutSection?.items, 'title') || 'About Us';
   const aboutDescription = getTextByKey(aboutSection?.items, 'description') ||
     'Our space is dedicated to cultivating an environment to guide individuals on a transformative journey that balances the physical and mental aspects of health. By integrating personalized training and evidence-based rehabilitation, we empower anyone to unlock their full potential. Through a focus on mental resilience, self-belief, and holistic well-being, we cultivate a space where individuals overcome challenges, enhance performance, and achieve a sustainable, confident lifestyle.';
-  const aboutBgImage   = getImage(aboutSection?.items, 'background');
+  const aboutBgImage   = getImage(aboutSection?.items, 'image') || getImage(aboutSection?.items, 'background');
   const aboutBgSrc     = aboutBgImage?.src || STR_ASSETS.backgrounds.aboutUs;
   const aboutBgAlt     = aboutBgImage?.alt || 'STR Fitness Gym Training';
   const aboutFeaturesRaw = getArrayItems(aboutSection?.items, 'features');
@@ -98,6 +98,13 @@ const STRTheme: React.FC<TenantLandingProps> = ({
     physiotherapy:   galleryTabsRaw[2]?.content || 'Physiotherapy',
     personalTraining: galleryTabsRaw[3]?.content || 'Personal Training',
   };
+  // CMS-provided gallery images (with category), fallback to local asset helpers
+  const cmsGalleryRaw = getArrayItems(gallerySection?.items, 'gallery');
+  const hasCmsGallery = cmsGalleryRaw.length > 0;
+  const cmsGalleryAll             = hasCmsGallery ? cmsGalleryRaw.map(i => ({ src: i.src || '', alt: i.alt || '' })) : null;
+  const cmsGalleryGroupClass      = hasCmsGallery ? cmsGalleryRaw.filter(i => i.category === 'group-class').map(i => ({ src: i.src || '', alt: i.alt || '' })) : null;
+  const cmsGalleryPhysiotherapy   = hasCmsGallery ? cmsGalleryRaw.filter(i => i.category === 'physiotherapy').map(i => ({ src: i.src || '', alt: i.alt || '' })) : null;
+  const cmsGalleryPersonalTraining = hasCmsGallery ? cmsGalleryRaw.filter(i => i.category === 'personal-training').map(i => ({ src: i.src || '', alt: i.alt || '' })) : null;
 
   // --- Testimonials: schema values with hardcoded fallbacks ---
   const testimonialsTitle   = getHeading(testimonialsSection?.items, 'title') || 'RESULT YOU CAN FEEL & SEE';
@@ -110,9 +117,11 @@ const STRTheme: React.FC<TenantLandingProps> = ({
   const faqBtn      = getButton(faqSection?.items, 'button');
   const faqBtnText  = faqBtn?.text || 'GET STARTED TODAY';
   const faqBtnUrl   = faqBtn?.url || getPageUrl('booking');
-  const faqItemsRaw = getArrayItems(faqSection?.items, 'faqs');
+  const faqItemsRaw = getArrayItems(faqSection?.items, 'faqItems').length > 0
+    ? getArrayItems(faqSection?.items, 'faqItems')
+    : getArrayItems(faqSection?.items, 'faqs');
   const faqItems    = faqItemsRaw.length > 0
-    ? faqItemsRaw.map(f => ({ question: f.title || '', answer: f.description || '' }))
+    ? faqItemsRaw.map(f => ({ question: f.question || f.title || '', answer: f.answer || f.description || '' }))
     : [
         { question: 'What experience level do I need to train at STR?',  answer: 'STR welcomes clients of all experience levels, from complete beginners to elite athletes. Our coaches tailor programs to your current fitness level and goals, ensuring safe and effective progression.' },
         { question: 'How do I know if STR is right for me?',              answer: "STR is ideal if you're looking for evidence-based coaching, personalized attention, and long-term physical development. We focus on building strength, improving performance, and supporting rehabilitation needs." },
@@ -126,17 +135,18 @@ const STRTheme: React.FC<TenantLandingProps> = ({
   const ctaTitle       = getHeading(ctaSection?.items, 'title') || 'READY TO TRANSFORM YOUR TRAINING?';
   const ctaDescription = getTextByKey(ctaSection?.items, 'description') ||
     'Join STR today and experience evidence-based coaching that delivers real, lasting results. Your journey to better strength, performance, and rehabilitation starts here.';
-  const ctaBtn         = getButton(ctaSection?.items, 'button');
+  const ctaBtn         = getButton(ctaSection?.items, 'cta') || getButton(ctaSection?.items, 'button');
   const ctaBtnText     = ctaBtn?.text || 'EXPLORE OUR PROGRAMMES';
   const ctaBtnUrl      = ctaBtn?.url || getThemeUrl('#programmes');
 
   // --- Team: schema values with hardcoded fallbacks ---
   const teamTitle      = getHeading(teamSection?.items, 'title') || 'OUR TEAM';
-  const teamMembersRaw = getArrayItems(teamSection?.items, 'members');
+  const _teamMembersNew = getArrayItems(teamSection?.items, 'teamMembers');
+  const teamMembersRaw  = _teamMembersNew.length > 0 ? _teamMembersNew : getArrayItems(teamSection?.items, 'members');
   const teamMembers    = teamMembersRaw.length > 0
     ? teamMembersRaw.map(m => ({
-        name:        m.title || '',
-        role:        m.props?.role || '',
+        name:        m.title || m.name || '',
+        role:        m.role || m.props?.role || '',
         description: m.description || '',
         image:       m.src || '',
       }))
@@ -362,14 +372,11 @@ const STRTheme: React.FC<TenantLandingProps> = ({
         { title: 'YOUTH STRENGTH & CONDITIONING', description: 'Engaging the youth and propelling them for long term athletic development while developing lifelong habits and values. Our coaches are specially equipped with the right skillset to motivate and teach the youth population.', content: '' },
       ];
 
-  // Gallery images - loaded from centralized asset config
-  const galleryImages = getGalleryImages();
-  const personalTrainingImages = getPersonalTrainingGalleryImages();
-  const groupClassImages = getGroupClassGalleryImages();
-  const physiotherapyImages = getPhysiotherapyGalleryImages();
-  
-  // Combined gallery images for "All" tab
-  const allGalleryImages = [...groupClassImages, ...physiotherapyImages, ...personalTrainingImages];
+  // Gallery images - prefer CMS-provided images, fall back to local asset helpers
+  const groupClassImages       = cmsGalleryGroupClass       ?? getGroupClassGalleryImages();
+  const physiotherapyImages    = cmsGalleryPhysiotherapy    ?? getPhysiotherapyGalleryImages();
+  const personalTrainingImages = cmsGalleryPersonalTraining ?? getPersonalTrainingGalleryImages();
+  const allGalleryImages       = cmsGalleryAll              ?? [...getGroupClassGalleryImages(), ...getPhysiotherapyGalleryImages(), ...getPersonalTrainingGalleryImages()];
 
   // Determine current page meta data
   const pageMeta = useMemo(() => {

@@ -56,7 +56,7 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   // Extract props from items if provided (for schema-based editing)
   const extractedProps = items ? extractPropsFromItems(items) : {};
   const heroImage = items ? getImage(items, 'image') : null;
-  const heroButton = items ? getButton(items, 'button') : null;
+  const heroButton = items ? (getButton(items, 'cta') || getButton(items, 'button')) : null;
   const heroTitle = items ? getHeading(items, 'title') : null;
   const heroDescription = items ? getTextByKey(items, 'description') : null;
   const heroSubtitle = items ? getTextByKey(items, 'subtitle') : null;

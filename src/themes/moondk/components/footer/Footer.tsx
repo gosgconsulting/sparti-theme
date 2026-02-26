@@ -115,12 +115,6 @@ const Footer = () => {
             >
               Privacy Policy
             </a>
-            <a
-              href={themeHref(basePath, "/terms-of-service")}
-              className="text-sm font-body font-light text-foreground/70 hover:text-primary transition-colors"
-            >
-              Terms of Service
-            </a>
           </div>
         </div>
       </div>

@@ -175,12 +175,11 @@ export default function DeliveryAndReturnPolicyPage() {
   // Define sections with their IDs and text
   const sections = [
     { id: "introduction", text: "Introduction", number: "" },
-    { id: "delivery", text: "1. Delivery Information", number: "1" },
-    { id: "shipping", text: "2. Shipping Options", number: "2" },
+    { id: "delivery", text: "1. Delivery", number: "1" },
+    { id: "cancellation", text: "2. Cancellation", number: "2" },
     { id: "returns", text: "3. Returns and Refunds", number: "3" },
-    { id: "exchanges", text: "4. Exchanges", number: "4" },
-    { id: "damaged-items", text: "5. Damaged or Defective Items", number: "5" },
-    { id: "contact", text: "6. Contact Us", number: "6" },
+    { id: "non-refundable", text: "4. Non-Refundable Items", number: "4" },
+    { id: "defective-items", text: "5. Defective Items", number: "5" },
   ];
 
   const sectionIds = sections.map((s) => s.id);
@@ -273,19 +272,25 @@ export default function DeliveryAndReturnPolicyPage() {
                 <section id="delivery" className="mb-16 scroll-mt-24 print:break-inside-avoid">
                   <div className="border-b border-border-light pb-6 mb-6">
                     <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      1. Delivery Information
+                      1. Delivery and Shipping Costs
                     </h2>
                   </div>
                   <div className="prose prose-lg max-w-none">
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      We offer delivery to various locations. Delivery times may vary depending on your location and the shipping method selected. Standard delivery typically takes 5-7 business days, while express delivery options are available for faster service.
+                      <strong className="font-medium text-foreground">Delivery Locations:</strong> Whole of Singapore
                     </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      Once your order has been processed and shipped, you will receive a confirmation email with tracking information. You can use this tracking number to monitor the status of your delivery.
+                      <strong className="font-medium text-foreground">Shipping Costs:</strong>
                     </p>
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      Please ensure that someone is available to receive the delivery at the specified address. If no one is available, the delivery may be left in a safe location or returned to our facility, which may result in additional charges.
-                    </p>
+                    <ul className="list-disc list-inside text-base font-body font-light text-foreground/70 leading-relaxed mb-4 space-y-2 ml-4">
+                      <li><strong className="font-medium text-foreground">Standard 1-3 working days delivery below minimum spend:</strong> 15 SGD per trip. No deliveries on Saturday and Sunday</li>
+                      <li><strong className="font-medium text-foreground">Express Next day delivery:</strong> 25 SGD</li>
+                      <li><strong className="font-medium text-foreground">Cut off time for next day delivery:</strong> 2pm</li>
+                      <li><strong className="font-medium text-foreground">Minimum for free Delivery:</strong> 150 SGD</li>
+                      <li><strong className="font-medium text-foreground">Delivery Times:</strong> 12pm to 9pm</li>
+                      <li><strong className="font-medium text-foreground">Order Processing:</strong> Takes at least 1 to 2 days to prepare for delivery</li>
+                      <li><strong className="font-medium text-foreground">Delivery Instructions:</strong> Delivery staffs will try to contact before making delivery attempt</li>
+                    </ul>
                   </div>
                   <button
                     onClick={scrollToTop}
@@ -296,21 +301,15 @@ export default function DeliveryAndReturnPolicyPage() {
                 </section>
 
                 {/* Section 2 */}
-                <section id="shipping" className="mb-16 scroll-mt-24 print:break-inside-avoid">
+                <section id="cancellation" className="mb-16 scroll-mt-24 print:break-inside-avoid">
                   <div className="border-b border-border-light pb-6 mb-6">
                     <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      2. Shipping Options
+                      2. Cancellation
                     </h2>
                   </div>
                   <div className="prose prose-lg max-w-none">
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      We offer several shipping options to accommodate your needs. Standard shipping is available for all orders, with free delivery for orders over $150. Express shipping options are available for an additional fee and provide faster delivery times.
-                    </p>
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      Shipping costs are calculated at checkout based on your delivery address and the selected shipping method. All prices displayed are in the currency of your selected region.
-                    </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      International shipping may be subject to customs duties and taxes, which are the responsibility of the recipient. We recommend checking with your local customs office for more information.
+                      Cancellations must be made at least 24 hours before the scheduled delivery time via phone or email. The full amount will be refunded.
                     </p>
                   </div>
                   <button
@@ -330,16 +329,13 @@ export default function DeliveryAndReturnPolicyPage() {
                   </div>
                   <div className="prose prose-lg max-w-none">
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      We want you to be completely satisfied with your purchase. If you are not satisfied, you may return items within 30 days of receipt for a full refund or exchange, provided the items are in their original condition, unused, and in their original packaging.
+                      Once delivery is on the way, refund and cancellation is not possible.
                     </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      To initiate a return, please contact our customer service team with your order number and the items you wish to return. We will provide you with a return authorization and instructions for returning the items.
-                    </p>
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      Refunds will be processed to the original payment method within 5-10 business days after we receive and inspect the returned items. Shipping costs are non-refundable unless the return is due to our error.
+                      Once delivered, goods can be exchanged if the packages/products are unopened and condition of Items are to be in "as-new" condition, without scratches, damages, or modifications. Returning items in their original packaging is often required or strongly encouraged.
                     </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      Please note that certain items, such as personalized or custom-made products, may not be eligible for return. These items will be clearly marked at the time of purchase.
+                      Items are available for refund within 7 to 14 days of delivery.
                     </p>
                   </div>
                   <button
@@ -351,18 +347,15 @@ export default function DeliveryAndReturnPolicyPage() {
                 </section>
 
                 {/* Section 4 */}
-                <section id="exchanges" className="mb-16 scroll-mt-24 print:break-inside-avoid">
+                <section id="non-refundable" className="mb-16 scroll-mt-24 print:break-inside-avoid">
                   <div className="border-b border-border-light pb-6 mb-6">
                     <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      4. Exchanges
+                      4. Non-Refundable Items
                     </h2>
                   </div>
                   <div className="prose prose-lg max-w-none">
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      If you need to exchange an item for a different size, color, or style, please contact us within 30 days of receipt. Exchanges are subject to product availability.
-                    </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      To process an exchange, you will need to return the original item following our return procedure. Once we receive the returned item, we will ship the replacement item. You will be responsible for return shipping costs unless the exchange is due to our error.
+                      Perishables, customized products, and items sold at a discount may not be returnable/ exchangeable or refunded.
                     </p>
                   </div>
                   <button
@@ -374,41 +367,15 @@ export default function DeliveryAndReturnPolicyPage() {
                 </section>
 
                 {/* Section 5 */}
-                <section id="damaged-items" className="mb-16 scroll-mt-24 print:break-inside-avoid">
+                <section id="defective-items" className="mb-16 scroll-mt-24 print:break-inside-avoid">
                   <div className="border-b border-border-light pb-6 mb-6">
                     <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      5. Damaged or Defective Items
-                    </h2>
-                  </div>
-                  <div className="prose prose-lg max-w-none">
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      If you receive a damaged or defective item, please contact us immediately within 7 days of receipt. We will arrange for a replacement or full refund at no cost to you.
-                    </p>
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      Please provide photos of the damaged or defective item when contacting us, as this will help us process your request more quickly. We may request that you return the item for inspection.
-                    </p>
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      We take quality control seriously and will investigate any reports of damaged or defective items to ensure we maintain our high standards.
-                    </p>
-                  </div>
-                  <button
-                    onClick={scrollToTop}
-                    className="mt-6 text-sm font-body text-foreground/60 hover:text-[#195B3E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
-                  >
-                    ↑ Back to top
-                  </button>
-                </section>
-
-                {/* Section 6 */}
-                <section id="contact" className="mb-16 scroll-mt-24 print:break-inside-avoid">
-                  <div className="border-b border-border-light pb-6 mb-6">
-                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      6. Contact Us
+                      5. Defective Items
                     </h2>
                   </div>
                   <div className="prose prose-lg max-w-none">
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      If you have any questions about our delivery and return policy, or if you need assistance with an order, please contact our customer service team. We are here to help and will respond to your inquiry as soon as possible.
+                      If an item is defective or damaged upon delivery, the return policy may differ, and you may be eligible for a refund or exchange.
                     </p>
                   </div>
                   <button

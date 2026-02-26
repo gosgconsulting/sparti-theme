@@ -2,18 +2,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Pagination from "./Pagination";
 import { ThemeLink } from "../ThemeLink";
+import { getLowestProductPrice } from "../../pricing";
 
 interface ProductGridProps {
   products?: any[];
   isLoading?: boolean;
-}
-
-function getLowestPrice(product: any) {
-  if (!product.variants || product.variants.length === 0) return 0;
-  const prices = product.variants
-    .map(v => v.prices && v.prices.length > 0 ? v.prices[0].amount : 0)
-    .filter(p => p > 0);
-  return prices.length > 0 ? Math.min(...prices) / 100 : 0; // Medusa returns prices in cents usually
 }
 
 function formatPrice(amount: number, currencyCode = 'USD') {
@@ -58,8 +51,10 @@ export default function ProductGrid({
       <div className="mx-auto max-w-6xl">
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
           {products.map((product) => {
-            const price = getLowestPrice(product);
-            const formattedPrice = price > 0 ? formatPrice(price) : 'Sold Out';
+            const priceValue = getLowestProductPrice(product);
+            const formattedPrice = priceValue
+              ? formatPrice(priceValue.amount, priceValue.currencyCode)
+              : 'Sold Out';
 
             return (
               <Card

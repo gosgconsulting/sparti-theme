@@ -5,18 +5,11 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ThemeLink } from "../ThemeLink";
 import { useProducts } from "../../hooks/useProducts";
 import { ChevronLeft, ChevronRight } from "lucide-react";
+import { getLowestProductPrice } from "../../pricing";
 
 interface ProductCarouselProps {
   excludeProductId?: string | number;
   onApiChange?: (api: CarouselApi | undefined) => void;
-}
-
-function getLowestPrice(product: any) {
-  if (!product.variants || product.variants.length === 0) return 0;
-  const prices = product.variants
-    .map((v: any) => (v.prices && v.prices.length > 0 ? v.prices[0].amount : 0))
-    .filter((p: number) => p > 0);
-  return prices.length > 0 ? Math.min(...prices) / 100 : 0;
 }
 
 function formatPrice(amount: number, currencyCode = 'USD') {
@@ -71,8 +64,10 @@ const ProductCarousel = ({ excludeProductId, onApiChange }: ProductCarouselProps
       >
         <CarouselContent>
           {displayProducts.map((product) => {
-            const price = getLowestPrice(product);
-            const formattedPrice = price > 0 ? formatPrice(price) : 'Sold Out';
+            const priceValue = getLowestProductPrice(product);
+            const formattedPrice = priceValue
+              ? formatPrice(priceValue.amount, priceValue.currencyCode)
+              : 'Sold Out';
             const category = product.collection?.title || (product.metadata?.category as string) || "Product";
 
             return (

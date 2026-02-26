@@ -12,6 +12,7 @@ import {
 } from "@/components/ui/select";
 import { useCategories, useProducts } from "../hooks/useProducts";
 import { Product } from "@medusajs/medusa";
+import { getLowestProductPrice } from "../pricing";
 
 function labelFromSlug(slug: string | undefined) {
   if (!slug || slug === "shop") return "All";
@@ -32,16 +33,8 @@ function getFilterFromURL(): string | null {
   return params.get("filter");
 }
 
-function parsePrice(price: number | undefined) {
-  return typeof price === 'number' ? price : 0;
-}
-
 function getLowestPrice(product: Product) {
-  if (!product.variants || product.variants.length === 0) return 0;
-  const prices = product.variants
-    .map((v) => (v.prices && v.prices.length > 0 ? v.prices[0].amount : 0))
-    .filter((p) => p > 0);
-  return prices.length > 0 ? Math.min(...prices) : 0;
+  return getLowestProductPrice(product)?.amount || 0;
 }
 
 export default function CategoryPage({ category }: { category: string }) {

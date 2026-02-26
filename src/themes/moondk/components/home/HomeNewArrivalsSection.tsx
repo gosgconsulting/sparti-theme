@@ -10,14 +10,7 @@ import { Card, CardContent } from "@/components/ui/card";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import { useProducts } from "../../hooks/useProducts";
 import { ThemeLink } from "../ThemeLink";
-
-function getLowestPrice(product: any) {
-  if (!product.variants || product.variants.length === 0) return 0;
-  const prices = product.variants
-    .map((v: any) => (v.prices && v.prices.length > 0 ? v.prices[0].amount : 0))
-    .filter((p: number) => p > 0);
-  return prices.length > 0 ? Math.min(...prices) / 100 : 0;
-}
+import { getLowestProductPrice } from "../../pricing";
 
 function formatPrice(amount: number, currencyCode = 'USD') {
   return new Intl.NumberFormat('en-US', {
@@ -99,8 +92,10 @@ export default function HomeNewArrivalsSection() {
             >
               <CarouselContent className="-ml-2">
                 {newArrivals.map((p) => {
-                  const price = getLowestPrice(p);
-                  const formattedPrice = price > 0 ? formatPrice(price) : 'Sold Out';
+                  const priceValue = getLowestProductPrice(p);
+                  const formattedPrice = priceValue
+                    ? formatPrice(priceValue.amount, priceValue.currencyCode)
+                    : 'Sold Out';
 
                   return (
                     <CarouselItem key={p.id} className="basis-full pl-2">
@@ -182,8 +177,10 @@ export default function HomeNewArrivalsSection() {
         {/* Desktop Grid - Keep original grid layout */}
         <div className="mt-10 hidden sm:grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
           {newArrivals.map((p) => {
-            const price = getLowestPrice(p);
-            const formattedPrice = price > 0 ? formatPrice(price) : 'Sold Out';
+            const priceValue = getLowestProductPrice(p);
+            const formattedPrice = priceValue
+              ? formatPrice(priceValue.amount, priceValue.currencyCode)
+              : 'Sold Out';
 
             return (
               <Card

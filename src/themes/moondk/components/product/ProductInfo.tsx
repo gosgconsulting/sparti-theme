@@ -12,17 +12,10 @@ import {
 import { ThemeLink } from "../ThemeLink";
 import { useCart } from "../../contexts/CartContext";
 import { AddToBagNotification } from "../ui/AddToBagNotification";
+import { getDisplayProductPrice } from "../../pricing";
 
 interface ProductInfoProps {
   product?: any;
-}
-
-function getLowestPrice(product: any) {
-  if (!product || !product.variants || product.variants.length === 0) return 0;
-  const prices = product.variants
-    .map((v: any) => (v.prices && v.prices.length > 0 ? v.prices[0].amount : 0))
-    .filter((p: number) => p > 0);
-  return prices.length > 0 ? Math.min(...prices) / 100 : 0;
 }
 
 function formatPrice(amount: number, currencyCode = 'USD') {
@@ -62,12 +55,10 @@ const ProductInfo = ({ product }: ProductInfoProps) => {
 
   const productId = product?.id?.toString();
   const productName = product?.title || "Unknown Product";
-  const lowestPrice = getLowestPrice(product);
-  const productPrice = lowestPrice > 0 ? formatPrice(lowestPrice) : "Sold Out";
-
-  const displayPrice = selectedVariant?.prices && selectedVariant.prices.length > 0
-    ? formatPrice(selectedVariant.prices[0].amount / 100)
-    : productPrice;
+  const displayPriceValue = getDisplayProductPrice(product, selectedVariant);
+  const displayPrice = displayPriceValue
+    ? formatPrice(displayPriceValue.amount, displayPriceValue.currencyCode)
+    : "Sold Out";
 
   const productImage = product?.thumbnail || "";
   const productCategory = product?.collection?.title || product?.metadata?.category || "Product";

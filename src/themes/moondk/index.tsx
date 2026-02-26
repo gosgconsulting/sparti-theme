@@ -15,6 +15,7 @@ import SizeGuidePage from "./pages/about/SizeGuide";
 import StoreLocatorPage from "./pages/about/StoreLocator";
 import PrivacyPolicyPage from "./pages/PrivacyPolicy";
 import TermsOfServicePage from "./pages/TermsOfService";
+import DeliveryAndReturnPolicyPage from "./pages/DeliveryAndReturnPolicy";
 import NotFoundPage from "./pages/NotFound";
 import RecipesPage from "./pages/Recipes";
 import RecipeDetailPage from "./pages/RecipeDetail";
@@ -89,6 +90,10 @@ const MoondkTheme: React.FC<MoondkThemeProps> = ({
 
     if (current === "terms-of-service") {
       return <TermsOfServicePage />;
+    }
+
+    if (current === "delivery-and-return-policy") {
+      return <DeliveryAndReturnPolicyPage />;
     }
 
     if (current === "about/our-story") {

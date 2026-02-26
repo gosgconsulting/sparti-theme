@@ -167,7 +167,7 @@ function TableOfContents({ items, activeSection, onSectionChange, isMobile, isOp
   );
 }
 
-export default function PrivacyPolicyPage() {
+export default function DeliveryAndReturnPolicyPage() {
   const [isTOCOpen, setIsTOCOpen] = useState(false);
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
   const contentRef = useRef<HTMLDivElement>(null);
@@ -175,12 +175,12 @@ export default function PrivacyPolicyPage() {
   // Define sections with their IDs and text
   const sections = [
     { id: "introduction", text: "Introduction", number: "" },
-    { id: "information-collection", text: "1. Information That We Collect From You", number: "1" },
-    { id: "use-of-information", text: "2. Use Of Your Information", number: "2" },
-    { id: "disclosure", text: "3. Disclosure Of Your Information", number: "3" },
-    { id: "security", text: "4. Security And Data Retention", number: "4" },
-    { id: "accessing", text: "5. Accessing And Updating", number: "5" },
-    { id: "changes", text: "6. Changes To Our Privacy Policy", number: "6" },
+    { id: "delivery", text: "1. Delivery Information", number: "1" },
+    { id: "shipping", text: "2. Shipping Options", number: "2" },
+    { id: "returns", text: "3. Returns and Refunds", number: "3" },
+    { id: "exchanges", text: "4. Exchanges", number: "4" },
+    { id: "damaged-items", text: "5. Damaged or Defective Items", number: "5" },
+    { id: "contact", text: "6. Contact Us", number: "6" },
   ];
 
   const sectionIds = sections.map((s) => s.id);
@@ -220,10 +220,10 @@ export default function PrivacyPolicyPage() {
           <div className="max-w-7xl mx-auto px-6 py-8 md:py-12">
             <div className="max-w-4xl">
               <h1 className="text-4xl md:text-5xl font-heading font-medium !text-[#195B3E] mb-4">
-                Privacy Policy
+                Delivery and Return Policy
               </h1>
               <p className="text-lg font-body font-light text-foreground/70">
-                How we collect, use, and protect your information
+                Information about shipping, delivery, and returns
               </p>
             </div>
           </div>
@@ -261,27 +261,30 @@ export default function PrivacyPolicyPage() {
                 <section id="introduction" className="mb-12 scroll-mt-24">
                   <div className="prose prose-lg max-w-none">
                     <p className="text-base md:text-lg font-body font-light text-foreground/70 leading-relaxed mb-6">
-                      MoonDk ("we", "our", or "MoonDk") is committed to protecting the privacy of all visitors to our website (http://moondk.com/) and all visitors who access our website or services through any mobile application (together, "Website"). Please read the following privacy policy which explains how we use and protect your information.
+                      At MoonDk, we are committed to providing you with a seamless shopping experience. This policy outlines our delivery, shipping, and return procedures to ensure transparency and clarity for all our customers.
                     </p>
                     <p className="text-base md:text-lg font-body font-light text-foreground/70 leading-relaxed">
-                      By visiting and/or ordering services on this Website, you agree and where required you consent to the collection, use and transfer of your information as set out in this policy.
+                      Please read this policy carefully before making a purchase. By placing an order with us, you agree to the terms outlined in this policy.
                     </p>
                   </div>
                 </section>
 
                 {/* Section 1 */}
-                <section id="information-collection" className="mb-16 scroll-mt-24 print:break-inside-avoid">
+                <section id="delivery" className="mb-16 scroll-mt-24 print:break-inside-avoid">
                   <div className="border-b border-border-light pb-6 mb-6">
                     <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      1. Information That We Collect From You
+                      1. Delivery Information
                     </h2>
                   </div>
                   <div className="prose prose-lg max-w-none">
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      When you visit the Website or make a MoonDk order through the Website, you may be asked to provide information about yourself including your name and contact details. We may also collect information about your usage of the Website and information about you from the messages you post to the Website and the e-mails or letters you send to us.
+                      We offer delivery to various locations. Delivery times may vary depending on your location and the shipping method selected. Standard delivery typically takes 5-7 business days, while express delivery options are available for faster service.
+                    </p>
+                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
+                      Once your order has been processed and shipped, you will receive a confirmation email with tracking information. You can use this tracking number to monitor the status of your delivery.
                     </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      By accessing MoonDk information and/or services using mobile digital routes such as (but not limited to) mobile, tablet or other devices/technology including mobile applications, then you should expect that MoonDk's data collection and usage as set out in this privacy policy will apply in that context too. We may collect technical information from your mobile device or your use of our services through a mobile device, for example, location data and certain characteristics of, and performance data about your device, carrier/operating system including device and connection type, IP address, mobile payment methods, interaction with other retail technology such as use of NFC Tags, QR Codes or use of mobile vouchers. Unless you have elected to remain anonymous through your device and/or platform settings, this information may be collected and used by us automatically if you use the service through your mobile device(s) via any MoonDk mobile application, through your mobile's browser or otherwise.
+                      Please ensure that someone is available to receive the delivery at the specified address. If no one is available, the delivery may be left in a safe location or returned to our facility, which may result in additional charges.
                     </p>
                   </div>
                   <button
@@ -293,27 +296,21 @@ export default function PrivacyPolicyPage() {
                 </section>
 
                 {/* Section 2 */}
-                <section id="use-of-information" className="mb-16 scroll-mt-24 print:break-inside-avoid">
+                <section id="shipping" className="mb-16 scroll-mt-24 print:break-inside-avoid">
                   <div className="border-b border-border-light pb-6 mb-6">
                     <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      2. Use Of Your Information
+                      2. Shipping Options
                     </h2>
                   </div>
                   <div className="prose prose-lg max-w-none">
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      Your information will enable us to provide you with access to the relevant parts of the Website and to supply the services you have requested. It will also enable us to bill you and to contact you where necessary concerning our services. We will also use and analyse the information we collect so that we can administer, support, improve and develop our business, for any other purpose whether statistical or analytical and to help us prevent fraud. Where appropriate, now and in the future you may have the ability to express your preferences around the use of your data as set out in this privacy policy and this may be exercised though your chosen method of using our services, for example mobile, mobile applications or any representation of our Website.
+                      We offer several shipping options to accommodate your needs. Standard shipping is available for all orders, with free delivery for orders over $150. Express shipping options are available for an additional fee and provide faster delivery times.
                     </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      We may use your information to contact you for your views on our services and to notify you occasionally about important changes or developments to the Website or our services.
-                    </p>
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      You agree that we may use your information to let you know about our other products and services that may be of interest to you including services that may be the subject of direct marketing and we may contact you to do so by post, telephone, mobile messaging (e.g. SMS, MMS etc.) as well as by e-mail. Where you have chosen at a device level to begin or continue receiving push notifications from us, we may send you push notifications relating to the services that you have requested from us and information about our services and offers. You can choose to stop receiving marketing push notifications from us at any time by changing your preferences on your mobile device or by contacting us (see Contact).
-                    </p>
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      If you do not want us to use your data in this way or change your mind about being contacted in the future, please let us know by using the contact details set out below and/or amending your profile accordingly.
+                      Shipping costs are calculated at checkout based on your delivery address and the selected shipping method. All prices displayed are in the currency of your selected region.
                     </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      Please note that by submitting comments and feedback regarding the Website and the services, you consent to us to use such comments and feedback on the Website and in any marketing or advertising materials. We will only identify you for this purpose by your first name and the city in which you reside.
+                      International shipping may be subject to customs duties and taxes, which are the responsibility of the recipient. We recommend checking with your local customs office for more information.
                     </p>
                   </div>
                   <button
@@ -325,27 +322,24 @@ export default function PrivacyPolicyPage() {
                 </section>
 
                 {/* Section 3 */}
-                <section id="disclosure" className="mb-16 scroll-mt-24 print:break-inside-avoid">
+                <section id="returns" className="mb-16 scroll-mt-24 print:break-inside-avoid">
                   <div className="border-b border-border-light pb-6 mb-6">
                     <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      3. Disclosure Of Your Information
+                      3. Returns and Refunds
                     </h2>
                   </div>
                   <div className="prose prose-lg max-w-none">
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      The information you provide to us will be transferred to and stored on our servers.
+                      We want you to be completely satisfied with your purchase. If you are not satisfied, you may return items within 30 days of receipt for a full refund or exchange, provided the items are in their original condition, unused, and in their original packaging.
                     </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      Third parties process information such as credit card payments and provide support services related to payments for us. Third parties also help us analyse the information we collect so that we can administer, support, improve and develop our business and services to you. By submitting your personal data, you agree to this transfer, storing or processing. MoonDk will take all steps reasonably necessary to ensure that your data is treated securely and in accordance with this privacy policy.
+                      To initiate a return, please contact our customer service team with your order number and the items you wish to return. We will provide you with a return authorization and instructions for returning the items.
                     </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      You agree that we may allow carefully selected third parties, including marketing and advertising companies, our affiliates and associates, to contact you occasionally about services that may be of interest to you. They may contact you by telephone, SMS as well as by e-mail. If you change your mind about being contacted by these companies in the future, please let us know by using the contact details set out below and/or by amending your profile accordingly.
-                    </p>
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      If our business enters into a joint venture with, purchases or is sold to or merged with another business entity, your information may be disclosed or transferred to the target company, our new business partners or owners or their advisors.
+                      Refunds will be processed to the original payment method within 5-10 business days after we receive and inspect the returned items. Shipping costs are non-refundable unless the return is due to our error.
                     </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      We may use the information that you provide to us if we are under a duty to disclose or share your information in order to comply with (and/or where we believe we are under a duty to comply with) any legal obligation; or in order to enforce our Website Terms and any other agreement; or to protect the rights of MoonDk or others. This includes exchanging information with other companies and other organisations for the purposes of fraud protection and prevention.
+                      Please note that certain items, such as personalized or custom-made products, may not be eligible for return. These items will be clearly marked at the time of purchase.
                     </p>
                   </div>
                   <button
@@ -357,21 +351,18 @@ export default function PrivacyPolicyPage() {
                 </section>
 
                 {/* Section 4 */}
-                <section id="security" className="mb-16 scroll-mt-24 print:break-inside-avoid">
+                <section id="exchanges" className="mb-16 scroll-mt-24 print:break-inside-avoid">
                   <div className="border-b border-border-light pb-6 mb-6">
                     <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      4. Security And Data Retention
+                      4. Exchanges
                     </h2>
                   </div>
                   <div className="prose prose-lg max-w-none">
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      We take steps to protect your information from unauthorised access and against unlawful processing, accidental loss, destruction and damage. We will keep your information for a reasonable period or as long as the law requires.
-                    </p>
-                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      Where you have chosen a password which allows you to access certain parts of the Website, you are responsible for keeping this password confidential. We advise you not to share your password with anyone.
+                      If you need to exchange an item for a different size, color, or style, please contact us within 30 days of receipt. Exchanges are subject to product availability.
                     </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      Unfortunately, the transmission of information via the internet is not completely secure. Although we will take steps to protect your information, we cannot guarantee the security of your data transmitted to the Website; any transmission is at your own risk. Once we have received your information, we will use strict procedures and security features to try to prevent unauthorised access.
+                      To process an exchange, you will need to return the original item following our return procedure. Once we receive the returned item, we will ship the replacement item. You will be responsible for return shipping costs unless the exchange is due to our error.
                     </p>
                   </div>
                   <button
@@ -383,15 +374,21 @@ export default function PrivacyPolicyPage() {
                 </section>
 
                 {/* Section 5 */}
-                <section id="accessing" className="mb-16 scroll-mt-24 print:break-inside-avoid">
+                <section id="damaged-items" className="mb-16 scroll-mt-24 print:break-inside-avoid">
                   <div className="border-b border-border-light pb-6 mb-6">
                     <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      5. Accessing And Updating
+                      5. Damaged or Defective Items
                     </h2>
                   </div>
                   <div className="prose prose-lg max-w-none">
+                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
+                      If you receive a damaged or defective item, please contact us immediately within 7 days of receipt. We will arrange for a replacement or full refund at no cost to you.
+                    </p>
+                    <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
+                      Please provide photos of the damaged or defective item when contacting us, as this will help us process your request more quickly. We may request that you return the item for inspection.
+                    </p>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      You have the right to see the information we hold about you ("Access Request") and to ask us to make any changes to ensure that it is accurate and up to date, as well as to request for data deletion.
+                      We take quality control seriously and will investigate any reports of damaged or defective items to ensure we maintain our high standards.
                     </p>
                   </div>
                   <button
@@ -403,15 +400,15 @@ export default function PrivacyPolicyPage() {
                 </section>
 
                 {/* Section 6 */}
-                <section id="changes" className="mb-16 scroll-mt-24 print:break-inside-avoid">
+                <section id="contact" className="mb-16 scroll-mt-24 print:break-inside-avoid">
                   <div className="border-b border-border-light pb-6 mb-6">
                     <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
-                      6. Changes To Our Privacy Policy
+                      6. Contact Us
                     </h2>
                   </div>
                   <div className="prose prose-lg max-w-none">
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
-                      Any changes to our Privacy Policy will be posted to the Website and, where appropriate, through e-mail notification.
+                      If you have any questions about our delivery and return policy, or if you need assistance with an order, please contact our customer service team. We are here to help and will respond to your inquiry as soon as possible.
                     </p>
                   </div>
                   <button
@@ -427,7 +424,7 @@ export default function PrivacyPolicyPage() {
                   <div className="bg-background rounded-lg p-6 md:p-8">
                     <h3 className="text-xl font-heading font-medium !text-[#195B3E] mb-3">Questions?</h3>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
-                      If you have questions about this Privacy Policy, please contact us.
+                      If you have questions about our delivery and return policy, please contact us.
                     </p>
                     <button
                       onClick={() => setIsContactFormOpen(true)}

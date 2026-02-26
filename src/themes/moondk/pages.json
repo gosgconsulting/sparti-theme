@@ -10,6 +10,7 @@
     { "id": "about-store-locator", "name": "Store Locator", "slug": "about/store-locator", "component": "StoreLocator" },
     { "id": "privacy-policy", "name": "Privacy Policy", "slug": "privacy-policy", "component": "PrivacyPolicy" },
     { "id": "terms-of-service", "name": "Terms of Service", "slug": "terms-of-service", "component": "TermsOfService" },
+    { "id": "delivery-and-return-policy", "name": "Delivery and Return Policy", "slug": "delivery-and-return-policy", "component": "DeliveryAndReturnPolicy" },
     { "id": "beok-private-dinning", "name": "Beok Private Dining", "slug": "beok-private-dinning", "component": "BrokPrivateDinning" }
   ]
 }

@@ -7,7 +7,6 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-
 import { useState } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -17,12 +16,42 @@ import ProductImageGallery from "../components/product/ProductImageGallery";
 import ProductInfo from "../components/product/ProductInfo";
 import ProductDescription from "../components/product/ProductDescription";
 import ProductCarousel from "../components/content/ProductCarousel";
-import { products } from "../components/category/products";
+import { useProduct } from "../hooks/useProducts";
+import { Product } from "@medusajs/medusa";
 
 export default function ProductDetailPage({ productId }: { productId: string }) {
-  const product = products.find((p) => p.id.toString() === productId);
-  const productName = product?.name || "Hovenia Dulcis Extract (헛개수)";
+  const { data: product, isLoading, isError } = useProduct(productId);
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+
+  if (isLoading) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <Header />
+        <main className="flex-1 flex items-center justify-center">
+          <div className="w-16 h-16 border-4 border-primary border-t-transparent rounded-full animate-spin"></div>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  if (isError || !product) {
+    return (
+      <div className="min-h-screen bg-background flex flex-col">
+        <Header />
+        <main className="flex-1 flex items-center justify-center flex-col gap-4">
+          <h2 className="text-2xl font-heading">Product not found</h2>
+          <ThemeLink to="/category/shop" className="text-primary hover:underline">
+            Return to shop
+          </ThemeLink>
+        </main>
+        <Footer />
+      </div>
+    );
+  }
+
+  const productName = product.title || "Unknown Product";
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -53,11 +82,11 @@ export default function ProductDetailPage({ productId }: { productId: string }) 
           </div>
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-            <ProductImageGallery productId={productId} />
+            <ProductImageGallery product={product} />
 
             <div className="lg:pl-12 mt-8 lg:mt-0 lg:sticky lg:top-6 lg:h-fit">
-              <ProductInfo productId={productId} />
-              <ProductDescription productId={productId} />
+              <ProductInfo product={product} />
+              <ProductDescription product={product} />
             </div>
           </div>
         </section>
@@ -84,7 +113,7 @@ export default function ProductDetailPage({ productId }: { productId: string }) 
               </button>
             </div>
           </div>
-          <ProductCarousel excludeProductId={productId} onApiChange={setCarouselApi} />
+          <ProductCarousel excludeProductId={product.id} onApiChange={setCarouselApi} />
         </section>
       </main>
 

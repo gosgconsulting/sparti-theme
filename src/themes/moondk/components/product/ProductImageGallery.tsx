@@ -27,7 +27,7 @@ import potatoNoodleImage2 from "../../assets/noodles/BEOK-Potatonoodle2.jpg";
 import potatoNoodleImage4 from "../../assets/noodles/BEOK-Potatonoodle4.jpg";
 
 interface ProductImageGalleryProps {
-  productId?: string;
+  product?: any;
 }
 
 // Map product IDs to their specific images
@@ -46,33 +46,41 @@ const productImageMap: Record<string, string> = {
   "12": potatoNoodleImage,
 };
 
-const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
-  
+const ProductImageGallery = ({ product }: ProductImageGalleryProps) => {
+  const productId = product?.id?.toString();
+
   const getDefaultImage = () => {
-    return productImageMap[productId || ""] || hoveniaDulcisImage;
+    return product?.thumbnail || productImageMap[productId || ""] || hoveniaDulcisImage;
   };
-  
+
   const [selectedImage, setSelectedImage] = useState(getDefaultImage());
 
   // For products with multiple images, show all available images
   // For other products 1-12, only show their specific image
   // Otherwise, show all default images
-  const specificImage = productImageMap[productId || ""];
-  const images = productId === "4"
-    ? [barleyTeaImage1, barleyTeaImage2, barleyTeaImage7]
-    : productId === "5"
-    ? [sesameOilImage, sesameOilImage2, sesameOilImage4]
-    : productId === "7"
-    ? [perillaOilImage, perillaOilImage2, perillaOilImage4, perillaOilImage5]
-    : productId === "8"
-    ? [saucesImage, saucesImageAlt]
-    : productId === "9"
-    ? [seorijuImage, seorijuImage1, seorijuImage2]
-    : productId === "12"
-    ? [potatoNoodleImage, potatoNoodleImage1, potatoNoodleImage2, potatoNoodleImage4]
-    : specificImage
-    ? [specificImage]
-    : [hoveniaDulcisImage, cornExtractImage, blackBeanTeaImage];
+  const specificImage = product?.thumbnail || productImageMap[productId || ""];
+  let images: string[] = [];
+
+  if (product && product.images && product.images.length > 0) {
+    images = product.images.map((img: any) => img.url);
+  } else {
+    images = productId === "4"
+      ? [barleyTeaImage, barleyTeaImage1, barleyTeaImage2, barleyTeaImage7]
+      : productId === "5"
+        ? [sesameOilImage, sesameOilImage2, sesameOilImage4]
+        : productId === "7"
+          ? [perillaOilImage, perillaOilImage2, perillaOilImage5]
+          : productId === "8"
+            ? [saucesImage, saucesImageAlt]
+            : productId === "9"
+              ? [seorijuImage, seorijuImage1, seorijuImage2]
+              : productId === "12"
+                ? [potatoNoodleImage, potatoNoodleImage4, potatoNoodleImage5]
+                : specificImage
+                  ? [specificImage]
+                  : [hoveniaDulcisImage, cornExtractImage, blackBeanTeaImage, barleyTeaImage];
+  }
+
 
   // Update selected image when productId changes
   useEffect(() => {
@@ -109,7 +117,7 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
           alt="Product"
           className="w-full h-full object-cover"
         />
-        
+
         {/* Navigation Arrows - Only show if multiple images */}
         {hasMultipleImages && (
           <>
@@ -137,11 +145,10 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
           <button
             key={index}
             onClick={() => setSelectedImage(image)}
-            className={`aspect-square overflow-hidden rounded-lg transition-all duration-200 shadow-sm hover:shadow-md ${
-              selectedImage === image
-                ? "ring-2 ring-primary ring-offset-2 shadow-md"
-                : "hover:opacity-80"
-            }`}
+            className={`aspect-square overflow-hidden rounded-lg transition-all duration-200 shadow-sm hover:shadow-md ${selectedImage === image
+              ? "ring-2 ring-primary ring-offset-2 shadow-md"
+              : "hover:opacity-80"
+              }`}
           >
             <img
               src={image}

@@ -1,5 +1,4 @@
 import { useEffect, useState } from "react";
-
 import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import ProductGrid from "../components/category/ProductGrid";
@@ -11,6 +10,8 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
+import { useProducts } from "../hooks/useProducts";
+import { Product } from "@medusajs/medusa";
 
 function labelFromSlug(slug: string | undefined) {
   if (!slug || slug === "shop") return "All";
@@ -31,6 +32,18 @@ function getFilterFromURL(): string | null {
   return params.get("filter");
 }
 
+function parsePrice(price: number | undefined) {
+  return typeof price === 'number' ? price : 0;
+}
+
+function getLowestPrice(product: Product) {
+  if (!product.variants || product.variants.length === 0) return 0;
+  const prices = product.variants
+    .map((v) => (v.prices && v.prices.length > 0 ? v.prices[0].amount : 0))
+    .filter((p) => p > 0);
+  return prices.length > 0 ? Math.min(...prices) : 0;
+}
+
 export default function CategoryPage({ category }: { category: string }) {
   const [activeTab, setActiveTab] = useState<string>(() => {
     const urlFilter = getFilterFromURL();
@@ -39,9 +52,48 @@ export default function CategoryPage({ category }: { category: string }) {
     }
     return labelFromSlug(category);
   });
+
   const [sortBy, setSortBy] = useState<
     "featured" | "price-low" | "price-high" | "newest" | "name"
   >("featured");
+
+  const { data, isLoading } = useProducts({
+    // You could pass limit/offset here for pagination later
+    limit: 100
+  });
+
+  const products: any[] = data?.products || [];
+
+  // Client-side filtering and sorting since all products are fetched
+  const getFilteredAndSortedProducts = () => {
+    let filtered = products;
+
+    if (activeTab && activeTab !== "All") {
+      filtered = products.filter((p) => {
+        // Here we map categories to Medusa. You might need to adjust 
+        // to use Medusa Collections or Categories based on your setup.
+        // For now, looking at 'metadata' or 'tags' might be a fallback.
+        // We'll try to check `collection.title` or a custom metadata field.
+        const categoryName = p.collection?.title || (p.metadata?.category as string) || "";
+
+        if (activeTab === "Foods") return categoryName === "Oil" || categoryName === "Noodles";
+        if (activeTab === "Drinks") return categoryName === "Soju" || categoryName === "Tea";
+        return categoryName === activeTab;
+      });
+    }
+
+    return [...filtered].sort((a, b) => {
+      if (sortBy === "price-low") return getLowestPrice(a) - getLowestPrice(b);
+      if (sortBy === "price-high") return getLowestPrice(b) - getLowestPrice(a);
+      if (sortBy === "newest") {
+        return new Date(b.created_at || 0).getTime() - new Date(a.created_at || 0).getTime();
+      }
+      if (sortBy === "name") return (a.title || "").localeCompare(b.title || "");
+      return 0; // Default featured
+    });
+  };
+
+  const displayProducts = getFilteredAndSortedProducts();
 
   useEffect(() => {
     const urlFilter = getFilterFromURL();
@@ -57,7 +109,6 @@ export default function CategoryPage({ category }: { category: string }) {
       <Header />
 
       <main className="pt-8">
-        {/* Tabs + sort on the same row (no item count, no Filters button) */}
         <section className="w-full px-6 mb-10 border-b border-border-light pb-4">
           <div className="mx-auto max-w-6xl">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
@@ -109,7 +160,7 @@ export default function CategoryPage({ category }: { category: string }) {
           </div>
         </section>
 
-        <ProductGrid activeTab={activeTab} sortBy={sortBy} />
+        <ProductGrid products={displayProducts} isLoading={isLoading} />
       </main>
 
       <Footer />

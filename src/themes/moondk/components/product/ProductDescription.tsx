@@ -3,18 +3,15 @@ import { ChevronDown, ChevronUp } from "lucide-react";
 import { Button } from "@/components/ui/button";
 
 interface ProductDescriptionProps {
-  productId?: string;
+  product?: any;
 }
 
-const ProductDescription = ({ productId }: ProductDescriptionProps) => {
+const ProductDescription = ({ product }: ProductDescriptionProps) => {
   const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isCareOpen, setIsCareOpen] = useState(false);
 
-  // Determine label based on productId (1-12 should show "Brand Story", others show "Description")
-  const descriptionLabel = productId && parseInt(productId) >= 1 && parseInt(productId) <= 12 
-    ? "Brand Story" 
-    : "Description";
+  const productId = product?.id?.toString();
 
   return (
     <div className="space-y-0 mt-8 border-t border-border-light">
@@ -24,7 +21,7 @@ const ProductDescription = ({ productId }: ProductDescriptionProps) => {
           onClick={() => setIsDescriptionOpen(!isDescriptionOpen)}
           className="w-full h-14 px-0 justify-between hover:bg-transparent font-body font-light rounded-none"
         >
-          <span>{descriptionLabel}</span>
+          <span>Description</span>
           {isDescriptionOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
         </Button>
         {isDescriptionOpen && (
@@ -86,13 +83,13 @@ const ProductDescription = ({ productId }: ProductDescriptionProps) => {
             ) : (
               <>
                 <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  Our Chef's Selection Box brings together the finest Korean ingredients, carefully curated by our chef partners 
-                  to help you create authentic home dining experiences. Each item is selected for its quality, authenticity, and 
+                  Our Chef's Selection Box brings together the finest Korean ingredients, carefully curated by our chef partners
+                  to help you create authentic home dining experiences. Each item is selected for its quality, authenticity, and
                   ability to elevate your Korean cooking.
                 </p>
                 <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  This collection includes premium gochujang, traditional kimchi, high-quality sesame oil, and doenjang paste, 
-                  along with a comprehensive recipe guide from our chef partners. Perfect for both beginners and experienced 
+                  This collection includes premium gochujang, traditional kimchi, high-quality sesame oil, and doenjang paste,
+                  along with a comprehensive recipe guide from our chef partners. Perfect for both beginners and experienced
                   home cooks looking to explore Korean cuisine.
                 </p>
               </>

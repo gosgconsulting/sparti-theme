@@ -10,7 +10,7 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { useProducts } from "../hooks/useProducts";
+import { useCategories, useProducts } from "../hooks/useProducts";
 import { Product } from "@medusajs/medusa";
 
 function labelFromSlug(slug: string | undefined) {
@@ -57,12 +57,17 @@ export default function CategoryPage({ category }: { category: string }) {
     "featured" | "price-low" | "price-high" | "newest" | "name"
   >("featured");
 
-  const { data, isLoading } = useProducts({
-    // You could pass limit/offset here for pagination later
-    limit: 100
+  const { data, isLoading: isProductsLoading } = useProducts({
+    limit: 100,
+    fields: "*categories" // For Medusa V2 to include product categories in the response
   });
-
   const products: any[] = data?.products || [];
+
+  const { data: categoriesData, isLoading: isCategoriesLoading } = useCategories();
+  const categories = categoriesData?.product_categories || [];
+  const dynamicTabs = ["All", ...categories.map((c: any) => c.name)];
+
+  const isLoading = isProductsLoading || isCategoriesLoading;
 
   // Client-side filtering and sorting since all products are fetched
   const getFilteredAndSortedProducts = () => {
@@ -70,15 +75,9 @@ export default function CategoryPage({ category }: { category: string }) {
 
     if (activeTab && activeTab !== "All") {
       filtered = products.filter((p) => {
-        // Here we map categories to Medusa. You might need to adjust 
-        // to use Medusa Collections or Categories based on your setup.
-        // For now, looking at 'metadata' or 'tags' might be a fallback.
-        // We'll try to check `collection.title` or a custom metadata field.
-        const categoryName = p.collection?.title || (p.metadata?.category as string) || "";
-
-        if (activeTab === "Foods") return categoryName === "Oil" || categoryName === "Noodles";
-        if (activeTab === "Drinks") return categoryName === "Soju" || categoryName === "Tea";
-        return categoryName === activeTab;
+        // Find if any of the product's categories match the active tab
+        const categoryMatch = p.categories?.some((c: any) => c.name === activeTab);
+        return categoryMatch;
       });
     }
 
@@ -96,13 +95,20 @@ export default function CategoryPage({ category }: { category: string }) {
   const displayProducts = getFilteredAndSortedProducts();
 
   useEffect(() => {
+    if (categories.length === 0) return; // Wait for categories to load
+
     const urlFilter = getFilterFromURL();
-    if (urlFilter && categoryTabs.includes(urlFilter)) {
+    if (urlFilter && dynamicTabs.includes(urlFilter)) {
       setActiveTab(urlFilter);
+    } else if (category && category !== "shop") {
+      // Find the Medusa category matching the URL param
+      const match = categories.find((c: any) => c.handle === category);
+      setActiveTab(match ? match.name : "All");
     } else {
-      setActiveTab(labelFromSlug(category));
+      setActiveTab("All");
     }
-  }, [category]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [category, categories.length]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -113,14 +119,14 @@ export default function CategoryPage({ category }: { category: string }) {
           <div className="mx-auto max-w-6xl">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
-                {categoryTabs.map((label) => {
+                {dynamicTabs.map((label: string) => {
                   const isActive = activeTab === label;
                   return (
                     <button
                       key={label}
                       onClick={() => setActiveTab(label)}
                       className={
-                        "rounded-full px-4 py-2 text-sm font-body border transition-colors " +
+                        "rounded-full px-4 py-2 text-sm font-body border transition-colors whitespace-nowrap " +
                         (isActive
                           ? "bg-primary text-white border-primary"
                           : "bg-background text-primary border-primary/30 hover:border-primary/60")

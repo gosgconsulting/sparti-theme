@@ -11,6 +11,16 @@ export const useProducts = (params = {}) => {
     });
 };
 
+export const useCategories = (params = {}) => {
+    return useQuery({
+        queryKey: ["product_categories", params],
+        queryFn: async () => {
+            const { product_categories, count } = await medusaClient.productCategories.list(params);
+            return { product_categories, count };
+        },
+    });
+};
+
 export const useProduct = (idOrHandle: string) => {
     return useQuery({
         queryKey: ["product", idOrHandle],

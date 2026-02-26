@@ -103,11 +103,11 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
   return (
     <div className="space-y-4">
       {/* Main image */}
-      <div className="aspect-square overflow-hidden bg-muted/5 relative group">
+      <div className="aspect-square overflow-hidden bg-muted/5 relative group rounded-2xl">
         <img
           src={selectedImage}
           alt="Product"
-          className="w-full h-full object-cover"
+          className="w-full h-full object-cover rounded-2xl"
         />
         
         {/* Navigation Arrows - Only show if multiple images */}

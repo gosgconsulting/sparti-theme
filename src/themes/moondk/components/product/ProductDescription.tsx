@@ -1,292 +1,392 @@
-import { useState } from "react";
-import { ChevronDown, ChevronUp } from "lucide-react";
-import { Button } from "@/components/ui/button";
+import ProductAccordion from "./ProductAccordion";
+import { products } from "../category/products";
 
 interface ProductDescriptionProps {
   productId?: string;
 }
 
 const ProductDescription = ({ productId }: ProductDescriptionProps) => {
-  const [isDescriptionOpen, setIsDescriptionOpen] = useState(false);
-  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
-  const [isCareOpen, setIsCareOpen] = useState(false);
+  // Get product description from ProductInfo's mapping
+  const productDescriptions: Record<string, string> = {
+    "1": "A restorative concentrate derived from the Oriental Raisin Tree, traditionally used in Korea for liver support and recovery. It has a bold, earthy character with unique bittersweet undertones, perfect for hydration after physical activity or a long night.",
+    "2": "Known for its smooth, mild, and naturally sweet profile, this \"Okmisu\" extract is a favorite in K-beauty for its reputation in supporting a slim \"V-line\" and reducing bloating. It transforms ordinary water into a delicate herbal infusion that is both hydrating and light on the stomach.",
+    "3": "High Concentration: This extract features a 97% authentic black bean tea base, offering a deep and savory taste without the wait of brewing.\n\n• Korean Superfood: Made from 100% domestic Korean black soybeans, often referred to as \"Beef from the Field\" for its incredible nutrient density.\n\n• Nutritional Powerhouse: Naturally rich in plant-based protein, dietary fiber, vitamins (A, B, C, E), beta-carotene, and essential minerals.",
+    "4": "A modern take on Korea's most beloved daily tea, this extract offers the authentic, nutty flavor of traditionally roasted barley without the hassle of boiling grains. It provides a clean, savory finish that refreshes the palate and is naturally caffeine-free, making it the perfect \"all-day\" water substitute for families.",
+    "5": "A highly aromatic, traditional oil that is essential for adding a rich, nutty finish to Korean cuisine. It is particularly effective at enhancing the absorption of vitamins in leafy greens.\n\nLow-Temperature Mastery: Unlike standard oils that can be roasted at high heat to increase yield, Kkosi Kkosi uses low-temperature roasting to maximize flavor while preventing the formation of benzopyrene.",
+    "6": "Marbled, tender, and rich with umami — this is more than meat; it's the taste that defines Korean tables.\n\nFrom hanwoo cuts to barbecue-ready selections, every piece is curated for perfect sear and unforgettable savor. The kind of flavor that stops conversation mid-sentence — because everyone's too busy tasting.",
+    "7": "Known for its unique, earthy, and deep savory profile. It is a nutritional powerhouse often used to balance the flavors of wild or dried mountain herbs.\n\nLow-Temperature Mastery: Unlike standard oils that can be roasted at high heat to increase yield, Kkosi Kkosi uses low-temperature roasting to maximize flavor while preventing the formation of benzopyrene.",
+    "8": "Includes Sesame Oil (180ml) and Perilla Oil (180ml)\n\nThe Kkosi Kkosi Premium Set is a curated duo of Korea's most essential culinary oils, representing the pinnacle of \"Young Farmer\" craftsmanship. Both the Sesame and Perilla oils are produced using a strict \"One-Press\" rule—extracting from 100% whole seeds just once to ensure maximum freshness and nutritional density. Unlike mass-produced oils, these are cold-pressed at low temperatures to preserve their delicate, natural aromas and to prevent the formation of harmful substances like benzopyrene.",
+    "9": "• A Fortified Masterpiece: Seoriju is made through the careful fermentation of glutinous rice with nuruk (traditional Korean fermentation starter), which is then fortified with Korean traditional soju\n\n• Complex Flavor Profile: Despite being unfiltered to preserve its soul, it delivers light, fruity, and intricate flavors with a pleasant, slightly sweet taste and grounded earthy undertones.",
+    "10": "These vibrant noodles are made using domestic Korean wheat and red rice for a distinct, high-quality profile. Through Myeongawon's specialized aging process, these noodles achieve a premium chewy texture that holds its shape and won't become mushy even if you slightly miss the timing.",
+    "11": "A luxurious collection of hand-stretched noodles featuring a variety of natural colors and flavors derived from traditional ingredients like plum, matcha, and sweet pumpkin. This set is the pinnacle of Sooyeon craftsmanship, offering a diverse tasting experience in one elegant package.",
+    "12": "200g (2 servings)\nIngredients: Potato flour (domestic), refined salt, canola oil\n\nThe first potato noodles in Korea that offer a perfect balance of chewiness and softness in just 3 minutes. Through 12 steps of HACCP certification and 8 aging processes, these noodles retain their ideal texture even if the cooking time is slightly off.",
+  };
 
-  // Determine label based on productId (1-12 should show "Brand Story", others show "Description")
-  const descriptionLabel = productId && parseInt(productId) >= 1 && parseInt(productId) <= 12 
-    ? "Brand Story" 
-    : "Description";
+  const defaultDescription = "Premium Hovenia Dulcis extract (헛개수), a traditional Korean beverage concentrate known for its refreshing taste and health benefits. This premium extract is made from 100% domestic Hovenia Dulcis fruit, carefully processed to preserve its natural flavor and nutrients.";
+  const productDescription = productDescriptions[productId || ""] || defaultDescription;
+
+  // Build accordion items
+  const accordionItems = [];
+
+  // 1. Description (always first)
+  accordionItems.push({
+    id: "description",
+    title: "Description",
+    content: (
+      <div className="space-y-4">
+        {productDescription.split('\n\n').map((paragraph, idx) => (
+          paragraph.trim() && (
+            <p key={idx} className="whitespace-pre-line">
+              {paragraph}
+            </p>
+          )
+        ))}
+      </div>
+    ),
+  });
+
+  // 2. Product Details
+  let productDetailsContent;
+  if (productId === "1") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>• Size: 420g</p>
+        <p>• Calories: 875kcal per bottle</p>
+        <p>• Ingredients: Hovenia fruit base 97% [Fructooligosaccharide, Purified water, Hovenia tree fruit extract concentrate, Glucose, Flavoring (Hovenia fruit flavor)]</p>
+      </div>
+    );
+  } else if (productId === "2") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>• Size: 870g</p>
+        <p>• Calories: 1,930kcal per bottle</p>
+        <p>• Ingredients: Corn silk tea base 97% [Other sugars, Purified water, Corn silk extract (Corn silk: Domestic), Roasted brown rice extract concentrate (Roasted brown rice: Domestic), Flavoring (Corn flavor), Glucose]</p>
+      </div>
+    );
+  } else if (productId === "3") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>• Size: 870g</p>
+        <p>• Calories: 2,025kcal per bottle</p>
+        <p>Ingredients - 97% Korean Black Bean Tea Base [Black Bean Concentrate, Fructooligosaccharide], Water, Black Bean flavor, Citric Acid, Enzyme-treated Stevia</p>
+        <p>Size - 870g (2,025Kcal)</p>
+      </div>
+    );
+  } else if (productId === "4") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>• Size: 290g</p>
+        <p>• Calories: 595kcal per bottle.</p>
+        <p>• Ingredients: Barley base 97% [Fructooligosaccharide, Barley extract concentrate (Barley: Domestic, solids), Purified water, Malt extract powder (Barley: 100%), Glucose], Flavoring (Roasted barley flavor, Barley flavor)</p>
+      </div>
+    );
+  } else if (productId === "5") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>Ingredients : Sesame Oil 100% (Korea)</p>
+        <p>Size : 180ml</p>
+      </div>
+    );
+  } else if (productId === "7") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>Ingredients : Perilla oil 100% (Korea)</p>
+        <p>Size : 180ml</p>
+      </div>
+    );
+  } else if (productId === "8") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <div>
+          <p className="font-medium">1 x Sesame oil</p>
+          <p>Ingredients : Sesame Oil 100% (Korea)</p>
+          <p>Size : 180ml</p>
+        </div>
+        <div>
+          <p className="font-medium">1 x Perilla oil</p>
+          <p>Ingredients : Perilla oil 100% (Korea)</p>
+          <p>Size : 180ml</p>
+        </div>
+      </div>
+    );
+  } else if (productId === "9") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>• Category: Fortified Rice Wine (Gwahaju).</p>
+        <p>• Volume: 375ml.</p>
+        <p>• ABV (Alcohol by Volume): 20%.</p>
+        <p>• Ingredients: Water, Glutinous Rice, Yeast (Nuruk), and Distilled Soju (Alcohol).</p>
+        <p>• Manufacturer: Agricultural Corporation Baekkyung Distillery Inc., Sejong-si, South Korea.</p>
+      </div>
+    );
+  } else if (productId === "10") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>Size : 200g (2 serving)</p>
+        <p>Ingredients : Flour(Domastic), Red rice powder(Domastic), Refined salt, Canola oil</p>
+      </div>
+    );
+  } else if (productId === "11") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>Size : 500g (5 servings)</p>
+        <p>Ingredients : Flour, Plum powder (Korea), Sweet pumpkin powder (Korea), Matecha(Korea), Black rice powder(Korea), Honey, Gardenia natural color, Refined salt, Canola oil</p>
+      </div>
+    );
+  } else if (productId === "12") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>Size : 200g (2 servings)</p>
+        <p>Ingredients : Potato flour (domestic), refined salt, canola oil</p>
+      </div>
+    );
+  } else {
+    productDetailsContent = (
+      <div className="flex flex-col space-y-4">
+        <div className="flex justify-between">
+          <span>SKU</span>
+          <span>MDK-CSB-001</span>
+        </div>
+        <div className="flex justify-between">
+          <span>Collection</span>
+          <span>Chef's Selection</span>
+        </div>
+        <div className="flex justify-between">
+          <span>Shelf Life</span>
+          <span>6-12 months</span>
+        </div>
+        <div className="flex justify-between">
+          <span>Storage</span>
+          <span>Cool, dry place</span>
+        </div>
+      </div>
+    );
+  }
+
+  accordionItems.push({
+    id: "product-details",
+    title: "Product Details",
+    content: productDetailsContent,
+  });
+
+  // 4. Chef's Notes
+  let chefsNotesContent;
+  if (productId === "1") {
+    chefsNotesContent = (
+      <p className="italic">
+        The Hovenia fruit is a nutritional powerhouse traditionally prized for its ability to support liver health. I've designed this to be a robust, earthy concentrate that isn't just about flavor, but about restoration. The deep, woody undertones are best revealed when mixed with plenty of water. It is my top recommendation for those seeking a daily liver cleanse or a powerful 'morning-after' hydration boost.
+      </p>
+    );
+  } else if (productId === "2") {
+    chefsNotesContent = (
+      <p className="italic">
+        The beauty of Corn Silk tea lies in its subtle, silky texture. I recommend this as a morning ritual to gently awaken the body. Its light sweetness is purely natural, so it doesn't overpower your breakfast, making it a sophisticated alternative to juice
+      </p>
+    );
+  } else if (productId === "3") {
+    chefsNotesContent = (
+      <p className="italic whitespace-pre-line">
+        Start with 1 pump for every 1 litre of water and adjust to your preferred "nutty" intensity
+
+While it's excellent cold for Singapore's heat, drinking it warm before bed helps highlight the Vitamin E and mineral notes for a soothing nightcap.
+      </p>
+    );
+  } else if (productId === "4") {
+    chefsNotesContent = (
+      <p className="italic">
+        This is the 'comfort food' of Korean teas. For a premium experience, serve it ice-cold in a chilled glass to highlight its crisp, roasted notes. It pairs excellently with spicy Singaporean dishes, as the grain's natural sweetness helps soothe the heat.
+      </p>
+    );
+  } else if (productId === "5") {
+    chefsNotesContent = (
+      <p className="italic">
+        Kkosi Kkosi oils are the 'liquid gold' of the Korean pantry. For the Sesame Oil, I highly recommend drizzling it over fresh spinach namul; the oil actually helps your body absorb more vitamins from the greens.
+      </p>
+    );
+  } else if (productId === "7") {
+    chefsNotesContent = (
+      <p className="italic">
+        For the Perilla Oil, try using it when stir-frying dried or mountain vegetables; it has a magical ability to remove bitterness and replace it with a deep, savory richness. Because these are cold-pressed from whole seeds, remember to give the bottle a gentle shake before use to incorporate the nutritious minerals at the bottom
+      </p>
+    );
+  } else if (productId === "8") {
+    chefsNotesContent = (
+      <p className="italic">
+        The magic of this set lies in its purity. The Sesame Oil is incredibly potent—a single drop can transform a simple bowl of rice into a gourmet experience. For the Perilla Oil, I recommend using it with dried vegetables; its unique profile removes bitterness and adds a sophisticated, buttery finish. Since these are high-protein oils, remember to 'shake to wake' the nutrients at the bottom for the full health benefit.
+      </p>
+    );
+  } else if (productId === "9") {
+    chefsNotesContent = (
+      <p className="italic">
+        Seoriju is a hidden gem in the world of Korean spirits. Because it is a Gwahaju, it has a beautiful, 'fortified' body that sits between a refined sake and a delicate brandy. I suggest pairing it with savory Korean pancakes (Jeon) or even a rich cheese platter. The subtle sweetness and higher ABV make it an excellent palate cleanser. For a truly 'Moondk' experience, serve it straight from the refrigerator on a quiet evening—the 'Frost' in its name really comes to life when the glass starts to mist.
+      </p>
+    );
+  } else if (productId === "10") {
+    chefsNotesContent = (
+      <p className="italic">
+        The red rice gives these noodles a stunning natural hue that elevates any dish. I highly recommend using these for a cold 'Bibim-guksu' (spicy mixed noodles); the firm texture provides a wonderful 'al dente' bite that beautifully complements fresh, crunchy vegetables.
+      </p>
+    );
+  } else if (productId === "11") {
+    chefsNotesContent = (
+      <p className="italic">
+        This set is truly a work of art. The different natural flavors, like the subtle earthiness of matecha or the sweetness of pumpkin, add a sophisticated layer to your meal. For a Michelin-star presentation at home, serve each color in small, individual nests topped with delicate garnishes.
+      </p>
+    );
+  } else if (productId === "12") {
+    chefsNotesContent = (
+      <p className="italic">
+        The first potato noodles in Korea that offer a perfect balance of chewiness and softness in just 3 minutes. Through 12 steps of HACCP certification and 8 aging processes, these noodles retain their ideal texture even if the cooking time is slightly off.
+      </p>
+    );
+  } else {
+    chefsNotesContent = (
+      <p className="italic">
+        "Hovenia Dulcis has been cherished in Korean tradition for generations. This premium extract captures the essence of this unique fruit, perfect for creating authentic Korean home dining experiences."
+      </p>
+    );
+  }
+
+  if (chefsNotesContent) {
+    accordionItems.push({
+      id: "chefs-notes",
+      title: "Chef's Notes",
+      content: chefsNotesContent,
+    });
+  }
+
+  // 4. Their Story (only for products 1-12)
+  const isProduct1to12 = productId && parseInt(productId) >= 1 && parseInt(productId) <= 12;
+  if (isProduct1to12) {
+    let brandStoryContent;
+    if (productId === "1" || productId === "2" || productId === "3" || productId === "4") {
+      brandStoryContent = (
+        <div className="space-y-4">
+          <p className="font-medium">Byulhasu</p>
+          <p>Byulhasu is a South Korean "emotional food brand" that operates under the motto, "Half of memories are taste</p>
+          <p>Led by CEO Noh Hae-woon, the company focuses on "1-second" convenience, modernizing traditional Korean flavors for a busy global lifestyle.</p>
+        </div>
+      );
+    } else if (productId === "5" || productId === "7" || productId === "8") {
+      brandStoryContent = (
+        <div className="space-y-4">
+          <p className="font-medium">Kkosi Kkosi</p>
+          <p>• A New Generation of Farming: The owner is a "Young Successor Farmer" officially selected by the Ministry of Agriculture, Food, and Rural Affairs.</p>
+          <p>• Direct Sourcing: The owner grows his own crops and personally selects seeds from neighboring farms to ensure absolute quality.</p>
+        </div>
+      );
+    } else if (productId === "9") {
+      brandStoryContent = (
+        <div className="space-y-4">
+          <p className="font-medium">Beok's Seoriju</p>
+          <p>The Name: "Seori" (서리) translates to "Frost," evoking a sense of crisp purity, while "Ju" (주) stands for traditional Korean alcohol.</p>
+          <p>• A Summer Legacy: Seoriju belongs to the rare category of Gwahaju (과하주), which literally means "Passing through Summer". This traditional variety was historically brewed to withstand the intense summer heat without spoiling, making it a "fortified" masterpiece.</p>
+          <p>• Crafted Partnership: Produced as a premium OEM through a specialized Korean brewery (Agricultural Corporation Baekkyung Distillery Inc.), Seoriju represents the bridge between ancient fermentation secrets and modern aesthetic lifestyle.</p>
+        </div>
+      );
+    } else if (productId === "10" || productId === "11") {
+      brandStoryContent = (
+        <div className="space-y-4">
+          <p className="font-medium">Myeongawon</p>
+          <p>• A Master's Legacy: Founded in 1975 by Chairman Kang Hee-tak, a former Navy spy officer who mastered the art of "Sooyeon" (hand-stretched) noodles with incredible stubbornness.</p>
+          <p>• The 150,000-Hour Rule: CEO Choi Woo-guk has dedicated over 150,000 hours to perfecting handmade somen, believing that while shape can be imitated, authentic taste cannot be replicated.</p>
+          <p>• Artisanal Process: Every strand is created through a rigorous 12-step HACCP-certified process and 8 distinct aging stages to ensure a superior, chewy texture.</p>
+        </div>
+      );
+    } else if (productId === "12") {
+      brandStoryContent = (
+        <div className="space-y-4">
+          <p className="font-medium">Myeongawon</p>
+          <p>• A Master's Legacy: Founded in 1975 by Chairman Kang Hee-tak, a former Navy spy officer who mastered the art of "Sooyeon" (hand-stretched) noodles with incredible stubbornness.</p>
+          <p>• The 150,000-Hour Rule: CEO Choi Woo-guk has dedicated over 150,000 hours to perfecting handmade somen, believing that while shape can be imitated, authentic taste cannot be replicated.</p>
+          <p>• Artisanal Process: Every strand is created through a rigorous 12-step HACCP-certified process and 8 distinct aging stages to ensure a superior, chewy texture.</p>
+        </div>
+      );
+    }
+
+    if (brandStoryContent) {
+      accordionItems.push({
+        id: "their-story",
+        title: "Their Story",
+        content: brandStoryContent,
+      });
+    }
+  }
+
+  // 5. Storage & Usage
+  let storageContent;
+  if (productId === "1" || productId === "2" || productId === "3" || productId === "4") {
+    storageContent = (
+      <ul className="space-y-4">
+        <li>• Usage: The liquid dissolves instantly in both hot and cold water; simply use the included pump for easy dispensing.</li>
+        <li>• Storage: Must be refrigerated unconditionally after opening and stored in a cool place away from direct sunlight.</li>
+        <li>• Shelf Life: The product has an expiration date of 24 months (2 years) from the date of manufacture.</li>
+      </ul>
+    );
+  } else if (productId === "5" || productId === "7" || productId === "8") {
+    storageContent = (
+      <div className="space-y-4">
+        <ul className="space-y-3">
+          <li>• Sesame Oil: Store in a cool, dark place at room temperature away from direct sunlight.</li>
+          <li>• Perilla Oil: Must be refrigerated (0-5C) to maintain freshness and prevent oxidation.</li>
+        </ul>
+        <p>
+          The natural sediment at the bottom of the oil is perfectly safe to consume. It consists of edible proteins and is rich in Vitamin E and essential minerals that are beneficial for your health. We recommend shaking the bottle gently before use to enjoy the full nutritional value
+        </p>
+      </div>
+    );
+  } else if (productId === "9") {
+    storageContent = (
+      <ul className="space-y-4">
+        <li>• Optimal Environment: Store in a cool and dry place away from direct sunlight.</li>
+        <li>• Pro-Tip: For the best tasting experience and to preserve its delicate fruity notes, refrigeration is highly recommended.</li>
+        <li>• Serving Suggestion: Best enjoyed Chilled or Warm. Serve in a small glass to appreciate the intricate earthy aromas.</li>
+      </ul>
+    );
+  } else if (productId === "10" || productId === "11" || productId === "12") {
+    storageContent = (
+      <ul className="space-y-4">
+        <li>• Shelf Life: 2 years from manufacture.</li>
+        <li>• Storage : Store in a cool, dry area to prevent the noodles from absorbing moisture.</li>
+        <li>• Key Feature: Fast-cooking and convenient—ready in just 2 minutes and 30 seconds.</li>
+      </ul>
+    );
+  } else {
+    storageContent = (
+      <div className="space-y-4">
+        <ul className="space-y-3">
+          <li>• Store in a cool, dry place away from direct sunlight</li>
+          <li>• Refrigerate after opening for best quality</li>
+          <li>• Use clean utensils to prevent contamination</li>
+          <li>• Follow recipe guide for best results</li>
+        </ul>
+        <p>
+          For questions about storage or usage, contact our customer service team or refer to the included recipe guide.
+        </p>
+      </div>
+    );
+  }
+
+  accordionItems.push({
+    id: "storage-usage",
+    title: "Storage & Usage",
+    content: storageContent,
+  });
 
   return (
-    <div className="space-y-0 mt-8 border-t border-border-light">
-      <div className="border-b border-border-light">
-        <Button
-          variant="ghost"
-          onClick={() => setIsDescriptionOpen(!isDescriptionOpen)}
-          className="w-full h-14 px-0 justify-between hover:bg-transparent font-body font-light rounded-none"
-        >
-          <span>{descriptionLabel}</span>
-          {isDescriptionOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-        </Button>
-        {isDescriptionOpen && (
-          <div className="pb-6 space-y-4">
-            {productId === "1" || productId === "2" || productId === "3" || productId === "4" ? (
-              <>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed font-medium">
-                  Byulhasu
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  Byulhasu is a South Korean "emotional food brand" that operates under the motto, "Half of memories are taste
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  Led by CEO Noh Hae-woon, the company focuses on "1-second" convenience, modernizing traditional Korean flavors for a busy global lifestyle.
-                </p>
-              </>
-            ) : productId === "5" || productId === "7" || productId === "8" ? (
-              <>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed font-medium">
-                  Kkosi Kkosi
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  • A New Generation of Farming: The owner is a "Young Successor Farmer" officially selected by the Ministry of Agriculture, Food, and Rural Affairs.
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  • Direct Sourcing: The owner grows his own crops and personally selects seeds from neighboring farms to ensure absolute quality.
-                </p>
-              </>
-            ) : productId === "9" ? (
-              <>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed font-medium">
-                  Beok's Seoriju
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  The Name: "Seori" (서리) translates to "Frost," evoking a sense of crisp purity, while "Ju" (주) stands for traditional Korean alcohol.
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  • A Summer Legacy: Seoriju belongs to the rare category of Gwahaju (과하주), which literally means "Passing through Summer". This traditional variety was historically brewed to withstand the intense summer heat without spoiling, making it a "fortified" masterpiece.
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  • Crafted Partnership: Produced as a premium OEM through a specialized Korean brewery (Agricultural Corporation Baekkyung Distillery Inc.), Seoriju represents the bridge between ancient fermentation secrets and modern aesthetic lifestyle.
-                </p>
-              </>
-            ) : productId === "10" || productId === "11" ? (
-              <>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed font-medium">
-                  Myeongawon
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  • A Master's Legacy: Founded in 1975 by Chairman Kang Hee-tak, a former Navy spy officer who mastered the art of "Sooyeon" (hand-stretched) noodles with incredible stubbornness.
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  • The 150,000-Hour Rule: CEO Choi Woo-guk has dedicated over 150,000 hours to perfecting handmade somen, believing that while shape can be imitated, authentic taste cannot be replicated.
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  • Artisanal Process: Every strand is created through a rigorous 12-step HACCP-certified process and 8 distinct aging stages to ensure a superior, chewy texture.
-                </p>
-              </>
-            ) : (
-              <>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  Our Chef's Selection Box brings together the finest Korean ingredients, carefully curated by our chef partners 
-                  to help you create authentic home dining experiences. Each item is selected for its quality, authenticity, and 
-                  ability to elevate your Korean cooking.
-                </p>
-                <p className="text-sm font-body font-light text-foreground/70 leading-relaxed">
-                  This collection includes premium gochujang, traditional kimchi, high-quality sesame oil, and doenjang paste, 
-                  along with a comprehensive recipe guide from our chef partners. Perfect for both beginners and experienced 
-                  home cooks looking to explore Korean cuisine.
-                </p>
-              </>
-            )}
-          </div>
-        )}
+    <div className="mt-10 md:mt-12">
+      {/* Section Divider */}
+      <div className="border-t border-border-light mb-6 md:mb-8"></div>
+      
+      {/* Section Intro */}
+      <div className="mb-6 md:mb-8">
+        <p className="text-xs font-body font-light text-foreground/50 uppercase tracking-wider">
+          Product Information
+        </p>
       </div>
 
-      <div className="border-b border-border-light">
-        <Button
-          variant="ghost"
-          onClick={() => setIsDetailsOpen(!isDetailsOpen)}
-          className="w-full h-14 px-0 justify-between hover:bg-transparent font-body font-light rounded-none"
-        >
-          <span>Product Details</span>
-          {isDetailsOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-        </Button>
-        {isDetailsOpen && (
-          <div className="pb-6 space-y-3">
-            {productId === "1" ? (
-              <div className="text-sm font-body font-light text-foreground/70 space-y-1">
-                <p>• Size: 420g</p>
-                <p>• Calories: 875kcal per bottle</p>
-                <p className="mt-2">• Ingredients: Hovenia fruit base 97% [Fructooligosaccharide, Purified water, Hovenia tree fruit extract concentrate, Glucose, Flavoring (Hovenia fruit flavor)]</p>
-              </div>
-            ) : productId === "2" ? (
-              <div className="text-sm font-body font-light text-foreground/70 space-y-1">
-                <p>• Size: 870g</p>
-                <p>• Calories: 1,930kcal per bottle</p>
-                <p className="mt-2">• Ingredients: Corn silk tea base 97% [Other sugars, Purified water, Corn silk extract (Corn silk: Domestic), Roasted brown rice extract concentrate (Roasted brown rice: Domestic), Flavoring (Corn flavor), Glucose]</p>
-              </div>
-            ) : productId === "3" ? (
-              <div className="text-sm font-body font-light text-foreground/70 space-y-1">
-                <p>• Size: 870g</p>
-                <p>• Calories: 2,025kcal per bottle</p>
-                <p className="mt-2">Ingredients - 97% Korean Black Bean Tea Base [Black Bean Concentrate, Fructooligosaccharide], Water, Black Bean flavor, Citric Acid, Enzyme-treated Stevia</p>
-                <p>Size - 870g (2,025Kcal)</p>
-              </div>
-            ) : productId === "4" ? (
-              <div className="text-sm font-body font-light text-foreground/70 space-y-1">
-                <p>• Size: 290g</p>
-                <p>• Calories: 595kcal per bottle.</p>
-                <p className="mt-2">• Ingredients: Barley base 97% [Fructooligosaccharide, Barley extract concentrate (Barley: Domestic, solids), Purified water, Malt extract powder (Barley: 100%), Glucose], Flavoring (Roasted barley flavor, Barley flavor)</p>
-              </div>
-            ) : productId === "5" ? (
-              <div className="text-sm font-body font-light text-foreground/70 space-y-1">
-                <p>Ingredients : Sesame Oil 100% (Korea)</p>
-                <p>Size : 180ml</p>
-              </div>
-            ) : productId === "7" ? (
-              <div className="text-sm font-body font-light text-foreground/70 space-y-1">
-                <p>Ingredients : Perilla oil 100% (Korea)</p>
-                <p>Size : 180ml</p>
-              </div>
-            ) : productId === "8" ? (
-              <div className="text-sm font-body font-light text-foreground/70 space-y-3">
-                <div>
-                  <p className="font-medium mb-1">1 x Sesame oil</p>
-                  <p>Ingredients : Sesame Oil 100% (Korea)</p>
-                  <p>Size : 180ml</p>
-                </div>
-                <div>
-                  <p className="font-medium mb-1">1 x Perilla oil</p>
-                  <p>Ingredients : Perilla oil 100% (Korea)</p>
-                  <p>Size : 180ml</p>
-                </div>
-              </div>
-            ) : productId === "9" ? (
-              <div className="text-sm font-body font-light text-foreground/70 space-y-1">
-                <p>• Category: Fortified Rice Wine (Gwahaju).</p>
-                <p>• Volume: 375ml.</p>
-                <p>• ABV (Alcohol by Volume): 20%.</p>
-                <p>• Ingredients: Water, Glutinous Rice, Yeast (Nuruk), and Distilled Soju (Alcohol).</p>
-                <p>• Manufacturer: Agricultural Corporation Baekkyung Distillery Inc., Sejong-si, South Korea.</p>
-              </div>
-            ) : productId === "10" ? (
-              <div className="text-sm font-body font-light text-foreground/70 space-y-1">
-                <p>Size : 200g (2 serving)</p>
-                <p>Ingredients : Flour(Domastic), Red rice powder(Domastic), Refined salt, Canola oil</p>
-              </div>
-            ) : productId === "11" ? (
-              <div className="text-sm font-body font-light text-foreground/70 space-y-1">
-                <p>Size : 500g (5 servings)</p>
-                <p>Ingredients : Flour, Plum powder (Korea), Sweet pumpkin powder (Korea), Matecha(Korea), Black rice powder(Korea), Honey, Gardenia natural color, Refined salt, Canola oil</p>
-              </div>
-            ) : (
-              <>
-                <div className="flex justify-between">
-                  <span className="text-sm font-body font-light text-foreground/70">SKU</span>
-                  <span className="text-sm font-body font-light text-foreground">MDK-CSB-001</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm font-body font-light text-foreground/70">Collection</span>
-                  <span className="text-sm font-body font-light text-foreground">Chef's Selection</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm font-body font-light text-foreground/70">Shelf Life</span>
-                  <span className="text-sm font-body font-light text-foreground">6-12 months</span>
-                </div>
-                <div className="flex justify-between">
-                  <span className="text-sm font-body font-light text-foreground/70">Storage</span>
-                  <span className="text-sm font-body font-light text-foreground">Cool, dry place</span>
-                </div>
-              </>
-            )}
-          </div>
-        )}
-      </div>
-
-      <div className="border-b border-border-light lg:mb-16">
-        <Button
-          variant="ghost"
-          onClick={() => setIsCareOpen(!isCareOpen)}
-          className="w-full h-14 px-0 justify-between hover:bg-transparent font-body font-light rounded-none"
-        >
-          <span>Storage & Usage</span>
-          {isCareOpen ? <ChevronUp className="h-4 w-4" /> : <ChevronDown className="h-4 w-4" />}
-        </Button>
-        {isCareOpen && (
-          <div className="pb-6 space-y-4">
-            {productId === "1" || productId === "2" || productId === "3" || productId === "4" ? (
-              <ul className="space-y-2">
-                <li className="text-sm font-body font-light text-foreground/70">
-                  • Usage: The liquid dissolves instantly in both hot and cold water; simply use the included pump for easy dispensing.
-                </li>
-                <li className="text-sm font-body font-light text-foreground/70">
-                  • Storage: Must be refrigerated unconditionally after opening and stored in a cool place away from direct sunlight.
-                </li>
-                <li className="text-sm font-body font-light text-foreground/70">
-                  • Shelf Life: The product has an expiration date of 24 months (2 years) from the date of manufacture.
-                </li>
-              </ul>
-            ) : productId === "5" || productId === "7" || productId === "8" ? (
-              <>
-                <ul className="space-y-2">
-                  <li className="text-sm font-body font-light text-foreground/70">
-                    • Sesame Oil: Store in a cool, dark place at room temperature away from direct sunlight.
-                  </li>
-                  <li className="text-sm font-body font-light text-foreground/70">
-                    • Perilla Oil: Must be refrigerated (0-5C) to maintain freshness and prevent oxidation.
-                  </li>
-                </ul>
-                <p className="text-sm font-body font-light text-foreground/70">
-                  The natural sediment at the bottom of the oil is perfectly safe to consume. It consists of edible proteins and is rich in Vitamin E and essential minerals that are beneficial for your health. We recommend shaking the bottle gently before use to enjoy the full nutritional value
-                </p>
-              </>
-            ) : productId === "9" ? (
-              <ul className="space-y-2">
-                <li className="text-sm font-body font-light text-foreground/70">
-                  • Optimal Environment: Store in a cool and dry place away from direct sunlight.
-                </li>
-                <li className="text-sm font-body font-light text-foreground/70">
-                  • Pro-Tip: For the best tasting experience and to preserve its delicate fruity notes, refrigeration is highly recommended.
-                </li>
-                <li className="text-sm font-body font-light text-foreground/70">
-                  • Serving Suggestion: Best enjoyed Chilled or Warm. Serve in a small glass to appreciate the intricate earthy aromas.
-                </li>
-              </ul>
-            ) : productId === "10" || productId === "11" ? (
-              <ul className="space-y-2">
-                <li className="text-sm font-body font-light text-foreground/70">
-                  • Shelf Life: 2 years from manufacture.
-                </li>
-                <li className="text-sm font-body font-light text-foreground/70">
-                  • Storage : Store in a cool, dry area to prevent the noodles from absorbing moisture.
-                </li>
-                <li className="text-sm font-body font-light text-foreground/70">
-                  • Key Feature: Fast-cooking and convenient—ready in just 2 minutes and 30 seconds.
-                </li>
-              </ul>
-            ) : (
-              <>
-                <ul className="space-y-2">
-                  <li className="text-sm font-body font-light text-foreground/70">
-                    • Store in a cool, dry place away from direct sunlight
-                  </li>
-                  <li className="text-sm font-body font-light text-foreground/70">
-                    • Refrigerate after opening for best quality
-                  </li>
-                  <li className="text-sm font-body font-light text-foreground/70">
-                    • Use clean utensils to prevent contamination
-                  </li>
-                  <li className="text-sm font-body font-light text-foreground/70">
-                    • Follow recipe guide for best results
-                  </li>
-                </ul>
-                <p className="text-sm font-body font-light text-foreground/70">
-                  For questions about storage or usage, contact our customer service team or refer to the included recipe guide.
-                </p>
-              </>
-            )}
-          </div>
-        )}
-      </div>
+      {/* Accordion Panels */}
+      <ProductAccordion items={accordionItems} />
     </div>
   );
 };

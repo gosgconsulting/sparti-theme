@@ -143,6 +143,10 @@ const TenantLandingPage: React.FC = () => {
       return 'blog';
     }
 
+    if (isDeployAtRoot) {
+      return location.pathname.replace(/^\/+/, '');
+    }
+
     // Extract full path from pathname to handle nested routes
     const pathParts = location.pathname.split('/').filter(Boolean);
     const themeIndex = pathParts.indexOf('theme');

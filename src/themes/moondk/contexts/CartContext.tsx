@@ -63,9 +63,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   }, [cartItems]);
 
   const addToCart = (item: Omit<CartItem, "id">, openCartAfterAdd: boolean = false) => {
-    // Check if item already exists in cart
+    // Check if item already exists in cart with the same name and variant
     const existingItemIndex = cartItems.findIndex(
-      (cartItem) => cartItem.name === item.name
+      (cartItem) => cartItem.name === item.name && cartItem.variant === item.variant
     );
 
     if (existingItemIndex >= 0) {

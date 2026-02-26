@@ -9,6 +9,7 @@ export interface CartItem {
   image: string;
   quantity: number;
   category: string;
+  variant?: string;
 }
 
 interface ShoppingBagProps {
@@ -120,7 +121,7 @@ const ShoppingBag = ({
                       <div className="flex-1 min-w-0">
                         <h3 className="text-sm font-medium text-foreground mb-1">{item.name}</h3>
                         <p className="text-xs text-muted-foreground mb-3">
-                          Volume {item.category}
+                          {item.category} {item.variant ? `| ${item.variant}` : ""}
                         </p>
 
                         {/* Quantity selector and price */}

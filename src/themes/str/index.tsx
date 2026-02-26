@@ -26,7 +26,7 @@ import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { useCustomCode } from './hooks/useCustomCode';
 import { getThemeUrl, getPageUrl, getHomeUrl } from './utils/urls';
 import { usePageLayout, getComponentByType } from '../../hooks/usePageLayout';
-import { getTextByKey, getHeading, getImage, getArrayItems, getButton } from './utils/schemaHelpers';
+import { getTextByKey, getHeading, getImage, getArrayItems, getButton, parseMemberFromSubItems } from './utils/schemaHelpers';
 
 interface TenantLandingProps {
   tenantName?: string;
@@ -144,12 +144,19 @@ const STRTheme: React.FC<TenantLandingProps> = ({
   const _teamMembersNew = getArrayItems(teamSection?.items, 'teamMembers');
   const teamMembersRaw  = _teamMembersNew.length > 0 ? _teamMembersNew : getArrayItems(teamSection?.items, 'members');
   const teamMembers    = teamMembersRaw.length > 0
-    ? teamMembersRaw.map(m => ({
-        name:        m.title || m.name || '',
-        role:        m.role || m.props?.role || '',
-        description: m.description || '',
-        image:       m.src || '',
-      }))
+    ? teamMembersRaw.map(m => {
+        // New schema: each member is type:"array" with nested sub-items
+        if (m.type === 'array' && Array.isArray(m.items)) {
+          return parseMemberFromSubItems(m.items);
+        }
+        // Legacy flat feature format
+        return {
+          name:        m.title || m.name || '',
+          role:        m.role || m.props?.role || '',
+          description: m.description || '',
+          image:       m.src || '',
+        };
+      })
     : [
         { name: 'JJ',           role: 'Head Coach | Founder | Physiotherapist', description: 'JJ, a former National Youth Wushu Athlete, earned a Physiotherapy degree from Trinity College Dublin and specialized in sports physiotherapy at Sengkang General Hospital. He competes in endurance events like Hyrox — ranking top 6 Singaporean in 2024 — and volunteers with the Special Olympics and Wushu community.',          image: '/theme/str/assets/team/JJ-Head-Coach-scaled-e1743491665639.jpg' },
         { name: 'Brandon Khoo', role: 'PT Coach',                               description: 'Brandon Khoo is an experienced strength and conditioning coach specializing in kettlebell and barbell training. He has designed and led both individualized and group training programs, focusing on strength, endurance, mobility, and injury prevention. He is passionate about helping clients build functional strength through structured progression.',    image: '/theme/str/assets/team/Brandon-Khoo-Coach-scaled-e1743491558663.jpg' },

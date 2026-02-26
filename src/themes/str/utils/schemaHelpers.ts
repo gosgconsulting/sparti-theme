@@ -130,6 +130,33 @@ export function extractPropsFromItems(items: SchemaItem[] | undefined): Record<s
 }
 
 /**
+ * Parse a team member from a nested sub-items array.
+ * Supports the schema format where each member is type:"array" with children:
+ *   - type:"image"          → photo
+ *   - type:"heading" lv 2  → name
+ *   - type:"heading" lv 4  → role
+ *   - type:"text"           → bio
+ */
+export function parseMemberFromSubItems(subItems: SchemaItem[] | undefined): {
+  name: string;
+  role: string;
+  description: string;
+  image: string;
+} {
+  if (!subItems || subItems.length === 0) return { name: '', role: '', description: '', image: '' };
+  const img  = subItems.find(i => i.type === 'image');
+  const name = subItems.find(i => i.type === 'heading' && i.level === 2);
+  const role = subItems.find(i => i.type === 'heading' && i.level === 4);
+  const bio  = subItems.find(i => i.type === 'text');
+  return {
+    name:        name?.content || '',
+    role:        role?.content || '',
+    description: bio?.content  || '',
+    image:       img?.src      || '',
+  };
+}
+
+/**
  * Merge direct props with items-extracted props
  * Direct props take precedence
  */

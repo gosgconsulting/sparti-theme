@@ -29,7 +29,7 @@ export interface Product {
 export const products: Product[] = [
   // Tea products
   { id: 1, name: "Hovenia Dulcis Extract (헛개수)", category: "Tea", price: "$37", image: hoveniaDulcisImage, isNew: true },
-  { id: 2, name: "Corn Silk Tea Extract", category: "Tea", price: "$58", image: cornExtractImage, isNew: true, stock: 3 },
+  { id: 2, name: "Corn Silk Tea Extract (옥미수/옥수수 수염차)", category: "Tea", price: "$58", image: cornExtractImage, isNew: true, stock: 3 },
   { id: 3, name: "Black Bean Tea Extract (검은콩차 진액)", category: "Tea", price: "$58", image: blackBeanTeaImage, isNew: true },
   { id: 4, name: "Barley Tea Extract (보리차 진액)", category: "Tea", price: "$32", image: barleyTeaImage, isNew: true, stock: 2 },
   

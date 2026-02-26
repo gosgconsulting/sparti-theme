@@ -1,6 +1,14 @@
 import { cn } from "@/lib/utils";
+import { getThemeAssetUrl } from "../../../utils/themeAssets";
 
-export function SocialMediaSticky() {
+const THEME_SLUG = "nail-queen";
+
+interface SocialMediaStickyProps {
+  basePath: string;
+}
+
+export function SocialMediaSticky({ basePath }: SocialMediaStickyProps) {
+  const tiktokLogoSrc = getThemeAssetUrl(basePath, "wall-murals-tiktok-vector-logo.jpg.jpg", THEME_SLUG);
   return (
     <div className={cn("fixed left-0 top-1/4 z-50 flex flex-col")}> 
       <a
@@ -29,12 +37,14 @@ export function SocialMediaSticky() {
         href="https://www.tiktok.com/@nailqueenfareast"
         target="_blank"
         rel="noopener noreferrer"
-        className="flex items-center justify-center w-8 h-8 bg-black hover:bg-gray-800 text-white hover:scale-110 transition-all"
+        className="flex items-center justify-center w-8 h-8 bg-black hover:bg-gray-800 text-white hover:scale-110 transition-all overflow-hidden"
         aria-label="TikTok"
       >
-        <svg className="w-4 h-4" fill="currentColor" viewBox="0 0 24 24">
-          <path d="M19.321 5.562a5.124 5.124 0 0 1-.443-.258 6.228 6.228 0 0 1-1.137-.966c-.849-.849-1.4-1.958-1.4-3.338h-3.066v13.641c0 2.67-2.168 4.838-4.838 4.838s-4.838-2.168-4.838-4.838c0-2.67 2.168-4.838 4.838-4.838.344 0 .677.038 1 .109V6.851c-.323-.03-.653-.046-.986-.046C4.043 6.805 0 10.848 0 15.857s4.043 9.052 9.052 9.052 9.052-4.043 9.052-9.052V9.565c1.373.946 3.023 1.5 4.793 1.5V7.998c-1.322 0-2.527-.474-3.525-1.264-.249-.197-.483-.415-.7-.651-.391-.426-.734-.89-1.017-1.386-.283-.496-.508-1.02-.677-1.568-.085-.274-.155-.554-.21-.84-.055-.286-.095-.576-.119-.87-.024-.294-.032-.592-.025-.89.007-.298.031-.6.071-.902h-3.066c-.04.302-.064.608-.071.917z" />
-        </svg>
+        <img 
+          src={tiktokLogoSrc} 
+          alt="TikTok" 
+          className="w-full h-full object-contain"
+        />
       </a>
       <div
         className="flex items-center justify-center w-8 h-8 bg-red-600 text-white opacity-50 cursor-not-allowed"

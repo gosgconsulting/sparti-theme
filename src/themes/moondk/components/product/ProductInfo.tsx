@@ -110,11 +110,11 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
 
       {/* CTA Section - Premium container */}
       <div className="mt-8 md:mt-10">
-        <div className="bg-foreground/[0.015] rounded-2xl p-6 md:p-8 shadow-[0_2px_8px_rgba(0,0,0,0.08),0_4px_16px_rgba(0,0,0,0.06)]">
-          <div className="space-y-5 md:space-y-6">
+        <div className="bg-foreground/[0.015] rounded-2xl pt-2 pb-2 md:pt-3 md:pb-3">
+          <div className="space-y-3 md:space-y-3">
             <div className="flex items-center gap-4">
               <span className="text-sm font-body font-light text-foreground">Quantity</span>
-              <div className="flex items-center border border-border-light rounded-lg overflow-hidden bg-background">
+              <div className="flex items-center border border-border-light overflow-hidden bg-background">
                 <Button
                   variant="ghost"
                   size="sm"

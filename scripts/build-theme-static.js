@@ -52,6 +52,10 @@ if (cmsTenant) {
   console.warn('[testing] Theme will need to determine tenant from URL or other means.');
 }
 
+// Optional build-time SEO overrides for standalone theme HTML
+const themeMetaTitleEnv = process.env.THEME_META_TITLE;
+const themeMetaDescriptionEnv = process.env.THEME_META_DESCRIPTION;
+
 // Helper function to fetch branding during build
 async function fetchBrandingForBuild(themeSlug, tenantId) {
   // Check for branding in environment variable first
@@ -239,20 +243,41 @@ async function createStandaloneHtml() {
     faviconUrl = base + faviconUrl;
   }
 
-  // Get title from branding or use theme title
-  // Escape HTML entities for safety
+  // Escape HTML entities for safe injection into <title> and meta tags.
+  const escapeHtml = (value) =>
+    String(value)
+      .replace(/&/g, '&amp;')
+      .replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;')
+      .replace(/"/g, '&quot;')
+      .replace(/'/g, '&#39;');
+
+  // Resolve title priority:
+  // THEME_META_TITLE env > branding.site_name > theme title fallback
   const getPageTitle = () => {
-    if (brandingData && brandingData.site_name) {
-      return brandingData.site_name
-        .replace(/&/g, '&amp;')
-        .replace(/</g, '&lt;')
-        .replace(/>/g, '&gt;')
-        .replace(/"/g, '&quot;')
-        .replace(/'/g, '&#39;');
+    if (themeMetaTitleEnv && themeMetaTitleEnv.trim()) {
+      return escapeHtml(themeMetaTitleEnv.trim());
     }
-    return themeTitle;
+    if (brandingData && brandingData.site_name) {
+      return escapeHtml(brandingData.site_name);
+    }
+    return escapeHtml(themeTitle);
   };
+
+  // Resolve description priority:
+  // THEME_META_DESCRIPTION env > branding.site_description > generic fallback
+  const getPageDescription = () => {
+    if (themeMetaDescriptionEnv && themeMetaDescriptionEnv.trim()) {
+      return escapeHtml(themeMetaDescriptionEnv.trim());
+    }
+    if (brandingData && brandingData.site_description) {
+      return escapeHtml(brandingData.site_description);
+    }
+    return escapeHtml(`${themeTitle} website`);
+  };
+
   const pageTitle = getPageTitle();
+  const pageDescription = getPageDescription();
 
   if (brandingData && brandingData.site_favicon) {
     console.log(`[testing] Using favicon from branding: ${faviconUrl}`);
@@ -265,6 +290,11 @@ async function createStandaloneHtml() {
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>${pageTitle}</title>
+    <meta name="description" content="${pageDescription}" />
+    <meta property="og:title" content="${pageTitle}" />
+    <meta property="og:description" content="${pageDescription}" />
+    <meta name="twitter:title" content="${pageTitle}" />
+    <meta name="twitter:description" content="${pageDescription}" />
     <link rel="icon" type="image/png" href="${faviconUrl}" />
     <link rel="apple-touch-icon" href="${faviconUrl}" />
     <!-- Allow indexing for theme deployments -->

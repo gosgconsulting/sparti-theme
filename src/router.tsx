@@ -68,9 +68,30 @@ const MasterAliasRoute: React.FC = () => {
 // Component to conditionally load SEO based on current route
 const ConditionalSEO = () => {
   const location = useLocation();
+  const deployThemeSlug = import.meta.env.DEPLOY_THEME_SLUG;
+
+  const pathParts = location.pathname.split("/").filter(Boolean);
+  const firstSegment = pathParts[0] || "";
+  const isKnownShortThemeRoute = KNOWN_THEME_SLUGS.includes(firstSegment);
+  const isThemePrefixedRoute = location.pathname.startsWith("/theme/");
+  const isThemeOwnedRootRoute =
+    location.pathname.startsWith("/booking") ||
+    location.pathname.startsWith("/packages") ||
+    location.pathname === "/blog" ||
+    location.pathname.startsWith("/blog/") ||
+    location.pathname.startsWith("/product/") ||
+    location.pathname === "/thank-you";
+
+  // Theme pages manage their own SEO/title via theme components.
+  // Keep global SEO only for CMS/public dashboard routes.
+  const skipGlobalSEO =
+    !!deployThemeSlug ||
+    isThemePrefixedRoute ||
+    isKnownShortThemeRoute ||
+    isThemeOwnedRootRoute;
 
   // No auth pages anymore
-  const { error: seoError } = useSEO({ skip: false });
+  const { error: seoError } = useSEO({ skip: skipGlobalSEO });
 
   if (seoError) {
     console.warn("[testing] SEO initialization error (non-blocking):", seoError);

@@ -1,8 +1,11 @@
+import { useEffect, useState } from "react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import Pagination from "./Pagination";
 import { ThemeLink } from "../ThemeLink";
 import { products as allProducts } from "./products";
+
+const PAGE_SIZE = 16;
 
 interface ProductGridProps {
   activeTab?: string; // "All" or category label
@@ -18,6 +21,8 @@ export default function ProductGrid({
   activeTab = "All",
   sortBy = "featured",
 }: ProductGridProps) {
+  const [currentPage, setCurrentPage] = useState(1);
+
   const filtered =
     activeTab && activeTab !== "All"
       ? activeTab === "Foods"
@@ -27,7 +32,7 @@ export default function ProductGrid({
         : allProducts.filter((p) => p.category === activeTab)
       : allProducts;
 
-  const products = [...filtered].sort((a, b) => {
+  const sortedProducts = [...filtered].sort((a, b) => {
     if (sortBy === "price-low") return parsePrice(a.price) - parsePrice(b.price);
     if (sortBy === "price-high") return parsePrice(b.price) - parsePrice(a.price);
     if (sortBy === "newest") return Number(Boolean(b.isNew)) - Number(Boolean(a.isNew));
@@ -35,12 +40,40 @@ export default function ProductGrid({
     return 0;
   });
 
+  // Reset to page 1 when filters or sort change
+  useEffect(() => {
+    setCurrentPage(1);
+  }, [activeTab, sortBy]);
+
+  // Calculate pagination values
+  const totalProducts = sortedProducts.length;
+  const totalPages = Math.max(1, Math.ceil(totalProducts / PAGE_SIZE));
+  const clampedPage = Math.min(Math.max(1, currentPage), totalPages);
+  const startIndex = (clampedPage - 1) * PAGE_SIZE;
+  const endIndex = Math.min(startIndex + PAGE_SIZE, totalProducts);
+  const paginatedProducts = sortedProducts.slice(startIndex, endIndex);
+  const showingCount = paginatedProducts.length;
+
+  // Scroll to top when page changes
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: "smooth" });
+  }, [clampedPage]);
+
+  const handlePageChange = (page: number) => {
+    setCurrentPage(page);
+  };
+
   return (
     <section className="w-full px-6 pb-12">
       {/* Recipe-style product cards */}
       <div className="mx-auto max-w-6xl">
+        {/* Showing count label */}
+        <div className="mb-6 text-sm font-body font-light text-foreground/70">
+          Showing {showingCount} of {totalProducts} products
+        </div>
+
         <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
-        {products.map((product) => (
+        {paginatedProducts.map((product) => (
           <Card
             key={product.id}
             className="rounded-[1.5rem] border-none shadow-md hover:shadow-lg transition-shadow flex flex-col"
@@ -83,7 +116,11 @@ export default function ProductGrid({
         ))}
         </div>
 
-        <Pagination />
+        <Pagination
+          currentPage={clampedPage}
+          totalPages={totalPages}
+          onPageChange={handlePageChange}
+        />
       </div>
     </section>
   );

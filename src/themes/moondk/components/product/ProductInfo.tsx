@@ -101,10 +101,10 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
       </div>
 
         <div className="space-y-3">
-        <div>
-          <p className="text-sm font-body font-light text-muted-foreground mb-2">Product</p>
+          <div>
+            <p className="text-sm font-body font-light text-muted-foreground mb-2">Product</p>
           <h1 className="text-3xl md:text-4xl font-heading font-medium text-foreground leading-tight break-words mb-3">{productName}</h1>
-          <p className="text-2xl font-body font-light text-foreground">{productPrice}</p>
+            <p className="text-2xl font-body font-light text-foreground">{productPrice}</p>
         </div>
       </div>
 
@@ -112,42 +112,42 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
       <div className="mt-8 md:mt-10">
         <div className="bg-foreground/[0.015] rounded-2xl pt-2 pb-2 md:pt-3 md:pb-3">
           <div className="space-y-3 md:space-y-3">
-            <div className="flex items-center gap-4">
-              <span className="text-sm font-body font-light text-foreground">Quantity</span>
+        <div className="flex items-center gap-4">
+          <span className="text-sm font-body font-light text-foreground">Quantity</span>
               <div className="flex items-center border border-border-light overflow-hidden bg-background">
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={decrementQuantity}
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={decrementQuantity}
                   className="h-11 w-11 p-0 hover:bg-foreground/[0.05] rounded-none border-none transition-colors"
                   aria-label="Decrease quantity"
-                >
-                  <Minus className="h-4 w-4" />
-                </Button>
+            >
+              <Minus className="h-4 w-4" />
+            </Button>
                 <span className="h-11 flex items-center px-4 text-sm font-body font-light min-w-12 justify-center border-l border-r border-border-light bg-background">
-                  {quantity}
-                </span>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={incrementQuantity}
+              {quantity}
+            </span>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={incrementQuantity}
                   className="h-11 w-11 p-0 hover:bg-foreground/[0.05] rounded-none border-none transition-colors"
                   aria-label="Increase quantity"
-                >
-                  <Plus className="h-4 w-4" />
-                </Button>
-              </div>
-              {product?.stock !== undefined && product.stock < 5 && (
-                <span className="text-sm font-body font-light text-foreground/70">* Limited stock left</span>
-              )}
-            </div>
-
-            <Button 
-              className="w-full h-14 bg-primary !text-white hover:bg-primary-hover font-body font-medium rounded-full text-base transition-all duration-200 shadow-sm hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2"
-              onClick={handleAddToBag}
             >
-              Add to Bag
+              <Plus className="h-4 w-4" />
             </Button>
+          </div>
+          {product?.stock !== undefined && product.stock < 5 && (
+                <span className="text-sm font-body font-light text-foreground/70">* Limited stock left</span>
+          )}
+        </div>
+
+        <Button 
+              className="w-full h-14 bg-primary !text-white hover:bg-primary-hover font-body font-medium rounded-full text-base transition-all duration-200 shadow-sm hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2"
+          onClick={handleAddToBag}
+        >
+          Add to Bag
+        </Button>
           </div>
         </div>
       </div>

@@ -50,88 +50,88 @@ const ProductDescription = ({ productId }: ProductDescriptionProps) => {
   if (productId === "1") {
     productDetailsContent = (
       <div className="space-y-4">
-        <p>• Size: 420g</p>
-        <p>• Calories: 875kcal per bottle</p>
+                <p>• Size: 420g</p>
+                <p>• Calories: 875kcal per bottle</p>
         <p>• Ingredients: Hovenia fruit base 97% [Fructooligosaccharide, Purified water, Hovenia tree fruit extract concentrate, Glucose, Flavoring (Hovenia fruit flavor)]</p>
-      </div>
+              </div>
     );
   } else if (productId === "2") {
     productDetailsContent = (
       <div className="space-y-4">
-        <p>• Size: 870g</p>
-        <p>• Calories: 1,930kcal per bottle</p>
+                <p>• Size: 870g</p>
+                <p>• Calories: 1,930kcal per bottle</p>
         <p>• Ingredients: Corn silk tea base 97% [Other sugars, Purified water, Corn silk extract (Corn silk: Domestic), Roasted brown rice extract concentrate (Roasted brown rice: Domestic), Flavoring (Corn flavor), Glucose]</p>
-      </div>
+              </div>
     );
   } else if (productId === "3") {
     productDetailsContent = (
       <div className="space-y-4">
-        <p>• Size: 870g</p>
-        <p>• Calories: 2,025kcal per bottle</p>
+                <p>• Size: 870g</p>
+                <p>• Calories: 2,025kcal per bottle</p>
         <p>Ingredients - 97% Korean Black Bean Tea Base [Black Bean Concentrate, Fructooligosaccharide], Water, Black Bean flavor, Citric Acid, Enzyme-treated Stevia</p>
-        <p>Size - 870g (2,025Kcal)</p>
-      </div>
+                <p>Size - 870g (2,025Kcal)</p>
+              </div>
     );
   } else if (productId === "4") {
     productDetailsContent = (
       <div className="space-y-4">
-        <p>• Size: 290g</p>
-        <p>• Calories: 595kcal per bottle.</p>
+                <p>• Size: 290g</p>
+                <p>• Calories: 595kcal per bottle.</p>
         <p>• Ingredients: Barley base 97% [Fructooligosaccharide, Barley extract concentrate (Barley: Domestic, solids), Purified water, Malt extract powder (Barley: 100%), Glucose], Flavoring (Roasted barley flavor, Barley flavor)</p>
-      </div>
+              </div>
     );
   } else if (productId === "5") {
     productDetailsContent = (
       <div className="space-y-4">
-        <p>Ingredients : Sesame Oil 100% (Korea)</p>
-        <p>Size : 180ml</p>
-      </div>
+                <p>Ingredients : Sesame Oil 100% (Korea)</p>
+                <p>Size : 180ml</p>
+              </div>
     );
   } else if (productId === "7") {
     productDetailsContent = (
       <div className="space-y-4">
-        <p>Ingredients : Perilla oil 100% (Korea)</p>
-        <p>Size : 180ml</p>
-      </div>
+                <p>Ingredients : Perilla oil 100% (Korea)</p>
+                <p>Size : 180ml</p>
+              </div>
     );
   } else if (productId === "8") {
     productDetailsContent = (
       <div className="space-y-4">
-        <div>
+                <div>
           <p className="font-medium">1 x Sesame oil</p>
-          <p>Ingredients : Sesame Oil 100% (Korea)</p>
-          <p>Size : 180ml</p>
-        </div>
-        <div>
+                  <p>Ingredients : Sesame Oil 100% (Korea)</p>
+                  <p>Size : 180ml</p>
+                </div>
+                <div>
           <p className="font-medium">1 x Perilla oil</p>
-          <p>Ingredients : Perilla oil 100% (Korea)</p>
-          <p>Size : 180ml</p>
-        </div>
-      </div>
+                  <p>Ingredients : Perilla oil 100% (Korea)</p>
+                  <p>Size : 180ml</p>
+                </div>
+              </div>
     );
   } else if (productId === "9") {
     productDetailsContent = (
       <div className="space-y-4">
-        <p>• Category: Fortified Rice Wine (Gwahaju).</p>
-        <p>• Volume: 375ml.</p>
-        <p>• ABV (Alcohol by Volume): 20%.</p>
-        <p>• Ingredients: Water, Glutinous Rice, Yeast (Nuruk), and Distilled Soju (Alcohol).</p>
-        <p>• Manufacturer: Agricultural Corporation Baekkyung Distillery Inc., Sejong-si, South Korea.</p>
-      </div>
+                <p>• Category: Fortified Rice Wine (Gwahaju).</p>
+                <p>• Volume: 375ml.</p>
+                <p>• ABV (Alcohol by Volume): 20%.</p>
+                <p>• Ingredients: Water, Glutinous Rice, Yeast (Nuruk), and Distilled Soju (Alcohol).</p>
+                <p>• Manufacturer: Agricultural Corporation Baekkyung Distillery Inc., Sejong-si, South Korea.</p>
+              </div>
     );
   } else if (productId === "10") {
     productDetailsContent = (
       <div className="space-y-4">
-        <p>Size : 200g (2 serving)</p>
-        <p>Ingredients : Flour(Domastic), Red rice powder(Domastic), Refined salt, Canola oil</p>
-      </div>
+                <p>Size : 200g (2 serving)</p>
+                <p>Ingredients : Flour(Domastic), Red rice powder(Domastic), Refined salt, Canola oil</p>
+              </div>
     );
   } else if (productId === "11") {
     productDetailsContent = (
       <div className="space-y-4">
-        <p>Size : 500g (5 servings)</p>
-        <p>Ingredients : Flour, Plum powder (Korea), Sweet pumpkin powder (Korea), Matecha(Korea), Black rice powder(Korea), Honey, Gardenia natural color, Refined salt, Canola oil</p>
-      </div>
+                <p>Size : 500g (5 servings)</p>
+                <p>Ingredients : Flour, Plum powder (Korea), Sweet pumpkin powder (Korea), Matecha(Korea), Black rice powder(Korea), Honey, Gardenia natural color, Refined salt, Canola oil</p>
+              </div>
     );
   } else if (productId === "12") {
     productDetailsContent = (
@@ -143,22 +143,22 @@ const ProductDescription = ({ productId }: ProductDescriptionProps) => {
   } else {
     productDetailsContent = (
       <div className="flex flex-col space-y-4">
-        <div className="flex justify-between">
+                <div className="flex justify-between">
           <span>SKU</span>
           <span>MDK-CSB-001</span>
-        </div>
-        <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
           <span>Collection</span>
           <span>Chef's Selection</span>
-        </div>
-        <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
           <span>Shelf Life</span>
           <span>6-12 months</span>
-        </div>
-        <div className="flex justify-between">
+                </div>
+                <div className="flex justify-between">
           <span>Storage</span>
           <span>Cool, dry place</span>
-        </div>
+          </div>
       </div>
     );
   }
@@ -321,7 +321,7 @@ While it's excellent cold for Singapore's heat, drinking it warm before bed help
         <li>• Usage: The liquid dissolves instantly in both hot and cold water; simply use the included pump for easy dispensing.</li>
         <li>• Storage: Must be refrigerated unconditionally after opening and stored in a cool place away from direct sunlight.</li>
         <li>• Shelf Life: The product has an expiration date of 24 months (2 years) from the date of manufacture.</li>
-      </ul>
+              </ul>
     );
   } else if (productId === "5" || productId === "7" || productId === "8") {
     storageContent = (
@@ -329,10 +329,10 @@ While it's excellent cold for Singapore's heat, drinking it warm before bed help
         <ul className="space-y-3">
           <li>• Sesame Oil: Store in a cool, dark place at room temperature away from direct sunlight.</li>
           <li>• Perilla Oil: Must be refrigerated (0-5C) to maintain freshness and prevent oxidation.</li>
-        </ul>
+                </ul>
         <p>
-          The natural sediment at the bottom of the oil is perfectly safe to consume. It consists of edible proteins and is rich in Vitamin E and essential minerals that are beneficial for your health. We recommend shaking the bottle gently before use to enjoy the full nutritional value
-        </p>
+                  The natural sediment at the bottom of the oil is perfectly safe to consume. It consists of edible proteins and is rich in Vitamin E and essential minerals that are beneficial for your health. We recommend shaking the bottle gently before use to enjoy the full nutritional value
+                </p>
       </div>
     );
   } else if (productId === "9") {
@@ -341,7 +341,7 @@ While it's excellent cold for Singapore's heat, drinking it warm before bed help
         <li>• Optimal Environment: Store in a cool and dry place away from direct sunlight.</li>
         <li>• Pro-Tip: For the best tasting experience and to preserve its delicate fruity notes, refrigeration is highly recommended.</li>
         <li>• Serving Suggestion: Best enjoyed Chilled or Warm. Serve in a small glass to appreciate the intricate earthy aromas.</li>
-      </ul>
+              </ul>
     );
   } else if (productId === "10" || productId === "11" || productId === "12") {
     storageContent = (
@@ -349,7 +349,7 @@ While it's excellent cold for Singapore's heat, drinking it warm before bed help
         <li>• Shelf Life: 2 years from manufacture.</li>
         <li>• Storage : Store in a cool, dry area to prevent the noodles from absorbing moisture.</li>
         <li>• Key Feature: Fast-cooking and convenient—ready in just 2 minutes and 30 seconds.</li>
-      </ul>
+              </ul>
     );
   } else {
     storageContent = (
@@ -359,11 +359,11 @@ While it's excellent cold for Singapore's heat, drinking it warm before bed help
           <li>• Refrigerate after opening for best quality</li>
           <li>• Use clean utensils to prevent contamination</li>
           <li>• Follow recipe guide for best results</li>
-        </ul>
+                </ul>
         <p>
-          For questions about storage or usage, contact our customer service team or refer to the included recipe guide.
-        </p>
-      </div>
+                  For questions about storage or usage, contact our customer service team or refer to the included recipe guide.
+                </p>
+          </div>
     );
   }
 

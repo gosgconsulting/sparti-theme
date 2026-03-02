@@ -412,7 +412,7 @@ export default function PrivacyPolicyPage() {
                   <div className="prose prose-lg max-w-none">
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed">
                       Any changes to our Privacy Policy will be posted to the Website and, where appropriate, through e-mail notification.
-                    </p>
+              </p>
                   </div>
                   <button
                     onClick={scrollToTop}
@@ -420,7 +420,7 @@ export default function PrivacyPolicyPage() {
                   >
                     ↑ Back to top
                   </button>
-                </section>
+            </section>
 
                 {/* Questions/Contact Block */}
                 <div className="mt-16 pt-8 border-t border-border-light">

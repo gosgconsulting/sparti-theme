@@ -45,15 +45,6 @@ export const products: Product[] = [
   { id: 10, name: "Myeongawon Hand-Stretched Red Rice Noodle", category: "Noodles", price: "$12", image: wheatNoodleImage },
   { id: 11, name: "Myeongawon 5 Color Noodle Gift Set", category: "Noodles", price: "$26", image: giftSetImage, stock: 2 },
   { id: 12, name: "Potato Noodle", category: "Noodles", price: "$22", image: potatoNoodleImage },
-  
-  // Virtual test products for pagination
-  { id: 13, name: "Test Tea Product 1", category: "Tea", price: "$25", image: hoveniaDulcisImage },
-  { id: 14, name: "Test Oil Product 1", category: "Oil", price: "$40", image: sesameOilImage },
-  { id: 15, name: "Test Noodle Product 1", category: "Noodles", price: "$15", image: wheatNoodleImage },
-  { id: 16, name: "Test Soju Product 1", category: "Soju", price: "$45", image: seorijuImage },
-  { id: 17, name: "Test Tea Product 2", category: "Tea", price: "$30", image: cornExtractImage },
-  { id: 18, name: "Test Oil Product 2", category: "Oil", price: "$35", image: perillaOilImage },
-  { id: 19, name: "Test Noodle Product 2", category: "Noodles", price: "$18", image: potatoNoodleImage },
 ];
 
 export const categoryTabs = [

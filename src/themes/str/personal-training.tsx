@@ -15,7 +15,9 @@ import { SEOHead } from './components/SEOHead';
 import { GTM } from './components/GTM';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { useCustomCode } from './hooks/useCustomCode';
-import { getHomeUrl } from './utils/urls';
+import { getHomeUrl, getPageUrl } from './utils/urls';
+import { usePageLayout, getComponentByType } from '../../hooks/usePageLayout';
+import { getTextByKey, getHeading, getImage, getArrayItems, getButton, parseMemberFromSubItems } from './utils/schemaHelpers';
 
 interface TenantLandingProps {
   tenantName?: string;
@@ -34,6 +36,18 @@ const PersonalTrainingPage: React.FC<TenantLandingProps> = ({
   
   // Load custom code settings (for GTM, GA, etc.)
   const { customCode } = useCustomCode(tenantId || undefined);
+
+  // Fetch page layout from CMS (same structure as str-personal-training.json)
+  const { data: pageData } = usePageLayout({ slug: '/personal-training', tenantId: tenantId || undefined });
+  const pageLayout = pageData?.layout;
+  const heroSection = getComponentByType(pageLayout, 'HeroSection');
+  const aboutSection = getComponentByType(pageLayout, 'AboutSection');
+  const programmesSection = getComponentByType(pageLayout, 'ProgrammesSection');
+  const gallerySection = getComponentByType(pageLayout, 'GallerySection');
+  const testimonialsSection = getComponentByType(pageLayout, 'TestimonialsSection');
+  const teamSection = getComponentByType(pageLayout, 'TeamSection');
+  const faqSection = getComponentByType(pageLayout, 'FAQSection');
+  const ctaSection = getComponentByType(pageLayout, 'CTASection');
   
   // Get settings from database with fallback to defaults
   const siteName = getSiteName(branding, tenantName);
@@ -63,13 +77,13 @@ const PersonalTrainingPage: React.FC<TenantLandingProps> = ({
     }
   }, [faviconSrc, brandingLoading]);
   
-  // Page meta
+  // Page meta (CMS meta_title/meta_description when available)
   const pageMeta = useMemo(() => ({
-    title: `Personal Training - ${siteName}`,
-    description: siteDescription,
+    title: pageData?.meta_title || `Personal Training - ${siteName}`,
+    description: pageData?.meta_description || siteDescription,
     keywords: 'STR Fitness, personal training, strength training, Singapore, fitness coaching',
     url: typeof window !== 'undefined' ? window.location.href : '',
-  }), [siteName, siteDescription]);
+  }), [pageData?.meta_title, pageData?.meta_description, siteName, siteDescription]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeProgramme, setActiveProgramme] = useState(0);
@@ -229,119 +243,54 @@ const PersonalTrainingPage: React.FC<TenantLandingProps> = ({
     { name: 'FAQ', href: '#faq' },
   ];
 
-  // Programmes data for accordion - PT-focused services
-  const programmes = [
-    {
-      title: 'INITIAL ASSESSMENT & GOAL SETTING',
-      description: `Your journey begins with a comprehensive movement and strength assessment. We evaluate your current fitness level, identify movement patterns, assess any limitations, and discuss your specific goals. This foundation allows us to design a program that's perfectly tailored to your body and objectives—whether that's injury recovery, performance enhancement, or long‑term health.`,
-      content: '',
-    },
-    {
-      title: 'CUSTOMIZED TRAINING PROGRAMS',
-      description: `Every workout is designed specifically for you. Based on your assessment, goals, and progress, your coach creates a structured program that evolves with you. No generic templates—just evidence‑based training that addresses your unique needs, schedule, and preferences. Each session builds on the last, ensuring continuous progress toward your goals.`,
-      content: '',
-    },
-    {
-      title: 'MOVEMENT CORRECTION & FORM COACHING',
-      description: `Proper form isn't just about safety—it's about maximizing results. Your coach provides real‑time feedback on every exercise, correcting movement patterns and teaching you the fundamentals of effective training. This attention to detail ensures you're not just going through the motions, but building strength, mobility, and movement quality that will serve you for years to come.`,
-      content: '',
-    },
-    {
-      title: 'PROGRESS TRACKING & ADJUSTMENTS',
-      description: `Your program isn't set in stone—it adapts as you improve. Your coach tracks your progress, measures your strength gains, and adjusts your training load, exercises, and intensity based on how your body responds. This data‑driven approach ensures you're always progressing, never plateauing, and always working at the right level for optimal results. To enhance precision and track progress objectively, we use advanced tools such as force plates and dynamometers. These technologies allow us to measure strength, power, balance, and movement efficiency, ensuring rehabilitation is tailored, measurable, and results-driven.`,
-      content: '',
-    },
-    {
-      title: 'INJURY PREVENTION & REHABILITATION SUPPORT',
-      description: `Having a team that includes a physiotherapist means that your coach understands how to work with injuries, not around them. Whether you're recovering from an injury or preventing one, your training program incorporates rehabilitation principles, movement corrections, and progressive loading that supports your body's healing and resilience. Train safely while building back stronger.`,
-      content: '',
-    },
-    {
-      title: 'NUTRITION & LIFESTYLE GUIDANCE',
-      description: `Training is only part of the equation. Your coach provides evidence‑based guidance on nutrition, recovery, sleep, and lifestyle factors that support your goals. While we're not dietitians, we help you understand how to fuel your body for performance, recovery, and long‑term health—creating sustainable habits that amplify your training results.`,
-      content: '',
-    },
-  ];
+  // Programmes data for accordion - from CMS with hardcoded fallback
+  const programmesRaw = getArrayItems(programmesSection?.items, 'programmes');
+  const programmes = programmesRaw.length > 0
+    ? programmesRaw.map(p => ({ title: p.title || '', description: p.description || '', content: p.content || '' }))
+    : [
+        { title: 'INITIAL ASSESSMENT & GOAL SETTING', description: `Your journey begins with a comprehensive movement and strength assessment. We evaluate your current fitness level, identify movement patterns, assess any limitations, and discuss your specific goals. This foundation allows us to design a program that's perfectly tailored to your body and objectives—whether that's injury recovery, performance enhancement, or long‑term health.`, content: '' },
+        { title: 'CUSTOMIZED TRAINING PROGRAMS', description: `Every workout is designed specifically for you. Based on your assessment, goals, and progress, your coach creates a structured program that evolves with you. No generic templates—just evidence‑based training that addresses your unique needs, schedule, and preferences. Each session builds on the last, ensuring continuous progress toward your goals.`, content: '' },
+        { title: 'MOVEMENT CORRECTION & FORM COACHING', description: `Proper form isn't just about safety—it's about maximizing results. Your coach provides real‑time feedback on every exercise, correcting movement patterns and teaching you the fundamentals of effective training. This attention to detail ensures you're not just going through the motions, but building strength, mobility, and movement quality that will serve you for years to come.`, content: '' },
+        { title: 'PROGRESS TRACKING & ADJUSTMENTS', description: `Your program isn't set in stone—it adapts as you improve. Your coach tracks your progress, measures your strength gains, and adjusts your training load, exercises, and intensity based on how your body responds. This data‑driven approach ensures you're always progressing, never plateauing, and always working at the right level for optimal results. To enhance precision and track progress objectively, we use advanced tools such as force plates and dynamometers. These technologies allow us to measure strength, power, balance, and movement efficiency, ensuring rehabilitation is tailored, measurable, and results-driven.`, content: '' },
+        { title: 'INJURY PREVENTION & REHABILITATION SUPPORT', description: `Having a team that includes a physiotherapist means that your coach understands how to work with injuries, not around them. Whether you're recovering from an injury or preventing one, your training program incorporates rehabilitation principles, movement corrections, and progressive loading that supports your body's healing and resilience. Train safely while building back stronger.`, content: '' },
+        { title: 'NUTRITION & LIFESTYLE GUIDANCE', description: `Training is only part of the equation. Your coach provides evidence‑based guidance on nutrition, recovery, sleep, and lifestyle factors that support your goals. While we're not dietitians, we help you understand how to fuel your body for performance, recovery, and long‑term health—creating sustainable habits that amplify your training results.`, content: '' },
+      ];
 
-  // Gallery images - loaded from centralized asset config
-  const galleryImages = getPersonalTrainingGalleryImages();
+  // Gallery images - from CMS (personal-training category) or asset config
+  const cmsGalleryRaw = getArrayItems(gallerySection?.items, 'gallery');
+  const cmsGalleryPT = cmsGalleryRaw.length > 0 ? cmsGalleryRaw.filter((i: { category?: string }) => i.category === 'personal-training').map((i: { src?: string; alt?: string }) => ({ src: i.src || '', alt: i.alt || '' })) : null;
+  const galleryImages = cmsGalleryPT && cmsGalleryPT.length > 0 ? cmsGalleryPT : getPersonalTrainingGalleryImages();
 
-  // Team members
-  const teamMembers = [
-    {
-      name: 'JJ',
-      role: 'Head Coach | Founder | Physiotherapist',
-      description: 'JJ, a former National Youth Wushu Athlete, earned a Physiotherapy degree from Trinity College Dublin and specialized in sports physiotherapy at Sengkang General Hospital. He competes in endurance events like Hyrox — ranking top 6 Singaporean in 2024 — and volunteers with the Special Olympics and Wushu community.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/JJ-Head-Coach-scaled-e1743491665639.jpg',
-      profileLink: '#',
-    },
-    {
-      name: 'Brandon Khoo',
-      role: 'PT Coach',
-      description: 'Brandon Khoo is an experienced strength and conditioning coach specializing in kettlebell and barbell training. He has designed and led both individualized and group training programs, focusing on strength, endurance, mobility, and injury prevention. He is passionate about helping clients build functional strength through structured progression.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Brandon-Khoo-Coach-scaled-e1743491558663.jpg',
-      profileLink: '#',
-    },
-    {
-      name: 'Jing Yong',
-      role: 'Group Class Coach',
-      description: 'Jing Yong earned an Accountancy degree from Nanyang Technological University and currently holds a managerial position at a local investment firm. A former competitive athlete in triathlons, track and field and cross-country running, he now focuses on endurance events such as Hyrox, marathons, and team-based functional fitness races.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Jing-Yong-Coach-e1743491534837.jpg',
-      profileLink: '#',
-    },
-    {
-      name: 'Jessica',
-      role: 'Group Class Coach | PT Coach',
-      description: 'Jessica is an experienced and versatile personal trainer with expertise in both strength and hybrid training. She has helped numerous clients achieve both fitness and aesthetic goals, while ensuring that they train safely and efficiently. She competes in half marathons and HYROX, ranking as the top Singaporean woman in both Open (2nd overall, first in AG) and Pro (3rd overall, first in AG) categories in HYROX 2024 races.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Jessica-e1744082680759.jpeg',
-      profileLink: '#',
-    },
-    {
-      name: 'Jacqueline',
-      role: 'Group Class Coach',
-      description: 'Jacqueline is a passionate fitness trainer dedicated to helping others feel strong, confident, and empowered through movement. While she works as an HR professional by day, her true energy comes from the world of fitness—especially spin and pilates. She believes fitness should be fun, approachable, and inclusive, regardless of experience level. Her mission is to create a supportive space where members are encouraged to grow, challenge themselves, and celebrate progress.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Jacqueline-e1744082763597.jpeg',
-      profileLink: '#',
-    },
-  ];
+  // Team members - from CMS with hardcoded fallback
+  const teamMembersRaw = getArrayItems(teamSection?.items, 'teamMembers').length > 0 ? getArrayItems(teamSection?.items, 'teamMembers') : getArrayItems(teamSection?.items, 'members');
+  const teamMembers = teamMembersRaw.length > 0
+    ? teamMembersRaw.map((m: { type?: string; items?: unknown[]; title?: string; name?: string; role?: string; description?: string; src?: string; props?: { role?: string } }) => {
+        if (m.type === 'array' && Array.isArray(m.items)) {
+          const parsed = parseMemberFromSubItems(m.items);
+          return { ...parsed, qualifications: '', specialization: '', profileLink: '#' };
+        }
+        return { name: m.title || m.name || '', role: m.role || m.props?.role || '', description: m.description || '', image: m.src || '', qualifications: '', specialization: '', profileLink: '#' };
+      })
+    : [
+        { name: 'JJ', role: 'Head Coach | Founder | Physiotherapist', description: 'JJ, a former National Youth Wushu Athlete, earned a Physiotherapy degree from Trinity College Dublin and specialized in sports physiotherapy at Sengkang General Hospital. He competes in endurance events like Hyrox — ranking top 6 Singaporean in 2024 — and volunteers with the Special Olympics and Wushu community.', qualifications: '', specialization: '', image: '/theme/str/assets/team/JJ-Head-Coach-scaled-e1743491665639.jpg', profileLink: '#' },
+        { name: 'Brandon Khoo', role: 'PT Coach', description: 'Brandon Khoo is an experienced strength and conditioning coach specializing in kettlebell and barbell training. He has designed and led both individualized and group training programs, focusing on strength, endurance, mobility, and injury prevention. He is passionate about helping clients build functional strength through structured progression.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Brandon-Khoo-Coach-scaled-e1743491558663.jpg', profileLink: '#' },
+        { name: 'Jing Yong', role: 'Group Class Coach', description: 'Jing Yong earned an Accountancy degree from Nanyang Technological University and currently holds a managerial position at a local investment firm. A former competitive athlete in triathlons, track and field and cross-country running, he now focuses on endurance events such as Hyrox, marathons, and team-based functional fitness races.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Jing-Yong-Coach-e1743491534837.jpg', profileLink: '#' },
+        { name: 'Jessica', role: 'Group Class Coach | PT Coach', description: 'Jessica is an experienced and versatile personal trainer with expertise in both strength and hybrid training. She has helped numerous clients achieve both fitness and aesthetic goals, while ensuring that they train safely and efficiently. She competes in half marathons and HYROX, ranking as the top Singaporean woman in both Open (2nd overall, first in AG) and Pro (3rd overall, first in AG) categories in HYROX 2024 races.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Jessica-e1744082680759.jpeg', profileLink: '#' },
+        { name: 'Jacqueline', role: 'Group Class Coach', description: 'Jacqueline is a passionate fitness trainer dedicated to helping others feel strong, confident, and empowered through movement. While she works as an HR professional by day, her true energy comes from the world of fitness—especially spin and pilates. She believes fitness should be fun, approachable, and inclusive, regardless of experience level. Her mission is to create a supportive space where members are encouraged to grow, challenge themselves, and celebrate progress.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Jacqueline-e1744082763597.jpeg', profileLink: '#' },
+      ];
 
-  // FAQ data - PT-focused
-  const faqData = [
-    {
-      question: 'What makes STR Personal Training different?',
-      answer: 'STR Personal Training is assessment‑led and physiotherapy‑informed. Every program starts with a comprehensive evaluation of your movement, strength, and goals. Unlike generic training programs, your coach designs every session specifically for you, provides real‑time form correction, and adjusts your program based on your progress. You get undivided attention, evidence‑based coaching, and a program that evolves with you—not a one‑size‑fits‑all template.',
-    },
-    {
-      question: 'How does the initial assessment work?',
-      answer: 'Your first session is a comprehensive assessment where your coach evaluates your movement patterns, strength levels, mobility, and any limitations or injuries. We discuss your goals, training history, and lifestyle factors. This foundation allows us to design a program that\'s perfectly tailored to your body and objectives. The assessment typically takes 60‑90 minutes and includes movement screening, strength testing, and goal setting.',
-    },
-    {
-      question: 'What should I expect in my first 1‑on‑1 session?',
-      answer: 'After your initial assessment, your first training session introduces you to your personalized program. Your coach guides you through each exercise with real‑time form correction, explains the purpose of each movement, and ensures you\'re comfortable with the training approach. You\'ll learn proper technique, understand how the program addresses your goals, and experience the level of attention and coaching you\'ll receive in every session.',
-    },
-    {
-      question: 'How often should I do personal training?',
-      answer: 'Training frequency depends on your goals, experience level, schedule, and budget. Most clients train 2‑3 times per week for optimal results, though some train more frequently for specific goals like competition prep or injury rehabilitation. During your initial consultation, your coach will recommend a training frequency that balances your goals with your lifestyle and ensures sustainable progress.',
-    },
-    {
-      question: 'Can personal training help with injury recovery?',
-      answer: 'Yes. Our physiotherapy‑informed approach means your coach understands how to work with injuries safely and effectively. Your program incorporates rehabilitation principles, movement corrections, and progressive loading that supports your body\'s healing process. We work closely with physiotherapists when needed and design training that addresses your injury while building strength and function. Many clients come to us specifically for post‑injury training.',
-    },
-    {
-      question: 'What results can I expect from personal training?',
-      answer: 'Results depend on your goals, consistency, and commitment, but most clients see measurable improvements within 4‑6 weeks. You can expect increased strength, improved movement quality, better body composition, enhanced performance, and reduced injury risk. Our evidence‑based approach focuses on sustainable, long‑term improvements rather than quick fixes. Your coach tracks your progress and adjusts your program to ensure you\'re always moving toward your goals.',
-    },
-  ];
+  // FAQ data - from CMS with hardcoded fallback
+  const faqItemsRaw = getArrayItems(faqSection?.items, 'faqItems').length > 0 ? getArrayItems(faqSection?.items, 'faqItems') : getArrayItems(faqSection?.items, 'faqs');
+  const faqData = faqItemsRaw.length > 0
+    ? faqItemsRaw.map((f: { question?: string; title?: string; answer?: string; description?: string }) => ({ question: f.question || f.title || '', answer: f.answer || f.description || '' }))
+    : [
+        { question: 'What makes STR Personal Training different?', answer: 'STR Personal Training is assessment‑led and physiotherapy‑informed. Every program starts with a comprehensive evaluation of your movement, strength, and goals. Unlike generic training programs, your coach designs every session specifically for you, provides real‑time form correction, and adjusts your program based on your progress. You get undivided attention, evidence‑based coaching, and a program that evolves with you—not a one‑size‑fits‑all template.' },
+        { question: 'How does the initial assessment work?', answer: 'Your first session is a comprehensive assessment where your coach evaluates your movement patterns, strength levels, mobility, and any limitations or injuries. We discuss your goals, training history, and lifestyle factors. This foundation allows us to design a program that\'s perfectly tailored to your body and objectives. The assessment typically takes 60‑90 minutes and includes movement screening, strength testing, and goal setting.' },
+        { question: 'What should I expect in my first 1‑on‑1 session?', answer: 'After your initial assessment, your first training session introduces you to your personalized program. Your coach guides you through each exercise with real‑time form correction, explains the purpose of each movement, and ensures you\'re comfortable with the training approach. You\'ll learn proper technique, understand how the program addresses your goals, and experience the level of attention and coaching you\'ll receive in every session.' },
+        { question: 'How often should I do personal training?', answer: 'Training frequency depends on your goals, experience level, schedule, and budget. Most clients train 2‑3 times per week for optimal results, though some train more frequently for specific goals like competition prep or injury rehabilitation. During your initial consultation, your coach will recommend a training frequency that balances your goals with your lifestyle and ensures sustainable progress.' },
+        { question: 'Can personal training help with injury recovery?', answer: 'Yes. Our physiotherapy‑informed approach means your coach understands how to work with injuries safely and effectively. Your program incorporates rehabilitation principles, movement corrections, and progressive loading that supports your body\'s healing process. We work closely with physiotherapists when needed and design training that addresses your injury while building strength and function. Many clients come to us specifically for post‑injury training.' },
+        { question: 'What results can I expect from personal training?', answer: 'Results depend on your goals, consistency, and commitment, but most clients see measurable improvements within 4‑6 weeks. You can expect increased strength, improved movement quality, better body composition, enhanced performance, and reduced injury risk. Our evidence‑based approach focuses on sustainable, long‑term improvements rather than quick fixes. Your coach tracks your progress and adjusts your program to ensure you\'re always moving toward your goals.' },
+      ];
 
   const isHomepage = true; // Use homepage layout with header in hero
 
@@ -454,29 +403,32 @@ const PersonalTrainingPage: React.FC<TenantLandingProps> = ({
         </header>
       )}
 
-      {/* Hero Section */}
+      {/* Hero Section - content from CMS (usePageLayout) with fallbacks */}
       <HeroSection 
         tenantSlug={tenantSlug}
-        items={undefined} // Can be populated from database schema in future
+        items={heroSection?.items}
         showHeader={true}
         navItems={navItems}
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
         isHomepage={true}
-        title="1‑On‑1 Personal Training For Performance And Longevity"
-        subtitle="Personalized Coaching In A Physiotherapy‑Informed Environment"
-        description="Assessment‑led, structured, and built for long‑term results. Every session is tailored to your goals—whether you're recovering from injury, preparing for competition, or building long‑term health and strength."
-        buttonText="Chat With Us"
+        title={getHeading(heroSection?.items, 'title') || '1‑On‑1 Personal Training For Performance And Longevity'}
+        subtitle={getTextByKey(heroSection?.items, 'subtitle') || 'Personalized Coaching In A Physiotherapy‑Informed Environment'}
+        description={getTextByKey(heroSection?.items, 'description') || "Assessment‑led, structured, and built for long‑term results. Every session is tailored to your goals—whether you're recovering from injury, preparing for competition, or building long‑term health and strength."}
+        imageSrc={getImage(heroSection?.items, 'image')?.src}
+        imageAlt={getImage(heroSection?.items, 'image')?.alt}
+        buttonText={getButton(heroSection?.items, 'cta')?.text || getButton(heroSection?.items, 'button')?.text || 'Chat With Us'}
+        buttonUrl={getButton(heroSection?.items, 'cta')?.url || getButton(heroSection?.items, 'button')?.url}
         onButtonClick={() => setIsContactModalOpen(true)}
       />
 
-      {/* About Us Section */}
+      {/* About Us Section - content from CMS with fallbacks */}
       <section id="about" className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 min-h-[90vh] flex items-center overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
           <img
-            src={STR_ASSETS.backgrounds.aboutUs}
-            alt="STR Fitness Gym Training"
+            src={getImage(aboutSection?.items, 'image')?.src || getImage(aboutSection?.items, 'background')?.src || STR_ASSETS.backgrounds.aboutUs}
+            alt={getImage(aboutSection?.items, 'image')?.alt || getImage(aboutSection?.items, 'background')?.alt || 'STR Fitness Gym Training'}
             className="w-full h-full object-cover"
             onError={(e) => {
               // Fallback to placeholder if image not found
@@ -490,51 +442,42 @@ const PersonalTrainingPage: React.FC<TenantLandingProps> = ({
 
         <div className="container mx-auto relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <div className="w-full">
-            {/* Main Heading */}
+            {/* Main Heading - from CMS or fallback */}
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-6 text-foreground leading-tight">
-              Why Choose STR Personal Training
+              {getHeading(aboutSection?.items, 'title') || 'Why Choose STR Personal Training'}
             </h2>
 
-            {/* Content */}
+            {/* Content - from CMS or fallback */}
             <p className="text-lg md:text-xl text-foreground mb-16 max-w-3xl leading-relaxed">
-              At STR, we believe personal training should be exactly that—personal. Every 1‑on‑1 session begins with a comprehensive assessment of your movement patterns, strength levels, and specific goals. Our physiotherapy‑informed approach ensures you train safely while making measurable progress. Whether you're recovering from injury, preparing for competition, or building long‑term health, your program is designed specifically for you—not a generic template. No classes. No crowds. Just focused, expert coaching that delivers real results.
+              {getTextByKey(aboutSection?.items, 'description') || "At STR, we believe personal training should be exactly that—personal. Every 1‑on‑1 session begins with a comprehensive assessment of your movement patterns, strength levels, and specific goals. Our physiotherapy‑informed approach ensures you train safely while making measurable progress. Whether you're recovering from injury, preparing for competition, or building long‑term health, your program is designed specifically for you—not a generic template. No classes. No crowds. Just focused, expert coaching that delivers real results."}
             </p>
 
-            {/* Feature Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* 1-on-1 Expert Coaching Card */}
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Wrench className="h-6 w-6 text-black" />
+            {/* Feature Cards - from CMS or fallback */}
+            {(() => {
+              const aboutFeatures = getArrayItems(aboutSection?.items, 'features');
+              const features = aboutFeatures.length > 0 ? aboutFeatures.map((f: { title?: string; description?: string }) => ({ title: f.title || '', description: f.description || '' })) : [
+                { title: '1‑ON‑1 EXPERT COACHING', description: 'Work directly with experienced coaches who provide undivided attention, real‑time form correction, and personalized guidance every single session. No distractions, no waiting—just you and your coach.' },
+                { title: 'PERSONALIZED TRAINING PLANS', description: 'Every program starts with a comprehensive assessment. Your training plan is built specifically for your body, your goals, and your schedule—not a one‑size‑fits‑all template.' },
+                { title: 'DEDICATED SUPPORT', description: 'Your coach tracks your progress, adjusts your program in real‑time, and provides the accountability you need to stay consistent. Every session is focused entirely on your success.' },
+              ];
+              const icons = [Wrench, Award, Users];
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {features.slice(0, 3).map((f, i) => {
+                    const Icon = icons[i];
+                    return (
+                      <div key={i} className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
+                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
+                          {Icon && <Icon className="h-6 w-6 text-black" />}
+                        </div>
+                        <h3 className="text-xl font-bold uppercase text-black mb-3">{f.title}</h3>
+                        <p className="text-black/80 text-sm leading-relaxed grow">{f.description}</p>
+                      </div>
+                    );
+                  })}
                 </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">1‑ON‑1 EXPERT COACHING</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  Work directly with experienced coaches who provide undivided attention, real‑time form correction, and personalized guidance every single session. No distractions, no waiting—just you and your coach.
-                </p>
-              </div>
-
-              {/* Personalized Training Plans Card */}
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Award className="h-6 w-6 text-black" />
-                </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">PERSONALIZED TRAINING PLANS</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  Every program starts with a comprehensive assessment. Your training plan is built specifically for your body, your goals, and your schedule—not a one‑size‑fits‑all template.
-                </p>
-              </div>
-
-              {/* Individual Attention Card */}
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Users className="h-6 w-6 text-black" />
-                </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">DEDICATED SUPPORT</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  Your coach tracks your progress, adjusts your program in real‑time, and provides the accountability you need to stay consistent. Every session is focused entirely on your success.
-                </p>
-              </div>
-            </div>
+              );
+            })()}
           </div>
         </div>
       </section>
@@ -546,16 +489,16 @@ const PersonalTrainingPage: React.FC<TenantLandingProps> = ({
             {/* Left Column - Big Title */}
             <div className="flex flex-col justify-center">
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase text-foreground leading-tight mb-6">
-                WHAT'S INCLUDED IN YOUR PT PROGRAM
+                {getHeading(programmesSection?.items, 'title') || "WHAT'S INCLUDED IN YOUR PT PROGRAM"}
               </h2>
               <p className="text-lg md:text-xl text-foreground/80 leading-relaxed max-w-xl mb-8">
-                Every 1‑on‑1 personal training program at STR includes comprehensive support from assessment to results. Here's what you get when you train with us.
+                {getTextByKey(programmesSection?.items, 'description') || "Every 1‑on‑1 personal training program at STR includes comprehensive support from assessment to results. Here's what you get when you train with us."}
               </p>
-              {/* Programmes Image */}
+              {/* Programmes Image - from CMS or default */}
               <div className="w-full max-w-xl">
                 <img 
-                  src="/theme/str/assets/programmes/1to1.png"
-                  alt="STR Fitness Gym Facilities - Rowing Machines, Training Area, and Weightlifting Equipment"
+                  src={getImage(programmesSection?.items, 'image')?.src || '/theme/str/assets/programmes/1to1.png'}
+                  alt={getImage(programmesSection?.items, 'image')?.alt || 'STR Fitness Gym Facilities - Rowing Machines, Training Area, and Weightlifting Equipment'}
                   className="w-full h-auto rounded-lg object-cover shadow-lg"
                   onError={(e) => {
                     // Fallback if image not found

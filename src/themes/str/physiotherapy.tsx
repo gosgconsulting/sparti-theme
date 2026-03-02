@@ -15,7 +15,9 @@ import { SEOHead } from './components/SEOHead';
 import { GTM } from './components/GTM';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { useCustomCode } from './hooks/useCustomCode';
-import { getHomeUrl } from './utils/urls';
+import { getHomeUrl, getPageUrl } from './utils/urls';
+import { usePageLayout, getComponentByType } from '../../hooks/usePageLayout';
+import { getTextByKey, getHeading, getImage, getArrayItems, getButton, parseMemberFromSubItems } from './utils/schemaHelpers';
 
 interface TenantLandingProps {
   tenantName?: string;
@@ -34,6 +36,18 @@ const PhysiotherapyPage: React.FC<TenantLandingProps> = ({
   
   // Load custom code settings (for GTM, GA, etc.)
   const { customCode } = useCustomCode(tenantId || undefined);
+
+  // Fetch page layout from CMS (same structure as personal-training)
+  const { data: pageData } = usePageLayout({ slug: '/physiotherapy', tenantId: tenantId || undefined });
+  const pageLayout = pageData?.layout;
+  const heroSection = getComponentByType(pageLayout, 'HeroSection');
+  const aboutSection = getComponentByType(pageLayout, 'AboutSection');
+  const programmesSection = getComponentByType(pageLayout, 'ProgrammesSection');
+  const gallerySection = getComponentByType(pageLayout, 'GallerySection');
+  const testimonialsSection = getComponentByType(pageLayout, 'TestimonialsSection');
+  const teamSection = getComponentByType(pageLayout, 'TeamSection');
+  const faqSection = getComponentByType(pageLayout, 'FAQSection');
+  const ctaSection = getComponentByType(pageLayout, 'CTASection');
   
   // Get settings from database with fallback to defaults
   const siteName = getSiteName(branding, tenantName);
@@ -63,13 +77,13 @@ const PhysiotherapyPage: React.FC<TenantLandingProps> = ({
     }
   }, [faviconSrc, brandingLoading]);
   
-  // Page meta
+  // Page meta (CMS meta_title/meta_description when available)
   const pageMeta = useMemo(() => ({
-    title: `Physiotherapy - ${siteName}`,
-    description: siteDescription,
+    title: pageData?.meta_title || `Physiotherapy - ${siteName}`,
+    description: pageData?.meta_description || siteDescription,
     keywords: 'STR Fitness, physiotherapy, sports rehabilitation, injury recovery, Singapore',
     url: typeof window !== 'undefined' ? window.location.href : '',
-  }), [siteName, siteDescription]);
+  }), [pageData?.meta_title, pageData?.meta_description, siteName, siteDescription]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeProgramme, setActiveProgramme] = useState(0);
@@ -229,119 +243,54 @@ const PhysiotherapyPage: React.FC<TenantLandingProps> = ({
     { name: 'FAQ', href: '#faq' },
   ];
 
-  // Programmes data for accordion - Physiotherapy focused services
-  const programmes = [
-    {
-      title: 'COMPREHENSIVE ASSESSMENT & DIAGNOSIS',
-      description: `Your treatment begins with a thorough assessment of your condition, movement patterns, and functional limitations. We evaluate your injury history, current symptoms, range of motion, strength, and movement quality. This comprehensive evaluation allows us to identify the root cause of your issue—not just the symptoms—and develop a targeted treatment plan that addresses your specific needs and goals.`,
-      content: '',
-    },
-    {
-      title: 'EVIDENCE-BASED TREATMENT',
-      description: `Our physiotherapy approach is grounded in the latest research and clinical evidence. We use proven techniques including manual therapy, therapeutic exercise, movement correction, and progressive loading strategies. Every treatment is selected based on what's most effective for your specific condition, ensuring you receive care that's both safe and results-driven.`,
-      content: '',
-    },
-    {
-      title: 'HANDS-ON MANUAL THERAPY',
-      description: `Our physiotherapists use skilled hands-on techniques to address tissue restrictions, improve joint mobility, reduce pain, and enhance movement quality. Techniques may include soft tissue mobilization, joint mobilization, myofascial release, dry needling, and other manual interventions tailored to your condition. This hands-on approach complements exercise-based treatment for comprehensive recovery.`,
-      content: '',
-    },
-    {
-      title: 'EXERCISE PRESCRIPTION & REHABILITATION',
-      description: `Movement is medicine. Your physiotherapist prescribes specific exercises designed to address your condition, restore function, and prevent recurrence. These exercises progress as you improve, ensuring you're always working at the right level for optimal recovery. You'll receive clear instructions and guidance on performing exercises correctly, both during sessions and for home practice. To enhance precision and track progress objectively, we use advanced tools such as force plates and dynamometers. These technologies allow us to measure strength, power, balance, and movement efficiency, ensuring rehabilitation is tailored, measurable, and results-driven.`,
-      content: '',
-    },
-    {
-      title: 'INJURY PREVENTION & PERFORMANCE OPTIMIZATION',
-      description: `Beyond treating current issues, we focus on preventing future injuries and optimizing your movement for better performance. Whether you're an athlete looking to enhance performance, someone returning to activity after injury, or simply wanting to move better, our physiotherapy approach helps you build resilience, improve movement quality, and reduce injury risk long-term.`,
-      content: '',
-    },
-    {
-      title: 'EDUCATION & SELF-MANAGEMENT',
-      description: `Understanding your condition is key to long-term success. Your physiotherapist educates you about your injury, explains the treatment approach, and teaches you strategies for managing symptoms and preventing recurrence. This knowledge empowers you to take an active role in your recovery and maintain your results after treatment concludes.`,
-      content: '',
-    },
-  ];
+  // Programmes data for accordion - from CMS with hardcoded fallback
+  const programmesRaw = getArrayItems(programmesSection?.items, 'programmes');
+  const programmes = programmesRaw.length > 0
+    ? programmesRaw.map((p: { title?: string; description?: string; content?: string }) => ({ title: p.title || '', description: p.description || '', content: p.content || '' }))
+    : [
+        { title: 'COMPREHENSIVE ASSESSMENT & DIAGNOSIS', description: `Your treatment begins with a thorough assessment of your condition, movement patterns, and functional limitations. We evaluate your injury history, current symptoms, range of motion, strength, and movement quality. This comprehensive evaluation allows us to identify the root cause of your issue—not just the symptoms—and develop a targeted treatment plan that addresses your specific needs and goals.`, content: '' },
+        { title: 'EVIDENCE-BASED TREATMENT', description: `Our physiotherapy approach is grounded in the latest research and clinical evidence. We use proven techniques including manual therapy, therapeutic exercise, movement correction, and progressive loading strategies. Every treatment is selected based on what's most effective for your specific condition, ensuring you receive care that's both safe and results-driven.`, content: '' },
+        { title: 'HANDS-ON MANUAL THERAPY', description: `Our physiotherapists use skilled hands-on techniques to address tissue restrictions, improve joint mobility, reduce pain, and enhance movement quality. Techniques may include soft tissue mobilization, joint mobilization, myofascial release, dry needling, and other manual interventions tailored to your condition. This hands-on approach complements exercise-based treatment for comprehensive recovery.`, content: '' },
+        { title: 'EXERCISE PRESCRIPTION & REHABILITATION', description: `Movement is medicine. Your physiotherapist prescribes specific exercises designed to address your condition, restore function, and prevent recurrence. These exercises progress as you improve, ensuring you're always working at the right level for optimal recovery. You'll receive clear instructions and guidance on performing exercises correctly, both during sessions and for home practice. To enhance precision and track progress objectively, we use advanced tools such as force plates and dynamometers. These technologies allow us to measure strength, power, balance, and movement efficiency, ensuring rehabilitation is tailored, measurable, and results-driven.`, content: '' },
+        { title: 'INJURY PREVENTION & PERFORMANCE OPTIMIZATION', description: `Beyond treating current issues, we focus on preventing future injuries and optimizing your movement for better performance. Whether you're an athlete looking to enhance performance, someone returning to activity after injury, or simply wanting to move better, our physiotherapy approach helps you build resilience, improve movement quality, and reduce injury risk long-term.`, content: '' },
+        { title: 'EDUCATION & SELF-MANAGEMENT', description: `Understanding your condition is key to long-term success. Your physiotherapist educates you about your injury, explains the treatment approach, and teaches you strategies for managing symptoms and preventing recurrence. This knowledge empowers you to take an active role in your recovery and maintain your results after treatment concludes.`, content: '' },
+      ];
 
-  // Gallery images - loaded from centralized asset config
-  const galleryImages = getPhysiotherapyGalleryImages();
+  // Gallery images - from CMS (physiotherapy category) or asset config
+  const cmsGalleryRaw = getArrayItems(gallerySection?.items, 'gallery');
+  const cmsGalleryPhysio = cmsGalleryRaw.length > 0 ? cmsGalleryRaw.filter((i: { category?: string }) => i.category === 'physiotherapy').map((i: { src?: string; alt?: string }) => ({ src: i.src || '', alt: i.alt || '' })) : null;
+  const galleryImages = cmsGalleryPhysio && cmsGalleryPhysio.length > 0 ? cmsGalleryPhysio : getPhysiotherapyGalleryImages();
 
-  // Team members
-  const teamMembers = [
-    {
-      name: 'JJ',
-      role: 'Head Coach | Founder | Physiotherapist',
-      description: 'JJ, a former National Youth Wushu Athlete, earned a Physiotherapy degree from Trinity College Dublin and specialized in sports physiotherapy at Sengkang General Hospital. He competes in endurance events like Hyrox — ranking top 6 Singaporean in 2024 — and volunteers with the Special Olympics and Wushu community.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/JJ-Head-Coach-scaled-e1743491665639.jpg',
-      profileLink: '#',
-    },
-    {
-      name: 'Brandon Khoo',
-      role: 'PT Coach',
-      description: 'Brandon Khoo is an experienced strength and conditioning coach specializing in kettlebell and barbell training. He has designed and led both individualized and group training programs, focusing on strength, endurance, mobility, and injury prevention. He is passionate about helping clients build functional strength through structured progression.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Brandon-Khoo-Coach-scaled-e1743491558663.jpg',
-      profileLink: '#',
-    },
-    {
-      name: 'Jing Yong',
-      role: 'Group Class Coach',
-      description: 'Jing Yong earned an Accountancy degree from Nanyang Technological University and currently holds a managerial position at a local investment firm. A former competitive athlete in triathlons, track and field and cross-country running, he now focuses on endurance events such as Hyrox, marathons, and team-based functional fitness races.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Jing-Yong-Coach-e1743491534837.jpg',
-      profileLink: '#',
-    },
-    {
-      name: 'Jessica',
-      role: 'Group Class Coach | PT Coach',
-      description: 'Jessica is an experienced and versatile personal trainer with expertise in both strength and hybrid training. She has helped numerous clients achieve both fitness and aesthetic goals, while ensuring that they train safely and efficiently. She competes in half marathons and HYROX, ranking as the top Singaporean woman in both Open (2nd overall, first in AG) and Pro (3rd overall, first in AG) categories in HYROX 2024 races.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Jessica-e1744082680759.jpeg',
-      profileLink: '#',
-    },
-    {
-      name: 'Jacqueline',
-      role: 'Group Class Coach',
-      description: 'Jacqueline is a passionate fitness trainer dedicated to helping others feel strong, confident, and empowered through movement. While she works as an HR professional by day, her true energy comes from the world of fitness—especially spin and pilates. She believes fitness should be fun, approachable, and inclusive, regardless of experience level. Her mission is to create a supportive space where members are encouraged to grow, challenge themselves, and celebrate progress.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Jacqueline-e1744082763597.jpeg',
-      profileLink: '#',
-    },
-  ];
+  // Team members - from CMS with hardcoded fallback
+  const teamMembersRaw = getArrayItems(teamSection?.items, 'teamMembers').length > 0 ? getArrayItems(teamSection?.items, 'teamMembers') : getArrayItems(teamSection?.items, 'members');
+  const teamMembers = teamMembersRaw.length > 0
+    ? teamMembersRaw.map((m: { type?: string; items?: unknown[]; title?: string; name?: string; role?: string; description?: string; src?: string; props?: { role?: string } }) => {
+        if (m.type === 'array' && Array.isArray(m.items)) {
+          const parsed = parseMemberFromSubItems(m.items);
+          return { ...parsed, qualifications: '', specialization: '', profileLink: '#' };
+        }
+        return { name: m.title || m.name || '', role: m.role || m.props?.role || '', description: m.description || '', image: m.src || '', qualifications: '', specialization: '', profileLink: '#' };
+      })
+    : [
+        { name: 'JJ', role: 'Head Coach | Founder | Physiotherapist', description: 'JJ, a former National Youth Wushu Athlete, earned a Physiotherapy degree from Trinity College Dublin and specialized in sports physiotherapy at Sengkang General Hospital. He competes in endurance events like Hyrox — ranking top 6 Singaporean in 2024 — and volunteers with the Special Olympics and Wushu community.', qualifications: '', specialization: '', image: '/theme/str/assets/team/JJ-Head-Coach-scaled-e1743491665639.jpg', profileLink: '#' },
+        { name: 'Brandon Khoo', role: 'PT Coach', description: 'Brandon Khoo is an experienced strength and conditioning coach specializing in kettlebell and barbell training. He has designed and led both individualized and group training programs, focusing on strength, endurance, mobility, and injury prevention. He is passionate about helping clients build functional strength through structured progression.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Brandon-Khoo-Coach-scaled-e1743491558663.jpg', profileLink: '#' },
+        { name: 'Jing Yong', role: 'Group Class Coach', description: 'Jing Yong earned an Accountancy degree from Nanyang Technological University and currently holds a managerial position at a local investment firm. A former competitive athlete in triathlons, track and field and cross-country running, he now focuses on endurance events such as Hyrox, marathons, and team-based functional fitness races.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Jing-Yong-Coach-e1743491534837.jpg', profileLink: '#' },
+        { name: 'Jessica', role: 'Group Class Coach | PT Coach', description: 'Jessica is an experienced and versatile personal trainer with expertise in both strength and hybrid training. She has helped numerous clients achieve both fitness and aesthetic goals, while ensuring that they train safely and efficiently. She competes in half marathons and HYROX, ranking as the top Singaporean woman in both Open (2nd overall, first in AG) and Pro (3rd overall, first in AG) categories in HYROX 2024 races.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Jessica-e1744082680759.jpeg', profileLink: '#' },
+        { name: 'Jacqueline', role: 'Group Class Coach', description: 'Jacqueline is a passionate fitness trainer dedicated to helping others feel strong, confident, and empowered through movement. While she works as an HR professional by day, her true energy comes from the world of fitness—especially spin and pilates. She believes fitness should be fun, approachable, and inclusive, regardless of experience level. Her mission is to create a supportive space where members are encouraged to grow, challenge themselves, and celebrate progress.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Jacqueline-e1744082763597.jpeg', profileLink: '#' },
+      ];
 
-  // FAQ data - Physiotherapy focused
-  const faqData = [
-    {
-      question: 'What makes STR Physiotherapy different?',
-      answer: 'STR Physiotherapy combines evidence-based treatment with a comprehensive, patient-centered approach. Our physiotherapists conduct thorough assessments to identify root causes—not just symptoms—and develop personalized treatment plans that address your specific needs. We use proven techniques including manual therapy, therapeutic exercise, and movement correction, all while educating you about your condition and empowering you to take an active role in your recovery. Our integration with training services means we can seamlessly transition you from treatment to performance optimization.',
-    },
-    {
-      question: 'What conditions do you treat?',
-      answer: 'We treat a wide range of musculoskeletal conditions including sports injuries, post-surgical rehabilitation, chronic pain, joint problems, muscle strains, back and neck pain, and movement dysfunctions. We also provide performance optimization for athletes and active individuals. During your initial assessment, we\'ll evaluate your specific condition and determine if physiotherapy is the right approach for you, or if you need referral to another healthcare provider.',
-    },
-    {
-      question: 'How long does a physiotherapy session last?',
-      answer: 'Initial assessments typically last 60-90 minutes to allow for comprehensive evaluation and treatment planning. Follow-up treatment sessions are usually 45-60 minutes, depending on your condition and treatment needs. Your physiotherapist will discuss session duration and frequency during your initial consultation, tailoring the schedule to your specific condition and goals.',
-    },
-    {
-      question: 'How many sessions will I need?',
-      answer: 'The number of sessions varies depending on your condition, its severity, how long you\'ve had it, and your goals. Some acute injuries may resolve in 4-6 sessions, while chronic conditions or post-surgical rehabilitation may require more extended treatment. Your physiotherapist will provide an estimated treatment timeline after your initial assessment, and we\'ll regularly reassess your progress to ensure you\'re on track. We focus on getting you better as efficiently as possible while ensuring long-term results.',
-    },
-    {
-      question: 'Do you accept insurance?',
-      answer: 'We recommend contacting your insurance provider to verify coverage for physiotherapy services. Some plans cover physiotherapy, while others may require a referral from a doctor. We can provide receipts and documentation needed for insurance claims. Please check with your insurance provider about coverage details, co-pays, and any referral requirements before your first visit.',
-    },
-    {
-      question: 'What should I expect in my first physiotherapy session?',
-      answer: 'Your first session begins with a comprehensive assessment where your physiotherapist will ask about your injury history, current symptoms, and goals. We\'ll evaluate your movement, strength, range of motion, and functional limitations. Based on this assessment, we\'ll explain our findings, discuss your treatment plan, and begin treatment. You\'ll receive education about your condition and may be given exercises to start at home. We\'ll also discuss expected outcomes and treatment timeline. Come prepared to discuss your condition openly and wear comfortable clothing that allows for movement assessment.',
-    },
-  ];
+  // FAQ data - from CMS with hardcoded fallback
+  const faqItemsRaw = getArrayItems(faqSection?.items, 'faqItems').length > 0 ? getArrayItems(faqSection?.items, 'faqItems') : getArrayItems(faqSection?.items, 'faqs');
+  const faqData = faqItemsRaw.length > 0
+    ? faqItemsRaw.map((f: { question?: string; title?: string; answer?: string; description?: string }) => ({ question: f.question || f.title || '', answer: f.answer || f.description || '' }))
+    : [
+        { question: 'What makes STR Physiotherapy different?', answer: 'STR Physiotherapy combines evidence-based treatment with a comprehensive, patient-centered approach. Our physiotherapists conduct thorough assessments to identify root causes—not just symptoms—and develop personalized treatment plans that address your specific needs. We use proven techniques including manual therapy, therapeutic exercise, and movement correction, all while educating you about your condition and empowering you to take an active role in your recovery. Our integration with training services means we can seamlessly transition you from treatment to performance optimization.' },
+        { question: 'What conditions do you treat?', answer: 'We treat a wide range of musculoskeletal conditions including sports injuries, post-surgical rehabilitation, chronic pain, joint problems, muscle strains, back and neck pain, and movement dysfunctions. We also provide performance optimization for athletes and active individuals. During your initial assessment, we\'ll evaluate your specific condition and determine if physiotherapy is the right approach for you, or if you need referral to another healthcare provider.' },
+        { question: 'How long does a physiotherapy session last?', answer: 'Initial assessments typically last 60-90 minutes to allow for comprehensive evaluation and treatment planning. Follow-up treatment sessions are usually 45-60 minutes, depending on your condition and treatment needs. Your physiotherapist will discuss session duration and frequency during your initial consultation, tailoring the schedule to your specific condition and goals.' },
+        { question: 'How many sessions will I need?', answer: 'The number of sessions varies depending on your condition, its severity, how long you\'ve had it, and your goals. Some acute injuries may resolve in 4-6 sessions, while chronic conditions or post-surgical rehabilitation may require more extended treatment. Your physiotherapist will provide an estimated treatment timeline after your initial assessment, and we\'ll regularly reassess your progress to ensure you\'re on track. We focus on getting you better as efficiently as possible while ensuring long-term results.' },
+        { question: 'Do you accept insurance?', answer: 'We recommend contacting your insurance provider to verify coverage for physiotherapy services. Some plans cover physiotherapy, while others may require a referral from a doctor. We can provide receipts and documentation needed for insurance claims. Please check with your insurance provider about coverage details, co-pays, and any referral requirements before your first visit.' },
+        { question: 'What should I expect in my first physiotherapy session?', answer: 'Your first session begins with a comprehensive assessment where your physiotherapist will ask about your injury history, current symptoms, and goals. We\'ll evaluate your movement, strength, range of motion, and functional limitations. Based on this assessment, we\'ll explain our findings, discuss your treatment plan, and begin treatment. You\'ll receive education about your condition and may be given exercises to start at home. We\'ll also discuss expected outcomes and treatment timeline. Come prepared to discuss your condition openly and wear comfortable clothing that allows for movement assessment.' },
+      ];
 
   const isHomepage = true; // Use homepage layout with header in hero
 
@@ -454,29 +403,32 @@ const PhysiotherapyPage: React.FC<TenantLandingProps> = ({
         </header>
       )}
 
-      {/* Hero Section */}
+      {/* Hero Section - content from CMS with fallbacks */}
       <HeroSection 
         tenantSlug={tenantSlug}
-        items={undefined} // Can be populated from database schema in future
+        items={heroSection?.items}
         showHeader={true}
         navItems={navItems}
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
         isHomepage={true}
-        title="Evidence-Based Sports Physiotherapy & Performance Rehabilitation"
-        subtitle="Evidence-Based Rehabilitation And Movement Optimization"
-        description="STR Fitness Club Physiotherapy delivers clinically driven, evidence-based care with a strong focus on sports performance and movement efficiency. Our approach prioritizes accurate assessment and diagnosis to identify the underlying causes of pain, injury, and movement dysfunction, rather than simply treating symptoms."
-        buttonText="Chat With Us"
+        title={getHeading(heroSection?.items, 'title') || 'Evidence-Based Sports Physiotherapy & Performance Rehabilitation'}
+        subtitle={getTextByKey(heroSection?.items, 'subtitle') || 'Evidence-Based Rehabilitation And Movement Optimization'}
+        description={getTextByKey(heroSection?.items, 'description') || 'STR Fitness Club Physiotherapy delivers clinically driven, evidence-based care with a strong focus on sports performance and movement efficiency. Our approach prioritizes accurate assessment and diagnosis to identify the underlying causes of pain, injury, and movement dysfunction, rather than simply treating symptoms.'}
+        imageSrc={getImage(heroSection?.items, 'image')?.src}
+        imageAlt={getImage(heroSection?.items, 'image')?.alt}
+        buttonText={getButton(heroSection?.items, 'cta')?.text || getButton(heroSection?.items, 'button')?.text || 'Chat With Us'}
+        buttonUrl={getButton(heroSection?.items, 'cta')?.url || getButton(heroSection?.items, 'button')?.url}
         onButtonClick={() => setIsContactModalOpen(true)}
       />
 
-      {/* About Us Section */}
+      {/* About Us Section - content from CMS with fallbacks */}
       <section id="about" className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 min-h-[90vh] flex items-center overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
           <img
-            src={STR_ASSETS.backgrounds.aboutUs}
-            alt="STR Fitness Gym Training"
+            src={getImage(aboutSection?.items, 'image')?.src || getImage(aboutSection?.items, 'background')?.src || STR_ASSETS.backgrounds.aboutUs}
+            alt={getImage(aboutSection?.items, 'image')?.alt || getImage(aboutSection?.items, 'background')?.alt || 'STR Fitness Gym Training'}
             className="w-full h-full object-cover"
             onError={(e) => {
               // Fallback to placeholder if image not found
@@ -490,51 +442,42 @@ const PhysiotherapyPage: React.FC<TenantLandingProps> = ({
 
         <div className="container mx-auto relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <div className="w-full">
-            {/* Main Heading */}
+            {/* Main Heading - from CMS or fallback */}
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-6 text-foreground leading-tight">
-              Why Choose STR Physiotherapy
+              {getHeading(aboutSection?.items, 'title') || 'Why Choose STR Physiotherapy'}
             </h2>
 
-            {/* Content */}
+            {/* Content - from CMS or fallback */}
             <p className="text-lg md:text-xl text-foreground mb-16 max-w-3xl leading-relaxed">
-              STR Fitness Club Physiotherapy delivers clinically driven, evidence-based care with a strong focus on sports performance and movement efficiency. Our approach prioritizes accurate assessment and diagnosis to identify the underlying causes of pain, injury, and movement dysfunction, rather than simply treating symptoms.
+              {getTextByKey(aboutSection?.items, 'description') || 'STR Fitness Club Physiotherapy delivers clinically driven, evidence-based care with a strong focus on sports performance and movement efficiency. Our approach prioritizes accurate assessment and diagnosis to identify the underlying causes of pain, injury, and movement dysfunction, rather than simply treating symptoms.'}
             </p>
 
-            {/* Feature Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Evidence-Based Treatment Card */}
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Wrench className="h-6 w-6 text-black" />
+            {/* Feature Cards - from CMS or fallback */}
+            {(() => {
+              const aboutFeatures = getArrayItems(aboutSection?.items, 'features');
+              const features = aboutFeatures.length > 0 ? aboutFeatures.map((f: { title?: string; description?: string }) => ({ title: f.title || '', description: f.description || '' })) : [
+                { title: 'EVIDENCE-BASED TREATMENT', description: 'Rehabilitation integrates manual therapy, progressive therapeutic exercise, and movement re-education, all conducted within a fully equipped gym environment. This allows for precise load management and sport-specific progressions that bridge the gap between clinical rehabilitation and high-performance training.' },
+                { title: 'INTEGRATED CARE', description: 'Our physiotherapists work in close collaboration with STR coaches and personal trainers to ensure continuity between rehabilitation and training. This integrated model supports safe return to sport, reduced injury risk, and measurable improvements in performance capacity.' },
+                { title: 'HIGH LEVEL PERFORMANCE', description: 'With extensive experience working with elite and competitive athletes, our team understands the demands of high-performance training, competition timelines, and return-to-play requirements. This background informs our clinical decision-making and progression strategies, ensuring every athlete—whether elite, competitive, or recreational—receives structured, outcome-driven care designed for long-term resilience and peak performance.' },
+              ];
+              const icons = [Wrench, Award, Users];
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {features.slice(0, 3).map((f, i) => {
+                    const Icon = icons[i];
+                    return (
+                      <div key={i} className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
+                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
+                          {Icon && <Icon className="h-6 w-6 text-black" />}
+                        </div>
+                        <h3 className="text-xl font-bold uppercase text-black mb-3">{f.title}</h3>
+                        <p className="text-black/80 text-sm leading-relaxed grow">{f.description}</p>
+                      </div>
+                    );
+                  })}
                 </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">EVIDENCE-BASED TREATMENT</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  Rehabilitation integrates manual therapy, progressive therapeutic exercise, and movement re-education, all conducted within a fully equipped gym environment. This allows for precise load management and sport-specific progressions that bridge the gap between clinical rehabilitation and high-performance training.
-                </p>
-              </div>
-
-              {/* Integrated Care Card */}
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Award className="h-6 w-6 text-black" />
-                </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">INTEGRATED CARE</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  Our physiotherapists work in close collaboration with STR coaches and personal trainers to ensure continuity between rehabilitation and training. This integrated model supports safe return to sport, reduced injury risk, and measurable improvements in performance capacity.
-                </p>
-              </div>
-
-              {/* High Level Performance Card */}
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Users className="h-6 w-6 text-black" />
-                </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">HIGH LEVEL PERFORMANCE</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  With extensive experience working with elite and competitive athletes, our team understands the demands of high-performance training, competition timelines, and return-to-play requirements. This background informs our clinical decision-making and progression strategies, ensuring every athlete—whether elite, competitive, or recreational—receives structured, outcome-driven care designed for long-term resilience and peak performance.
-                </p>
-              </div>
-            </div>
+              );
+            })()}
           </div>
         </div>
       </section>
@@ -546,16 +489,16 @@ const PhysiotherapyPage: React.FC<TenantLandingProps> = ({
             {/* Left Column - Big Title */}
             <div className="flex flex-col justify-center">
               <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase text-foreground leading-tight mb-6">
-                WHAT'S INCLUDED IN PHYSIOTHERAPY
+                {getHeading(programmesSection?.items, 'title') || "WHAT'S INCLUDED IN PHYSIOTHERAPY"}
               </h2>
               <p className="text-lg md:text-xl text-foreground/80 leading-relaxed max-w-xl mb-8">
-                Every physiotherapy program at STR includes comprehensive assessment, evidence-based treatment, and personalized care. Here's what you get when you work with us.
+                {getTextByKey(programmesSection?.items, 'description') || "Every physiotherapy program at STR includes comprehensive assessment, evidence-based treatment, and personalized care. Here's what you get when you work with us."}
               </p>
-              {/* Programmes Image */}
+              {/* Programmes Image - from CMS or default */}
               <div className="w-full max-w-xl">
                 <img 
-                    src="/theme/str/assets/programmes/Physiotherapy.png"
-                  alt="STR Fitness Physiotherapy Treatment"
+                  src={getImage(programmesSection?.items, 'image')?.src || '/theme/str/assets/programmes/Physiotherapy.png'}
+                  alt={getImage(programmesSection?.items, 'image')?.alt || 'STR Fitness Physiotherapy Treatment'}
                   className="w-full h-auto rounded-lg object-cover shadow-lg"
                   onError={(e) => {
                     // Fallback if image not found

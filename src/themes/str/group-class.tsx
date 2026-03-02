@@ -15,7 +15,9 @@ import { SEOHead } from './components/SEOHead';
 import { GTM } from './components/GTM';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
 import { useCustomCode } from './hooks/useCustomCode';
-import { getHomeUrl } from './utils/urls';
+import { getHomeUrl, getPageUrl } from './utils/urls';
+import { usePageLayout, getComponentByType } from '../../hooks/usePageLayout';
+import { getTextByKey, getHeading, getImage, getArrayItems, getButton, parseMemberFromSubItems } from './utils/schemaHelpers';
 
 interface TenantLandingProps {
   tenantName?: string;
@@ -34,6 +36,18 @@ const GroupClassPage: React.FC<TenantLandingProps> = ({
   
   // Load custom code settings (for GTM, GA, etc.)
   const { customCode } = useCustomCode(tenantId || undefined);
+
+  // Fetch page layout from CMS (same structure as personal-training / physiotherapy)
+  const { data: pageData } = usePageLayout({ slug: '/group-class', tenantId: tenantId || undefined });
+  const pageLayout = pageData?.layout;
+  const heroSection = getComponentByType(pageLayout, 'HeroSection');
+  const aboutSection = getComponentByType(pageLayout, 'AboutSection');
+  const programmesSection = getComponentByType(pageLayout, 'ProgrammesSection');
+  const gallerySection = getComponentByType(pageLayout, 'GallerySection');
+  const testimonialsSection = getComponentByType(pageLayout, 'TestimonialsSection');
+  const teamSection = getComponentByType(pageLayout, 'TeamSection');
+  const faqSection = getComponentByType(pageLayout, 'FAQSection');
+  const ctaSection = getComponentByType(pageLayout, 'CTASection');
   
   // Get settings from database with fallback to defaults
   const siteName = getSiteName(branding, tenantName);
@@ -63,13 +77,13 @@ const GroupClassPage: React.FC<TenantLandingProps> = ({
     }
   }, [faviconSrc, brandingLoading]);
   
-  // Page meta
+  // Page meta (CMS meta_title/meta_description when available)
   const pageMeta = useMemo(() => ({
-    title: `Group Classes - ${siteName}`,
-    description: siteDescription,
+    title: pageData?.meta_title || `Group Classes - ${siteName}`,
+    description: pageData?.meta_description || siteDescription,
     keywords: 'STR Fitness, group classes, fitness training, Singapore, group training',
     url: typeof window !== 'undefined' ? window.location.href : '',
-  }), [siteName, siteDescription]);
+  }), [pageData?.meta_title, pageData?.meta_description, siteName, siteDescription]);
 
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [activeProgramme, setActiveProgramme] = useState(0);
@@ -230,8 +244,11 @@ const GroupClassPage: React.FC<TenantLandingProps> = ({
   ];
 
   
-  // Programmes data for accordion - Group Class focused services
-  const programmes = [
+  // Programmes data for accordion - from CMS with hardcoded fallback
+  const programmesRaw = getArrayItems(programmesSection?.items, 'programmes');
+  const programmes = programmesRaw.length > 0
+    ? programmesRaw.map((p: { title?: string; description?: string; content?: string }) => ({ title: p.title || '', description: p.description || '', content: p.content || '' }))
+    : [
     {
       title: 'HYROX APEX',
       description: `Build HYROX race-day resilience by increasing your ability to sustain threshold intensity. This class is designed to replicate the flow and fatigue of race day.
@@ -265,85 +282,41 @@ const GroupClassPage: React.FC<TenantLandingProps> = ({
     },
   ];
 
-  // Gallery images - loaded from centralized asset config file
-  const galleryImages = getGroupClassGalleryImages()
+  // Gallery images - from CMS (group-class category) or asset config
+  const cmsGalleryRaw = getArrayItems(gallerySection?.items, 'gallery');
+  const cmsGalleryGC = cmsGalleryRaw.length > 0 ? cmsGalleryRaw.filter((i: { category?: string }) => i.category === 'group-class').map((i: { src?: string; alt?: string }) => ({ src: i.src || '', alt: i.alt || '' })) : null;
+  const galleryImages = cmsGalleryGC && cmsGalleryGC.length > 0 ? cmsGalleryGC : getGroupClassGalleryImages();
 
-  // Team members
-  const teamMembers = [
-    {
-      name: 'JJ',
-      role: 'Head Coach | Founder | Physiotherapist',
-      description: 'JJ, a former National Youth Wushu Athlete, earned a Physiotherapy degree from Trinity College Dublin and specialized in sports physiotherapy at Sengkang General Hospital. He competes in endurance events like Hyrox — ranking top 6 Singaporean in 2024 — and volunteers with the Special Olympics and Wushu community.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/JJ-Head-Coach-scaled-e1743491665639.jpg',
-      profileLink: '#',
-    },
-    {
-      name: 'Brandon Khoo',
-      role: 'PT Coach',
-      description: 'Brandon Khoo is an experienced strength and conditioning coach specializing in kettlebell and barbell training. He has designed and led both individualized and group training programs, focusing on strength, endurance, mobility, and injury prevention. He is passionate about helping clients build functional strength through structured progression.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Brandon-Khoo-Coach-scaled-e1743491558663.jpg',
-      profileLink: '#',
-    },
-    {
-      name: 'Jing Yong',
-      role: 'Group Class Coach',
-      description: 'Jing Yong earned an Accountancy degree from Nanyang Technological University and currently holds a managerial position at a local investment firm. A former competitive athlete in triathlons, track and field and cross-country running, he now focuses on endurance events such as Hyrox, marathons, and team-based functional fitness races.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Jing-Yong-Coach-e1743491534837.jpg',
-      profileLink: '#',
-    },
-    {
-      name: 'Jessica',
-      role: 'Group Class Coach | PT Coach',
-      description: 'Jessica is an experienced and versatile personal trainer with expertise in both strength and hybrid training. She has helped numerous clients achieve both fitness and aesthetic goals, while ensuring that they train safely and efficiently. She competes in half marathons and HYROX, ranking as the top Singaporean woman in both Open (2nd overall, first in AG) and Pro (3rd overall, first in AG) categories in HYROX 2024 races.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Jessica-e1744082680759.jpeg',
-      profileLink: '#',
-    },
-    {
-      name: 'Jacqueline',
-      role: 'Group Class Coach',
-      description: 'Jacqueline is a passionate fitness trainer dedicated to helping others feel strong, confident, and empowered through movement. While she works as an HR professional by day, her true energy comes from the world of fitness—especially spin and pilates. She believes fitness should be fun, approachable, and inclusive, regardless of experience level. Her mission is to create a supportive space where members are encouraged to grow, challenge themselves, and celebrate progress.',
-      qualifications: '',
-      specialization: '',
-      image: '/theme/str/assets/team/Jacqueline-e1744082763597.jpeg',
-      profileLink: '#',
-    },
-  ];
+  // Team members - from CMS with hardcoded fallback
+  const teamMembersRaw = getArrayItems(teamSection?.items, 'teamMembers').length > 0 ? getArrayItems(teamSection?.items, 'teamMembers') : getArrayItems(teamSection?.items, 'members');
+  const teamMembers = teamMembersRaw.length > 0
+    ? teamMembersRaw.map((m: { type?: string; items?: unknown[]; title?: string; name?: string; role?: string; description?: string; src?: string; props?: { role?: string } }) => {
+        if (m.type === 'array' && Array.isArray(m.items)) {
+          const parsed = parseMemberFromSubItems(m.items);
+          return { ...parsed, qualifications: '', specialization: '', profileLink: '#' };
+        }
+        return { name: m.title || m.name || '', role: m.role || m.props?.role || '', description: m.description || '', image: m.src || '', qualifications: '', specialization: '', profileLink: '#' };
+      })
+    : [
+        { name: 'JJ', role: 'Head Coach | Founder | Physiotherapist', description: 'JJ, a former National Youth Wushu Athlete, earned a Physiotherapy degree from Trinity College Dublin and specialized in sports physiotherapy at Sengkang General Hospital. He competes in endurance events like Hyrox — ranking top 6 Singaporean in 2024 — and volunteers with the Special Olympics and Wushu community.', qualifications: '', specialization: '', image: '/theme/str/assets/team/JJ-Head-Coach-scaled-e1743491665639.jpg', profileLink: '#' },
+        { name: 'Brandon Khoo', role: 'PT Coach', description: 'Brandon Khoo is an experienced strength and conditioning coach specializing in kettlebell and barbell training. He has designed and led both individualized and group training programs, focusing on strength, endurance, mobility, and injury prevention. He is passionate about helping clients build functional strength through structured progression.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Brandon-Khoo-Coach-scaled-e1743491558663.jpg', profileLink: '#' },
+        { name: 'Jing Yong', role: 'Group Class Coach', description: 'Jing Yong earned an Accountancy degree from Nanyang Technological University and currently holds a managerial position at a local investment firm. A former competitive athlete in triathlons, track and field and cross-country running, he now focuses on endurance events such as Hyrox, marathons, and team-based functional fitness races.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Jing-Yong-Coach-e1743491534837.jpg', profileLink: '#' },
+        { name: 'Jessica', role: 'Group Class Coach | PT Coach', description: 'Jessica is an experienced and versatile personal trainer with expertise in both strength and hybrid training. She has helped numerous clients achieve both fitness and aesthetic goals, while ensuring that they train safely and efficiently. She competes in half marathons and HYROX, ranking as the top Singaporean woman in both Open (2nd overall, first in AG) and Pro (3rd overall, first in AG) categories in HYROX 2024 races.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Jessica-e1744082680759.jpeg', profileLink: '#' },
+        { name: 'Jacqueline', role: 'Group Class Coach', description: 'Jacqueline is a passionate fitness trainer dedicated to helping others feel strong, confident, and empowered through movement. While she works as an HR professional by day, her true energy comes from the world of fitness—especially spin and pilates. She believes fitness should be fun, approachable, and inclusive, regardless of experience level. Her mission is to create a supportive space where members are encouraged to grow, challenge themselves, and celebrate progress.', qualifications: '', specialization: '', image: '/theme/str/assets/team/Jacqueline-e1744082763597.jpeg', profileLink: '#' },
+      ];
 
-  // FAQ data - Group Class focused
-  const faqData = [
-    {
-      question: 'What makes STR Group Classes different?',
-      answer: 'STR Group Classes combine expert coaching with a supportive community atmosphere. Our classes are led by experienced coaches who provide real-time form correction and motivation, while the group dynamic creates natural accountability and energy. Every exercise is scalable to your fitness level, so whether you\'re a beginner or advanced, you\'ll be appropriately challenged. We offer diverse class types—from HIIT and strength circuits to hybrid workouts—keeping your training fresh and engaging.',
-    },
-    {
-      question: 'How do I book a group class?',
-      answer: 'You can book classes through our online booking system. Simply select the class you want to attend, check the schedule for available times, and reserve your spot. We recommend booking in advance as popular classes fill up quickly. If you\'re new to STR, you can also contact us directly to learn about our class offerings and find the best fit for your fitness goals.',
-    },
-    {
-      question: 'What should I expect in my first group class?',
-      answer: 'Your first group class will start with a brief introduction from the coach, who will explain the workout format and demonstrate key movements. The coach will provide modifications for different fitness levels, so you can participate at a pace that feels right for you. Don\'t worry about keeping up with everyone—focus on proper form and doing your best. The community is welcoming and supportive, and you\'ll quickly feel comfortable in the group setting.',
-    },
-    {
-      question: 'How often should I attend group classes?',
-      answer: 'The frequency depends on your goals, fitness level, and schedule. Most members attend 2-4 classes per week for optimal results, though some attend more frequently. Our flexible scheduling allows you to find classes that fit your lifestyle. During your initial consultation, we can help you determine the right frequency based on your goals and current fitness level.',
-    },
-    {
-      question: 'Can beginners join group classes?',
-      answer: 'Absolutely! Our group classes are designed to be inclusive and scalable. Every exercise can be modified to match your current fitness level, and our coaches provide clear demonstrations and alternatives. Beginners are welcome in all our classes, and the supportive community atmosphere makes it easy to learn and progress at your own pace. Many of our members started as beginners and have seen incredible improvements.',
-    },
-    {
-      question: 'What results can I expect from group classes?',
-      answer: 'Results depend on your consistency, effort, and goals, but most members see noticeable improvements within 4-6 weeks of regular attendance. You can expect increased strength, improved cardiovascular fitness, better body composition, enhanced energy levels, and reduced stress. The combination of expert coaching, varied workouts, and community support creates an environment where sustainable progress is achievable. Many members also report improved mental well-being and stronger social connections.',
-    },
-  ];
+  // FAQ data - from CMS with hardcoded fallback
+  const faqItemsRaw = getArrayItems(faqSection?.items, 'faqItems').length > 0 ? getArrayItems(faqSection?.items, 'faqItems') : getArrayItems(faqSection?.items, 'faqs');
+  const faqData = faqItemsRaw.length > 0
+    ? faqItemsRaw.map((f: { question?: string; title?: string; answer?: string; description?: string }) => ({ question: f.question || f.title || '', answer: f.answer || f.description || '' }))
+    : [
+        { question: 'What makes STR Group Classes different?', answer: 'STR Group Classes combine expert coaching with a supportive community atmosphere. Our classes are led by experienced coaches who provide real-time form correction and motivation, while the group dynamic creates natural accountability and energy. Every exercise is scalable to your fitness level, so whether you\'re a beginner or advanced, you\'ll be appropriately challenged. We offer diverse class types—from HIIT and strength circuits to hybrid workouts—keeping your training fresh and engaging.' },
+        { question: 'How do I book a group class?', answer: 'You can book classes through our online booking system. Simply select the class you want to attend, check the schedule for available times, and reserve your spot. We recommend booking in advance as popular classes fill up quickly. If you\'re new to STR, you can also contact us directly to learn about our class offerings and find the best fit for your fitness goals.' },
+        { question: 'What should I expect in my first group class?', answer: 'Your first group class will start with a brief introduction from the coach, who will explain the workout format and demonstrate key movements. The coach will provide modifications for different fitness levels, so you can participate at a pace that feels right for you. Don\'t worry about keeping up with everyone—focus on proper form and doing your best. The community is welcoming and supportive, and you\'ll quickly feel comfortable in the group setting.' },
+        { question: 'How often should I attend group classes?', answer: 'The frequency depends on your goals, fitness level, and schedule. Most members attend 2-4 classes per week for optimal results, though some attend more frequently. Our flexible scheduling allows you to find classes that fit your lifestyle. During your initial consultation, we can help you determine the right frequency based on your goals and current fitness level.' },
+        { question: 'Can beginners join group classes?', answer: 'Absolutely! Our group classes are designed to be inclusive and scalable. Every exercise can be modified to match your current fitness level, and our coaches provide clear demonstrations and alternatives. Beginners are welcome in all our classes, and the supportive community atmosphere makes it easy to learn and progress at your own pace. Many of our members started as beginners and have seen incredible improvements.' },
+        { question: 'What results can I expect from group classes?', answer: 'Results depend on your consistency, effort, and goals, but most members see noticeable improvements within 4-6 weeks of regular attendance. You can expect increased strength, improved cardiovascular fitness, better body composition, enhanced energy levels, and reduced stress. The combination of expert coaching, varied workouts, and community support creates an environment where sustainable progress is achievable. Many members also report improved mental well-being and stronger social connections.' },
+      ];
 
   const isHomepage = true; // Use homepage layout with header in hero
 
@@ -456,29 +429,32 @@ const GroupClassPage: React.FC<TenantLandingProps> = ({
         </header>
       )}
 
-      {/* Hero Section */}
+      {/* Hero Section - content from CMS with fallbacks */}
       <HeroSection 
         tenantSlug={tenantSlug}
-        items={undefined} // Can be populated from database schema in future
+        items={heroSection?.items}
         showHeader={true}
         navItems={navItems}
         isMenuOpen={isMenuOpen}
         setIsMenuOpen={setIsMenuOpen}
         isHomepage={true}
-        title="Where Expert Coaching Meets Community Training"
-        subtitle="Train Better, Live Better"
-        description="Experience our Small Group Classes, capped at 8 - 12 pax with a dedicated, progressive and structured training programme alongside a supportive community. Whether you're building strength, improving fitness, or seeking accountability, our group classes offer the perfect environment to achieve your goals."
-        buttonText="Chat With Us"
+        title={getHeading(heroSection?.items, 'title') || 'Where Expert Coaching Meets Community Training'}
+        subtitle={getTextByKey(heroSection?.items, 'subtitle') || 'Train Better, Live Better'}
+        description={getTextByKey(heroSection?.items, 'description') || "Experience our Small Group Classes, capped at 8 - 12 pax with a dedicated, progressive and structured training programme alongside a supportive community. Whether you're building strength, improving fitness, or seeking accountability, our group classes offer the perfect environment to achieve your goals."}
+        imageSrc={getImage(heroSection?.items, 'image')?.src}
+        imageAlt={getImage(heroSection?.items, 'image')?.alt}
+        buttonText={getButton(heroSection?.items, 'cta')?.text || getButton(heroSection?.items, 'button')?.text || 'Chat With Us'}
+        buttonUrl={getButton(heroSection?.items, 'cta')?.url || getButton(heroSection?.items, 'button')?.url}
         onButtonClick={() => setIsContactModalOpen(true)}
       />
 
-      {/* About Us Section */}
+      {/* About Us Section - content from CMS with fallbacks */}
       <section id="about" className="relative py-16 sm:py-20 px-4 sm:px-6 lg:px-8 min-h-[90vh] flex items-center overflow-hidden">
         {/* Background Image with Overlay */}
         <div className="absolute inset-0">
           <img
-            src={STR_ASSETS.backgrounds.aboutUs}
-            alt="STR Fitness Gym Training"
+            src={getImage(aboutSection?.items, 'image')?.src || getImage(aboutSection?.items, 'background')?.src || STR_ASSETS.backgrounds.aboutUs}
+            alt={getImage(aboutSection?.items, 'image')?.alt || getImage(aboutSection?.items, 'background')?.alt || 'STR Fitness Gym Training'}
             className="w-full h-full object-cover"
             onError={(e) => {
               // Fallback to placeholder if image not found
@@ -492,51 +468,42 @@ const GroupClassPage: React.FC<TenantLandingProps> = ({
 
         <div className="container mx-auto relative z-10 w-full px-4 sm:px-6 lg:px-8">
           <div className="w-full">
-            {/* Main Heading */}
+            {/* Main Heading - from CMS or fallback */}
             <h2 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase mb-6 text-foreground leading-tight">
-              Why Choose STR Group Classes
+              {getHeading(aboutSection?.items, 'title') || 'Why Choose STR Group Classes'}
             </h2>
 
-            {/* Content */}
+            {/* Content - from CMS or fallback */}
             <p className="text-lg md:text-xl text-foreground mb-16 max-w-3xl leading-relaxed">
-              At STR Fitness Club, we believe fitness should be transformative, empowering, and community-driven. Our group classes embody the ethos of Train Better, Live Better — where physical performance meets mental resilience and holistic well-being. Every session is guided by experienced coaches who bring expert instruction, real-time feedback, and unwavering encouragement. You'll train in an environment built on mutual support, where everyone pushes each other to improve and celebrate every milestone — big or small. <br></br><br></br>Whether you're stepping into your fitness journey for the first time or preparing for your next race, our scalable workouts meet you where you are and elevate you further. With classes designed for a range of intensities — from beginner-friendly to advanced performance training — you'll find challenge, connection, and results, all within a welcoming community. Join STR Group Classes and experience effective, fun, and purpose-driven workouts that build strength, confidence, resilience, and lasting friendships along the way.
+              {getTextByKey(aboutSection?.items, 'description') || "At STR Fitness Club, we believe fitness should be transformative, empowering, and community-driven. Our group classes embody the ethos of Train Better, Live Better — where physical performance meets mental resilience and holistic well-being. Every session is guided by experienced coaches who bring expert instruction, real-time feedback, and unwavering encouragement. You'll train in an environment built on mutual support, where everyone pushes each other to improve and celebrate every milestone — big or small. Whether you're stepping into your fitness journey for the first time or preparing for your next race, our scalable workouts meet you where you are and elevate you further. With classes designed for a range of intensities — from beginner-friendly to advanced performance training — you'll find challenge, connection, and results, all within a welcoming community. Join STR Group Classes and experience effective, fun, and purpose-driven workouts that build strength, confidence, resilience, and lasting friendships along the way."}
             </p>
 
-            {/* Feature Cards */}
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {/* Expert Coaching Card */}
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Wrench className="h-6 w-6 text-black" />
+            {/* Feature Cards - from CMS or fallback */}
+            {(() => {
+              const aboutFeatures = getArrayItems(aboutSection?.items, 'features');
+              const features = aboutFeatures.length > 0 ? aboutFeatures.map((f: { title?: string; description?: string }) => ({ title: f.title || '', description: f.description || '' })) : [
+                { title: 'EXPERT COACHING', description: 'Every session is guided by experienced coaches who bring expert instruction, real-time feedback, and unwavering encouragement.' },
+                { title: 'SUPPORTIVE COMMUNITY', description: "You'll train in an environment built on mutual support, where everyone pushes each other to improve and celebrate every milestone — big or small." },
+                { title: 'VARIETY & FLEXIBILITY', description: 'At STR Fitness Club, our group classes cover the full spectrum of performance training. From strength-focused sessions that build a solid foundation, to conditioning classes targeting varied movement patterns and HYROX-style stations, every workout is designed to improve strength, endurance, and efficiency. Our HYROX classes and simulations prepare you for real race-day intensity, helping you refine pacing, strategy, and mental resilience. Complementing this, our Run & Develop classes focus on improving running threshold and speed, ensuring you move stronger, faster, and more confidently—whether in training or competition.' },
+              ];
+              const icons = [Wrench, Award, Users];
+              return (
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  {features.slice(0, 3).map((f, i) => {
+                    const Icon = icons[i];
+                    return (
+                      <div key={i} className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
+                        <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
+                          {Icon && <Icon className="h-6 w-6 text-black" />}
+                        </div>
+                        <h3 className="text-xl font-bold uppercase text-black mb-3">{f.title}</h3>
+                        <p className="text-black/80 text-sm leading-relaxed grow">{f.description}</p>
+                      </div>
+                    );
+                  })}
                 </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">EXPERT COACHING</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  Every session is guided by experienced coaches who bring expert instruction, real-time feedback, and unwavering encouragement.
-                </p>
-              </div>
-
-              {/* Community Support Card */}
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Award className="h-6 w-6 text-black" />
-                </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">SUPPORTIVE COMMUNITY</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  You'll train in an environment built on mutual support, where everyone pushes each other to improve and celebrate every milestone — big or small.
-                </p>
-              </div>
-
-              {/* Variety & Flexibility Card */}
-              <div className="bg-white rounded-3xl p-6 shadow-2xl h-full flex flex-col">
-                <div className="w-12 h-12 rounded-full bg-white flex items-center justify-center mb-4 shrink-0">
-                  <Users className="h-6 w-6 text-black" />
-                </div>
-                <h3 className="text-xl font-bold uppercase text-black mb-3">VARIETY & FLEXIBILITY</h3>
-                <p className="text-black/80 text-sm leading-relaxed grow">
-                  At STR Fitness Club, our group classes cover the full spectrum of performance training. From strength-focused sessions that build a solid foundation, to conditioning classes targeting varied movement patterns and HYROX-style stations, every workout is designed to improve strength, endurance, and efficiency. Our HYROX classes and simulations prepare you for real race-day intensity, helping you refine pacing, strategy, and mental resilience. Complementing this, our Run & Develop classes focus on improving running threshold and speed, ensuring you move stronger, faster, and more confidently—whether in training or competition.
-                </p>
-              </div>
-            </div>
+              );
+            })()}
           </div>
         </div>
       </section>
@@ -549,7 +516,7 @@ const GroupClassPage: React.FC<TenantLandingProps> = ({
             {/* Left Column - Big Title */}
             <div className="flex flex-col justify-center">
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-7xl font-bold uppercase text-foreground leading-tight mb-6">
-              GROUP CLASS PACKAGES 2 WEEKS UNLIMITED TRAINING
+                {getHeading(programmesSection?.items, 'title') || 'GROUP CLASS PACKAGES 2 WEEKS UNLIMITED TRAINING'}
               </h1>
               {/* <h2 className="text-lg md:text-xl text-foreground/80 leading-relaxed max-w-xl mb-8 uppercase tracking-wide">
                 New Here? Train Unlimited for 2 Weeks at{" "}
@@ -568,13 +535,13 @@ const GroupClassPage: React.FC<TenantLandingProps> = ({
                 </span>
               </h2> */}
               <p className="text-lg md:text-xl text-foreground/80 leading-relaxed max-w-xl mb-8">
-              Join STR Group Classes and experience effective, fun, and purpose-driven workouts that build strength, confidence, resilience, and lasting friendships along the way
+                {getTextByKey(programmesSection?.items, 'description') || 'Join STR Group Classes and experience effective, fun, and purpose-driven workouts that build strength, confidence, resilience, and lasting friendships along the way'}
               </p>
-              {/* Programmes Image */}
+              {/* Programmes Image - from CMS or default */}
               <div className="w-full max-w-xl">
                 <img 
-                  src="/theme/str/assets/programmes/Group.png"
-                  alt="STR Fitness Gym Facilities - Group Class Training Area"
+                  src={getImage(programmesSection?.items, 'image')?.src || '/theme/str/assets/programmes/Group.png'}
+                  alt={getImage(programmesSection?.items, 'image')?.alt || 'STR Fitness Gym Facilities - Group Class Training Area'}
                   className="w-full h-auto rounded-lg object-cover shadow-lg"
                   onError={(e) => {
                     // Fallback if image not found

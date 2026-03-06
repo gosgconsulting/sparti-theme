@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 
 const GallerySection = () => {
+  const { ref, isVisible } = useScrollAnimation();
   const [activeChapter, setActiveChapter] = useState("Quiet Mornings");
   const [slideDirection, setSlideDirection] = useState<"left" | "right" | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
@@ -88,7 +90,10 @@ const GallerySection = () => {
   };
 
   return (
-    <section className="bg-brand-main py-20 lg:py-32">
+    <section
+      ref={ref}
+      className={`bg-brand-main py-12 lg:py-20 section-scroll-animate ${isVisible ? "visible" : ""}`}
+    >
       <div className="container mx-auto">
         {/* Section Header */}
         <div className="max-w-4xl mx-auto mb-16 text-center">

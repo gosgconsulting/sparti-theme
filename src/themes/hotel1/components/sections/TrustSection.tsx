@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from "react";
+import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 
 const TrustSection = () => {
+  const { ref, isVisible } = useScrollAnimation();
   const [activeTestimonial, setActiveTestimonial] = useState(0);
   const [guestScore, setGuestScore] = useState(0);
   const [directBooking, setDirectBooking] = useState(0);
@@ -73,7 +75,10 @@ const TrustSection = () => {
   const activeTestimonialData = testimonials[activeTestimonial];
 
   return (
-    <section className="bg-white py-20 lg:py-32">
+    <section
+      ref={ref}
+      className={`bg-white py-12 lg:py-20 section-scroll-animate ${isVisible ? "visible" : ""}`}
+    >
       <div className="container mx-auto">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-16">
           {/* Left: Trust Metrics */}

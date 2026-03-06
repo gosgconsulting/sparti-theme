@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 
 const LocationSection = () => {
+  const { ref, isVisible } = useScrollAnimation();
   const [activeHighlight, setActiveHighlight] = useState("Culture");
 
   const highlights = [
@@ -51,7 +53,10 @@ const LocationSection = () => {
   const activeHighlightData = highlights.find((h) => h.id === activeHighlight) || highlights[0];
 
   return (
-    <section className="bg-brand-main pt-12 lg:pt-16 pb-24 lg:pb-40">
+    <section
+      ref={ref}
+      className={`bg-brand-main pt-8 lg:pt-12 pb-12 lg:pb-20 section-scroll-animate ${isVisible ? "visible" : ""}`}
+    >
       <div className="container mx-auto px-4 sm:px-6 lg:px-8">
         {/* Section Header */}
         <div className="max-w-2xl mx-auto mb-16 lg:mb-24 text-center">

@@ -180,3 +180,15 @@ html::-webkit-scrollbar-track {
     padding-bottom: 120px;
   }
 }
+
+/* Scroll Animation - Mask Up Effect */
+.theme-hotel1 .section-scroll-animate {
+  opacity: 0;
+  transform: translateY(40px);
+  transition: opacity 0.8s ease-out, transform 0.8s ease-out;
+}
+
+.theme-hotel1 .section-scroll-animate.visible {
+  opacity: 1;
+  transform: translateY(0);
+}

@@ -1,6 +1,8 @@
 import React, { useState } from "react";
+import { useScrollAnimation } from "../../hooks/useScrollAnimation";
 
 const AmenitiesSection = () => {
+  const { ref, isVisible } = useScrollAnimation();
   const [activeTab, setActiveTab] = useState("Rooms & Suites");
 
   const tabs = [
@@ -61,7 +63,10 @@ const AmenitiesSection = () => {
   const activeTabData = tabs.find((t) => t.id === activeTab) || tabs[0];
 
   return (
-    <section className="bg-brand-main py-20 lg:py-32">
+    <section
+      ref={ref}
+      className={`bg-brand-main py-12 lg:py-20 section-scroll-animate ${isVisible ? "visible" : ""}`}
+    >
       <div className="container mx-auto">
         <div className="max-w-4xl mx-auto mb-16 text-center">
           <p className="font-body text-sm text-brand-neutral uppercase tracking-wider mb-4">

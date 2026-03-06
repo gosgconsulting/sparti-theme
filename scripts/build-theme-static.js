@@ -254,16 +254,27 @@ async function createStandaloneHtml() {
     console.log(`[testing] Branding will be injected into HTML:`, Object.keys(brandingData));
   }
 
-  // Get favicon from branding or use default
-  let faviconUrl = (brandingData && brandingData.site_favicon)
-    ? brandingData.site_favicon
-    : '/favicon.png';
+  // Favicon priority: THEME_FAVICON_URL env > branding.site_favicon > default
+  let faviconUrl = process.env.THEME_FAVICON_URL && String(process.env.THEME_FAVICON_URL).trim();
+  if (!faviconUrl && brandingData && brandingData.site_favicon) {
+    faviconUrl = brandingData.site_favicon;
+  }
+  if (!faviconUrl) {
+    faviconUrl = '/favicon.png';
+  }
   // Resolve /uploads/ paths to API base URL for static deploy so favicon loads from backend
   const apiBase = process.env.VITE_API_BASE_URL && String(process.env.VITE_API_BASE_URL).trim();
   if (faviconUrl.startsWith('/uploads/') && apiBase) {
     const base = apiBase.replace(/\/$/, '');
     faviconUrl = base + faviconUrl;
   }
+  // Safe for HTML attribute (no double quotes)
+  faviconUrl = faviconUrl.replace(/"/g, '%22');
+  const faviconType = faviconUrl.toLowerCase().includes('.ico')
+    ? 'image/x-icon'
+    : faviconUrl.toLowerCase().includes('.svg')
+      ? 'image/svg+xml'
+      : 'image/png';
 
   // Escape HTML entities for safe injection into <title> and meta tags.
   const escapeHtml = (value) =>
@@ -317,7 +328,7 @@ async function createStandaloneHtml() {
     <meta property="og:description" content="${pageDescription}" />
     <meta name="twitter:title" content="${pageTitle}" />
     <meta name="twitter:description" content="${pageDescription}" />
-    <link rel="icon" type="image/png" href="${faviconUrl}" />
+    <link rel="icon" type="${faviconType}" href="${faviconUrl}" />
     <link rel="apple-touch-icon" href="${faviconUrl}" />
     <!-- Allow indexing for theme deployments -->
     <meta name="robots" content="index, follow" />

@@ -516,6 +516,59 @@ ${urlEntries.join('\n')}
   console.log(`[testing] Wrote sitemap.xml with ${pagePaths.length} URL(s)`);
 }
 
+// Resolve favicon URL the same way as createStandaloneHtml (for copy step). Returns absolute URL or null.
+function getResolvedFaviconUrl(brandingData) {
+  let url = process.env.THEME_FAVICON_URL && String(process.env.THEME_FAVICON_URL).trim();
+  if (!url && brandingData && brandingData.site_favicon) {
+    url = brandingData.site_favicon;
+  }
+  if (!url) return null;
+  const apiBase = process.env.VITE_API_BASE_URL && String(process.env.VITE_API_BASE_URL).trim();
+  if (url.startsWith('/uploads/') && apiBase) {
+    url = apiBase.replace(/\/$/, '') + url;
+  }
+  return url;
+}
+
+// Fetch branding favicon from URL and write to dist/ root, then patch dist/index.html to use it.
+async function copyFaviconToDist(projectRoot, brandingData) {
+  const faviconUrl = getResolvedFaviconUrl(brandingData);
+  if (!faviconUrl || (!faviconUrl.startsWith('http://') && !faviconUrl.startsWith('https://'))) {
+    return;
+  }
+  const distPath = path.join(projectRoot, 'dist');
+  const indexPath = path.join(distPath, 'index.html');
+  let ext = 'png';
+  try {
+    const pathname = new URL(faviconUrl).pathname;
+    const match = pathname.match(/\.(ico|svg|png|jpe?g|webp)$/i);
+    if (match) ext = match[1].toLowerCase();
+  } catch (_) {}
+  const filename = `favicon.${ext}`;
+  const outPath = path.join(distPath, filename);
+  try {
+    const res = await fetch(faviconUrl, { redirect: 'follow' });
+    if (!res.ok) {
+      console.warn(`[testing] Favicon fetch failed (${res.status}): ${faviconUrl}`);
+      return;
+    }
+    const buf = Buffer.from(await res.arrayBuffer());
+    fs.writeFileSync(outPath, buf);
+    console.log(`[testing] Copied branding favicon to dist/${filename}`);
+  } catch (err) {
+    console.warn(`[testing] Could not fetch/copy favicon:`, err.message);
+    return;
+  }
+  const faviconType = ext === 'ico' ? 'image/x-icon' : ext === 'svg' ? 'image/svg+xml' : 'image/png';
+  const newIconLine = `    <link rel="icon" type="${faviconType}" href="/${filename}" />`;
+  const newAppleLine = `    <link rel="apple-touch-icon" href="/${filename}" />`;
+  let html = fs.readFileSync(indexPath, 'utf8');
+  html = html.replace(/<link rel="icon"[^>]*\/?\s*>/i, newIconLine);
+  html = html.replace(/<link rel="apple-touch-icon"[^>]*\/?\s*>/i, newAppleLine);
+  fs.writeFileSync(indexPath, html, 'utf8');
+  console.log(`[testing] Updated dist/index.html to use /${filename}`);
+}
+
 // Build the theme
 (async () => {
   try {
@@ -524,6 +577,9 @@ ${urlEntries.join('\n')}
     verifyBuildOutput();
     // Copy theme assets so static deploy can serve /theme/<slug>/assets/*
     copyThemeAssetsToDist();
+
+    // Fetch branding favicon and copy to dist/ root so deployed site serves it from same origin
+    await copyFaviconToDist(path.join(__dirname, '..'), brandingData);
 
     // Deployment-specific robots.txt and sitemap.xml (only when base URL is known)
     const projectRoot = path.join(__dirname, '..');

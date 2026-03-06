@@ -56,6 +56,24 @@ if (cmsTenant) {
 const themeMetaTitleEnv = process.env.THEME_META_TITLE;
 const themeMetaDescriptionEnv = process.env.THEME_META_DESCRIPTION;
 
+// Resolve canonical base URL for robots.txt and sitemap (no trailing slash)
+// Priority: SITE_URL > VERCEL_PROJECT_PRODUCTION_URL > VERCEL_URL; skip if none set
+function resolveBaseUrl() {
+  const siteUrl = process.env.SITE_URL && String(process.env.SITE_URL).trim();
+  if (siteUrl) {
+    return siteUrl.replace(/\/+$/, '');
+  }
+  const prodUrl = process.env.VERCEL_PROJECT_PRODUCTION_URL && String(process.env.VERCEL_PROJECT_PRODUCTION_URL).trim();
+  if (prodUrl) {
+    return prodUrl.startsWith('http') ? prodUrl.replace(/\/+$/, '') : `https://${prodUrl}`;
+  }
+  const vercelUrl = process.env.VERCEL_URL && String(process.env.VERCEL_URL).trim();
+  if (vercelUrl) {
+    return vercelUrl.startsWith('http') ? vercelUrl.replace(/\/+$/, '') : `https://${vercelUrl}`;
+  }
+  return null;
+}
+
 // Helper function to fetch branding during build
 async function fetchBrandingForBuild(themeSlug, tenantId) {
   // Check for branding in environment variable first
@@ -93,10 +111,14 @@ async function fetchBrandingForBuild(themeSlug, tenantId) {
 
 console.log(`[testing] Building static export for theme: ${themeSlug}`);
 
-// Check if theme exists
-const themePath = path.join(__dirname, '..', 'sparti-cms', 'theme', themeSlug);
-if (!fs.existsSync(themePath)) {
-  console.error(`Error: Theme "${themeSlug}" not found at ${themePath}`);
+// Check if theme exists (sparti-cms/theme or src/themes fallback for repo layout)
+const themePathCms = path.join(__dirname, '..', 'sparti-cms', 'theme', themeSlug);
+const themePathSrc = path.join(__dirname, '..', 'src', 'themes', themeSlug);
+const themeExists = fs.existsSync(themePathCms) ||
+  fs.existsSync(path.join(themePathSrc, 'index.tsx')) ||
+  fs.existsSync(path.join(themePathSrc, 'pages.json'));
+if (!themeExists) {
+  console.error(`Error: Theme "${themeSlug}" not found at ${themePathCms} or ${themePathSrc}`);
   process.exit(1);
 }
 
@@ -413,6 +435,76 @@ function copyThemeAssetsToDist() {
   console.log(`[testing] Copied theme assets to dist/theme/${themeSlug}/assets/`);
 }
 
+// Escape for XML text/attributes (sitemap <loc>)
+function escapeXml(str) {
+  return String(str)
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/"/g, '&quot;')
+    .replace(/'/g, '&apos;');
+}
+
+// Read theme pages from src/themes/<themeSlug>/pages.json; return normalized path list ('' for root, else no leading slash)
+function getThemePagePaths(projectRoot, slug) {
+  const pagesPath = path.join(projectRoot, 'src', 'themes', slug, 'pages.json');
+  if (!fs.existsSync(pagesPath)) {
+    return [''];
+  }
+  let data;
+  try {
+    data = JSON.parse(fs.readFileSync(pagesPath, 'utf8'));
+  } catch (err) {
+    console.warn(`[testing] Could not parse ${pagesPath}, using homepage only:`, err.message);
+    return [''];
+  }
+  const pages = Array.isArray(data?.pages) ? data.pages : [];
+  const paths = [];
+  const seen = new Set();
+  for (const p of pages) {
+    const raw = p?.slug != null ? String(p.slug).trim() : '';
+    const normalized = raw === '/' || raw === '' ? '' : raw.replace(/^\/+/, '').replace(/\/+$/, '');
+    if (normalized === '' && seen.has('')) continue;
+    if (normalized !== '' && seen.has(normalized)) continue;
+    seen.add(normalized);
+    paths.push(normalized);
+  }
+  if (paths.length === 0) paths.push('');
+  return paths;
+}
+
+// Write deployment-specific robots.txt to dist/
+function writeRobotsTxt(projectRoot, baseUrl) {
+  const content = `User-agent: *
+Allow: /
+
+Sitemap: ${baseUrl}/sitemap.xml
+`;
+  const outPath = path.join(projectRoot, 'dist', 'robots.txt');
+  fs.writeFileSync(outPath, content, 'utf8');
+  console.log(`[testing] Wrote robots.txt (Sitemap: ${baseUrl}/sitemap.xml)`);
+}
+
+// Write sitemap.xml to dist/ using baseUrl and theme page paths
+function writeSitemapXml(projectRoot, baseUrl, pagePaths) {
+  const lastmod = new Date().toISOString().split('T')[0];
+  const urlEntries = pagePaths.map((p) => {
+    const loc = p === '' ? baseUrl : `${baseUrl}/${p}`;
+    return `  <url>
+    <loc>${escapeXml(loc)}</loc>
+    <lastmod>${lastmod}</lastmod>
+  </url>`;
+  });
+  const xml = `<?xml version="1.0" encoding="UTF-8"?>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+${urlEntries.join('\n')}
+</urlset>
+`;
+  const outPath = path.join(projectRoot, 'dist', 'sitemap.xml');
+  fs.writeFileSync(outPath, xml, 'utf8');
+  console.log(`[testing] Wrote sitemap.xml with ${pagePaths.length} URL(s)`);
+}
+
 // Build the theme
 (async () => {
   try {
@@ -421,6 +513,17 @@ function copyThemeAssetsToDist() {
     verifyBuildOutput();
     // Copy theme assets so static deploy can serve /theme/<slug>/assets/*
     copyThemeAssetsToDist();
+
+    // Deployment-specific robots.txt and sitemap.xml (only when base URL is known)
+    const projectRoot = path.join(__dirname, '..');
+    const baseUrl = resolveBaseUrl();
+    if (baseUrl) {
+      writeRobotsTxt(projectRoot, baseUrl);
+      const pagePaths = getThemePagePaths(projectRoot, themeSlug);
+      writeSitemapXml(projectRoot, baseUrl, pagePaths);
+    } else {
+      console.log(`[testing] SITE_URL / Vercel URL not set; skipping robots.txt and sitemap.xml`);
+    }
 
     console.log(`[testing] ✅ Standalone theme build completed successfully!`);
     console.log(`[testing] Output directory: dist/`);

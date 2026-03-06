@@ -133,13 +133,13 @@ import { TooltipProvider } from "@/components/ui/tooltip";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import ErrorBoundary from "@/components/common/ErrorBoundary";
 import './index.css';
-import '../sparti-cms/styles/modal-sparti-fix.css';
-import '../sparti-cms/styles/rich-text-editor.css';
+import '@/styles/modal-sparti-fix.css';
+import '@/styles/rich-text-editor.css';
 
 // Import the theme component and ThemeBasePathContext for deploy-at-root
-import { ThemeBasePathContext } from '../sparti-cms/context/ThemeBasePathContext';
+import { ThemeBasePathContext } from '@/context/ThemeBasePathContext';
 
-const ThemeComponent = React.lazy(() => import('../src/themes/${themeSlug}'));
+const ThemeComponent = React.lazy(() => import('@/themes/${themeSlug}'));
 
 // Theme name mapping (all themes deployable via DEPLOY_THEME_SLUG)
 const themeNames: Record<string, string> = {

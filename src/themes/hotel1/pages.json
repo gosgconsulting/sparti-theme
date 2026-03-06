@@ -1,0 +1,14 @@
+{
+  "pages": [
+    {
+      "page_name": "Homepage",
+      "slug": "/",
+      "meta_title": "Hotel1 — Luxury Rooms & Suites",
+      "meta_description": "Experience luxury and comfort at Hotel1. Browse our selection of premium rooms and suites. Book your perfect stay with flexible check-in options.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["hotel", "luxury rooms", "suites", "accommodation", "booking", "hotel1"]
+    }
+  ]
+}

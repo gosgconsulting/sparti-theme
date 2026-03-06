@@ -23,6 +23,7 @@ const KNOWN_THEME_SLUGS = [
   "master",
   "e-shop",
   "hotel",
+  "hotel1",
   "nail-queen",
 ];
 

@@ -19,6 +19,7 @@ const PORTFOLIO_THEMES: { slug: string; name: string }[] = [
   { slug: "master", name: "Master Template" },
   { slug: "e-shop", name: "E-shop" },
   { slug: "hotel", name: "Hotel Adina" },
+  { slug: "hotel1", name: "Hotel1" },
   { slug: "nail-queen", name: "Nail Queen" },
 ];
 

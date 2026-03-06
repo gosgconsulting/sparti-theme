@@ -16,6 +16,7 @@ const OptimalConsultingTheme = lazy(() => import('@/themes/optimalconsulting'));
 const MasterTheme = lazy(() => import('@/themes/master'));
 const EShopTheme = lazy(() => import('@/themes/e-shop'));
 const HotelTheme = lazy(() => import('@/themes/hotel'));
+const Hotel1Theme = lazy(() => import('@/themes/hotel1'));
 const NailQueenTheme = lazy(() => import('@/themes/nail-queen'));
 
 /**
@@ -70,6 +71,10 @@ const themeConfig: Record<string, { name: string; component: React.LazyExoticCom
   'hotel': {
     name: 'Hotel Adina',
     component: HotelTheme
+  },
+  'hotel1': {
+    name: 'Hotel1',
+    component: Hotel1Theme
   },
   'nail-queen': {
     name: 'Nail Queen',

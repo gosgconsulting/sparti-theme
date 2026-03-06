@@ -1,0 +1,22 @@
+{
+  "name": "Hotel1 Booking Theme",
+  "description": "A new hotel booking theme based on the hotel theme structure.",
+  "version": "1.0.0",
+  "author": "GOSG",
+  "is_active": true,
+  "category": "hospitality",
+  "tags": ["hotel", "booking", "rooms", "hospitality", "reservation"],
+  "designSystem": "custom",
+  "designSystemTheme": "hotel1",
+  "features": [
+    "Room listings with filtering",
+    "Interactive booking form",
+    "Room details showcase",
+    "Hero image slider",
+    "Responsive design",
+    "Custom hotel-themed styling"
+  ],
+  "preview_image": "assets/preview.svg",
+  "demo_url": "/theme/hotel1",
+  "documentation_url": "/docs/themes/hotel1"
+}

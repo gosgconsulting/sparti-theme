@@ -4,6 +4,7 @@ const GallerySection = () => {
   const [activeChapter, setActiveChapter] = useState("Quiet Mornings");
   const [slideDirection, setSlideDirection] = useState<"left" | "right" | null>(null);
   const [isTransitioning, setIsTransitioning] = useState(false);
+  const [previousIndex, setPreviousIndex] = useState(0);
 
   const chapters = [
     {
@@ -45,6 +46,8 @@ const GallerySection = () => {
 
   const changeChapter = (newChapterId: string, direction: "left" | "right") => {
     if (isTransitioning) return;
+    const currentIndex = chapters.findIndex((c) => c.id === activeChapter);
+    setPreviousIndex(currentIndex);
     setSlideDirection(direction);
     setIsTransitioning(true);
     setActiveChapter(newChapterId);
@@ -57,17 +60,30 @@ const GallerySection = () => {
 
   const handleNext = () => {
     const nextIndex = (activeIndex + 1) % chapters.length;
+    // Always slide left when going forward, even when looping
     changeChapter(chapters[nextIndex].id, "left");
   };
 
   const handlePrevious = () => {
     const prevIndex = (activeIndex - 1 + chapters.length) % chapters.length;
+    // Always slide right when going backward, even when looping
     changeChapter(chapters[prevIndex].id, "right");
   };
 
   const handleChapterClick = (chapterId: string) => {
     const clickedIndex = chapters.findIndex((c) => c.id === chapterId);
-    const direction = clickedIndex > activeIndex ? "left" : "right";
+    // Determine direction, but handle looping case
+    let direction: "left" | "right";
+    if (clickedIndex === 0 && activeIndex === chapters.length - 1) {
+      // Clicking first from last - loop forward
+      direction = "left";
+    } else if (clickedIndex === chapters.length - 1 && activeIndex === 0) {
+      // Clicking last from first - loop backward
+      direction = "right";
+    } else {
+      // Normal case
+      direction = clickedIndex > activeIndex ? "left" : "right";
+    }
     changeChapter(chapterId, direction);
   };
 
@@ -115,11 +131,34 @@ const GallerySection = () => {
             <div className="relative w-full h-full">
               {chapters.map((chapter, index) => {
                 const isActive = chapter.id === activeChapter;
-                const slideOffset = slideDirection === "left" 
-                  ? (index < activeIndex ? "-100%" : index === activeIndex ? "0%" : "100%")
-                  : slideDirection === "right"
-                  ? (index > activeIndex ? "100%" : index === activeIndex ? "0%" : "-100%")
-                  : isActive ? "0%" : index < activeIndex ? "-100%" : "100%";
+                let slideOffset: string;
+                
+                if (isActive) {
+                  slideOffset = "0%";
+                } else if (slideDirection === "left") {
+                  // Sliding left (forward) - current slides left, next comes from right
+                  if (previousIndex === chapters.length - 1 && index === 0) {
+                    // Looping from last to first - first comes from right
+                    slideOffset = "100%";
+                  } else if (index < activeIndex) {
+                    slideOffset = "-100%";
+                  } else {
+                    slideOffset = "100%";
+                  }
+                } else if (slideDirection === "right") {
+                  // Sliding right (backward) - current slides right, previous comes from left
+                  if (previousIndex === 0 && index === chapters.length - 1) {
+                    // Looping from first to last - last comes from left
+                    slideOffset = "-100%";
+                  } else if (index > activeIndex) {
+                    slideOffset = "100%";
+                  } else {
+                    slideOffset = "-100%";
+                  }
+                } else {
+                  // No transition - static positioning
+                  slideOffset = index < activeIndex ? "-100%" : "100%";
+                }
                 
                 return (
                   <div
@@ -195,34 +234,6 @@ const GallerySection = () => {
                 />
               </svg>
             </button>
-          </div>
-
-          {/* Supporting Detail Panel */}
-          <div className="relative overflow-hidden">
-            {chapters.map((chapter, index) => {
-              const isActive = chapter.id === activeChapter;
-              const slideOffset = slideDirection === "left" 
-                ? (index < activeIndex ? "-100%" : index === activeIndex ? "0%" : "100%")
-                : slideDirection === "right"
-                ? (index > activeIndex ? "100%" : index === activeIndex ? "0%" : "-100%")
-                : isActive ? "0%" : index < activeIndex ? "-100%" : "100%";
-              
-              return (
-                <div
-                  key={chapter.id}
-                  className={`bg-white p-8 lg:p-10 rounded-lg border border-brand-neutral/20 max-w-3xl mx-auto transition-transform duration-700 ease-in-out ${
-                    isActive ? "relative z-10" : "absolute inset-x-0 z-0"
-                  }`}
-                  style={{
-                    transform: `translateX(${isActive ? "0%" : slideOffset})`,
-                  }}
-                >
-                  <p className="font-body text-base lg:text-lg text-brand-text/80 leading-relaxed">
-                    {chapter.detail}
-                  </p>
-                </div>
-              );
-            })}
           </div>
         </div>
       </div>

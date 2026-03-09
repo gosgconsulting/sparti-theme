@@ -15,6 +15,7 @@ import saucesImage from "../../assets/oil/BEOK-sauces2.jpg";
 import wheatNoodleImage from "../../assets/IMG_1701.jpg";
 import giftSetImage from "../../assets/noodles/IMG_1700.jpg";
 import potatoNoodleImage from "../../assets/noodles/BEOK-Potatonoodle3.jpg";
+import hallabongNoodleImage from "../../assets/noodles/BEOK-Hanrabongnoodle3.jpg";
 
 export interface Product {
   id: number;
@@ -45,6 +46,7 @@ export const products: Product[] = [
   { id: 10, name: "Myeongawon Hand-Stretched Red Rice Noodle", category: "Noodles", price: "$12", image: wheatNoodleImage },
   { id: 11, name: "Myeongawon 5 Color Noodle Gift Set", category: "Noodles", price: "$26", image: giftSetImage, stock: 2 },
   { id: 12, name: "Potato Noodle", category: "Noodles", price: "$22", image: potatoNoodleImage },
+  { id: 13, name: "Hallabong Noodle", category: "Noodles", price: "$22", image: hallabongNoodleImage },
 ];
 
 export const categoryTabs = [

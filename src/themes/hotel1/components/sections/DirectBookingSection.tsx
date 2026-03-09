@@ -95,10 +95,10 @@ const DirectBookingSection = () => {
 
                   <h3 className="font-headline text-3xl lg:text-4xl font-semibold text-white mb-4 leading-tight">
                     {activeBenefit.title}
-                  </h3>
+                </h3>
                   <p className="font-body text-lg lg:text-xl text-white/95 leading-relaxed max-w-2xl mb-4">
                     {activeBenefit.description}
-                  </p>
+                </p>
                   <p className="font-body text-base text-white/85 leading-relaxed max-w-xl">
                     {activeBenefit.detail}
                   </p>

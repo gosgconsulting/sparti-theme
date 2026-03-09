@@ -25,6 +25,10 @@ import potatoNoodleImage from "../../assets/noodles/BEOK-Potatonoodle3.jpg";
 import potatoNoodleImage1 from "../../assets/noodles/BEOK-Potatonoodle1.jpg";
 import potatoNoodleImage2 from "../../assets/noodles/BEOK-Potatonoodle2.jpg";
 import potatoNoodleImage4 from "../../assets/noodles/BEOK-Potatonoodle4.jpg";
+import hallabongNoodleImage from "../../assets/noodles/BEOK-Hanrabongnoodle3.jpg";
+import hallabongNoodleImage2 from "../../assets/noodles/BEOK-Hanrabongnoodle2.jpg";
+import hallabongNoodleImage4 from "../../assets/noodles/BEOK-Hanrabongnoodle4.jpg";
+import hallabongNoodleImage5 from "../../assets/noodles/BEOK-Hanrabongnoodle5.jpg";
 
 interface ProductImageGalleryProps {
   productId?: string;
@@ -44,6 +48,7 @@ const productImageMap: Record<string, string> = {
   "10": wheatNoodleImage,
   "11": giftSetImage,
   "12": potatoNoodleImage,
+  "13": hallabongNoodleImage,
 };
 
 const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
@@ -70,6 +75,8 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
     ? [seorijuImage, seorijuImage1, seorijuImage2]
     : productId === "12"
     ? [potatoNoodleImage, potatoNoodleImage1, potatoNoodleImage2, potatoNoodleImage4]
+    : productId === "13"
+    ? [hallabongNoodleImage, hallabongNoodleImage2, hallabongNoodleImage4, hallabongNoodleImage5]
     : specificImage
     ? [specificImage]
     : [hoveniaDulcisImage, cornExtractImage, blackBeanTeaImage];

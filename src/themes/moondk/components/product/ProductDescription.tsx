@@ -19,7 +19,8 @@ const ProductDescription = ({ productId }: ProductDescriptionProps) => {
     "9": "• A Fortified Masterpiece: Seoriju is made through the careful fermentation of glutinous rice with nuruk (traditional Korean fermentation starter), which is then fortified with Korean traditional soju\n\n• Complex Flavor Profile: Despite being unfiltered to preserve its soul, it delivers light, fruity, and intricate flavors with a pleasant, slightly sweet taste and grounded earthy undertones.",
     "10": "These vibrant noodles are made using domestic Korean wheat and red rice for a distinct, high-quality profile. Through Myeongawon's specialized aging process, these noodles achieve a premium chewy texture that holds its shape and won't become mushy even if you slightly miss the timing.",
     "11": "A luxurious collection of hand-stretched noodles featuring a variety of natural colors and flavors derived from traditional ingredients like plum, matcha, and sweet pumpkin. This set is the pinnacle of Sooyeon craftsmanship, offering a diverse tasting experience in one elegant package.",
-    "12": "200g (2 servings)\nIngredients: Potato flour (domestic), refined salt, canola oil\n\nThe first potato noodles in Korea that offer a perfect balance of chewiness and softness in just 3 minutes. Through 12 steps of HACCP certification and 8 aging processes, these noodles retain their ideal texture even if the cooking time is slightly off.",
+    "12": "These noodles are crafted with 25% domestic potatoes, providing an earthy depth and a remarkably clean, savory finish. The addition of potato starch creates a superior chewiness and a smooth \"slip\" that is more satisfying than traditional wheat-only somen.",
+    "13": "Infused with a staggering 35% of domestic Hallabong (premium Jeju citrus), these noodles carry a bright, refreshing aroma and a beautiful natural yellow hue. The citrus acidity adds a unique bounce to the noodle's texture, making it a refreshing sensory experience.",
   };
 
   const defaultDescription = "Premium Hovenia Dulcis extract (헛개수), a traditional Korean beverage concentrate known for its refreshing taste and health benefits. This premium extract is made from 100% domestic Hovenia Dulcis fruit, carefully processed to preserve its natural flavor and nutrients.";
@@ -136,8 +137,17 @@ const ProductDescription = ({ productId }: ProductDescriptionProps) => {
   } else if (productId === "12") {
     productDetailsContent = (
       <div className="space-y-4">
-        <p>Size : 200g (2 servings)</p>
-        <p>Ingredients : Potato flour (domestic), refined salt, canola oil</p>
+        <p>• Weight: 500g.</p>
+        <p>• Calories: 338 kcal per 100g (Total 1,690 kcal).</p>
+        <p>• Ingredients: Flour 62% (Australia, USA), Potato (Domestic) 25%, Rice (Domestic) 10%, Sea salt (Domestic) 2.3%, Alcohol.</p>
+      </div>
+    );
+  } else if (productId === "13") {
+    productDetailsContent = (
+      <div className="space-y-4">
+        <p>• Weight: 500g.</p>
+        <p>• Calories: 330 kcal per 100g (Total 1,650 kcal).</p>
+        <p>• Ingredients: Flour 52% (Australia, USA), Hallabong (Domestic) 35%, Rice (Domestic) 10%, Sea salt (Domestic) 2.3%, Alcohol 0.7%.</p>
       </div>
     );
   } else {
@@ -236,7 +246,13 @@ While it's excellent cold for Singapore's heat, drinking it warm before bed help
   } else if (productId === "12") {
     chefsNotesContent = (
       <p className="italic">
-        The first potato noodles in Korea that offer a perfect balance of chewiness and softness in just 3 minutes. Through 12 steps of HACCP certification and 8 aging processes, these noodles retain their ideal texture even if the cooking time is slightly off.
+        The Potato Noodle is the ultimate choice for savory comfort. Its resilient texture holds up beautifully in warm broths without becoming mushy. I recommend serving it in a clear Anchovy broth or a 'Janchi-guksu' style soup where its clean, nutty flavor can truly shine
+      </p>
+    );
+  } else if (productId === "13") {
+    chefsNotesContent = (
+      <p className="italic">
+        This is a masterpiece for warm weather. The subtle citrus fragrance is best highlighted in a cold salad pasta. Toss these noodles with fresh arugula, a drizzle of our Kkosi Kkosi Perilla Oil, and a squeeze of lemon to create a vibrant, Michelin-quality meal at home
       </p>
     );
   } else {
@@ -255,9 +271,9 @@ While it's excellent cold for Singapore's heat, drinking it warm before bed help
     });
   }
 
-  // 4. Their Story (only for products 1-12)
-  const isProduct1to12 = productId && parseInt(productId) >= 1 && parseInt(productId) <= 12;
-  if (isProduct1to12) {
+  // 4. Their Story (only for products 1-13)
+  const isProduct1to13 = productId && parseInt(productId) >= 1 && parseInt(productId) <= 13;
+  if (isProduct1to13) {
     let brandStoryContent;
     if (productId === "1" || productId === "2" || productId === "3" || productId === "4") {
       brandStoryContent = (
@@ -293,13 +309,14 @@ While it's excellent cold for Singapore's heat, drinking it warm before bed help
           <p>• Artisanal Process: Every strand is created through a rigorous 12-step HACCP-certified process and 8 distinct aging stages to ensure a superior, chewy texture.</p>
         </div>
       );
-    } else if (productId === "12") {
+    } else if (productId === "12" || productId === "13") {
       brandStoryContent = (
         <div className="space-y-4">
-          <p className="font-medium">Myeongawon</p>
-          <p>• A Master's Legacy: Founded in 1975 by Chairman Kang Hee-tak, a former Navy spy officer who mastered the art of "Sooyeon" (hand-stretched) noodles with incredible stubbornness.</p>
-          <p>• The 150,000-Hour Rule: CEO Choi Woo-guk has dedicated over 150,000 hours to perfecting handmade somen, believing that while shape can be imitated, authentic taste cannot be replicated.</p>
-          <p>• Artisanal Process: Every strand is created through a rigorous 12-step HACCP-certified process and 8 distinct aging stages to ensure a superior, chewy texture.</p>
+          <p className="font-medium">Grande Noodle</p>
+          <p>• Heritage of Patience: Since 1987, this brand has practiced "the aesthetics of waiting" in Geochang, Gyeongnam, using natural wind and sunlight to dry their noodles instead of artificial machines.</p>
+          <p>• Artisanal Mastery: Led by Master Artisan Kim Hyun-gyu, who brings over 40 years of experience to every batch, ensuring a texture that is uniquely chewy and resilient.</p>
+          <p>• Whole-Ingredient Philosophy: Unlike standard noodles that use powdered additives, Geochanghan Guksu grinds fresh, seasonal ingredients whole and kneads them directly into the dough to capture authentic flavors and colors.</p>
+          <p>• No Artificial Colors: All vibrant hues are derived naturally from the primary ingredients, reflecting the brand's commitment to honest, premium food.</p>
         </div>
       );
     }
@@ -343,12 +360,20 @@ While it's excellent cold for Singapore's heat, drinking it warm before bed help
         <li>• Serving Suggestion: Best enjoyed Chilled or Warm. Serve in a small glass to appreciate the intricate earthy aromas.</li>
               </ul>
     );
-  } else if (productId === "10" || productId === "11" || productId === "12") {
+  } else if (productId === "10" || productId === "11") {
     storageContent = (
       <ul className="space-y-4">
         <li>• Shelf Life: 2 years from manufacture.</li>
         <li>• Storage : Store in a cool, dry area to prevent the noodles from absorbing moisture.</li>
         <li>• Key Feature: Fast-cooking and convenient—ready in just 2 minutes and 30 seconds.</li>
+              </ul>
+    );
+  } else if (productId === "12" || productId === "13") {
+    storageContent = (
+      <ul className="space-y-4">
+        <li>• Standard Storage: Store in a cool, dry place at room temperature, away from direct sunlight and humidity.</li>
+        <li>• Post-Opening: It is recommended to consume as soon as possible after opening; store any remaining noodles in an airtight container to maintain the best dry texture.</li>
+        <li>• Cooking Tip: Due to the high content of whole ingredients, the cooking time may vary slightly from standard somen. Rinse thoroughly in ice-cold water after boiling to maximize the "springy" artisanal texture.</li>
               </ul>
     );
   } else {

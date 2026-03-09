@@ -78,12 +78,12 @@ const LocationSection = () => {
             <div className="relative aspect-[16/10] lg:aspect-[16/9] overflow-hidden bg-brand-neutral/10">
               {/* Featured Image */}
               <div className="absolute inset-0">
-                <img
-                  src={activeHighlightData.image}
-                  alt={activeHighlightData.title}
+              <img
+                src={activeHighlightData.image}
+                alt={activeHighlightData.title}
                   className="w-full h-full object-cover transition-opacity duration-700 ease-in-out"
-                  key={activeHighlight}
-                />
+                key={activeHighlight}
+              />
                 {/* Gradient Overlay */}
                 <div className="absolute inset-0 bg-gradient-to-t from-brand-text/70 via-brand-text/30 to-transparent" />
               </div>
@@ -99,10 +99,10 @@ const LocationSection = () => {
                     <span className="font-body text-sm text-white/80 font-medium">
                       {activeHighlightData.distance} from hotel
                     </span>
-                  </div>
+            </div>
                   <h3 className="font-headline text-3xl lg:text-5xl font-semibold text-white mb-5 leading-tight">
-                    {activeHighlightData.title}
-                  </h3>
+                  {activeHighlightData.title}
+                </h3>
                   <p className="font-body text-lg lg:text-xl text-white/95 leading-relaxed max-w-xl">
                     {activeHighlightData.description}
                   </p>
@@ -124,9 +124,9 @@ const LocationSection = () => {
               {highlights.map((highlight) => {
                 const isActive = activeHighlight === highlight.id;
                 return (
-                  <button
-                    key={highlight.id}
-                    onClick={() => setActiveHighlight(highlight.id)}
+                <button
+                  key={highlight.id}
+                  onClick={() => setActiveHighlight(highlight.id)}
                     className={`
                       group relative
                       text-center lg:text-left
@@ -135,7 +135,7 @@ const LocationSection = () => {
                     `}
                   >
                     <div className="flex flex-col lg:flex-row items-center lg:items-baseline gap-1 lg:gap-2">
-                      <h4
+                  <h4
                         className={`
                           font-headline text-sm lg:text-base font-medium
                           transition-colors duration-300
@@ -145,9 +145,9 @@ const LocationSection = () => {
                               : "text-brand-text/60 group-hover:text-brand-text/80"
                           }
                         `}
-                      >
-                        {highlight.title}
-                      </h4>
+                  >
+                    {highlight.title}
+                  </h4>
                       <span
                         className={`
                           font-body text-xs text-brand-text/40
@@ -155,14 +155,14 @@ const LocationSection = () => {
                           ${isActive ? "text-brand-primary/60" : ""}
                         `}
                       >
-                        {highlight.distance}
-                      </span>
+                    {highlight.distance}
+                  </span>
                     </div>
                     {/* Active Indicator */}
                     {isActive && (
                       <div className="absolute -bottom-1 left-1/2 -translate-x-1/2 lg:left-0 lg:translate-x-0 w-8 h-0.5 bg-brand-primary" />
                     )}
-                  </button>
+                </button>
                 );
               })}
             </div>
@@ -171,8 +171,8 @@ const LocationSection = () => {
           {/* CTA */}
           <div className="mt-16 lg:mt-20 text-center">
             <button className="btn-primary">
-              Discover the Area
-            </button>
+                Discover the Area
+              </button>
           </div>
         </div>
       </div>

@@ -1,6 +1,10 @@
+import hoveniaTea1 from "../../assets/tea/Hovenia_Tea_fol/1.jpg";
 import hoveniaDulcisImage from "../../assets/tea/Dulcis_extract.jpg";
+import cornSilkTea1 from "../../assets/tea/Corn_Silk_fol/1.jpg";
 import cornExtractImage from "../../assets/tea/corn_tea.jpg";
+import blackBeanTea1 from "../../assets/tea/Blackbean_Tea_fol/1.jpg";
 import blackBeanTeaImage from "../../assets/tea/black_bean_tea_extract.jpg";
+import barleyTea1 from "../../assets/tea/Barley_Tea_fol/1.jpg";
 import barleyTeaImage from "../../../e-shop/assets/barley-tea.png";
 
 // Oil products
@@ -29,10 +33,10 @@ export interface Product {
 
 export const products: Product[] = [
   // Tea products
-  { id: 1, name: "Hovenia Dulcis Extract (헛개수)", category: "Tea", price: "$37", image: hoveniaDulcisImage, isNew: true },
-  { id: 2, name: "Corn Silk Tea Extract (옥미수/옥수수 수염차)", category: "Tea", price: "$58", image: cornExtractImage, isNew: true, stock: 3 },
-  { id: 3, name: "Black Bean Tea Extract (검은콩차 진액)", category: "Tea", price: "$58", image: blackBeanTeaImage, isNew: true },
-  { id: 4, name: "Barley Tea Extract (보리차 진액)", category: "Tea", price: "$32", image: barleyTeaImage, isNew: true, stock: 2 },
+  { id: 1, name: "Hovenia Dulcis Extract (헛개수)", category: "Tea", price: "$37", image: hoveniaTea1, isNew: true },
+  { id: 2, name: "Corn Silk Tea Extract (옥미수/옥수수 수염차)", category: "Tea", price: "$58", image: cornSilkTea1, isNew: true, stock: 3 },
+  { id: 3, name: "Black Bean Tea Extract (검은콩차 진액)", category: "Tea", price: "$58", image: blackBeanTea1, isNew: true },
+  { id: 4, name: "Barley Tea Extract (보리차 진액)", category: "Tea", price: "$32", image: barleyTea1, isNew: true, stock: 2 },
   
   // Oil products
   { id: 5, name: "Cold Pressed Sesame Oil", category: "Oil", price: "$36", image: sesameOilImage, stock: 4 },

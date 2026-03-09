@@ -9,15 +9,16 @@ import barleyTeaImage from "../../../e-shop/assets/barley-tea.png";
 
 // Oil products
 import sesameOilImage from "../../assets/oil/BEOK-sesameoil1.jpg";
-import perillaOilImage from "../../assets/oil/BEOK-perillaoil3.jpg";
+import perillaOilImage from "../../assets/oil/BEOK-perillaoil.jpg";
 import saucesImage from "../../assets/oil/BEOK-sauces2.jpg";
 
   // Soju products
-  import seorijuImage from "../../assets/alcohol/BEOK-seoriju3.jpg";
+import seorijuImage from "../../assets/alcohol/BEOK-seoriju1.jpg";
 
 // Noodles products
 import wheatNoodleImage from "../../assets/IMG_1701.jpg";
-import giftSetImage from "../../assets/noodles/IMG_1700.jpg";
+import wheatNoodleImage2 from "../../assets/noodles/IMG_1702.jpg";
+import giftSetImage from "../../assets/noodles/Myrongawon_noodle/1.jpg";
 import potatoNoodleImage from "../../assets/noodles/BEOK-Potatonoodle3.jpg";
 import hallabongNoodleImage from "../../assets/noodles/BEOK-Hanrabongnoodle3.jpg";
 
@@ -47,7 +48,7 @@ export const products: Product[] = [
   { id: 9, name: "Seoriju", category: "Soju", price: "$58", image: seorijuImage, stock: 3 },
   
   // Noodles products
-  { id: 10, name: "Myeongawon Hand-Stretched Red Rice Noodle", category: "Noodles", price: "$12", image: wheatNoodleImage },
+  { id: 10, name: "Myeongawon Hand-Stretched Red Rice Noodle", category: "Noodles", price: "$12", image: wheatNoodleImage2 },
   { id: 11, name: "Myeongawon 5 Color Noodle Gift Set", category: "Noodles", price: "$26", image: giftSetImage, stock: 2 },
   { id: 12, name: "Potato Noodle", category: "Noodles", price: "$22", image: potatoNoodleImage },
   { id: 13, name: "Hallabong Noodle", category: "Noodles", price: "$22", image: hallabongNoodleImage },

@@ -94,10 +94,12 @@ import barleyTeaImage2 from "../../assets/tea/BEOK-Barleytea2.jpg";
 import barleyTeaImage7 from "../../assets/tea/BEOK-Barleytea7.jpg";
 import sesameOilImage from "../../assets/oil/BEOK-sesameoil1.jpg";
 import sesameOilImage2 from "../../assets/oil/BEOK-sesameoil2.jpg";
+import sesameOilImage3 from "../../assets/oil/BEOK-sesameoil3.jpg";
 import sesameOilImage4 from "../../assets/oil/BEOK-sesameoil4.jpg";
 import meatImage from "../../assets/oil/BEOK-meat1.jpg";
-import perillaOilImage from "../../assets/oil/BEOK-perillaoil3.jpg";
+import perillaOilImage1 from "../../assets/oil/BEOK-perillaoil.jpg";
 import perillaOilImage2 from "../../assets/oil/BEOK-perillaoil2.jpg";
+import perillaOilImage3 from "../../assets/oil/BEOK-perillaoil3.jpg";
 import perillaOilImage4 from "../../assets/oil/BEOK-perillaoil4.jpg";
 import perillaOilImage5 from "../../assets/oil/BEOK-perillaoil5.jpg";
 import saucesImage from "../../assets/oil/BEOK-sauces2.jpg";
@@ -106,7 +108,15 @@ import seorijuImage from "../../assets/alcohol/BEOK-seoriju3.jpg";
 import seorijuImage1 from "../../assets/alcohol/BEOK-seoriju1.jpg";
 import seorijuImage2 from "../../assets/alcohol/BEOK-seoriju2.jpg";
 import wheatNoodleImage from "../../assets/IMG_1701.jpg";
-import giftSetImage from "../../assets/noodles/IMG_1700.jpg";
+import wheatNoodleImage2 from "../../assets/noodles/IMG_1702.jpg";
+import giftSetImage1 from "../../assets/noodles/Myrongawon_noodle/1.jpg";
+import giftSetImage2 from "../../assets/noodles/Myrongawon_noodle/2.jpg";
+import giftSetImage3 from "../../assets/noodles/Myrongawon_noodle/3.jpg";
+import giftSetImage4 from "../../assets/noodles/Myrongawon_noodle/4.jpg";
+import giftSetImage5 from "../../assets/noodles/Myrongawon_noodle/5.jpg";
+import giftSetImage6 from "../../assets/noodles/Myrongawon_noodle/6.jpg";
+import giftSetImage7 from "../../assets/noodles/Myrongawon_noodle/7.jpg";
+import giftSetImage8 from "../../assets/noodles/Myrongawon_noodle/8.jpg";
 import potatoNoodleImage from "../../assets/noodles/BEOK-Potatonoodle3.jpg";
 import potatoNoodleImage1 from "../../assets/noodles/BEOK-Potatonoodle1.jpg";
 import potatoNoodleImage2 from "../../assets/noodles/BEOK-Potatonoodle2.jpg";
@@ -128,11 +138,11 @@ const productImageMap: Record<string, string> = {
   "4": barleyTea1,
   "5": sesameOilImage,
   "6": meatImage,
-  "7": perillaOilImage,
+  "7": perillaOilImage1,
   "8": saucesImage,
-  "9": seorijuImage,
-  "10": wheatNoodleImage,
-  "11": giftSetImage,
+  "9": seorijuImage1,
+  "10": wheatNoodleImage2,
+  "11": giftSetImage1,
   "12": potatoNoodleImage,
   "13": hallabongNoodleImage,
 };
@@ -162,13 +172,17 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
     : productId === "4"
     ? [barleyTea1, barleyTea2, barleyTea3, barleyTea4, barleyTea5, barleyTea6, barleyTea7, barleyTea8, barleyTea9, barleyTea10, barleyTea11, barleyTea12, barleyTea13, barleyTea14, barleyTea15, barleyTea16, barleyTea17, barleyTea18, barleyTea19, barleyTea20, barleyTea21, barleyTea22, barleyTea23, barleyTea24]
     : productId === "5"
-    ? [sesameOilImage, sesameOilImage2, sesameOilImage4]
+    ? [sesameOilImage, sesameOilImage2, sesameOilImage3, sesameOilImage4]
     : productId === "7"
-    ? [perillaOilImage, perillaOilImage2, perillaOilImage4, perillaOilImage5]
+    ? [perillaOilImage1, perillaOilImage2, perillaOilImage3, perillaOilImage4, perillaOilImage5]
     : productId === "8"
     ? [saucesImage, saucesImageAlt]
     : productId === "9"
-    ? [seorijuImage, seorijuImage1, seorijuImage2]
+    ? [seorijuImage1, seorijuImage2, seorijuImage]
+    : productId === "10"
+    ? [wheatNoodleImage2, giftSetImage2, giftSetImage3, giftSetImage4, giftSetImage5, giftSetImage6, giftSetImage7, giftSetImage8]
+    : productId === "11"
+    ? [giftSetImage1, giftSetImage2, giftSetImage3, giftSetImage4, giftSetImage5, giftSetImage6, giftSetImage7, giftSetImage8]
     : productId === "12"
     ? [potatoNoodleImage, potatoNoodleImage1, potatoNoodleImage2, potatoNoodleImage4]
     : productId === "13"
@@ -322,8 +336,8 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
         )}
       </div>
 
-      {/* Thumbnail gallery - Carousel for products 1, 2, 3, and 4, grid for others */}
-      {(productId === "1" || productId === "2" || productId === "3" || productId === "4") && images.length > maxVisible ? (
+      {/* Thumbnail gallery - Carousel for products 1, 2, 3, 4, 7, 10, and 11, grid for others */}
+      {(productId === "1" || productId === "2" || productId === "3" || productId === "4" || productId === "7" || productId === "10" || productId === "11") && images.length > maxVisible ? (
         <div className="relative">
           {/* Carousel container - shows exactly 4 images, slides smoothly */}
           <div className="relative overflow-hidden rounded-lg" ref={carouselRef}>

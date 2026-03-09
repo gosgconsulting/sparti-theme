@@ -44,51 +44,7 @@ import cornSilkTea19 from "../../assets/tea/Corn_Silk_fol/19.jpg";
 import cornSilkTea20 from "../../assets/tea/Corn_Silk_fol/20.jpg";
 import cornSilkTea21 from "../../assets/tea/Corn_Silk_fol/21.jpg";
 import cornExtractImage from "../../assets/tea/corn_tea.jpg";
-// Black Bean Tea images (1-18)
-import blackBeanTea1 from "../../assets/tea/Blackbean_Tea_fol/1.jpg";
-import blackBeanTea2 from "../../assets/tea/Blackbean_Tea_fol/2.jpg";
-import blackBeanTea3 from "../../assets/tea/Blackbean_Tea_fol/3.jpg";
-import blackBeanTea4 from "../../assets/tea/Blackbean_Tea_fol/4.jpg";
-import blackBeanTea5 from "../../assets/tea/Blackbean_Tea_fol/5.jpg";
-import blackBeanTea6 from "../../assets/tea/Blackbean_Tea_fol/6.jpg";
-import blackBeanTea7 from "../../assets/tea/Blackbean_Tea_fol/7.jpg";
-import blackBeanTea8 from "../../assets/tea/Blackbean_Tea_fol/8.jpg";
-import blackBeanTea9 from "../../assets/tea/Blackbean_Tea_fol/9.jpg";
-import blackBeanTea10 from "../../assets/tea/Blackbean_Tea_fol/10.jpg";
-import blackBeanTea11 from "../../assets/tea/Blackbean_Tea_fol/11.jpg";
-import blackBeanTea12 from "../../assets/tea/Blackbean_Tea_fol/12.jpg";
-import blackBeanTea13 from "../../assets/tea/Blackbean_Tea_fol/13.jpg";
-import blackBeanTea14 from "../../assets/tea/Blackbean_Tea_fol/14.jpg";
-import blackBeanTea15 from "../../assets/tea/Blackbean_Tea_fol/15.jpg";
-import blackBeanTea16 from "../../assets/tea/Blackbean_Tea_fol/16.jpg";
-import blackBeanTea17 from "../../assets/tea/Blackbean_Tea_fol/17.jpg";
-import blackBeanTea18 from "../../assets/tea/Blackbean_Tea_fol/18.jpg";
 import blackBeanTeaImage from "../../assets/tea/black_bean_tea_extract.jpg";
-// Barley Tea images (1-24)
-import barleyTea1 from "../../assets/tea/Barley_Tea_fol/1.jpg";
-import barleyTea2 from "../../assets/tea/Barley_Tea_fol/2.jpg";
-import barleyTea3 from "../../assets/tea/Barley_Tea_fol/3.jpg";
-import barleyTea4 from "../../assets/tea/Barley_Tea_fol/4.jpg";
-import barleyTea5 from "../../assets/tea/Barley_Tea_fol/5.jpg";
-import barleyTea6 from "../../assets/tea/Barley_Tea_fol/6.jpg";
-import barleyTea7 from "../../assets/tea/Barley_Tea_fol/7.jpg";
-import barleyTea8 from "../../assets/tea/Barley_Tea_fol/8.jpg";
-import barleyTea9 from "../../assets/tea/Barley_Tea_fol/9.jpg";
-import barleyTea10 from "../../assets/tea/Barley_Tea_fol/10.jpg";
-import barleyTea11 from "../../assets/tea/Barley_Tea_fol/11.jpg";
-import barleyTea12 from "../../assets/tea/Barley_Tea_fol/12.jpg";
-import barleyTea13 from "../../assets/tea/Barley_Tea_fol/13.jpg";
-import barleyTea14 from "../../assets/tea/Barley_Tea_fol/14.jpg";
-import barleyTea15 from "../../assets/tea/Barley_Tea_fol/15.jpg";
-import barleyTea16 from "../../assets/tea/Barley_Tea_fol/16.jpg";
-import barleyTea17 from "../../assets/tea/Barley_Tea_fol/17.jpg";
-import barleyTea18 from "../../assets/tea/Barley_Tea_fol/18.jpg";
-import barleyTea19 from "../../assets/tea/Barley_Tea_fol/19.jpg";
-import barleyTea20 from "../../assets/tea/Barley_Tea_fol/20.jpg";
-import barleyTea21 from "../../assets/tea/Barley_Tea_fol/21.jpg";
-import barleyTea22 from "../../assets/tea/Barley_Tea_fol/22.jpg";
-import barleyTea23 from "../../assets/tea/Barley_Tea_fol/23.jpg";
-import barleyTea24 from "../../assets/tea/Barley_Tea_fol/24.jpg";
 import barleyTeaImage1 from "../../assets/tea/BEOK-Barleytea1.jpg";
 import barleyTeaImage2 from "../../assets/tea/BEOK-Barleytea2.jpg";
 import barleyTeaImage7 from "../../assets/tea/BEOK-Barleytea7.jpg";
@@ -124,8 +80,8 @@ interface ProductImageGalleryProps {
 const productImageMap: Record<string, string> = {
   "1": hoveniaTea1,
   "2": cornSilkTea1,
-  "3": blackBeanTea1,
-  "4": barleyTea1,
+  "3": blackBeanTeaImage,
+  "4": barleyTeaImage1,
   "5": sesameOilImage,
   "6": meatImage,
   "7": perillaOilImage,
@@ -157,10 +113,8 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
     ? [hoveniaTea1, hoveniaTea2, hoveniaTea3, hoveniaTea4, hoveniaTea5, hoveniaTea6, hoveniaTea7, hoveniaTea8, hoveniaTea9, hoveniaTea10, hoveniaTea12, hoveniaTea13, hoveniaTea14, hoveniaTea15, hoveniaTea16, hoveniaTea17, hoveniaTea18, hoveniaTea19, hoveniaTea20]
     : productId === "2"
     ? [cornSilkTea1, cornSilkTea2, cornSilkTea3, cornSilkTea4, cornSilkTea5, cornSilkTea6, cornSilkTea7, cornSilkTea8, cornSilkTea9, cornSilkTea10, cornSilkTea11, cornSilkTea12, cornSilkTea13, cornSilkTea14, cornSilkTea15, cornSilkTea16, cornSilkTea17, cornSilkTea18, cornSilkTea19, cornSilkTea20, cornSilkTea21]
-    : productId === "3"
-    ? [blackBeanTea1, blackBeanTea2, blackBeanTea3, blackBeanTea4, blackBeanTea5, blackBeanTea6, blackBeanTea7, blackBeanTea8, blackBeanTea9, blackBeanTea10, blackBeanTea11, blackBeanTea12, blackBeanTea13, blackBeanTea14, blackBeanTea15, blackBeanTea16, blackBeanTea17, blackBeanTea18]
     : productId === "4"
-    ? [barleyTea1, barleyTea2, barleyTea3, barleyTea4, barleyTea5, barleyTea6, barleyTea7, barleyTea8, barleyTea9, barleyTea10, barleyTea11, barleyTea12, barleyTea13, barleyTea14, barleyTea15, barleyTea16, barleyTea17, barleyTea18, barleyTea19, barleyTea20, barleyTea21, barleyTea22, barleyTea23, barleyTea24]
+    ? [barleyTeaImage1, barleyTeaImage2, barleyTeaImage7]
     : productId === "5"
     ? [sesameOilImage, sesameOilImage2, sesameOilImage4]
     : productId === "7"
@@ -322,8 +276,8 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
         )}
       </div>
 
-      {/* Thumbnail gallery - Carousel for products 1, 2, 3, and 4, grid for others */}
-      {(productId === "1" || productId === "2" || productId === "3" || productId === "4") && images.length > maxVisible ? (
+      {/* Thumbnail gallery - Carousel for products 1 and 2, grid for others */}
+      {(productId === "1" || productId === "2") && images.length > maxVisible ? (
         <div className="relative">
           {/* Carousel container - shows exactly 4 images, slides smoothly */}
           <div className="relative overflow-hidden rounded-lg" ref={carouselRef}>

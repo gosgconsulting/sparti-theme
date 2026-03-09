@@ -121,6 +121,8 @@ import potatoNoodleImage from "../../assets/noodles/BEOK-Potatonoodle3.jpg";
 import potatoNoodleImage1 from "../../assets/noodles/BEOK-Potatonoodle1.jpg";
 import potatoNoodleImage2 from "../../assets/noodles/BEOK-Potatonoodle2.jpg";
 import potatoNoodleImage4 from "../../assets/noodles/BEOK-Potatonoodle4.jpg";
+import potatoNoodleImage5 from "../../assets/noodles/BEOK-Potatonoodle5.jpg";
+import potatoNoodleImage6 from "../../assets/noodles/BEOK-Potatonoodle6.jpg";
 import hallabongNoodleImage from "../../assets/noodles/BEOK-Hanrabongnoodle3.jpg";
 import hallabongNoodleImage2 from "../../assets/noodles/BEOK-Hanrabongnoodle2.jpg";
 import hallabongNoodleImage4 from "../../assets/noodles/BEOK-Hanrabongnoodle4.jpg";
@@ -143,7 +145,7 @@ const productImageMap: Record<string, string> = {
   "9": seorijuImage1,
   "10": wheatNoodleImage2,
   "11": giftSetImage1,
-  "12": potatoNoodleImage,
+  "12": potatoNoodleImage1,
   "13": hallabongNoodleImage,
 };
 
@@ -184,7 +186,7 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
     : productId === "11"
     ? [giftSetImage1, giftSetImage2, giftSetImage3, giftSetImage4, giftSetImage5, giftSetImage6, giftSetImage7, giftSetImage8]
     : productId === "12"
-    ? [potatoNoodleImage, potatoNoodleImage1, potatoNoodleImage2, potatoNoodleImage4]
+    ? [potatoNoodleImage1, potatoNoodleImage2, potatoNoodleImage, potatoNoodleImage4, potatoNoodleImage5, potatoNoodleImage6]
     : productId === "13"
     ? [hallabongNoodleImage, hallabongNoodleImage2, hallabongNoodleImage4, hallabongNoodleImage5]
     : specificImage
@@ -336,8 +338,8 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
         )}
       </div>
 
-      {/* Thumbnail gallery - Carousel for products 1, 2, 3, 4, 7, 10, and 11, grid for others */}
-      {(productId === "1" || productId === "2" || productId === "3" || productId === "4" || productId === "7" || productId === "10" || productId === "11") && images.length > maxVisible ? (
+      {/* Thumbnail gallery - Carousel for products 1, 2, 3, 4, 7, 10, 11, and 12, grid for others */}
+      {(productId === "1" || productId === "2" || productId === "3" || productId === "4" || productId === "7" || productId === "10" || productId === "11" || productId === "12") && images.length > maxVisible ? (
         <div className="relative">
           {/* Carousel container - shows exactly 4 images, slides smoothly */}
           <div className="relative overflow-hidden rounded-lg" ref={carouselRef}>

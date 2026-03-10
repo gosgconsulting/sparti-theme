@@ -267,7 +267,7 @@ export default function BlogPostPage({
             >
               ← Back to blog
             </Link>
-            <h1 className="text-4xl md:text-5xl font-bold text-nail-queen-brown mb-4">{post.title}</h1>
+            <h1 className="text-4xl md:text-5xl font-bold text-nail-queen-brown mb-4" dangerouslySetInnerHTML={{ __html: post.title }} />
             {publishedDate && (
               <p className="text-gray-600 text-sm mb-4">Published on {publishedDate}</p>
             )}

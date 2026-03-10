@@ -10,7 +10,7 @@ import barleyTeaImage from "../../../e-shop/assets/barley-tea.png";
 // Oil products
 import sesameOilImage from "../../assets/oil/BEOK-sesameoil1.jpg";
 import perillaOilImage from "../../assets/oil/BEOK-perillaoil.jpg";
-import saucesImage from "../../assets/oil/BEOK-sauces2.jpg";
+import saucesImage from "../../assets/oil/BEOK-sauces.jpg";
 
   // Soju products
 import seorijuImage from "../../assets/alcohol/BEOK-seoriju1.jpg";
@@ -20,7 +20,7 @@ import wheatNoodleImage from "../../assets/IMG_1701.jpg";
 import wheatNoodleImage2 from "../../assets/noodles/IMG_1702.jpg";
 import giftSetImage from "../../assets/noodles/Myrongawon_noodle/1.jpg";
 import potatoNoodleImage1 from "../../assets/noodles/BEOK-Potatonoodle1.jpg";
-import hallabongNoodleImage from "../../assets/noodles/BEOK-Hanrabongnoodle3.jpg";
+import hallabongNoodleImage from "../../assets/noodles/BEOK-Hanrabongnoodle.jpg";
 
 export interface Product {
   id: number;

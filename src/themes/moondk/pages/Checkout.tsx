@@ -1,5 +1,6 @@
 import { useMemo, useState } from "react";
-import { Check, CreditCard, Minus, Plus } from "lucide-react";
+import { Check, CreditCard, Minus, Plus, CalendarIcon } from "lucide-react";
+import { format } from "date-fns";
 
 import Footer from "../components/footer/Footer";
 import CheckoutHeader from "../components/header/CheckoutHeader";
@@ -10,6 +11,9 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Textarea } from "@/components/ui/textarea";
+import { Calendar } from "@/components/ui/calendar";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { cn } from "@/lib/utils";
 
 export default function CheckoutPage() {
   const { cartItems, updateQuantity, clearCart } = useCart();
@@ -41,6 +45,8 @@ export default function CheckoutPage() {
   const [shippingOption, setShippingOption] = useState("standard");
   const [agreeToDoorstep, setAgreeToDoorstep] = useState(false);
   const [shippingComments, setShippingComments] = useState("");
+  const [pickupDate, setPickupDate] = useState<Date | undefined>(undefined);
+  const [pickupDateError, setPickupDateError] = useState("");
   const [paymentDetails, setPaymentDetails] = useState({
     cardNumber: "",
     expiryDate: "",
@@ -75,6 +81,32 @@ export default function CheckoutPage() {
   const freeShippingThreshold = 150;
   const amountNeededForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
 
+  // Helper function to get minimum pickup date (today + 2 days)
+  const getMinSelfPickupDate = (): Date => {
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    const minDate = new Date(today);
+    minDate.setDate(today.getDate() + 2);
+    return minDate;
+  };
+
+  // Helper function to check if a date is allowed for self pickup
+  const isSelfPickupDateAllowed = (date: Date): boolean => {
+    const minDate = getMinSelfPickupDate();
+    const checkDate = new Date(date);
+    checkDate.setHours(0, 0, 0, 0);
+    return checkDate >= minDate;
+  };
+
+  // Handle shipping option change - clear pickup date if switching away from self-pickup
+  const handleShippingOptionChange = (value: string) => {
+    setShippingOption(value);
+    if (value !== "self-pickup") {
+      setPickupDate(undefined);
+      setPickupDateError("");
+    }
+  };
+
   const handleDiscountSubmit = () => {
     console.log("Discount code submitted:", discountCode);
     setShowDiscountInput(false);
@@ -97,10 +129,27 @@ export default function CheckoutPage() {
   };
 
   const handleCompleteOrder = async () => {
+    // Validate pickup date if self-pickup is selected
+    if (shippingOption === "self-pickup") {
+      if (!pickupDate) {
+        setPickupDateError("Please select a pickup date");
+        return;
+      }
+      if (!isSelfPickupDateAllowed(pickupDate)) {
+        setPickupDateError("Pickup date must be at least 2 days from today");
+        return;
+      }
+      setPickupDateError("");
+    }
+
     setIsProcessing(true);
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsProcessing(false);
     setPaymentComplete(true);
+    
+    // Here you would typically send the order data including pickupDate
+    // Example: await submitOrder({ ...orderData, pickupDate: pickupDate ? format(pickupDate, 'yyyy-MM-dd') : undefined });
+    
     // Clear cart only after successful order completion
     clearCart();
   };
@@ -494,7 +543,7 @@ export default function CheckoutPage() {
               <div className="bg-white p-8 rounded-card border border-border-light">
                 <h2 className="text-lg font-heading font-medium text-foreground mb-6">Shipping Options</h2>
 
-                <RadioGroup value={shippingOption} onValueChange={setShippingOption} className="space-y-4">
+                <RadioGroup value={shippingOption} onValueChange={handleShippingOptionChange} className="space-y-4">
                   <Label
                     htmlFor="standard"
                     className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
@@ -545,7 +594,7 @@ export default function CheckoutPage() {
                         Self Pickup
                       </span>
                     </div>
-                    <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">Free • Pickup available immediately</div>
+                    <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">Free • Pickup from 2 days</div>
                   </Label>
                 </RadioGroup>
 
@@ -577,6 +626,50 @@ export default function CheckoutPage() {
                         className="mt-2 rounded-card min-h-[100px] resize-none text-sm md:text-base"
                         placeholder="Please provide any additional delivery instructions or information..."
                       />
+                    </div>
+                  </div>
+                )}
+
+                {/* Conditional fields for Self Pickup */}
+                {shippingOption === "self-pickup" && (
+                  <div className="mt-6 pt-6 border-t border-border-light space-y-6">
+                    <div>
+                      <Label htmlFor="pickupDate" className="text-sm font-body font-light text-foreground">
+                        Pickup Date * <span className="text-xs text-foreground/60">(Available from {format(getMinSelfPickupDate(), "MMM d, yyyy")})</span>
+                      </Label>
+                      <Popover>
+                        <PopoverTrigger asChild>
+                          <Button
+                            id="pickupDate"
+                            variant="outline"
+                            className={cn(
+                              "w-full mt-2 justify-start text-left font-normal rounded-card text-sm md:text-base",
+                              !pickupDate && "text-muted-foreground",
+                              pickupDateError && "border-red-500"
+                            )}
+                          >
+                            <CalendarIcon className="mr-2 h-4 w-4" />
+                            {pickupDate ? format(pickupDate, "PPP") : <span>Select pickup date</span>}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-auto p-0" align="start">
+                          <Calendar
+                            mode="single"
+                            selected={pickupDate}
+                            onSelect={(date) => {
+                              setPickupDate(date);
+                              if (date) {
+                                setPickupDateError("");
+                              }
+                            }}
+                            disabled={(date) => !isSelfPickupDateAllowed(date)}
+                            initialFocus
+                          />
+                        </PopoverContent>
+                      </Popover>
+                      {pickupDateError && (
+                        <p className="mt-2 text-sm text-red-500 font-body font-light">{pickupDateError}</p>
+                      )}
                     </div>
                   </div>
                 )}
@@ -697,7 +790,8 @@ export default function CheckoutPage() {
                         !paymentDetails.expiryDate ||
                         !paymentDetails.cvv ||
                         !paymentDetails.cardholderName ||
-                        cartItems.length === 0
+                        cartItems.length === 0 ||
+                        (shippingOption === "self-pickup" && !pickupDate)
                       }
                       className="w-full rounded-full h-12 text-base bg-primary hover:bg-primary-hover text-white font-body font-medium"
                     >

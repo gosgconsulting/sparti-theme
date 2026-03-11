@@ -114,10 +114,14 @@ const RootLayout: React.FC<{ children: React.ReactNode }> = ({ children }) => {
 
 // Root: dashboard at / (direct access, no redirect)
 // When DEPLOY_THEME_SLUG is set (Vercel env), serve theme at root (no /theme/ prefix)
+// In production, automatically serve landingpage theme at root (keep /theme/landingpage in localhost)
 const RootIndex: React.FC = () => {
   const deployThemeSlug = import.meta.env.DEPLOY_THEME_SLUG;
+  // In production, automatically serve landingpage theme at root
+  const isProduction = import.meta.env.PROD;
+  const shouldServeLandingpageAtRoot = isProduction && !deployThemeSlug;
 
-  if (deployThemeSlug) {
+  if (deployThemeSlug || shouldServeLandingpageAtRoot) {
     return (
       <ErrorBoundary>
         <TenantLandingPage />

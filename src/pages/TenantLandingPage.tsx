@@ -120,8 +120,18 @@ const TenantLandingPage: React.FC = () => {
   );
 
   // When DEPLOY_THEME_SLUG is set (Vercel/env), always use it so theme is served at root
+  // In production, automatically use 'landingpage' as deploySlug if no other theme is specified
+  // This allows landingpage theme to be served at root (/) and root-level routes (/blog, /thank-you, etc.)
+  // In localhost, /theme/landingpage will still work via tenantSlug
   // Treat empty string as missing so /theme/ and /theme resolve to default theme on localhost
-  const deploySlug = import.meta.env.DEPLOY_THEME_SLUG;
+  const deploySlugEnv = import.meta.env.DEPLOY_THEME_SLUG;
+  const isProduction = import.meta.env.PROD;
+  // In production, automatically serve landingpage at root paths if no deploySlug is set
+  // Check if we're NOT at a /theme/ path and no tenantSlug/themeSlug is provided
+  const isNotThemePath = !location.pathname.startsWith('/theme/');
+  const autoLandingpageDeploy = isProduction && !deploySlugEnv && isNotThemePath && !tenantSlug && !themeSlug && !slugFromShortPath && !isRootSTRRoute;
+  const deploySlug = deploySlugEnv || (autoLandingpageDeploy ? 'landingpage' : null);
+  
   const slug =
     (deploySlug && deploySlug.trim()) ||
     (tenantSlug && tenantSlug.trim()) ||
@@ -130,7 +140,8 @@ const TenantLandingPage: React.FC = () => {
     (isRootSTRRoute ? 'str' : 'landingpage');
 
   // When deploy theme at root, basePath is '' so links use /services not /theme/gosgconsulting/services
-  const isDeployAtRoot = !!deploySlug && !location.pathname.startsWith('/theme/');
+  // Also use root basePath when auto-deploying landingpage in production
+  const isDeployAtRoot = (!!deploySlug || autoLandingpageDeploy) && !location.pathname.startsWith('/theme/');
   const basePath = isDeployAtRoot ? '' : undefined;
 
   // Extract full page path from location for nested routes like /booking/classes

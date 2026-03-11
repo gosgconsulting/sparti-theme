@@ -13,6 +13,17 @@ const Footer: React.FC<FooterProps> = ({
   logoSrc,
   companyDescription = 'Empowering businesses with professional, efficient, and scalable support. Your trusted partner for business success from day one.'
 }) => {
+  // Helper function to generate paths - removes /theme/landingpage/ prefix in production
+  const getPath = (path: string) => {
+    if (import.meta.env.PROD && tenantSlug === 'landingpage') {
+      // In production, remove /theme/landingpage prefix
+      const cleaned = path.replace(/^\/theme\/landingpage/, '');
+      return cleaned || '/';
+    }
+    // In localhost, keep the full path
+    return path;
+  };
+
   const scrollToSection = (sectionId: string) => {
     const element = document.getElementById(sectionId);
     if (element) {
@@ -127,7 +138,7 @@ const Footer: React.FC<FooterProps> = ({
                 Reviews
               </button>
               <a
-                href={import.meta.env.PROD && tenantSlug === 'landingpage' ? '/blog' : `/theme/${tenantSlug}/blog`}
+                href={getPath(`/theme/${tenantSlug}/blog`)}
                 className="block text-muted-foreground hover:text-primary transition-colors cursor-pointer"
               >
                 Blog
@@ -152,10 +163,10 @@ const Footer: React.FC<FooterProps> = ({
           </div>
           
           <div className="flex items-center gap-6 text-sm text-muted-foreground">
-            <a href={`/theme/${tenantSlug}/privacy-policy`} className="hover:text-primary transition-colors">
+            <a href={getPath(`/theme/${tenantSlug}/privacy-policy`)} className="hover:text-primary transition-colors">
               Privacy Policy
             </a>
-            <a href={`/theme/${tenantSlug}/terms-conditions`} className="hover:text-primary transition-colors">
+            <a href={getPath(`/theme/${tenantSlug}/terms-conditions`)} className="hover:text-primary transition-colors">
               Terms of Service
             </a>
             <a href="#" className="hover:text-primary transition-colors">

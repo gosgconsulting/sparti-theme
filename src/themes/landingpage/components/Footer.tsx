@@ -127,7 +127,7 @@ const Footer: React.FC<FooterProps> = ({
                 Reviews
               </button>
               <a
-                href={`/theme/${tenantSlug}/blog`}
+                href={import.meta.env.PROD && tenantSlug === 'landingpage' ? '/blog' : `/theme/${tenantSlug}/blog`}
                 className="block text-muted-foreground hover:text-primary transition-colors cursor-pointer"
               >
                 Blog

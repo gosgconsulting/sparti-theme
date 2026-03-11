@@ -319,7 +319,7 @@ export default function BlogPage({ basePath, tenantId }: { basePath: string; ten
                         />
                       </div>
                       <div className="md:w-2/3 p-6">
-                        <h2 className="text-xl font-bold text-nail-queen-brown mb-3">{post.title}</h2>
+                        <h2 className="text-xl font-bold text-nail-queen-brown mb-3" dangerouslySetInnerHTML={{ __html: post.title }} />
                         <p className="text-gray-600 text-sm mb-4 leading-relaxed">
                           {post.excerpt || "No excerpt available."}
                         </p>

@@ -1,31 +1,17 @@
 import { createBrowserRouter, Navigate } from "react-router-dom";
 import { useParams, useLocation } from "react-router-dom";
 import React from "react";
-// import AdminTopBar from "@/components/AdminTopBar"; // Removing AdminTopBar as it's likely not needed for public view
 import { useSEO } from "@/hooks/useSEO";
 import ErrorBoundary from '@/components/common/ErrorBoundary';
 import NotFound from "./pages/NotFound";
 import PublicDashboard from "./pages/PublicDashboard";
 import TenantLandingPage from "./pages/TenantLandingPage";
 import TenantPage from "./pages/TenantPage";
+import { KNOWN_THEME_SLUGS } from "@/themes/themeRegistry";
 
-// Known theme slugs (shared for /theme/:tenantSlug and /:themeSlug short URLs)
-const KNOWN_THEME_SLUGS = [
-  "sissonne",
-  "landingpage",
-  "sparti-seo-landing",
-  "gosgconsulting",
-  "gosgconsulting.com",
-  "storefront",
-  "moondk",
-  "str",
-  "optimalconsulting",
-  "master",
-  "e-shop",
-  "hotel",
-  "hotel1",
-  "nail-queen",
-];
+// KNOWN_THEME_SLUGS is now auto-generated from the src/themes/* directory structure
+// via import.meta.glob in src/themes/themeRegistry.ts.
+// To add a new theme, simply create src/themes/<slug>/index.tsx — no changes needed here.
 
 // Component to handle theme sub-routes - checks if it's a known theme
 const ThemeRouteHandler: React.FC = () => {
@@ -95,7 +81,7 @@ const ConditionalSEO = () => {
   const { error: seoError } = useSEO({ skip: skipGlobalSEO });
 
   if (seoError) {
-    console.warn("[testing] SEO initialization error (non-blocking):", seoError);
+    console.warn("SEO initialization error (non-blocking):", seoError);
   }
 
   return null;

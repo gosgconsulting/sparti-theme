@@ -7,7 +7,24 @@ import { RouterProvider } from "react-router-dom";
 import { AuthProvider } from "@/components/auth/AuthProvider";
 import { router } from "./router";
 
-const queryClient = new QueryClient();
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      // Cache data for 5 minutes before considering it stale.
+      staleTime: 5 * 60 * 1000,
+      // Retry failed requests once before surfacing the error.
+      retry: 1,
+      // Don't refetch on window focus for theme/settings data (mostly static).
+      refetchOnWindowFocus: false,
+    },
+    mutations: {
+      onError: (error: unknown) => {
+        const message = error instanceof Error ? error.message : 'An unexpected error occurred';
+        console.error('[QueryClient] Mutation error:', message);
+      },
+    },
+  },
+});
 
 const App = () => {
   return (

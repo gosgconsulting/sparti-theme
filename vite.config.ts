@@ -138,11 +138,10 @@ export default defineConfig(({ mode }) => {
     server: {
       host: "::",
       port: 8080,
-      strictPort: false, // Allow port fallback if 8080 is in use
+      strictPort: false,
       hmr: {
         host: 'localhost',
         protocol: 'ws'
-        // port and clientPort removed - Vite will auto-detect from server.port
       }
     },
     plugins,
@@ -151,13 +150,63 @@ export default defineConfig(({ mode }) => {
       dedupe: ['react', 'react-dom'],
     },
     optimizeDeps: {
-      // Force React and React-DOM to be pre-bundled together
       include: ['react', 'react-dom', 'react/jsx-runtime', 'flowbite'],
-      force: true // Force re-optimization to clear cache
+      force: true
     },
     build: {
       commonjsOptions: {
         include: [/node_modules/],
+      },
+      rollupOptions: {
+        output: {
+          /**
+           * Split node_modules into focused vendor chunks for better HTTP caching.
+           * - react-vendor: React core (rarely changes)
+           * - query-vendor:  React Query (rarely changes)
+           * - ui-vendor:     Radix UI + shadcn primitives (changes with design system upgrades)
+           * - three-vendor:  Three.js (large, only loaded by 3D-capable themes)
+           * - animation-vendor: GSAP + framer-motion (only loaded by animated themes)
+           * - chart-vendor:  Recharts + Chart.js (only loaded by dashboard themes)
+           */
+          manualChunks(id: string) {
+            if (!id.includes('node_modules')) return;
+
+            // React core runtime
+            if (
+              id.includes('/react/') ||
+              id.includes('/react-dom/') ||
+              id.includes('/react-router') ||
+              id.includes('/scheduler/')
+            ) {
+              return 'react-vendor';
+            }
+
+            // React Query / TanStack
+            if (id.includes('@tanstack/')) {
+              return 'query-vendor';
+            }
+
+            // Radix UI primitives + shadcn/ui building blocks
+            if (id.includes('@radix-ui/') || id.includes('class-variance-authority') || id.includes('tailwind-merge') || id.includes('clsx')) {
+              return 'ui-vendor';
+            }
+
+            // Heavy 3D library — only used by specific themes
+            if (id.includes('/three/') || id.includes('@react-three/')) {
+              return 'three-vendor';
+            }
+
+            // Animation libraries — only used by animated themes
+            if (id.includes('/gsap/') || id.includes('@gsap/') || id.includes('/framer-motion/') || id.includes('/motion/')) {
+              return 'animation-vendor';
+            }
+
+            // Charting libraries — only used by dashboard/analytics themes
+            if (id.includes('/recharts/') || id.includes('/chart.js/') || id.includes('/react-chartjs-2/')) {
+              return 'chart-vendor';
+            }
+          },
+        },
       },
     },
   };

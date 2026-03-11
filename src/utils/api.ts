@@ -1,76 +1,70 @@
-// API utility for consistent API calls
-// In development, use relative URLs to leverage Vite proxy
-// In production, default to same-origin unless VITE_API_BASE_URL is explicitly set
+/**
+ * API utility for consistent API calls.
+ * In development, uses relative URLs to leverage Vite proxy.
+ * In production, defaults to same-origin unless VITE_API_BASE_URL is explicitly set.
+ */
+
+import { STORAGE_KEYS } from '@/utils/constants';
+
 const getApiBaseUrl = () => {
   const raw = String(import.meta.env.VITE_API_BASE_URL || 'https://cms.sparti.ai').trim();
-
-  // If a domain is provided without protocol, assume https
   if (!raw.startsWith('http://') && !raw.startsWith('https://')) {
     return `https://${raw}`;
   }
-
   return raw;
 };
 
 const API_BASE_URL = getApiBaseUrl();
 
-// Get JWT token from localStorage
-const getAuthToken = () => {
-  const session = localStorage.getItem('sparti-user-session');
-  console.log('[testing] API utility - Session data:', session);
-  if (session) {
-    try {
-      const userData = JSON.parse(session);
-      console.log('[testing] API utility - Token:', userData.token ? 'Present' : 'Missing');
-      return userData.token;
-    } catch (error) {
-      console.error('Error parsing session data:', error);
-      return null;
-    }
+// ----- Auth header helpers -----
+
+const getAuthToken = (): string | null => {
+  const session = localStorage.getItem(STORAGE_KEYS.USER_SESSION);
+  if (!session) return null;
+  try {
+    return JSON.parse(session)?.token ?? null;
+  } catch {
+    console.error('Error parsing session data');
+    return null;
   }
-  console.log('[testing] API utility - No session found');
-  return null;
 };
 
-// Get access key from localStorage
-const getAccessKey = () => {
-  return localStorage.getItem('sparti-access-key');
+const getAccessKey = (): string | null => {
+  return localStorage.getItem(STORAGE_KEYS.ACCESS_KEY);
 };
 
-// Get tenant API key from localStorage
-// Supports both tenant-specific keys (sparti-tenant-api-key-{tenantId}) and global key (sparti-tenant-api-key)
-const getTenantApiKey = (tenantId?: string) => {
+const getTenantApiKey = (tenantId?: string): string | null => {
   if (tenantId) {
-    // Try tenant-specific key first
-    const tenantSpecificKey = localStorage.getItem(`sparti-tenant-api-key-${tenantId}`);
-    if (tenantSpecificKey) {
-      return tenantSpecificKey;
-    }
+    const tenantSpecificKey = localStorage.getItem(STORAGE_KEYS.tenantApiKey(tenantId));
+    if (tenantSpecificKey) return tenantSpecificKey;
   }
-  // Fallback to global tenant API key
-  return localStorage.getItem('sparti-tenant-api-key');
+  return localStorage.getItem(STORAGE_KEYS.TENANT_API_KEY);
 };
 
-// Get headers with authentication
-const getAuthHeaders = (additionalHeaders: Record<string, string> = {}, tenantId?: string) => {
+const getAuthHeaders = (
+  additionalHeaders: Record<string, string> = {},
+  tenantId?: string
+): Record<string, string> => {
   const token = getAuthToken();
   const accessKey = getAccessKey();
   const tenantApiKey = getTenantApiKey(tenantId);
-  const headers = {
+
+  return {
     'Content-Type': 'application/json',
-    ...(token && { 'Authorization': `Bearer ${token}` }),
+    ...(token && { Authorization: `Bearer ${token}` }),
     ...(accessKey && { 'X-Access-Key': accessKey }),
     ...(tenantApiKey && { 'X-Tenant-API-Key': tenantApiKey }),
-    ...(tenantApiKey && { 'X-API-Key': tenantApiKey }), // Also support X-API-Key for backward compatibility
+    // Also support X-API-Key for backward compatibility
+    ...(tenantApiKey && { 'X-API-Key': tenantApiKey }),
     // Automatically add X-Tenant-Id header if tenantId is provided
     ...(tenantId && { 'X-Tenant-Id': tenantId }),
     ...additionalHeaders,
   };
-  console.log('[testing] API utility - Headers being sent:', headers);
-  return headers;
 };
 
-/** Build full API URL for use with fetch - prepends VITE_API_BASE_URL when set */
+// ----- Public API -----
+
+/** Build full API URL for use with fetch — prepends VITE_API_BASE_URL when set */
 export const getApiUrl = (path: string): string => {
   return `${API_BASE_URL}${path.startsWith('/') ? path : `/${path}`}`;
 };
@@ -87,15 +81,10 @@ export const resolveBackendAssetUrl = (path: string): string => {
 };
 
 export const api = {
-  // Get the base URL (empty in dev for proxy, VITE_API_BASE_URL in production when set)
   getBaseUrl: () => API_BASE_URL,
-  // Build full URL for a path - use with fetch() when api.get/post aren't suitable
   getApiUrl,
-  
-  // Get tenant API key (exported for external use)
   getTenantApiKey: (tenantId?: string) => getTenantApiKey(tenantId),
-  
-  // Make API calls with proper base URL and authentication
+
   get: async (endpoint: string, options?: RequestInit & { tenantId?: string }) => {
     const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
     const { headers: additionalHeaders, tenantId, ...restOptions } = options || {};
@@ -105,7 +94,7 @@ export const api = {
       ...restOptions,
     });
   },
-  
+
   post: async (endpoint: string, data?: any, options?: RequestInit & { tenantId?: string }) => {
     const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
     const { headers: additionalHeaders, tenantId, ...restOptions } = options || {};
@@ -116,7 +105,7 @@ export const api = {
       ...restOptions,
     });
   },
-  
+
   put: async (endpoint: string, data?: any, options?: RequestInit & { tenantId?: string }) => {
     const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
     const { headers: additionalHeaders, tenantId, ...restOptions } = options || {};
@@ -127,7 +116,7 @@ export const api = {
       ...restOptions,
     });
   },
-  
+
   delete: async (endpoint: string, options?: RequestInit & { tenantId?: string }) => {
     const url = endpoint.startsWith('http') ? endpoint : `${API_BASE_URL}${endpoint}`;
     const { headers: additionalHeaders, tenantId, ...restOptions } = options || {};

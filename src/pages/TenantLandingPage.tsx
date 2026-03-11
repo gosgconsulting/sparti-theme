@@ -1,95 +1,16 @@
-import React, { lazy, Suspense, useMemo } from 'react';
+import React, { Suspense, useMemo } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ThemeBasePathContext } from '@/context/ThemeBasePathContext';
-
-// Dynamic theme imports - themes with hardcoded content, ready for database integration
-const LandingPageTheme = lazy(() => import('@/themes/landingpage'));
-const SpartiSEOLandingTheme = lazy(() => import('@/themes/sparti-seo-landing'));
-const GosgConsultingTheme = lazy(() => import('@/themes/gosgconsulting'));
-const SissonneTheme = lazy(() => import('@/themes/sissonne'));
-const StorefrontTheme = lazy(() => import('@/themes/storefront'));
-const MoondkTheme = lazy(() => import('@/themes/moondk'));
-const StrTheme = lazy(() => import('@/themes/str'));
-const OptimalConsultingTheme = lazy(() => import('@/themes/optimalconsulting'));
-const MasterTheme = lazy(() => import('@/themes/master'));
-const EShopTheme = lazy(() => import('@/themes/e-shop'));
-const HotelTheme = lazy(() => import('@/themes/hotel'));
-const Hotel1Theme = lazy(() => import('@/themes/hotel1'));
-const NailQueenTheme = lazy(() => import('@/themes/nail-queen'));
+import { themeComponentMap, getThemeDisplayName } from '@/themes/themeRegistry';
 
 /**
- * Map theme slugs to their display names and components
- * Themes have hardcoded content but are ready to integrate with tenant database
- */
-const themeConfig: Record<string, { name: string; component: React.LazyExoticComponent<React.ComponentType<any>> }> = {
-  'landingpage': {
-    name: 'ACATR Business Services',
-    component: LandingPageTheme
-  },
-  'sparti-seo-landing': {
-    name: 'Sparti SEO Landing',
-    component: SpartiSEOLandingTheme
-  },
-  'gosgconsulting': {
-    name: 'GO SG Consulting',
-    component: GosgConsultingTheme
-  },
-  'gosgconsulting.com': {
-    name: 'GO SG Consulting',
-    component: GosgConsultingTheme
-  },
-  'sissonne': {
-    name: 'Sissonne Dance Academy',
-    component: SissonneTheme
-  },
-  'storefront': {
-    name: 'Storefront',
-    component: StorefrontTheme
-  },
-  'moondk': {
-    name: 'Moondk',
-    component: MoondkTheme
-  },
-  'str': {
-    name: 'STR',
-    component: StrTheme
-  },
-  'optimalconsulting': {
-    name: 'Optimal Consulting',
-    component: OptimalConsultingTheme
-  },
-  'master': {
-    name: 'Master Template',
-    component: MasterTheme
-  },
-  'e-shop': {
-    name: 'E-shop',
-    component: EShopTheme
-  },
-  'hotel': {
-    name: 'Hotel Adina',
-    component: HotelTheme
-  },
-  'hotel1': {
-    name: 'Hotel1',
-    component: Hotel1Theme
-  },
-  'nail-queen': {
-    name: 'Nail Queen',
-    component: NailQueenTheme
-  }
-};
-
-/**
- * Client-side React component for tenant landing pages
- * Dynamically loads themes based on tenantSlug (which is actually the theme slug)
- * 
- * Each theme has:
- * - Hardcoded content, images, pages, etc.
- * - Ready to integrate with tenant database via useThemeSettings hook
- * - Can replace hardcoded values with database values when tenant is assigned
+ * Client-side React component for tenant landing pages.
+ * Dynamically loads themes based on tenantSlug (which is the theme slug).
+ *
+ * To add a new theme, create `src/themes/<slug>/index.tsx` — no changes
+ * needed here or in router.tsx.
  */
 const TenantLandingPage: React.FC = () => {
   const { tenantSlug, themeSlug, pageSlug, productname, slug: blogSlug } = useParams<{
@@ -106,7 +27,7 @@ const TenantLandingPage: React.FC = () => {
   const themeIndexInPath = pathParts.indexOf('theme');
   const firstSegment = pathParts[0];
   const slugFromShortPath =
-    themeIndexInPath < 0 && firstSegment && firstSegment in themeConfig ? firstSegment : null;
+    themeIndexInPath < 0 && firstSegment && firstSegment in themeComponentMap ? firstSegment : null;
 
   // Handle root-level blog routes (/blog or /blog/:slug)
   const isRootBlogRoute = !tenantSlug && !themeSlug && !slugFromShortPath && (location.pathname === '/blog' || location.pathname.startsWith('/blog/'));
@@ -120,18 +41,7 @@ const TenantLandingPage: React.FC = () => {
   );
 
   // When DEPLOY_THEME_SLUG is set (Vercel/env), always use it so theme is served at root
-  // In production, automatically use 'landingpage' as deploySlug if no other theme is specified
-  // This allows landingpage theme to be served at root (/) and root-level routes (/blog, /thank-you, etc.)
-  // In localhost, /theme/landingpage will still work via tenantSlug
-  // Treat empty string as missing so /theme/ and /theme resolve to default theme on localhost
-  const deploySlugEnv = import.meta.env.DEPLOY_THEME_SLUG;
-  const isProduction = import.meta.env.PROD;
-  // In production, automatically serve landingpage at root paths if no deploySlug is set
-  // Check if we're NOT at a /theme/ path and no tenantSlug/themeSlug is provided
-  const isNotThemePath = !location.pathname.startsWith('/theme/');
-  const autoLandingpageDeploy = isProduction && !deploySlugEnv && isNotThemePath && !tenantSlug && !themeSlug && !slugFromShortPath && !isRootSTRRoute;
-  const deploySlug = deploySlugEnv || (autoLandingpageDeploy ? 'landingpage' : null);
-  
+  const deploySlug = import.meta.env.DEPLOY_THEME_SLUG;
   const slug =
     (deploySlug && deploySlug.trim()) ||
     (tenantSlug && tenantSlug.trim()) ||
@@ -145,7 +55,6 @@ const TenantLandingPage: React.FC = () => {
   const basePath = isDeployAtRoot ? '' : undefined;
 
   // Extract full page path from location for nested routes like /booking/classes
-  // Always extract from pathname to handle both /theme/:tenantSlug/:pageSlug and /theme/:tenantSlug/* routes
   const fullPageSlug = useMemo(() => {
     if (productname) {
       return `product/${productname}`;
@@ -160,38 +69,32 @@ const TenantLandingPage: React.FC = () => {
     }
 
     // Extract full path from pathname to handle nested routes
-    const pathParts = location.pathname.split('/').filter(Boolean);
-    const themeIndex = pathParts.indexOf('theme');
+    const parts = location.pathname.split('/').filter(Boolean);
+    const themeIndex = parts.indexOf('theme');
     const effectiveSlug = (tenantSlug && tenantSlug.trim()) || (themeSlug && themeSlug.trim()) || slug;
-    const tenantIndex = pathParts.indexOf(effectiveSlug);
+    const tenantIndex = parts.indexOf(effectiveSlug);
 
-    // Short theme URL: /gosgconsulting or /gosgconsulting/services - first segment is theme slug, rest is page path
-    if (themeIndex < 0 && pathParts.length > 0 && pathParts[0] === effectiveSlug) {
-      return pathParts.slice(1).join('/');
+    // Short theme URL: /gosgconsulting or /gosgconsulting/services
+    if (themeIndex < 0 && parts.length > 0 && parts[0] === effectiveSlug) {
+      return parts.slice(1).join('/');
     }
 
     // Handle other root-level routes (e.g. /blog or /blog/slug)
-    if (themeIndex < 0 && pathParts.length > 0) {
-      return pathParts.join('/');
+    if (themeIndex < 0 && parts.length > 0) {
+      return parts.join('/');
     }
 
-    if (themeIndex >= 0 && tenantIndex === themeIndex + 1 && tenantIndex + 1 < pathParts.length) {
-      // Get all parts after tenant slug (handles both single and nested paths)
-      const remainingParts = pathParts.slice(tenantIndex + 1);
-      return remainingParts.join('/');
+    if (themeIndex >= 0 && tenantIndex === themeIndex + 1 && tenantIndex + 1 < parts.length) {
+      return parts.slice(tenantIndex + 1).join('/');
     }
 
-    // Fallback to pageSlug if pathname parsing didn't work
     return pageSlug || '';
   }, [pageSlug, location.pathname, tenantSlug, themeSlug, productname, isRootBlogRoute, blogSlug, slug]);
 
-  // Get theme config or fallback
-  const currentTheme = useMemo(() => {
-    return themeConfig[slug] || themeConfig['landingpage'];
-  }, [slug]);
-
-  const ThemeComponent = currentTheme.component;
-  const isKnownTheme = slug in themeConfig;
+  const isKnownTheme = slug in themeComponentMap;
+  // Resolve component from registry; fall back to landingpage if slug not found
+  const ThemeComponent = themeComponentMap[slug] ?? themeComponentMap['landingpage'];
+  const tenantName = getThemeDisplayName(slug);
 
   // Error component for unknown themes
   const ThemeNotFound = () => (
@@ -204,33 +107,27 @@ const TenantLandingPage: React.FC = () => {
             Theme <code className="bg-muted px-1 py-0.5 rounded">{slug}</code> was not found.
           </p>
           <p className="text-sm mt-2">
-            Available themes: {Object.keys(themeConfig).join(', ')}
+            Available themes: {Object.keys(themeComponentMap).join(', ')}
           </p>
           <p className="text-sm mt-2">
-            To add a new theme, create a folder at <code className="bg-muted px-1 py-0.5 rounded">src/themes/{slug}/</code> with an <code className="bg-muted px-1 py-0.5 rounded">index.tsx</code> file.
+            To add a new theme, create a folder at{' '}
+            <code className="bg-muted px-1 py-0.5 rounded">src/themes/{slug}/</code> with an{' '}
+            <code className="bg-muted px-1 py-0.5 rounded">index.tsx</code> file.
           </p>
         </AlertDescription>
       </Alert>
     </div>
   );
 
-  // Show error if theme is not found (and not using fallback)
   if (!isKnownTheme && slug !== 'landingpage') {
     return <ThemeNotFound />;
   }
 
-  // Loading fallback with proper UI
-  const LoadingFallback = () => (
-    <div />
-  );
-
-  // Pass pageSlug and basePath; tenantId omitted for portfolio (themes use internal fallbacks if needed)
-  // ThemeBasePathContext: when basePath='', theme uses root paths for links
   return (
     <ThemeBasePathContext.Provider value={basePath}>
-      <Suspense fallback={<LoadingFallback />}>
+      <Suspense fallback={<div />}>
         <ThemeComponent
-          tenantName={currentTheme.name}
+          tenantName={tenantName}
           tenantSlug={slug}
           pageSlug={fullPageSlug}
           tenantId={undefined}

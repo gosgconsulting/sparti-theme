@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 import { Tenant } from '../admin/PostgresIntegration';
+import { STORAGE_KEYS } from '@/utils/constants';
 
 interface User {
   id: string;
@@ -51,11 +52,11 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
 
   const signOut = useCallback(() => {
     setUser(null);
-    localStorage.removeItem('sparti-user-session');
-    localStorage.removeItem('sparti-access-key');
+    localStorage.removeItem(STORAGE_KEYS.USER_SESSION);
+    localStorage.removeItem(STORAGE_KEYS.ACCESS_KEY);
     setCurrentTenantId(null);
-    localStorage.removeItem('sparti-current-tenant-id');
-    hasSetTenantFromSignIn.current = false; // Reset flag on sign out
+    localStorage.removeItem(STORAGE_KEYS.CURRENT_TENANT_ID);
+    hasSetTenantFromSignIn.current = false;
   }, []);
 
   useEffect(() => {
@@ -65,7 +66,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       const API_BASE_URL = getApiBaseUrl();
 
       // 1. Verify session with backend or use local data for demo
-      const session = localStorage.getItem('sparti-user-session');
+      const session = localStorage.getItem(STORAGE_KEYS.USER_SESSION);
       if (session) {
         try {
           const sessionData = JSON.parse(session);
@@ -112,7 +113,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       // Only restore from localStorage on initialization, don't set from user.tenant_id
       // (that should only happen during sign-in)
       let tenantIdToSet: string | null = null;
-      const savedTenantId = localStorage.getItem('sparti-current-tenant-id');
+      const savedTenantId = localStorage.getItem(STORAGE_KEYS.CURRENT_TENANT_ID);
       if (savedTenantId) {
         tenantIdToSet = savedTenantId;
       } else if (validatedUser && validatedUser.tenant_id) {
@@ -126,11 +127,10 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
       if (!tenantIdToSet && import.meta.env.DEV) {
         tenantIdToSet = 'tenant-gosg';
         try {
-          localStorage.setItem('sparti-current-tenant-id', tenantIdToSet);
+          localStorage.setItem(STORAGE_KEYS.CURRENT_TENANT_ID, tenantIdToSet);
         } catch {}
       }
 
-      console.log('tenantIdToSet', tenantIdToSet);
       setCurrentTenantId(tenantIdToSet);
 
       setLoading(false);
@@ -140,16 +140,12 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
   }, [signOut]);
 
   const handleTenantChange = useCallback((tenantId: string) => {
-    // Handle clearing tenant selection (empty string or null)
     if (!tenantId || tenantId === '') {
       setCurrentTenantId(null);
-      localStorage.removeItem('sparti-current-tenant-id');
-      console.log('Cleared tenant selection');
+      localStorage.removeItem(STORAGE_KEYS.CURRENT_TENANT_ID);
     } else {
       setCurrentTenantId(tenantId);
-      localStorage.setItem('sparti-current-tenant-id', tenantId);
-      // Here you would typically fetch data for the selected tenant
-      console.log(`Switched to tenant ID: ${tenantId}`);
+      localStorage.setItem(STORAGE_KEYS.CURRENT_TENANT_ID, tenantId);
     }
   }, []);
 
@@ -240,16 +236,13 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           };
           
           setUser(userData);
-          localStorage.setItem('sparti-user-session', JSON.stringify({ ...userData, token: data.token }));
+          localStorage.setItem(STORAGE_KEYS.USER_SESSION, JSON.stringify({ ...userData, token: data.token }));
           
-          // Set tenant ID from user.tenant_id only once on sign-in
-          // This ensures it's set on sign-in but not when user is updated later
           if (!hasSetTenantFromSignIn.current) {
             const tenantIdToSet = userData.tenant_id && !userData.is_super_admin ? userData.tenant_id : null;
-            
             if (tenantIdToSet) {
               setCurrentTenantId(tenantIdToSet);
-              localStorage.setItem('sparti-current-tenant-id', tenantIdToSet);
+              localStorage.setItem(STORAGE_KEYS.CURRENT_TENANT_ID, tenantIdToSet);
               hasSetTenantFromSignIn.current = true;
             }
           }
@@ -320,17 +313,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         };
         
         setUser(userData);
-        localStorage.setItem('sparti-user-session', JSON.stringify(userData));
-        localStorage.setItem('sparti-access-key', accessKey);
+        localStorage.setItem(STORAGE_KEYS.USER_SESSION, JSON.stringify(userData));
+        localStorage.setItem(STORAGE_KEYS.ACCESS_KEY, accessKey);
         
-        // Set tenant ID from user.tenant_id only once on sign-in
-        // This ensures it's set on sign-in but not when user is updated later
         if (!hasSetTenantFromSignIn.current) {
           const tenantIdToSet = userData.tenant_id && !userData.is_super_admin ? userData.tenant_id : null;
-          
           if (tenantIdToSet) {
             setCurrentTenantId(tenantIdToSet);
-            localStorage.setItem('sparti-current-tenant-id', tenantIdToSet);
+            localStorage.setItem(STORAGE_KEYS.CURRENT_TENANT_ID, tenantIdToSet);
             hasSetTenantFromSignIn.current = true;
           }
         }
@@ -364,14 +354,9 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         is_super_admin: true
       };
       
-      // Store the admin user in localStorage
-      localStorage.setItem('sparti-user-session', JSON.stringify(adminUser));
-      
-      // Set the user in state
+      localStorage.setItem(STORAGE_KEYS.USER_SESSION, JSON.stringify(adminUser));
       setUser(adminUser);
-      
-      // Store the credentials in localStorage for demo purposes
-      localStorage.setItem('sparti-demo-credentials', JSON.stringify({ email, password }));
+      localStorage.setItem(STORAGE_KEYS.DEMO_CREDENTIALS, JSON.stringify({ email, password }));
       
       return { success: true };
     } catch (error) {

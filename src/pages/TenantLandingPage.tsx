@@ -50,8 +50,7 @@ const TenantLandingPage: React.FC = () => {
     (isRootSTRRoute ? 'str' : 'landingpage');
 
   // When deploy theme at root, basePath is '' so links use /services not /theme/gosgconsulting/services
-  // Also use root basePath when auto-deploying landingpage in production
-  const isDeployAtRoot = (!!deploySlug || autoLandingpageDeploy) && !location.pathname.startsWith('/theme/');
+  const isDeployAtRoot = !!deploySlug && !location.pathname.startsWith('/theme/');
   const basePath = isDeployAtRoot ? '' : undefined;
 
   // Extract full page path from location for nested routes like /booking/classes

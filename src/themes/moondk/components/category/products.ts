@@ -12,7 +12,7 @@ import sesameOilImage from "../../assets/oil/BEOK-sesameoil1.jpg";
 import perillaOilImage from "../../assets/oil/BEOK-perillaoil.jpg";
 import saucesImage from "../../assets/oil/BEOK-sauces.jpg";
 
-  // Soju products
+  // Alcohol products
 import seorijuImage from "../../assets/alcohol/BEOK-seoriju1.jpg";
 
 // Noodles products
@@ -44,8 +44,8 @@ export const products: Product[] = [
   { id: 7, name: "Cold Pressed Perilla Oil", category: "Oil", price: "$36", image: perillaOilImage, stock: 1 },
   { id: 8, name: "Cold Pressed Oil Gift Set", category: "Oil", price: "$68", image: saucesImage },
   
-  // Soju products
-  { id: 9, name: "Seoriju", category: "Soju", price: "$58", image: seorijuImage, stock: 3 },
+  // Alcohol products
+  { id: 9, name: "Seoriju", category: "Alcohol", price: "$58", image: seorijuImage, stock: 3 },
   
   // Noodles products
   { id: 10, name: "Myeongawon Hand-Stretched Red Rice Noodle", category: "Noodles", price: "$12", image: wheatNoodleImage2 },
@@ -59,5 +59,5 @@ export const categoryTabs = [
   "Tea",
   "Oil",
   "Noodles",
-  "Soju",
+  "Alcohol",
 ];

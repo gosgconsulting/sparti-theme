@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from "react";
-import { ChevronLeft, ChevronRight, X } from "lucide-react";
+import { ChevronLeft, ChevronRight, X, Maximize2 } from "lucide-react";
 // Hovenia Tea images (1-20)
 import hoveniaTea1 from "../../assets/tea/Hovenia_Tea_fol/1.jpg";
 import hoveniaTea2 from "../../assets/tea/Hovenia_Tea_fol/2.jpg";
@@ -215,15 +215,43 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
   const canScrollRight = carouselIndex < maxIndex;
 
   const scrollCarouselLeft = () => {
-    if (!canScrollLeft) return;
-    const newIndex = Math.max(0, carouselIndex - 1);
-    setCarouselIndex(newIndex);
+    const selectedIndex = images.findIndex(img => img === selectedImage);
+    const firstVisibleIndex = carouselIndex;
+    const lastVisibleIndex = carouselIndex + maxVisible - 1;
+    
+    // Only slide if selected image is at the 1st visible position (first in carousel)
+    if (selectedIndex === firstVisibleIndex && canScrollLeft) {
+      const newIndex = Math.max(0, carouselIndex - 1);
+      setCarouselIndex(newIndex);
+      // Update main image to show the first visible image in the new carousel position
+      const firstVisibleImage = images[newIndex];
+      if (firstVisibleImage) {
+        setSelectedImage(firstVisibleImage);
+      }
+    } else if (selectedIndex > 0) {
+      // Just change the main image to previous one without sliding
+      setSelectedImage(images[selectedIndex - 1]);
+    }
   };
 
   const scrollCarouselRight = () => {
-    if (!canScrollRight) return;
-    const newIndex = Math.min(maxIndex, carouselIndex + 1);
-    setCarouselIndex(newIndex);
+    const selectedIndex = images.findIndex(img => img === selectedImage);
+    const firstVisibleIndex = carouselIndex;
+    const lastVisibleIndex = carouselIndex + maxVisible - 1;
+    
+    // Only slide if selected image is at the 4th visible position (last in carousel)
+    if (selectedIndex === lastVisibleIndex && canScrollRight) {
+      const newIndex = Math.min(maxIndex, carouselIndex + 1);
+      setCarouselIndex(newIndex);
+      // Update main image to show the last visible image in the new carousel position
+      const lastVisibleImage = images[newIndex + maxVisible - 1];
+      if (lastVisibleImage) {
+        setSelectedImage(lastVisibleImage);
+      }
+    } else if (selectedIndex < images.length - 1) {
+      // Just change the main image to next one without sliding
+      setSelectedImage(images[selectedIndex + 1]);
+    }
   };
 
   // Calculate transform using ref-based measurement for accuracy
@@ -317,26 +345,10 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
             alt="Product"
             className="w-full h-full object-cover rounded-2xl"
           />
-        
-        {/* Navigation Arrows - Only show if multiple images */}
-        {hasMultipleImages && (
-          <>
-            <button
-              onClick={goToPrevious}
-              className="absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/80 hover:bg-white border border-border/60 shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100 z-10"
-              aria-label="Previous image"
-            >
-              <ChevronLeft className="h-5 w-5 text-foreground" />
-            </button>
-            <button
-              onClick={goToNext}
-              className="absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/80 hover:bg-white border border-border/60 shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center opacity-0 group-hover:opacity-100 z-10"
-              aria-label="Next image"
-            >
-              <ChevronRight className="h-5 w-5 text-foreground" />
-            </button>
-          </>
-        )}
+          {/* Expand icon */}
+          <div className="absolute bottom-3 right-3 h-8 w-8 rounded-full bg-white/80 hover:bg-white border border-primary/40 shadow-sm hover:shadow-lg transition-all duration-200 flex items-center justify-center opacity-70 group-hover:opacity-100 z-10">
+            <Maximize2 className="h-4 w-4 text-primary" />
+          </div>
       </div>
 
       {/* Thumbnail gallery - Carousel for products 1, 2, 3, 4, 7, 10, 11, 12, and 13, grid for others */}
@@ -357,10 +369,10 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
                   key={index}
                   ref={index === 0 ? measureItemRef : null}
                   onClick={() => setSelectedImage(image)}
-                  className={`flex-shrink-0 aspect-square overflow-hidden rounded-lg transition-all duration-200 shadow-sm hover:shadow-md ${
+                  className={`flex-shrink-0 aspect-square overflow-hidden rounded-lg transition-all duration-200 ${
                     selectedImage === image
-                      ? "ring-2 ring-primary ring-offset-2 shadow-md"
-                      : "hover:opacity-80"
+                      ? "ring-2 ring-primary ring-offset-2 shadow-lg border-2 border-primary"
+                      : "shadow-sm hover:shadow-md hover:opacity-80 border border-transparent"
                   }`}
                   style={{ 
                     width: `calc((100% - 1.5rem) / ${maxVisible})`
@@ -377,34 +389,40 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
           </div>
 
           {/* Navigation arrows */}
-          {images.length > maxVisible && (
-            <>
-              <button
-                onClick={scrollCarouselLeft}
-                disabled={!canScrollLeft}
-                className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 h-8 w-8 rounded-full border border-border/60 shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center z-10 ${
-                  canScrollLeft
-                    ? "bg-white/90 hover:bg-white cursor-pointer"
-                    : "bg-white/50 cursor-not-allowed opacity-50"
-                }`}
-                aria-label="Scroll carousel left"
-              >
-                <ChevronLeft className="h-4 w-4 text-foreground" />
-              </button>
-              <button
-                onClick={scrollCarouselRight}
-                disabled={!canScrollRight}
-                className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 h-8 w-8 rounded-full border border-border/60 shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center z-10 ${
-                  canScrollRight
-                    ? "bg-white/90 hover:bg-white cursor-pointer"
-                    : "bg-white/50 cursor-not-allowed opacity-50"
-                }`}
-                aria-label="Scroll carousel right"
-              >
-                <ChevronRight className="h-4 w-4 text-foreground" />
-              </button>
-            </>
-          )}
+          {images.length > maxVisible && (() => {
+            const selectedIndex = images.findIndex(img => img === selectedImage);
+            const canGoPrevious = selectedIndex > 0;
+            const canGoNext = selectedIndex < images.length - 1;
+            
+            return (
+              <>
+                <button
+                  onClick={scrollCarouselLeft}
+                  disabled={!canGoPrevious}
+                  className={`absolute left-0 top-1/2 -translate-y-1/2 -translate-x-2 h-8 w-8 rounded-full border border-border/60 shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center z-10 ${
+                    canGoPrevious
+                      ? "bg-white/90 hover:bg-white cursor-pointer"
+                      : "bg-white/50 cursor-not-allowed opacity-50"
+                  }`}
+                  aria-label="Previous image"
+                >
+                  <ChevronLeft className="h-4 w-4 text-foreground" />
+                </button>
+                <button
+                  onClick={scrollCarouselRight}
+                  disabled={!canGoNext}
+                  className={`absolute right-0 top-1/2 -translate-y-1/2 translate-x-2 h-8 w-8 rounded-full border border-border/60 shadow-md hover:shadow-lg transition-all duration-200 flex items-center justify-center z-10 ${
+                    canGoNext
+                      ? "bg-white/90 hover:bg-white cursor-pointer"
+                      : "bg-white/50 cursor-not-allowed opacity-50"
+                  }`}
+                  aria-label="Next image"
+                >
+                  <ChevronRight className="h-4 w-4 text-foreground" />
+                </button>
+              </>
+            );
+          })()}
         </div>
       ) : (
         <div className="grid grid-cols-4 gap-2">
@@ -412,10 +430,10 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
             <button
               key={index}
               onClick={() => setSelectedImage(image)}
-              className={`aspect-square overflow-hidden rounded-lg transition-all duration-200 shadow-sm hover:shadow-md ${
+              className={`aspect-square overflow-hidden rounded-lg transition-all duration-200 ${
                 selectedImage === image
-                  ? "ring-2 ring-primary ring-offset-2 shadow-md"
-                  : "hover:opacity-80"
+                  ? "ring-2 ring-primary ring-offset-2 shadow-lg border-2 border-primary"
+                  : "shadow-sm hover:shadow-md hover:opacity-80 border border-transparent"
               }`}
             >
               <img

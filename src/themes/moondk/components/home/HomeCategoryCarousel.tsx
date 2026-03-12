@@ -26,7 +26,7 @@ const categories: CategoryItem[] = [
   { title: "Tea", to: "/category/all-products?filter=Tea", image: teaImg },
   { title: "Oil", to: "/category/all-products?filter=Oil", image: oilImg },
   { title: "Noodle", to: "/category/all-products?filter=Noodles", image: noodleImg },
-  { title: "Soju", to: "/category/all-products?filter=Soju", image: alcImg },
+  { title: "Alcohol", to: "/category/all-products?filter=Alcohol", image: alcImg },
   { title: "Personal care", to: "/category/all-products?filter=Personal%20care", image: personalCareImg },
 ];
 

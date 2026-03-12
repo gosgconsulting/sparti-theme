@@ -200,20 +200,7 @@ const Navigation = () => {
       <div className="bg-white relative">
         <div className="px-6 py-4">
           <div className="mx-auto max-w-6xl">
-            {/* Left: Logo above navigation menus */}
-            <div className="flex flex-col">
-            {/* Logo */}
-            <div className="mb-3">
-              <ThemeLink to="/" className="block">
-                <img
-                  src={logoSrc}
-                  alt="MOONDK"
-                  className="block h-10 md:h-12 lg:h-14 xl:h-16 w-auto object-contain"
-                />
-              </ThemeLink>
-            </div>
-
-            {/* Navigation menus below logo */}
+            {/* Logo, Navigation menus, and Icons aligned horizontally */}
             <div className="flex items-center gap-2 w-full">
               {/* Mobile hamburger button */}
               <button
@@ -246,6 +233,17 @@ const Navigation = () => {
                   ></span>
                 </div>
               </button>
+
+              {/* Logo */}
+              <div className="flex-shrink-0 mr-8 lg:mr-20 xl:mr-36">
+                <ThemeLink to="/" className="block">
+                  <img
+                    src={logoSrc}
+                    alt="MOONDK"
+                    className="block h-10 md:h-12 lg:h-14 xl:h-16 w-auto object-contain"
+                  />
+                </ThemeLink>
+              </div>
 
               {/* Desktop nav items and utility icons */}
               <div className="hidden lg:flex items-center gap-8 flex-1 justify-between">
@@ -441,7 +439,6 @@ const Navigation = () => {
                 )}
               </button>
             </div>
-          </div>
           </div>
         </div>
       </div>

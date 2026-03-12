@@ -267,57 +267,57 @@ Reservations are confirmed upon payment of deposit within 12 hours. Otherwise, t
           >
             <div className="text-center mb-12">
               <h2 className="text-3xl md:text-4xl font-heading tracking-tight mb-2">Beok</h2>
-              <p className="text-lg font-body text-foreground/70">Winter Menu</p>
+              <p className="text-lg font-body text-foreground/70">Spring & Summer</p>
             </div>
 
             <div className="space-y-8">
               {/* Menu Item 1 */}
               <div className="border-b border-border pb-6">
-                <h3 className="text-xl md:text-2xl font-heading mb-2">막걸리빵 / 호박범벅 / 닭보김치</h3>
-                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Makgeolli Bread / Hobak Beombeok / Chicken Bo Kimchi</p>
-                <p className="text-sm md:text-base font-body text-foreground/60">Burdock Butter / Red Bean & Mung Bean / Mustard Pearl</p>
+                <h3 className="text-xl md:text-2xl font-heading mb-2">막걸리빵 / 편수 / 문어쌈</h3>
+                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Makgeolli Bread / Pyeonsu / Octopus Ssam</p>
+                <p className="text-sm md:text-base font-body text-foreground/60">Mugwort Butter / Korean Zucchini / Gamromae salsa</p>
               </div>
 
               {/* Menu Item 2 */}
               <div className="border-b border-border pb-6">
-                <h3 className="text-xl md:text-2xl font-heading mb-2">참깨두부</h3>
-                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Sesame Dubu</p>
-                <p className="text-sm md:text-base font-body text-foreground/60">Tot Seaweed, Celeriac, Kale, Soy Sauce Foam</p>
+                <h3 className="text-xl md:text-2xl font-heading mb-2">관자 물회</h3>
+                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Scallop Mulhoei</p>
+                <p className="text-sm md:text-base font-body text-foreground/60">Hokkaido Scallop, Tofu Mascapone, Tomato Water</p>
               </div>
 
               {/* Menu Item 3 */}
               <div className="border-b border-border pb-6">
-                <h3 className="text-xl md:text-2xl font-heading mb-2">잔치 국수</h3>
-                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Janchi Guksu</p>
-                <p className="text-sm md:text-base font-body text-foreground/60">Korean Noodle, Jeju Golden Flounder, Korean Zucchini</p>
+                <h3 className="text-xl md:text-2xl font-heading mb-2">아롱사태 수육</h3>
+                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Arongsatae Suyuk</p>
+                <p className="text-sm md:text-base font-body text-foreground/60">Beef Heel muscle, Yuja Chive Gremolata</p>
               </div>
 
               {/* Menu Item 4 */}
               <div className="border-b border-border pb-6">
-                <h3 className="text-xl md:text-2xl font-heading mb-2">오징어순대</h3>
-                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Squid Sundae</p>
-                <p className="text-sm md:text-base font-body text-foreground/60">Jeyuk Pork, Kimchi Caper Beurre Blanc, Sunchoke Crumble</p>
+                <h3 className="text-xl md:text-2xl font-heading mb-2">잣 국수</h3>
+                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Jatt Guksu</p>
+                <p className="text-sm md:text-base font-body text-foreground/60">Hand-Stretched Noodle, Kombucha, White Kimchi</p>
               </div>
 
               {/* Menu Item 5 */}
               <div className="border-b border-border pb-6">
-                <h3 className="text-xl md:text-2xl font-heading mb-2">돼지보쌈</h3>
-                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Pork Bossam</p>
-                <p className="text-sm md:text-base font-body text-foreground/60">Iberico Pork Collar, Anchovy Chili Jang, Nuruk Salt Paste</p>
+                <h3 className="text-xl md:text-2xl font-heading mb-2">생선찜</h3>
+                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Fish Jjim</p>
+                <p className="text-sm md:text-base font-body text-foreground/60">Seasonal Fish, Sunchoke, Caviar</p>
               </div>
 
               {/* Menu Item 6 */}
               <div className="border-b border-border pb-6">
-                <h3 className="text-xl md:text-2xl font-heading mb-2">갈비찜반상</h3>
-                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Galbij-Jim Bansang</p>
-                <p className="text-sm md:text-base font-body text-foreground/60">USA Prime Beef Short Rib, Raisin, Red Wine, Wild Mountain Vegetable Rice & Maesaengi Seaweed Soup</p>
+                <h3 className="text-xl md:text-2xl font-heading mb-2">너비아니 반상</h3>
+                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Neobiani Bansang</p>
+                <p className="text-sm md:text-base font-body text-foreground/60">Jeju Pork Collar, Native Korean Bean Rice, Seasonal Soup</p>
               </div>
 
               {/* Menu Item 7 - Dessert */}
               <div className="pb-6">
-                <h3 className="text-xl md:text-2xl font-heading mb-2">인절미파이</h3>
-                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Injeolmi Pie</p>
-                <p className="text-sm md:text-base font-body text-foreground/60">Injeolmi Ice Cream, Strawberry, Italian Meringue, Overproof Rum</p>
+                <h3 className="text-xl md:text-2xl font-heading mb-2">오미자 파나코타</h3>
+                <p className="text-base md:text-lg font-body text-foreground/80 mb-2">Omija Panna Cotta</p>
+                <p className="text-sm md:text-base font-body text-foreground/60">Seasonal Fruit Mamalade, Basil</p>
               </div>
             </div>
           </motion.div>

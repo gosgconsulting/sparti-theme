@@ -3,7 +3,8 @@ import HomeCategoryCarousel from "./HomeCategoryCarousel";
 import HomeNewArrivalsSection from "./HomeNewArrivalsSection";
 import HomeAboutSection from "./HomeAboutSection";
 import HomeFineDiningSection from "./HomeFineDiningSection";
-import HomeRecipesSection from "./HomeRecipesSection";
+// HIDDEN: HomeRecipesSection - can be restored by uncommenting
+// import HomeRecipesSection from "./HomeRecipesSection";
 
 export default function HomePage() {
   return (
@@ -23,8 +24,8 @@ export default function HomePage() {
       {/* Fine Dining at Beok */}
       <HomeFineDiningSection />
 
-      {/* Recipes */}
-      <HomeRecipesSection />
+      {/* HIDDEN: Recipes - can be restored by uncommenting */}
+      {/* <HomeRecipesSection /> */}
     </main>
   );
 }

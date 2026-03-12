@@ -28,7 +28,7 @@ export default function ProductGrid({
       ? activeTab === "Foods"
         ? allProducts.filter((p) => p.category === "Oil" || p.category === "Noodles")
         : activeTab === "Drinks"
-        ? allProducts.filter((p) => p.category === "Soju" || p.category === "Tea")
+        ? allProducts.filter((p) => p.category === "Alcohol" || p.category === "Tea")
         : allProducts.filter((p) => p.category === activeTab)
       : allProducts;
 

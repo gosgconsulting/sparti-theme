@@ -131,8 +131,8 @@ export default defineConfig(({ mode }) => {
   ].filter(Boolean);
 
   // Add theme dev plugin if in theme dev mode
-  if (envVars.VITE_DEV_THEME_SLUG || envVars.VITE_DEPLOY_THEME_SLUG || envVars.THEME_DEV_MODE) {
-    const themeSlug = envVars.VITE_DEV_THEME_SLUG || envVars.VITE_DEPLOY_THEME_SLUG || 'custom';
+  if (envVars.VITE_DEV_THEME_SLUG || envVars.VITE_DEPLOY_THEME_SLUG || envVars.DEPLOY_THEME_SLUG || envVars.THEME_DEV_MODE) {
+    const themeSlug = envVars.VITE_DEV_THEME_SLUG || envVars.VITE_DEPLOY_THEME_SLUG || envVars.DEPLOY_THEME_SLUG || 'custom';
     // Read tenant ID from .env file (CMS_TENANT) or environment variables
     // Priority: process.env (set by dev-theme.js) > .env file > fallback
     const tenantId = envVars.CMS_TENANT || envVars.VITE_DEV_TENANT_ID || envVars.VITE_DEPLOY_TENANT_ID || 'tenant-gosg';

@@ -71,11 +71,11 @@ export function themeDevPlugin(themeSlug: string, tenantId: string): Plugin {
     name: 'theme-dev',
     async transformIndexHtml(html) {
       // Only inject if we're in theme dev mode
-      const isThemeDevMode = process.env.VITE_DEV_THEME_SLUG || process.env.VITE_DEPLOY_THEME_SLUG || process.env.THEME_DEV_MODE;
+      const isThemeDevMode = process.env.VITE_DEV_THEME_SLUG || process.env.VITE_DEPLOY_THEME_SLUG || process.env.DEPLOY_THEME_SLUG || process.env.THEME_DEV_MODE;
       console.log(`[testing] Theme dev plugin: isThemeDevMode: ${isThemeDevMode}`);
       
       if (isThemeDevMode) {
-        const slug = themeSlug || process.env.VITE_DEV_THEME_SLUG || process.env.VITE_DEPLOY_THEME_SLUG || 'custom';
+        const slug = themeSlug || process.env.VITE_DEV_THEME_SLUG || process.env.VITE_DEPLOY_THEME_SLUG || process.env.DEPLOY_THEME_SLUG || 'custom';
         const tenant = tenantId || process.env.CMS_TENANT || 'tenant-gosg';
         
         // Fetch branding data
@@ -107,6 +107,13 @@ export function themeDevPlugin(themeSlug: string, tenantId: string): Plugin {
     </script>`;
         
         let modifiedHtml = html;
+
+        // Replace the default noindex robots tag with index, follow for theme deployments
+        modifiedHtml = modifiedHtml.replace(
+          /<meta\s+name="robots"\s+content="noindex,\s*nofollow"\s*\/?>/i,
+          '<meta name="robots" content="index, follow" />'
+        );
+
         let injectionDone = false;
         
         // Strategy 1: Replace main.tsx script tag with theme-dev.tsx and inject script

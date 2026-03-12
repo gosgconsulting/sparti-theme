@@ -6,6 +6,7 @@ import fs from "fs";
 import { componentTagger } from "lovable-tagger";
 import dyadComponentTagger from '@dyad-sh/react-vite-component-tagger';
 import { themeDevPlugin } from './vite-plugin-theme-dev';
+import { generateRobotsTxt, generateSitemapXml } from './src/themes/pagesRegistry';
 
 // https://vitejs.dev/config/
 export default defineConfig(({ mode }) => {
@@ -94,6 +95,38 @@ export default defineConfig(({ mode }) => {
           console.error('[vite] Error copying theme assets:', e);
         }
       }
+    },
+    // Generate robots.txt and sitemap.xml as static files for non-Vercel deployments.
+    // On Vercel, these are served dynamically by api/robots.ts and api/sitemap.ts instead.
+    !envVars.VERCEL && {
+      name: 'generate-seo-files',
+      closeBundle() {
+        const siteUrl = envVars.SITE_URL || '';
+        const themeSlug = envVars.DEPLOY_THEME_SLUG || envVars.VITE_DEPLOY_THEME_SLUG || '';
+        const distDir = path.resolve(process.cwd(), 'dist');
+
+        if (!fs.existsSync(distDir)) return;
+
+        if (!siteUrl) {
+          console.warn('[vite] SITE_URL not set — skipping robots.txt / sitemap.xml generation');
+          return;
+        }
+
+        fs.writeFileSync(path.join(distDir, 'robots.txt'), generateRobotsTxt(siteUrl), 'utf-8');
+        console.log('[vite] Generated dist/robots.txt');
+
+        if (themeSlug) {
+          const xml = generateSitemapXml(siteUrl, themeSlug);
+          if (xml) {
+            fs.writeFileSync(path.join(distDir, 'sitemap.xml'), xml, 'utf-8');
+            console.log(`[vite] Generated dist/sitemap.xml for theme: ${themeSlug}`);
+          } else {
+            console.warn(`[vite] Unknown theme "${themeSlug}" — skipping sitemap.xml generation`);
+          }
+        } else {
+          console.warn('[vite] DEPLOY_THEME_SLUG not set — skipping sitemap.xml generation');
+        }
+      },
     },
   ].filter(Boolean);
 

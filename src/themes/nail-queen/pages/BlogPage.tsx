@@ -246,12 +246,7 @@ export default function BlogPage({ basePath, tenantId }: { basePath: string; ten
                     : "bg-gray-100 text-gray-700 hover:bg-gray-200"
                 }`}
               >
-                {category.name}
-                {selectedCategory === category.slug && totalPosts > 0
-                  ? ` (${totalPosts})`
-                  : category.post_count
-                  ? ` (${category.post_count})`
-                  : ""}
+                {`${category.name} (${category.post_count || 0})`}
               </button>
             ))}
           </div>

@@ -62,6 +62,8 @@ const Carousel = React.forwardRef<
       {
         ...opts,
         axis: orientation === "horizontal" ? "x" : "y",
+        // Ensure drag is enabled (default is true, but being explicit for mobile)
+        drag: opts?.drag !== false,
       },
       plugins
     )
@@ -163,7 +165,40 @@ const CarouselContent = React.forwardRef<
   const { carouselRef, orientation } = useCarousel()
 
   return (
-    <div ref={carouselRef} className="overflow-hidden">
+    <div 
+      ref={carouselRef} 
+      className="overflow-hidden"
+      style={{
+        // Enable touch gestures for carousel dragging on mobile
+        // Allow both horizontal (carousel) and vertical (page scroll) panning
+        // Embla will detect the primary swipe direction and handle accordingly
+        touchAction: 'pan-x pan-y',
+        WebkitOverflowScrolling: 'touch' as any,
+        // Ensure cursor indicates draggable on desktop
+        cursor: 'grab',
+        // Prevent text selection during drag
+        userSelect: 'none' as any,
+        WebkitUserSelect: 'none' as any,
+      }}
+      onMouseDown={(e) => {
+        // Change cursor to grabbing on mouse down
+        if (e.currentTarget) {
+          (e.currentTarget as HTMLElement).style.cursor = 'grabbing';
+        }
+      }}
+      onMouseUp={(e) => {
+        // Reset cursor on mouse up
+        if (e.currentTarget) {
+          (e.currentTarget as HTMLElement).style.cursor = 'grab';
+        }
+      }}
+      onMouseLeave={(e) => {
+        // Reset cursor when mouse leaves
+        if (e.currentTarget) {
+          (e.currentTarget as HTMLElement).style.cursor = 'grab';
+        }
+      }}
+    >
       <div
         ref={ref}
         className={cn(
@@ -171,6 +206,14 @@ const CarouselContent = React.forwardRef<
           orientation === "horizontal" ? "-ml-4" : "-mt-4 flex-col",
           className
         )}
+        style={{
+          // Prevent text selection during drag on mobile
+          userSelect: 'none' as any,
+          WebkitUserSelect: 'none' as any,
+          // Prevent tap highlight on mobile
+          WebkitTapHighlightColor: 'transparent' as any,
+          ...props.style,
+        }}
         {...props}
       />
     </div>

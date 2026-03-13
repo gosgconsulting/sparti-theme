@@ -95,12 +95,12 @@ export default function ContactFormSheet({
     <Sheet open={open} onOpenChange={handleOpenChange}>
       <SheetContent 
         side="right" 
-        className="w-full sm:max-w-lg overflow-hidden bg-[#FAF9F6] p-0 border-0 [&>button]:hidden"
+        className="w-full sm:max-w-lg overflow-y-auto bg-[#FAF9F6] p-0 border-0 [&>button]:hidden flex flex-col h-full max-h-screen"
       >
         {/* Premium Card Container */}
-        <div className="h-full flex flex-col overflow-y-auto overflow-x-hidden">
+        <div className="flex-1 flex flex-col min-h-0">
           {/* Card with rounded corners and soft shadow */}
-          <div className="flex-1 m-4 sm:m-6 bg-white rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.08)] overflow-hidden flex flex-col relative will-change-transform">
+          <div className="m-4 sm:m-6 mb-4 sm:mb-6 bg-white rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.08)] flex flex-col relative will-change-transform min-h-fit">
             {/* Custom Close Button */}
             <button
               onClick={() => handleOpenChange(false)}
@@ -121,7 +121,7 @@ export default function ContactFormSheet({
             </SheetHeader>
 
             {/* Form Section with increased padding */}
-            <form onSubmit={handleSubmit} className="flex-1 flex flex-col px-8 py-8 space-y-6">
+            <form onSubmit={handleSubmit} className="flex flex-col px-8 py-8 space-y-6">
               <div className="space-y-3">
                 <Label 
                   htmlFor="fullName" 

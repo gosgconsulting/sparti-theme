@@ -161,6 +161,18 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
   const [isLightboxOpen, setIsLightboxOpen] = useState(false);
   const carouselRef = useRef<HTMLDivElement>(null);
   const itemRef = useRef<HTMLButtonElement>(null);
+  
+  // Touch/swipe state for mobile carousel
+  const [touchStartX, setTouchStartX] = useState(0);
+  const [touchCurrentX, setTouchCurrentX] = useState(0);
+  const [isDragging, setIsDragging] = useState(false);
+  const hasDraggedRef = useRef(false);
+  
+  // Touch/swipe state for lightbox
+  const [lightboxTouchStartX, setLightboxTouchStartX] = useState(0);
+  const [lightboxTouchCurrentX, setLightboxTouchCurrentX] = useState(0);
+  const [isLightboxDragging, setIsLightboxDragging] = useState(false);
+  const lightboxHasDraggedRef = useRef(false);
 
   // For products with multiple images, show all available images
   // For other products 1-12, only show their specific image
@@ -290,6 +302,146 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
 
   // Calculate transform - move by measured item width + gap
   const transformValue = carouselIndex * itemWidth;
+  
+  // Touch/swipe handlers for mobile
+  const handleTouchStart = (e: React.TouchEvent) => {
+    const startX = e.touches[0].clientX;
+    setTouchStartX(startX);
+    setTouchCurrentX(startX);
+    setIsDragging(true);
+    hasDraggedRef.current = false;
+  };
+  
+  const handleTouchMove = (e: React.TouchEvent) => {
+    if (!isDragging) return;
+    e.preventDefault(); // Prevent default scrolling behavior
+    const currentX = e.touches[0].clientX;
+    setTouchCurrentX(currentX);
+    
+    // Mark as dragged if movement exceeds threshold
+    if (Math.abs(touchStartX - currentX) > 10) {
+      hasDraggedRef.current = true;
+    }
+  };
+  
+  const handleTouchEnd = () => {
+    if (!isDragging) return;
+    
+    const diff = touchStartX - touchCurrentX;
+    const threshold = 30; // Minimum swipe distance in pixels
+    
+    // Calculate new index based on swipe distance
+    let newIndex = carouselIndex;
+    
+    if (Math.abs(diff) > threshold) {
+      let itemsToScroll = 1; // Default to at least 1 item
+      
+      if (itemWidth > 0) {
+        // Calculate how many items to scroll based on swipe distance
+        // Use itemWidth to determine the number of items scrolled
+        itemsToScroll = Math.max(1, Math.round(Math.abs(diff) / itemWidth));
+      } else if (carouselRef.current) {
+        // Fallback if itemWidth is not yet measured - use percentage-based calculation
+        const swipePercentage = Math.abs(diff) / carouselRef.current.offsetWidth;
+        itemsToScroll = Math.max(1, Math.round(swipePercentage * maxVisible));
+      }
+      
+      if (diff > 0) {
+        // Swiped left - move forward (increase index)
+        // Allow scrolling multiple items based on swipe distance - no limit
+        newIndex = Math.min(maxIndex, carouselIndex + itemsToScroll);
+      } else {
+        // Swiped right - move backward (decrease index)
+        // Allow scrolling multiple items based on swipe distance - no limit
+        newIndex = Math.max(0, carouselIndex - itemsToScroll);
+      }
+    }
+    
+    // Reset drag state FIRST to clear drag offset immediately
+    setIsDragging(false);
+    setTouchStartX(0);
+    setTouchCurrentX(0);
+    
+    // Then update carousel index - this will trigger smooth transition
+    setCarouselIndex(newIndex);
+    
+    // Reset drag flag after a short delay to allow click handler to check it
+    setTimeout(() => {
+      hasDraggedRef.current = false;
+    }, 100);
+  };
+  
+  const handleTouchCancel = () => {
+    // Reset everything if touch is cancelled
+    setIsDragging(false);
+    setTouchStartX(0);
+    setTouchCurrentX(0);
+    hasDraggedRef.current = false;
+  };
+  
+  // Lightbox touch/swipe handlers for mobile
+  const handleLightboxTouchStart = (e: React.TouchEvent) => {
+    if (!isLightboxOpen || !hasMultipleImages) return;
+    const startX = e.touches[0].clientX;
+    setLightboxTouchStartX(startX);
+    setLightboxTouchCurrentX(startX);
+    setIsLightboxDragging(true);
+    lightboxHasDraggedRef.current = false;
+  };
+  
+  const handleLightboxTouchMove = (e: React.TouchEvent) => {
+    if (!isLightboxDragging || !isLightboxOpen || !hasMultipleImages) return;
+    const currentX = e.touches[0].clientX;
+    setLightboxTouchCurrentX(currentX);
+    
+    // Mark as dragged if movement exceeds threshold
+    if (Math.abs(lightboxTouchStartX - currentX) > 10) {
+      lightboxHasDraggedRef.current = true;
+    }
+  };
+  
+  const handleLightboxTouchEnd = () => {
+    if (!isLightboxDragging || !isLightboxOpen || !hasMultipleImages) return;
+    
+    const diff = lightboxTouchStartX - lightboxTouchCurrentX;
+    const threshold = 50; // Minimum swipe distance in pixels
+    
+    // Reset drag state first
+    setIsLightboxDragging(false);
+    setLightboxTouchStartX(0);
+    setLightboxTouchCurrentX(0);
+    
+    // Navigate based on swipe direction
+    if (Math.abs(diff) > threshold) {
+      if (diff > 0) {
+        // Swiped left - go to next image
+        goToNextInLightbox();
+      } else {
+        // Swiped right - go to previous image
+        goToPreviousInLightbox();
+      }
+    }
+    
+    // Reset drag flag after a short delay
+    setTimeout(() => {
+      lightboxHasDraggedRef.current = false;
+    }, 100);
+  };
+  
+  const handleLightboxTouchCancel = () => {
+    // Reset everything if touch is cancelled
+    setIsLightboxDragging(false);
+    setLightboxTouchStartX(0);
+    setLightboxTouchCurrentX(0);
+    lightboxHasDraggedRef.current = false;
+  };
+  
+  // Calculate drag offset for smooth scrolling during touch
+  // When swiping left (touchCurrentX < touchStartX), we want positive offset to move carousel left
+  // When swiping right (touchCurrentX > touchStartX), we want negative offset to move carousel right
+  const dragOffset = isDragging && touchStartX !== 0 && touchCurrentX !== 0 
+    ? touchStartX - touchCurrentX 
+    : 0;
 
   // Navigation functions
   const currentIndex = images.findIndex((img) => img === selectedImage);
@@ -355,20 +507,39 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
       {(productId === "1" || productId === "2" || productId === "3" || productId === "4" || productId === "7" || productId === "10" || productId === "11" || productId === "12" || productId === "13") && images.length > maxVisible ? (
         <div className="relative">
           {/* Carousel container - shows exactly 4 images, slides smoothly */}
-          <div className="relative overflow-hidden rounded-lg" ref={carouselRef}>
+          <div 
+            className="relative overflow-hidden rounded-lg select-none" 
+            ref={carouselRef}
+            onTouchStart={handleTouchStart}
+            onTouchMove={handleTouchMove}
+            onTouchEnd={handleTouchEnd}
+            onTouchCancel={handleTouchCancel}
+            style={{ 
+              touchAction: 'pan-x',
+              WebkitOverflowScrolling: 'touch'
+            }}
+          >
             <div 
-              className="flex gap-2 transition-transform duration-300 ease-in-out" 
+              className="flex gap-2 transition-transform ease-out" 
               style={{ 
                 transform: itemWidth > 0 
-                  ? `translateX(-${transformValue}px)` 
-                  : `translateX(calc(-${carouselIndex} * (100% / ${maxVisible} + 0.5rem)))`
+                  ? `translateX(${-transformValue - dragOffset}px)` 
+                  : `translateX(calc(-${carouselIndex} * (100% / ${maxVisible} + 0.5rem) + ${-dragOffset}px))`,
+                transitionDuration: isDragging ? '0ms' : '300ms',
+                transitionTimingFunction: isDragging ? 'linear' : 'ease-out',
+                willChange: isDragging ? 'transform' : 'auto'
               }}
             >
               {images.map((image, index) => (
                 <button
                   key={index}
                   ref={index === 0 ? measureItemRef : null}
-                  onClick={() => setSelectedImage(image)}
+                  onClick={() => {
+                    // Prevent click if user was dragging
+                    if (!hasDraggedRef.current) {
+                      setSelectedImage(image);
+                    }
+                  }}
                   className={`flex-shrink-0 aspect-square overflow-hidden rounded-lg transition-all duration-200 ${
                     selectedImage === image
                       ? "ring-2 ring-primary ring-offset-2 shadow-lg border-2 border-primary"
@@ -381,7 +552,7 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
                   <img
                     src={image}
                     alt={`Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover rounded-lg"
+                    className="w-full h-full object-cover rounded-lg pointer-events-none"
                   />
                 </button>
               ))}
@@ -451,7 +622,17 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
       {isLightboxOpen && (
         <div
           className="fixed inset-0 z-50 flex items-center justify-center bg-black/90 backdrop-blur-sm"
-          onClick={() => setIsLightboxOpen(false)}
+          onClick={() => {
+            // Only close if user wasn't dragging
+            if (!lightboxHasDraggedRef.current) {
+              setIsLightboxOpen(false);
+            }
+          }}
+          onTouchStart={handleLightboxTouchStart}
+          onTouchMove={handleLightboxTouchMove}
+          onTouchEnd={handleLightboxTouchEnd}
+          onTouchCancel={handleLightboxTouchCancel}
+          style={{ touchAction: 'pan-x pan-y pinch-zoom' }}
         >
           {/* Close button */}
           <button
@@ -490,7 +671,7 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
 
           {/* Image container */}
           <div
-            className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center"
+            className="relative max-w-[90vw] max-h-[90vh] flex items-center justify-center select-none"
             onClick={(e) => e.stopPropagation()}
           >
             <img

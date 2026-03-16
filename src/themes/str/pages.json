@@ -101,6 +101,15 @@
       "page_type": "page"
     },
     {
+      "page_name": "Personal Training",
+      "slug": "/personal-training",
+      "meta_title": "Personal Training - STR Fitness",
+      "meta_description": "One-on-one personal training at STR Fitness. Expert coaches tailoring every session to your goals for maximum results.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page"
+    },
+    {
       "page_name": "Thank You",
       "slug": "/thank-you",
       "meta_title": "Thank You - STR Fitness",

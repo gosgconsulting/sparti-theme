@@ -13,12 +13,11 @@ import { themeComponentMap, getThemeDisplayName } from '@/themes/themeRegistry';
  * needed here or in router.tsx.
  */
 const TenantLandingPage: React.FC = () => {
-  const { tenantSlug, themeSlug, pageSlug, productname, slug: blogSlug } = useParams<{
+  const { tenantSlug, themeSlug, pageSlug, productname } = useParams<{
     tenantSlug?: string;
     themeSlug?: string;
     pageSlug?: string;
     productname?: string;
-    slug?: string;
   }>();
   const location = useLocation();
 
@@ -61,10 +60,8 @@ const TenantLandingPage: React.FC = () => {
 
     // Handle root-level blog routes (/blog or /blog/:slug)
     if (isRootBlogRoute) {
-      if (blogSlug) {
-        return `blog/${blogSlug}`;
-      }
-      return 'blog';
+      const parts = location.pathname.split('/').filter(Boolean);
+      return parts.join('/');
     }
 
     // Extract full path from pathname to handle nested routes
@@ -88,7 +85,7 @@ const TenantLandingPage: React.FC = () => {
     }
 
     return pageSlug || '';
-  }, [pageSlug, location.pathname, tenantSlug, themeSlug, productname, isRootBlogRoute, blogSlug, slug]);
+  }, [pageSlug, location.pathname, tenantSlug, themeSlug, productname, isRootBlogRoute, slug]);
 
   const isKnownTheme = slug in themeComponentMap;
   // Resolve component from registry; fall back to landingpage if slug not found

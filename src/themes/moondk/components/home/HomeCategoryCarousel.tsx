@@ -60,7 +60,7 @@ export default function HomeCategoryCarousel() {
         <div className="flex flex-col gap-6 sm:flex-row sm:items-start sm:justify-between">
           <div>
             <h2 className="text-3xl md:text-4xl font-body tracking-tight">
-              Simple solutions for <span className="font-heading italic font-normal">every need</span>
+              Simple solutions for <span className="font-heading italic font-normal">your need</span>
             </h2>
             <p className="mt-3 text-sm md:text-base font-body text-foreground/70 max-w-xl">
               Shop by category—curated to help you find the right essentials quickly.

@@ -4,9 +4,10 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeLink } from "../ThemeLink";
 
-import slide1 from "../../assets/hero_new.png";
+import slide1 from "../../assets/tea/barleytea_2800x1664_smaller_right_1.png";
 import slide2 from "../../assets/20240514_161154.jpg";
 import slide3 from "../../assets/roof.png";
+import slide4 from "../../assets/alcohol/seorijju_banner_right_positioned_1.png";
 
 type Slide = {
   id: number;
@@ -24,43 +25,57 @@ type Slide = {
 
 const slides: Slide[] = [
   {
-    id: 1,
-    titleStart: "Curated",
-    emphasized: "Korean",
-    titleEnd: "Taste",
+    id: 5,
+    titleStart: "Korean Taste,",
+    emphasized: "Thoughtfully",
+    titleEnd: "Curated",
     description:
-      "A journey through Korea, poured with intention, shaped by tradition and quiet craftsmanship.",
-    ctaText: "Shop all",
+      "A journey through Korean ingredients and flavours, crafted for those who appreciate thoughtful cooking and quiet culinary tradition.",
+    ctaText: "Shop All",
     ctaTo: "/category/shop",
-    image: slide1,
-    bg: "#F6B7C1",
-    accent: "#B2458A",
+    image: slide3,
+    bg: "#E9C5C9",
+    accent: "#2F5C3E",
     gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
   },
   {
     id: 2,
-    titleStart: "Natural Flavours",
+    titleStart: "An Intimate",
     emphasized: "Korean",
-    titleEnd: "Contemporary Cuisine",
+    titleEnd: "Dining Experience",
     description:
-      "Premium ingredients and tools to make restaurant-quality meals at home.",
-    ctaText: "Explore",
-    ctaTo: "/category/curated-sets",
+      "A private dining setting designed for small gatherings, where seasonal Korean cuisine is prepared with balance, care, and contemporary refinement.",
+    ctaText: "Discover More",
+    ctaTo: "/beok-private-dinning",
     image: slide2,
     bg: "#F3C3B4",
     accent: "#2F5C3E",
     gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
   },
   {
-    id: 3,
-    titleStart: "Opening",
-    emphasized: "Offers",
-    titleEnd: "available for a limited time",
+    id: 1,
+    titleStart: "Tradition in",
+    emphasized: "Every",
+    titleEnd: "Drop",
     description:
-      "PROMO CODE: moondk10 Minimum order $88 Valid until November 2025",
-    ctaText: "Shop new",
-    ctaTo: "/category/new-in",
-    image: slide3,
+      "Authentic Korean teas, carefully extracted. Pure flavour made simple for everyday moments.",
+    ctaText: "Shop Tea",
+    ctaTo: "/category/shop?filter=Tea",
+    image: slide1,
+    bg: "#F6B7C1",
+    accent: "#B2458A",
+    gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
+  },
+  {
+    id: 4,
+    titleStart: "The Spirit of",
+    emphasized: "Korean",
+    titleEnd: "Craft",
+    description:
+      "A traditional Korean grain spirit shaped by patience and craft. Balanced, refined, and rooted in brewing tradition.",
+    ctaText: "Explore Seoriju",
+    ctaTo: "/category/shop?filter=Alcohol",
+    image: slide4,
     bg: "#E9C5C9",
     accent: "#2F5C3E",
     gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
@@ -91,8 +106,8 @@ export default function HomeHeroSlider() {
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
       style={{ 
-        backgroundColor: slide.bg,
-        transition: 'background-color 0.8s ease-in-out'
+        background: '#FFFFFF',
+        transition: 'background 0.8s ease-in-out'
       }}
     >
       {/* Render all slides with smooth transitions */}
@@ -108,12 +123,12 @@ export default function HomeHeroSlider() {
             alt=""
             className="h-full w-full object-cover object-[70%_center]"
           />
-          {/* Soft overlay to keep text readable */}
-          <div className="absolute inset-0 bg-white/10" />
-          <div
-            className="absolute inset-0 transition-opacity duration-700 ease-in-out"
+          {/* Warm white gradient overlay behind text */}
+          <div 
+            className="absolute inset-0" 
             style={{
-              background: s.gradient,
+              background: 'linear-gradient(to right, rgba(255,252,235,0.95) 0%, rgba(255,248,220,0.85) 30%, rgba(255,245,200,0.6) 50%, rgba(255,255,255,0.2) 70%, rgba(255,255,255,0) 85%)',
+              zIndex: 15
             }}
           />
         </div>
@@ -126,6 +141,12 @@ export default function HomeHeroSlider() {
               <>
                 <span className="whitespace-nowrap">{slide.titleStart} <span className="font-heading italic font-normal text-black">{slide.emphasized}</span> {slide.titleEnd.split(' ')[0]}</span>
                 <span className="block">{slide.titleEnd.split(' ').slice(1).join(' ')}</span>
+              </>
+            ) : slide.id === 5 ? (
+              <>
+                <span className="whitespace-nowrap">{slide.titleStart}</span>
+                <span className="block"><span className="font-heading italic font-normal text-black">{slide.emphasized}</span></span>
+                <span className="block">{slide.titleEnd}</span>
               </>
             ) : (
               <>

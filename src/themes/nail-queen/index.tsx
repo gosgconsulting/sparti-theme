@@ -187,7 +187,7 @@ const NailQueenTheme: React.FC<NailQueenThemeProps> = ({
           />
         );
       default:
-        return <NotFoundPage basePath={resolvedBasePath} path={location.pathname} />;
+        return <NotFoundPage basePath={resolvedBasePath} path={location.pathname} tenantId={tenantId} />;
     }
   };
 

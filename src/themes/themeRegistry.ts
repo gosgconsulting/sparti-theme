@@ -63,6 +63,7 @@ const THEME_DISPLAY_NAMES: Record<string, string> = {
   'e-shop': 'E-shop',
   'hotel': 'Hotel Adina',
   'hotel1': 'Hotel1',
+  'hotel2': 'Hotel2',
   'nail-queen': 'Nail Queen',
   'custom': 'Custom',
 };

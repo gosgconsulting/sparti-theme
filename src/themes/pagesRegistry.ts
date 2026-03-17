@@ -16,6 +16,7 @@ import nailQueen from './nail-queen/pages.json';
 import gosgconsulting from './gosgconsulting/pages.json';
 import hotel from './hotel/pages.json';
 import hotel1 from './hotel1/pages.json';
+import hotel2 from './hotel2/pages.json';
 import landingpage from './landingpage/pages.json';
 import master from './master/pages.json';
 import moondk from './moondk/pages.json';
@@ -49,6 +50,7 @@ export const themePagesMap: Record<string, ThemePages> = {
   'gosgconsulting': gosgconsulting,
   'hotel': hotel,
   'hotel1': hotel1,
+  'hotel2': hotel2,
   'landingpage': landingpage,
   'master': master,
   'moondk': moondk,

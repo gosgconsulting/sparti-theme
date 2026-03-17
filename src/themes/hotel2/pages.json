@@ -1,0 +1,15 @@
+{
+  "pages": [
+    {
+      "page_name": "Hotel2",
+      "slug": "/",
+      "meta_title": "Hotel2 — Curated stays, refined service",
+      "meta_description": "A premium hotel landing experience with polished booking controls and curated collections.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["hotel", "luxury", "booking", "collections", "experience", "hotel2"]
+    }
+  ]
+}
+

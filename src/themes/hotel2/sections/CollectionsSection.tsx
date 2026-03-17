@@ -64,13 +64,15 @@ export default function CollectionsSection({ hotels }: Props) {
         </div>
       </div>
 
-      <HorizontalRail asSection={false}>
+      <div className="mt-6 lg:mt-8">
+        <HorizontalRail asSection={false}>
         {filtered.map((h) => (
           <div key={h.id} data-rail-card className="transition-opacity duration-200">
             <HotelCard hotel={h} />
           </div>
         ))}
-      </HorizontalRail>
+        </HorizontalRail>
+      </div>
     </section>
   );
 }

@@ -78,7 +78,7 @@ export default function HomeRecipesSection() {
           {recipes.map((r) => (
             <Card key={r.slug} className="rounded-[1.5rem] border-none shadow-md hover:shadow-lg transition-shadow flex flex-col">
               <CardContent className="p-0 flex flex-col flex-1">
-                <ThemeLink to="/recipes" className="block">
+                <ThemeLink to={`/recipes/${r.slug}`} className="block">
                   <div className="rounded-t-[1.5rem] overflow-hidden">
                     <img src={r.image} alt={r.title} className="w-full h-48 md:h-52 object-cover" />
                   </div>
@@ -94,7 +94,7 @@ export default function HomeRecipesSection() {
                     </span>
                   </div>
 
-                  <ThemeLink to="/recipes" className="block mt-2">
+                  <ThemeLink to={`/recipes/${r.slug}`} className="block mt-2">
                     <h3 className="text-base font-heading leading-tight hover:underline underline-offset-4">
                       {r.title}
                     </h3>
@@ -104,7 +104,7 @@ export default function HomeRecipesSection() {
 
                   <div className="mt-4">
                     <Button asChild className="rounded-full w-full bg-primary hover:bg-primary-hover !text-white">
-                      <ThemeLink to="/recipes" className="!text-white">Read recipe</ThemeLink>
+                      <ThemeLink to={`/recipes/${r.slug}`} className="!text-white">Read recipe</ThemeLink>
                     </Button>
                   </div>
                 </div>

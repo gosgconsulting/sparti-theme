@@ -16,6 +16,9 @@ import haloImage from "../../../e-shop/assets/halo.jpg";
 import foundersImage from "../../../e-shop/assets/founders.png";
 
 const Navigation = () => {
+  // Temporarily hide Recipes in header navigation (easy toggle later).
+  const SHOW_RECIPES = false;
+
   const [activeDropdown, setActiveDropdown] = useState<string | null>(null);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
   const [offCanvasType, setOffCanvasType] = useState<"favorites" | null>(null);
@@ -148,6 +151,22 @@ const Navigation = () => {
     setActiveDropdown(itemName);
   };
 
+  const slugify = useCallback((value: string) => value.toLowerCase().trim().replace(/\s+/g, "-"), []);
+
+  const getSubItemTo = useCallback(
+    (itemName: string, itemHref: string, subItem: string) => {
+      const slug = slugify(subItem);
+      const normalized = itemName.toLowerCase().trim();
+
+      if (normalized === "shop") return `/category/${slug}`;
+      if (normalized === "recipes") return `/recipes/${slug}`;
+
+      // Fallback: append to item's base href (avoid double slashes).
+      return `${itemHref.replace(/\/$/, "")}/${slug}`;
+    },
+    [slugify],
+  );
+
   const navItems = [
     {
       name: "Home",
@@ -161,12 +180,16 @@ const Navigation = () => {
       submenuItems: [],
       images: [],
     },
-    {
-      name: "Recipes",
-      href: "/recipes",
-      submenuItems: [],
-      images: [],
-    },
+    ...(SHOW_RECIPES
+      ? [
+          {
+            name: "Recipes",
+            href: "/recipes",
+            submenuItems: [],
+            images: [],
+          },
+        ]
+      : []),
     {
       name: "Beok Home Dining",
       href: "/beok-private-dinning",
@@ -313,10 +336,7 @@ const Navigation = () => {
                             }}
                           >
                             {item.submenuItems.map((subItem, index) => {
-                              const to =
-                                item.name === "SHOP"
-                                  ? `/category/${subItem.toLowerCase().replace(/\s+/g, "-")}`
-                                  : `/category/${subItem.toLowerCase().replace(/\s+/g, "-")}`;
+                              const to = getSubItemTo(item.name, item.href, subItem);
 
                               return (
                                 <ThemeLink
@@ -495,10 +515,7 @@ const Navigation = () => {
                   {item.submenuItems && item.submenuItems.length > 0 && (
                     <div className="space-y-1">
                       {item.submenuItems.map((subItem, subIndex) => {
-                        const to =
-                          item.name === "SHOP"
-                            ? `/category/${subItem.toLowerCase().replace(/\s+/g, "-")}`
-                            : `/category/${subItem.toLowerCase().replace(/\s+/g, "-")}`;
+                        const to = getSubItemTo(item.name, item.href, subItem);
 
                         return (
                           <ThemeLink

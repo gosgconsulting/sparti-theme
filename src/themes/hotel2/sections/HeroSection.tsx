@@ -10,6 +10,13 @@ type Props = {
   children: number;
   onAdultsChange: (n: number) => void;
   onChildrenChange: (n: number) => void;
+  onFindHotels: (payload: {
+    destination: Hotel2Destination;
+    checkIn: string;
+    checkOut: string;
+    adults: number;
+    children: number;
+  }) => void;
 };
 
 function yyyyMmDd(d: Date) {
@@ -40,6 +47,7 @@ export default function HeroSection({
   children,
   onAdultsChange,
   onChildrenChange,
+  onFindHotels,
 }: Props) {
   const today = useMemo(() => new Date(), []);
   const [checkIn, setCheckIn] = useState(() => yyyyMmDd(today));
@@ -171,8 +179,7 @@ export default function HeroSection({
                   type="button"
                   className="w-full h-14 lg:h-16 bg-black text-white font-body text-[15px] font-medium tracking-wide hover:bg-black/90 transition-colors whitespace-nowrap"
                   onClick={() => {
-                    void checkIn;
-                    void checkOut;
+                    onFindHotels({ destination, checkIn, checkOut, adults, children });
                   }}
                 >
                   Find Hotels

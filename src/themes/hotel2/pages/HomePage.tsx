@@ -1,154 +1,19 @@
 import React, { useMemo, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import HeroSection from "../sections/HeroSection";
 import HotelResultsSection from "../sections/HotelResultsSection";
 import CollectionsSection from "../sections/CollectionsSection";
-import type { Hotel2Hotel } from "../types";
 import type { Hotel2Destination } from "../booking/countries";
+import { buildHotel2SearchHref } from "../utils/searchUrl";
+import { getHotel2Hotels } from "../data/hotels";
 
-const HomePage: React.FC = () => {
-  const hotels = useMemo<Hotel2Hotel[]>(() => {
-    const seed: Omit<Hotel2Hotel, "id">[] = [
-      {
-        name: "Atelier Arcadia",
-        city: "Bangkok",
-        country: "Thailand",
-        pricePerNight: 240,
-        rating: 4.8,
-        reviews: 412,
-        amenities: ["Rooftop pool", "Concierge", "Spa"],
-        tag: "Editor’s pick",
-        image:
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80",
-        collections: ["Luxury Escapes", "Wellness Retreats", "Romantic Getaways"],
-      },
-      {
-        name: "Kiyomizu House",
-        city: "Kyoto",
-        country: "Japan",
-        pricePerNight: 310,
-        rating: 4.9,
-        reviews: 286,
-        amenities: ["Onsen", "Tea lounge", "Garden"],
-        tag: "Quiet luxury",
-        image:
-          "https://images.unsplash.com/photo-1542314831-068cd1dbfeeb?w=1200&q=80",
-        collections: ["Luxury Escapes", "Romantic Getaways", "Wellness Retreats"],
-      },
-      {
-        name: "Civic Atelier",
-        city: "Singapore",
-        country: "Singapore",
-        pricePerNight: 280,
-        rating: 4.7,
-        reviews: 534,
-        amenities: ["Sky bar", "Gym", "Late checkout"],
-        image:
-          "https://images.unsplash.com/photo-1551882547-ff40c63fe5fa?w=1200&q=80",
-        collections: ["Luxury Escapes", "Family Friendly"],
-      },
-      {
-        name: "Maison Rivoli",
-        city: "Paris",
-        country: "France",
-        pricePerNight: 360,
-        rating: 4.8,
-        reviews: 621,
-        amenities: ["Bistro", "Concierge", "Suites"],
-        tag: "Boutique",
-        image:
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80",
-        collections: ["Romantic Getaways", "Luxury Escapes"],
-      },
-      {
-        name: "Palazzo Lucente",
-        city: "Florence",
-        country: "Italy",
-        pricePerNight: 330,
-        rating: 4.6,
-        reviews: 307,
-        amenities: ["Terrace", "Wine cellar", "Spa"],
-        image:
-          "https://images.unsplash.com/photo-1520250497591-112f2f40a3f4?w=1200&q=80",
-        collections: ["Romantic Getaways", "Luxury Escapes", "Wellness Retreats"],
-      },
-      {
-        name: "SoHo Residences",
-        city: "New York",
-        country: "United States",
-        pricePerNight: 420,
-        rating: 4.5,
-        reviews: 894,
-        amenities: ["Penthouse bar", "City views", "Gym"],
-        tag: "New",
-        image:
-          "https://images.unsplash.com/photo-1564501049412-61c2a3083791?w=1200&q=80",
-        collections: ["Luxury Escapes", "Family Friendly"],
-      },
-      {
-        name: "Mayfair Atelier",
-        city: "London",
-        country: "United Kingdom",
-        pricePerNight: 390,
-        rating: 4.7,
-        reviews: 515,
-        amenities: ["Afternoon tea", "Concierge", "Suites"],
-        image:
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80",
-        collections: ["Luxury Escapes", "Romantic Getaways"],
-      },
-      {
-        name: "Harbourline Hotel",
-        city: "Sydney",
-        country: "Australia",
-        pricePerNight: 295,
-        rating: 4.6,
-        reviews: 448,
-        amenities: ["Harbour views", "Pool", "Dining"],
-        image:
-          "https://images.unsplash.com/photo-1566073771259-6a8506099945?w=1200&q=80",
-        collections: ["Family Friendly", "Luxury Escapes"],
-      },
-      {
-        name: "Desert Gallery",
-        city: "Dubai",
-        country: "United Arab Emirates",
-        pricePerNight: 410,
-        rating: 4.9,
-        reviews: 702,
-        amenities: ["Private cabana", "Spa", "Concierge"],
-        tag: "Signature",
-        image:
-          "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?w=1200&q=80",
-        collections: ["Luxury Escapes", "Wellness Retreats", "Family Friendly"],
-      },
-      {
-        name: "Alpine Archive",
-        city: "Zürich",
-        country: "Switzerland",
-        pricePerNight: 380,
-        rating: 4.8,
-        reviews: 243,
-        amenities: ["Lake views", "Sauna", "Dining"],
-        image:
-          "https://images.unsplash.com/photo-1544161515-4ab6ce6db874?w=1200&q=80",
-        collections: ["Wellness Retreats", "Romantic Getaways", "Luxury Escapes"],
-      },
-    ];
+type Props = {
+  basePath: string;
+};
 
-    // Expand to 20 “virtual hotels” deterministically (no randomness).
-    const expanded: Hotel2Hotel[] = [];
-    for (let i = 0; i < 20; i += 1) {
-      const base = seed[i % seed.length];
-      expanded.push({
-        id: `h-${i + 1}`,
-        ...base,
-        name: i < seed.length ? base.name : `${base.name} ${i - seed.length + 2}`,
-        pricePerNight: base.pricePerNight + (i % 5) * 15,
-        reviews: base.reviews + i * 7,
-      });
-    }
-    return expanded;
-  }, []);
+const HomePage: React.FC<Props> = ({ basePath }) => {
+  const navigate = useNavigate();
+  const hotels = useMemo(() => getHotel2Hotels(), []);
 
   const [destination, setDestination] = useState<Hotel2Destination>("All");
   const [adults, setAdults] = useState(2);
@@ -163,6 +28,9 @@ const HomePage: React.FC = () => {
         children={children}
         onAdultsChange={setAdults}
         onChildrenChange={setChildren}
+        onFindHotels={(payload) => {
+          navigate(buildHotel2SearchHref(basePath, payload));
+        }}
       />
       <HotelResultsSection hotels={hotels} destination={destination} />
       <CollectionsSection hotels={hotels} />

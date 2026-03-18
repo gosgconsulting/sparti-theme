@@ -5,7 +5,7 @@ import { useOutsideClose } from "./useOutsideClose";
 type Props = {
   value: Hotel2Destination;
   onChange: (v: Hotel2Destination) => void;
-  variant?: "default" | "underline";
+  variant?: "default" | "underline" | "compact";
   placeholder?: string;
 };
 
@@ -82,6 +82,8 @@ export default function DestinationDropdown({
         className={
           variant === "underline"
             ? "w-full h-12 px-0 bg-transparent border-b border-black/20 text-left flex items-center justify-between gap-3 hover:border-black/35 transition-colors"
+            : variant === "compact"
+              ? "w-full h-7 px-0 bg-transparent border-0 text-left flex items-center justify-between gap-2 hover:opacity-90 transition-opacity"
             : "w-full h-12 px-4 rounded-xl bg-brand-surface border border-black/15 text-left flex items-center justify-between gap-3 hover:border-black/25 transition-colors"
         }
         aria-haspopup="listbox"
@@ -104,7 +106,7 @@ export default function DestinationDropdown({
 
       <div
         ref={panelRef}
-        className={`absolute left-0 right-0 mt-2 z-[80] origin-top rounded-xl bg-white border border-black/10 shadow-[0_18px_50px_rgba(0,0,0,0.18)] overflow-hidden transition-all duration-200 ${
+        className={`absolute left-0 right-0 mt-2 z-[80] origin-top rounded-lg bg-white border border-black/10 shadow-[0_18px_50px_rgba(0,0,0,0.18)] overflow-hidden transition-all duration-200 ${
           open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"
         }`}
         role="presentation"

@@ -1,73 +1,110 @@
 import React, { useMemo } from "react";
-import { NavLink, useParams } from "react-router-dom";
+import { NavLink, useParams, useSearchParams } from "react-router-dom";
 import {
   DESIGN_SYSTEM_ENTRIES,
-  getEntriesBySource,
+  DESIGN_SYSTEM_SOURCES_ORDER,
+  getEntriesForSource,
   getEntryById,
   type DesignSystemEntry,
 } from "@/config/designSystemRegistry";
-import { getPreviewComponent, hasPreview } from "@/pages/design-system/DesignSystemPreview";
+import { getPreviewComponent, hasPreview, preloadPreview } from "@/pages/design-system/DesignSystemPreview";
 import { ScrollArea } from "@/components/ui/scroll-area";
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import { cn } from "@/lib/utils";
+import { ThemeBasePathContext } from "@/context/ThemeBasePathContext";
 
 const DESIGN_SYSTEM_PATH = "/design-system";
 
 export default function DesignSystemPage() {
   const { componentId } = useParams<{ componentId?: string }>();
-  const entriesBySource = useMemo(() => getEntriesBySource(), []);
-  const selectedEntry = componentId ? getEntryById(componentId) : null;
+  const [searchParams, setSearchParams] = useSearchParams();
+  const themeParam = searchParams.get("theme");
+  const selectedEntryForTheme = componentId ? getEntryById(componentId) : null;
+  const derivedTheme = selectedEntryForTheme?.source;
+  const selectedTheme =
+    themeParam && DESIGN_SYSTEM_SOURCES_ORDER.includes(themeParam as (typeof DESIGN_SYSTEM_SOURCES_ORDER)[number])
+      ? themeParam
+      : derivedTheme && DESIGN_SYSTEM_SOURCES_ORDER.includes(derivedTheme as (typeof DESIGN_SYSTEM_SOURCES_ORDER)[number])
+        ? derivedTheme
+        : DESIGN_SYSTEM_SOURCES_ORDER[0];
+
+  const sidebarEntries = useMemo(
+    () => getEntriesForSource(selectedTheme),
+    [selectedTheme]
+  );
+
+  const selectedEntry = selectedEntryForTheme;
   const preview = selectedEntry ? getPreviewComponent(selectedEntry.id) : null;
-  const showPreview = selectedEntry && hasPreview(selectedEntry.id);
+  const showPreview = selectedEntry ? hasPreview(selectedEntry.id) : false;
+
+  const onThemeChange = (value: string) => {
+    setSearchParams((prev) => {
+      const next = new URLSearchParams(prev);
+      next.set("theme", value);
+      return next;
+    });
+  };
 
   return (
-    <div className="flex h-screen bg-background">
+    <ThemeBasePathContext.Provider value="">
+      <div className="flex h-screen bg-background">
       {/* Sidebar */}
       <aside className="w-64 shrink-0 border-r border-border bg-muted/30 flex flex-col">
-        <div className="p-4 border-b border-border">
-          <a href={DESIGN_SYSTEM_PATH} className="font-semibold text-foreground hover:underline">
+        <div className="p-4 border-b border-border space-y-3">
+          <a href={DESIGN_SYSTEM_PATH} className="font-semibold text-foreground hover:underline block">
             Design System
           </a>
-          <p className="text-xs text-muted-foreground mt-1">
-            Components from all themes and Flowbite. Use as reference when building new themes.
+          <Select value={selectedTheme} onValueChange={onThemeChange}>
+            <SelectTrigger className="w-full h-9 text-sm">
+              <SelectValue placeholder="Select theme" />
+            </SelectTrigger>
+            <SelectContent>
+              {DESIGN_SYSTEM_SOURCES_ORDER.map((source) => (
+                <SelectItem key={source} value={source}>
+                  {source}
+                </SelectItem>
+              ))}
+            </SelectContent>
+          </Select>
+          <p className="text-xs text-muted-foreground">
+            Components from {selectedTheme}. Use as reference when building new themes.
           </p>
         </div>
         <ScrollArea className="flex-1">
-          <nav className="p-2 space-y-4">
-            {Array.from(entriesBySource.entries()).map(([source, entries]) => {
-              if (entries.length === 0) return null;
-              return (
-                <div key={source}>
-                  <div className="px-2 py-1 text-xs font-medium text-muted-foreground uppercase tracking-wider">
-                    {source}
-                  </div>
-                  <ul className="space-y-0.5">
-                    {entries.map((entry) => (
-                      <li key={entry.id}>
-                        <NavLink
-                          to={`${DESIGN_SYSTEM_PATH}/${entry.id}`}
-                          className={({ isActive }) =>
-                            cn(
-                              "block px-2 py-1.5 rounded-md text-sm",
-                              isActive
-                                ? "bg-primary text-primary-foreground"
-                                : "text-foreground hover:bg-muted"
-                            )
-                          }
-                          end={false}
-                        >
-                          {entry.name}
-                          {!hasPreview(entry.id) && (
-                            <span className="ml-1 text-muted-foreground" title="Preview not implemented">
-                              ·
-                            </span>
-                          )}
-                        </NavLink>
-                      </li>
-                    ))}
-                  </ul>
-                </div>
-              );
-            })}
+          <nav className="p-2">
+            <ul className="space-y-0.5">
+              {sidebarEntries.map((entry) => (
+                <li key={entry.id}>
+                  <NavLink
+                    to={`${DESIGN_SYSTEM_PATH}/${entry.id}?theme=${selectedTheme}`}
+                    onMouseEnter={() => preloadPreview(entry.id)}
+                    onFocus={() => preloadPreview(entry.id)}
+                    className={({ isActive }) =>
+                      cn(
+                        "block px-2 py-1.5 rounded-md text-sm",
+                        isActive
+                          ? "bg-primary text-primary-foreground"
+                          : "text-foreground hover:bg-muted"
+                      )
+                    }
+                    end={false}
+                  >
+                    {entry.name}
+                    {!hasPreview(entry.id) ? (
+                      <span className="ml-1 text-muted-foreground" title="Preview not implemented">
+                        ·
+                      </span>
+                    ) : null}
+                  </NavLink>
+                </li>
+              ))}
+            </ul>
           </nav>
         </ScrollArea>
       </aside>
@@ -102,6 +139,7 @@ export default function DesignSystemPage() {
         )}
       </main>
     </div>
+    </ThemeBasePathContext.Provider>
   );
 }
 

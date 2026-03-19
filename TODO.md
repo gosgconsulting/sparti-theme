@@ -12,6 +12,11 @@
 
 - (None at this time.)
 
+## Completed (project-doc-planner)
+
+- **Design system previews** — Added Flowbite CTA, FAQ, Page Title and Master Banner Section previews; 7 components now have live previews on `/design-system`.
+- **themeSettings unit tests** — Added `src/utils/themeSettings.test.ts` (21 tests); total 39 unit tests (schemaHelpers + themeSettings).
+
 ## Blockers
 
 - (None.)

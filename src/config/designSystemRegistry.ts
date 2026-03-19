@@ -121,3 +121,8 @@ export function getEntriesBySource(): Map<string, DesignSystemEntry[]> {
 export function getEntryById(id: string): DesignSystemEntry | undefined {
   return DESIGN_SYSTEM_ENTRIES.find((e) => e.id === id);
 }
+
+/** Get entries for a single source (theme). Used when filtering by theme. */
+export function getEntriesForSource(source: string): DesignSystemEntry[] {
+  return DESIGN_SYSTEM_ENTRIES.filter((e) => e.source === source);
+}

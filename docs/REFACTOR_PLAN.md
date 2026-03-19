@@ -169,6 +169,8 @@ Sissonne ships a full set of UI components (button, card, dialog, etc.). Many of
 - Manually: dev server, theme picker, and at least one theme per “family” (e.g. gosgconsulting, str, sissonne, master) to confirm routing and base path.
 - Update `docs/todo.md` and root `TODO.md` with completed items and any new duplicate risks.
 
+**Follow-up (project-doc-planner auto-run):** Design system token alignment for str, gosgconsulting, nail-queen; docs/todo.md refreshed (duplicate risks and refactor opportunities); `src/utils/schemaHelpers.test.ts` added (18 tests); Vitest includes `src/**/*.test.ts`; README Known Tech Debt updated; build and test:unit pass.
+
 ---
 
 ## 8. Summary Table

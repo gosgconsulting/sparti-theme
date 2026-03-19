@@ -15,11 +15,27 @@ const MasterFooterPreview = lazy(() =>
 const FlowbiteHeroSectionPreview = lazy(() =>
   import("./previews/FlowbiteHeroSectionPreview").then((m) => ({ default: m.FlowbiteHeroSectionPreview }))
 );
+const FlowbiteCTASectionPreview = lazy(() =>
+  import("./previews/FlowbiteCTASectionPreview").then((m) => ({ default: m.FlowbiteCTASectionPreview }))
+);
+const FlowbiteFAQSectionPreview = lazy(() =>
+  import("./previews/FlowbiteFAQSectionPreview").then((m) => ({ default: m.FlowbiteFAQSectionPreview }))
+);
+const FlowbitePageTitlePreview = lazy(() =>
+  import("./previews/FlowbitePageTitlePreview").then((m) => ({ default: m.FlowbitePageTitlePreview }))
+);
+const MasterBannerSectionPreview = lazy(() =>
+  import("./previews/MasterBannerSectionPreview").then((m) => ({ default: m.MasterBannerSectionPreview }))
+);
 
 const PREVIEW_MAP: Record<string, React.LazyExoticComponent<React.ComponentType>> = {
   "master-header": MasterHeaderPreview,
   "master-footer": MasterFooterPreview,
+  "master-banner-section": MasterBannerSectionPreview,
   "flowbite-hero-section": FlowbiteHeroSectionPreview,
+  "flowbite-cta-section": FlowbiteCTASectionPreview,
+  "flowbite-faq-section": FlowbiteFAQSectionPreview,
+  "flowbite-page-title": FlowbitePageTitlePreview,
 };
 
 export function getPreviewComponent(id: string): React.ReactNode {
@@ -34,4 +50,21 @@ export function getPreviewComponent(id: string): React.ReactNode {
 
 export function hasPreview(id: string): boolean {
   return id in PREVIEW_MAP;
+}
+
+/** Preload preview chunk on hover/focus to reduce perceived latency (Vercel bundle-preload). */
+const PRELOAD_LOADERS: Record<string, () => Promise<unknown>> = {
+  "master-header": () => import("./previews/MasterHeaderPreview"),
+  "master-footer": () => import("./previews/MasterFooterPreview"),
+  "master-banner-section": () => import("./previews/MasterBannerSectionPreview"),
+  "flowbite-hero-section": () => import("./previews/FlowbiteHeroSectionPreview"),
+  "flowbite-cta-section": () => import("./previews/FlowbiteCTASectionPreview"),
+  "flowbite-faq-section": () => import("./previews/FlowbiteFAQSectionPreview"),
+  "flowbite-page-title": () => import("./previews/FlowbitePageTitlePreview"),
+};
+
+export function preloadPreview(id: string): void {
+  if (typeof window !== "undefined" && id in PRELOAD_LOADERS) {
+    void PRELOAD_LOADERS[id]();
+  }
 }

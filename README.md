@@ -32,6 +32,7 @@ Frontend theme system for **Sparti CMS**: a React-based multi-tenant theme runti
 
 - `/` → Dev: PublicDashboard (theme picker). Deploy: TenantLandingPage with `DEPLOY_THEME_SLUG`.
 - `/theme/:tenantSlug/*` → TenantLandingPage; theme slug = `tenantSlug`; `pageSlug` from path.
+- `/design-system`, `/design-system/:componentId` → Design system page: sidebar of all theme + Flowbite components; select a component to see preview and path. Use as reference when building new themes or adding components.
 - `/:pageSlug`, `/:pageSlug/*` → TenantLandingPage; theme from first path segment or `DEPLOY_THEME_SLUG`; supports short URLs (e.g. `/gosgconsulting`, `/blog`, `/booking/classes`).
 - `*` → NotFound.
 
@@ -131,9 +132,9 @@ Frontend theme system for **Sparti CMS**: a React-based multi-tenant theme runti
 ## Known Tech Debt
 
 - **Package name:** Resolved — `package.json` name is `sparti-theme`.
-- **Duplicate theme logic:** Some themes duplicate helpers (e.g. `useThemeBasePath`, `useCustomCode`) that could live in shared hooks or `src/hooks/`.
+- **Duplicate theme logic:** Resolved for core helpers — `useThemeBasePath`, `useCustomCode`, shared `ThemeLink`, `schemaHelpers`, and `themeSettings` live in `src/hooks/`, `src/components/`, and `src/utils/`; themes import from there.
 - **Root README vs theme docs:** Deeper theme system docs live in `src/themes/README.md` and `src/themes/master/README.md`; root README is high-level; consider a single `docs/` index.
-- **Tests:** Limited test scripts (`test:contact`, `test:form`, `test:unit`); no documented E2E or theme regression strategy.
+- **Tests:** `test:unit` runs Vitest (includes `src/**/*.test.ts` and `server/tests/**`); shared utils (`schemaHelpers`, `themeSettings`) have unit tests (39 total). No in-repo E2E; manual theme preview and deploy verification documented in `docs/todo.md`.
 
 ---
 
@@ -163,6 +164,7 @@ Output: `dist/`. For theme-only static build: `npm run build:theme`. Deploy to V
 ### Docs
 
 - **Design system (cross-theme):** `docs/DESIGN_SYSTEM_GUIDELINE.md` — tokens, components, styling rules for all themes.
+- **Design system page:** `/design-system` (dev and deploy) — live catalog of Header, Footer, Hero, Sections from every theme and Flowbite; register new components in `src/config/designSystemRegistry.ts` and add previews in `src/pages/design-system/` so new themes can reuse them as templates.
 - Theme system and structure: `src/themes/README.md`
 - Master theme (duplicate this for new themes): `src/themes/master/README.md`
 - Project TODO and verification: `docs/todo.md`

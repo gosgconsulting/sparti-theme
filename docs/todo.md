@@ -14,6 +14,7 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ## Next
 
+- [x] **Add more design system previews** — Added Flowbite CTA, FAQ, Page Title and Master Banner Section previews; registered in `DesignSystemPreview.tsx`. Other components (Gosgconsulting, STR, Landingpage, etc.) can follow the same pattern in `src/pages/design-system/previews/`.
 - [x] **Align remaining themes with design system token set** — Master, sissonne, landingpage, hotel2 already aligned. str, gosgconsulting, nail-queen updated with full canonical tokens (sidebar, chart, spacing, typography, shadow) in `theme.css`. Remaining themes (e-shop, moondk, hotel, etc.) can adopt the same pattern; new themes must follow from day one.
 - [x] **Execute refactor plan (Phases 4–5)** — Done: shared NotFound (gosgconsulting, sissonne, e-shop, moondk use it; nail-queen keeps custom); Sissonne UI documented as theme overrides; Astro and @astrojs/@astrolib deps removed. See `docs/REFACTOR_PLAN.md`.
 
@@ -29,6 +30,8 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ## Done
 
+- [x] **Design system page (`/design-system`)** — Route `/design-system` and `/design-system/:componentId`; sidebar lists all components from Flowbite and every theme (Master, Gosgconsulting, STR, Landingpage, Sissonne, E-shop, Nail-queen). Registry: `src/config/designSystemRegistry.ts`; previews for Master Header/Footer and Flowbite Hero in `src/pages/design-system/previews/`. New themes reuse these; new components must be added to the registry. See README and `docs/DESIGN_SYSTEM_GUIDELINE.md` §4.1.
+- [x] **Design system token alignment (str, gosgconsulting, nail-queen)** — Added full canonical tokens (sidebar, chart, spacing, typography, shadow) to each theme's `theme.css` per `docs/DESIGN_SYSTEM_GUIDELINE.md`. Remaining themes (e-shop, moondk, hotel, etc.) can follow the same pattern.
 - [x] **Design system guideline** — Added `docs/DESIGN_SYSTEM_GUIDELINE.md`: canonical CSS variable token set (light/dark), value format (hex/HSL), where tokens live, design system component reuse, typography/spacing/shadows, and rules for new development. Linked from `docs/README.md`.
   - Files: `docs/DESIGN_SYSTEM_GUIDELINE.md`, `docs/README.md`, `docs/todo.md`.
 - [x] **Refactor code structure to design system** — (1) Added `src/themes/tokens.css` with full canonical token set (HSL). (2) `index.css` imports `tokens.css` and only adds legacy/brand vars and component styles. (3) Tailwind: sidebar uses `--sidebar`, added `chart` 1–5. (4) `applyThemeStyles` extended for popover, sidebar, radius, spacing, letterSpacing. (5) Master theme `theme.css` overrides canonical tokens from brand palette. (6) Sissonne and landingpage set `--sidebar: var(--sidebar-background)`. (7) Guideline §3 and README updated.
@@ -83,12 +86,11 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ### Tests
 
-- Status: partial / not fully run
-- Notes: `test:unit` (Vitest), `test:contact`, `test:form` exist; no E2E in repo. Manual theme preview via dev server.
+- Status: partial — `test:unit` runs Vitest (`src/**/*.test.ts`): schemaHelpers (18 tests), themeSettings (21 tests). `test:contact`, `test:form` exist. No in-repo E2E; manual theme preview and deploy verification via dev server.
 
 ### Manual Checks
 
 - Checked:
-  - Dev: `/` shows dashboard; `/theme/<slug>/` loads theme.
+  - Dev: `/` shows dashboard; `/theme/<slug>/` loads theme; `/design-system` shows design system catalog and component previews.
   - Deploy: Set DEPLOY_THEME_SLUG and build; root serves that theme.
 - Issues found: _(none recorded)_

@@ -189,6 +189,14 @@ This format is the **reference** for what each theme should provide (values are 
 - **Theme-specific UI:** Only add custom components when the design system doesn’t provide the pattern. When you do, use the canonical tokens (e.g. `var(--primary)`, `var(--card)`, `var(--border)`).
 - **Reference:** [Theme AI context](../src/themes/AI_CONTEXT.md) and [Master theme STYLE_RULES](../src/themes/master/STYLE_RULES.md) for button variants, badges, spacing, and typography.
 
+### 4.1 Design system page (`/design-system`)
+
+- **URL:** `/design-system` (and `/design-system/:componentId` for deep links). Available in dev and on deploy (e.g. `https://sparti-theme.vercel.app/design-system`).
+- **Purpose:** Single catalog of all layout, hero, and section components from every theme and from the Flowbite library. Use it to browse components and copy patterns when building new themes.
+- **Registry:** `src/config/designSystemRegistry.ts` — add an entry for every new Header, Footer, Hero, Section, or modal you create so it appears in the sidebar.
+- **Previews:** Components with a live preview are wired in `src/pages/design-system/DesignSystemPreview.tsx` and `src/pages/design-system/previews/`. Add a preview wrapper when you want the component to render with demo data on the design system page.
+- **Convention:** When you create a new theme, reuse components from this list (and from `src/libraries/flowbite/`). When you create a new component, register it in `designSystemRegistry.ts` (and optionally add a preview) so it becomes a reusable template for future sites.
+
 ---
 
 ## 5. Typography, spacing, and shadows
@@ -214,6 +222,7 @@ This format is the **reference** for what each theme should provide (values are 
 ## 7. Reference
 
 - **Token set (this doc):** §2.
+- **Design system page:** `/design-system` — [designSystemRegistry.ts](../src/config/designSystemRegistry.ts), [DesignSystemPage](../src/pages/DesignSystemPage.tsx), [previews](../src/pages/design-system/previews/).
 - **Theme structure:** [src/themes/README.md](../src/themes/README.md).
 - **Master theme (duplicate for new themes):** [src/themes/master/README.md](../src/themes/master/README.md).
 - **Detailed UI patterns (buttons, badges, dark mode):** [src/themes/master/STYLE_RULES.md](../src/themes/master/STYLE_RULES.md).

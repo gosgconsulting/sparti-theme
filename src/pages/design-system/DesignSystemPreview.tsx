@@ -27,6 +27,9 @@ const FlowbitePageTitlePreview = lazy(() =>
 const MasterBannerSectionPreview = lazy(() =>
   import("./previews/MasterBannerSectionPreview").then((m) => ({ default: m.MasterBannerSectionPreview }))
 );
+const STRPageWrapperPreview = lazy(() =>
+  import("./previews/STRPageWrapperPreview").then((m) => ({ default: m.STRPageWrapperPreview }))
+);
 
 const PREVIEW_MAP: Record<string, React.LazyExoticComponent<React.ComponentType>> = {
   "master-header": MasterHeaderPreview,
@@ -36,6 +39,7 @@ const PREVIEW_MAP: Record<string, React.LazyExoticComponent<React.ComponentType>
   "flowbite-cta-section": FlowbiteCTASectionPreview,
   "flowbite-faq-section": FlowbiteFAQSectionPreview,
   "flowbite-page-title": FlowbitePageTitlePreview,
+  "str-page-wrapper": STRPageWrapperPreview,
 };
 
 export function getPreviewComponent(id: string): React.ReactNode {
@@ -61,6 +65,7 @@ const PRELOAD_LOADERS: Record<string, () => Promise<unknown>> = {
   "flowbite-cta-section": () => import("./previews/FlowbiteCTASectionPreview"),
   "flowbite-faq-section": () => import("./previews/FlowbiteFAQSectionPreview"),
   "flowbite-page-title": () => import("./previews/FlowbitePageTitlePreview"),
+  "str-page-wrapper": () => import("./previews/STRPageWrapperPreview"),
 };
 
 export function preloadPreview(id: string): void {

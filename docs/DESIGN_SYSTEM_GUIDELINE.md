@@ -188,6 +188,8 @@ This format is the **reference** for what each theme should provide (values are 
 - **Flowbite:** `src/libraries/` (see `src/libraries/README.md`). Use these for shared UI (buttons, cards, forms, nav, etc.) so themes don’t reimplement the same patterns.
 - **Theme-specific UI:** Only add custom components when the design system doesn’t provide the pattern. When you do, use the canonical tokens (e.g. `var(--primary)`, `var(--card)`, `var(--border)`).
 - **Reference:** [Theme AI context](../src/themes/AI_CONTEXT.md) and [Master theme STYLE_RULES](../src/themes/master/STYLE_RULES.md) for button variants, badges, spacing, and typography.
+- **Adding missing previews:** When a component shows "Preview not yet implemented", follow [docs/DESIGN_SYSTEM_PREVIEW_PLAN.md](DESIGN_SYSTEM_PREVIEW_PLAN.md) — create a wrapper in `src/pages/design-system/previews/`, register in `DesignSystemPreview.tsx`, and add preload on hover (Vercel bundle-preload).
+- **Full section list:** [docs/DESIGN_SYSTEM_SECTIONS.md](DESIGN_SYSTEM_SECTIONS.md) — all sections per theme by category (Layout, Hero, Sections, Modals, UI); registry vs inline.
 
 ### 4.1 Design system page (`/design-system`)
 
@@ -223,6 +225,7 @@ This format is the **reference** for what each theme should provide (values are 
 
 - **Token set (this doc):** §2.
 - **Design system page:** `/design-system` — [designSystemRegistry.ts](../src/config/designSystemRegistry.ts), [DesignSystemPage](../src/pages/DesignSystemPage.tsx), [previews](../src/pages/design-system/previews/).
+- **Adding previews:** [DESIGN_SYSTEM_PREVIEW_PLAN.md](DESIGN_SYSTEM_PREVIEW_PLAN.md) — steps and Vercel best practices.
 - **Theme structure:** [src/themes/README.md](../src/themes/README.md).
 - **Master theme (duplicate for new themes):** [src/themes/master/README.md](../src/themes/master/README.md).
 - **Detailed UI patterns (buttons, badges, dark mode):** [src/themes/master/STYLE_RULES.md](../src/themes/master/STYLE_RULES.md).

@@ -62,8 +62,17 @@ export const DESIGN_SYSTEM_ENTRIES: DesignSystemEntry[] = [
   { id: "gosgconsulting-newsletter", source: "Gosgconsulting", name: "Newsletter", category: "Sections", pathHint: "themes/gosgconsulting/components/Newsletter" },
 
   // ---- STR theme ----
-  { id: "str-hero-section", source: "STR", name: "Hero Section", category: "Hero", pathHint: "themes/str/components/HeroSection" },
   { id: "str-page-wrapper", source: "STR", name: "Page Wrapper", category: "Layout", pathHint: "themes/str/components/PageWrapper" },
+  { id: "str-hero-section", source: "STR", name: "Hero Section", category: "Hero", pathHint: "themes/str/components/HeroSection" },
+  { id: "str-about-section", source: "STR", name: "About Us Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #about)" },
+  { id: "str-programmes-section", source: "STR", name: "Programmes Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #programmes)" },
+  { id: "str-gallery-section", source: "STR", name: "Gallery Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #gallery)" },
+  { id: "str-testimonials-section", source: "STR", name: "Testimonials Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #testimonials)" },
+  { id: "str-team-section", source: "STR", name: "Our Team Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #team)" },
+  { id: "str-faq-section", source: "STR", name: "FAQ Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #faq)" },
+  { id: "str-cta-section", source: "STR", name: "CTA Banner Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #contact)" },
+  { id: "str-footer", source: "STR", name: "Footer", category: "Layout", pathHint: "themes/str/index.tsx (inline)" },
+  { id: "str-contact-modal", source: "STR", name: "Contact Modal", category: "Modals", pathHint: "themes/str/ContactModal" },
 
   // ---- Landingpage theme ----
   { id: "landingpage-header", source: "Landingpage", name: "Header", category: "Layout", pathHint: "themes/landingpage/components/Header" },

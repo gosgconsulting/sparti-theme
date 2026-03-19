@@ -81,17 +81,17 @@ export default function DestinationDropdown({
         type="button"
         className={
           variant === "underline"
-            ? "w-full h-12 px-0 bg-transparent border-b border-black/20 text-left flex items-center justify-between gap-3 hover:border-black/35 transition-colors"
+            ? "w-full h-12 px-0 bg-transparent border-b border-border text-left flex items-center justify-between gap-3 hover:border-foreground/35 transition-colors"
             : variant === "compact"
               ? "w-full h-7 px-0 bg-transparent border-0 text-left flex items-center justify-between gap-2 hover:opacity-90 transition-opacity"
-            : "w-full h-12 px-4 rounded-xl bg-brand-surface border border-black/15 text-left flex items-center justify-between gap-3 hover:border-black/25 transition-colors"
+            : "w-full h-12 px-4 rounded-xl bg-card border border-border text-left flex items-center justify-between gap-3 hover:border-foreground/25 transition-colors"
         }
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         onKeyDown={onButtonKeyDown}
       >
-        <span className={`font-body text-sm ${value ? "text-brand-dark" : "text-brand-muted"}`}>
+        <span className={`font-body text-sm ${value ? "text-foreground" : "text-muted-foreground"}`}>
           {label}
         </span>
         <span
@@ -106,7 +106,7 @@ export default function DestinationDropdown({
 
       <div
         ref={panelRef}
-        className={`absolute left-0 right-0 mt-2 z-[80] origin-top rounded-lg bg-white border border-black/10 shadow-[0_18px_50px_rgba(0,0,0,0.18)] overflow-hidden transition-all duration-200 ${
+        className={`absolute left-0 right-0 mt-2 z-[80] origin-top rounded-lg bg-card border border-border shadow-xl overflow-hidden transition-all duration-200 ${
           open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"
         }`}
         role="presentation"
@@ -129,16 +129,16 @@ export default function DestinationDropdown({
                   data-opt={idx}
                   className={`w-full px-4 py-3 text-left font-body text-sm transition-colors ${
                     isSelected
-                      ? "bg-black/5 text-brand-dark"
-                      : "text-brand-dark/90 hover:bg-black/4 active:bg-black/6"
-                  } ${isActive ? "outline-none ring-2 ring-black/10" : ""}`}
+                      ? "bg-muted text-foreground"
+                      : "text-foreground/90 hover:bg-muted/80 active:bg-muted"
+                  } ${isActive ? "outline-none ring-2 ring-ring" : ""}`}
                   onMouseEnter={() => setActiveIndex(idx)}
                   onClick={() => selectAt(idx)}
                 >
                   <div className="flex items-center justify-between gap-4">
                     <span>{country}</span>
                     {isSelected && (
-                      <span className="text-brand-accent" aria-hidden="true">
+                      <span className="text-primary" aria-hidden="true">
                         <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
                           <path
                             d="M20 6L9 17l-5-5"

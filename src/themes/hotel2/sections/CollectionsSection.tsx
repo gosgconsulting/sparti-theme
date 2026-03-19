@@ -26,19 +26,19 @@ export default function CollectionsSection({ hotels }: Props) {
       <div className="container mx-auto">
         <div className="flex flex-col gap-4">
           <div>
-            <p className="font-body text-xs tracking-[0.18em] uppercase text-brand-muted">
+            <p className="font-body text-xs tracking-[0.18em] uppercase text-muted-foreground">
               Collections & Experience
             </p>
-            <h2 className="mt-2 font-headline text-2xl sm:text-3xl text-black">
+            <h2 className="mt-2 font-headline text-2xl sm:text-3xl text-foreground">
               Moments that define your stay
             </h2>
-            <p className="mt-2 font-body text-sm text-brand-dark/80 max-w-2xl">
+            <p className="mt-2 font-body text-sm text-foreground/80 max-w-2xl">
               Switch categories to explore stays that match the tone of your trip—always curated, never crowded.
             </p>
           </div>
 
           {/* Tabs */}
-          <div className="border-b border-black/10">
+          <div className="border-b border-border">
             <div className="flex gap-2 sm:gap-3 overflow-x-auto pb-2">
               {TABS.map((t) => {
                 const isActive = active === t;
@@ -47,14 +47,14 @@ export default function CollectionsSection({ hotels }: Props) {
                     key={t}
                     type="button"
                     className={`relative whitespace-nowrap px-4 sm:px-5 py-3 font-body text-sm transition-colors ${
-                      isActive ? "text-brand-accent" : "text-brand-dark/70 hover:text-brand-dark"
+                      isActive ? "text-primary" : "text-foreground/70 hover:text-foreground"
                     }`}
                     onClick={() => setActive(t)}
                     aria-pressed={isActive}
                   >
                     {t}
                     {isActive && (
-                      <span className="absolute left-0 right-0 -bottom-[1px] h-0.5 bg-[var(--brand-accent)]" />
+                      <span className="absolute left-0 right-0 -bottom-[1px] h-0.5 bg-primary" />
                     )}
                   </button>
                 );

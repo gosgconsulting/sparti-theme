@@ -14,7 +14,7 @@ import { getSiteName, getSiteDescription, getLogoSrc, getFaviconSrc, applyFavico
 import { SEOHead } from './components/SEOHead';
 import { GTM } from './components/GTM';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
-import { useCustomCode } from './hooks/useCustomCode';
+import { useCustomCode } from '@/hooks/useCustomCode';
 import { getHomeUrl, getPageUrl } from './utils/urls';
 import { usePageLayout, getComponentByType } from '../../hooks/usePageLayout';
 import { getTextByKey, getHeading, getImage, getArrayItems, getButton, parseMemberFromSubItems } from './utils/schemaHelpers';

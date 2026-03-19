@@ -1,4 +1,4 @@
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 import { ArrowRight } from "lucide-react";
 
 import shadowlineImage from "../../../e-shop/assets/shadowline.jpg";

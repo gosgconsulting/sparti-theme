@@ -45,15 +45,15 @@ export default function HorizontalRail({ title, subtitle, children, asSection = 
     return (
       <div className="flex items-end justify-between gap-6">
         <div>
-          <h2 className="font-headline text-2xl sm:text-3xl text-black">{title}</h2>
+          <h2 className="font-headline text-2xl sm:text-3xl text-foreground">{title}</h2>
           {subtitle && (
-            <p className="mt-2 font-body text-sm text-brand-dark/80 max-w-2xl">{subtitle}</p>
+            <p className="mt-2 font-body text-sm text-foreground/80 max-w-2xl">{subtitle}</p>
           )}
         </div>
         <div className="hidden lg:flex items-center gap-2">
           <button
             type="button"
-            className={`h-11 w-11 rounded-full border border-black/10 bg-white hover:bg-black/5 transition-colors ${
+            className={`h-11 w-11 rounded-full border border-border bg-card hover:bg-muted transition-colors ${
               canLeft ? "" : "opacity-40 pointer-events-none"
             }`}
             aria-label="Scroll left"
@@ -65,7 +65,7 @@ export default function HorizontalRail({ title, subtitle, children, asSection = 
           </button>
           <button
             type="button"
-            className={`h-11 w-11 rounded-full border border-black/10 bg-white hover:bg-black/5 transition-colors ${
+            className={`h-11 w-11 rounded-full border border-border bg-card hover:bg-muted transition-colors ${
               canRight ? "" : "opacity-40 pointer-events-none"
             }`}
             aria-label="Scroll right"

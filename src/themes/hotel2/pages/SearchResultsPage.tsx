@@ -191,7 +191,7 @@ export default function SearchResultsPage({ basePath }: Props) {
             {!ordered.length && (
               <div className="hotel2-results-empty">
                 <div className="font-headline text-xl">No results</div>
-                <div className="font-body text-sm text-brand-dark/80 mt-1">
+                <div className="font-body text-sm text-foreground/80 mt-1">
                   Try a different destination.
                 </div>
               </div>

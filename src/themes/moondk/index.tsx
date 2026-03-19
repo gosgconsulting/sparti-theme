@@ -1,8 +1,6 @@
-import React, { useEffect, useMemo, useContext } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import "./theme.css";
-import { ThemeBasePathProvider } from "./components/ThemeLink";
 import { CartProvider } from "./contexts/CartContext";
 
 import IndexPage from "./pages/Index";
@@ -41,8 +39,6 @@ const MoondkTheme: React.FC<MoondkThemeProps> = ({
 }) => {
   const location = useLocation();
   const params = useParams<{ pageSlug?: string }>();
-  const ctxBasePath = useContext(ThemeBasePathContext);
-  const basePath = ctxBasePath ?? `/theme/${tenantSlug}`;
 
   const current = useMemo(() => {
     const n = normalizeSlug(pageSlug);
@@ -129,13 +125,11 @@ const MoondkTheme: React.FC<MoondkThemeProps> = ({
   };
 
   return (
-    <ThemeBasePathProvider basePath={basePath}>
-      <CartProvider>
-        <div className="moondk-theme min-h-screen bg-background text-foreground">
-          {renderPage()}
-        </div>
-      </CartProvider>
-    </ThemeBasePathProvider>
+    <CartProvider>
+      <div className="moondk-theme min-h-screen bg-background text-foreground">
+        {renderPage()}
+      </div>
+    </CartProvider>
   );
 };
 

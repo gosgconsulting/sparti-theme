@@ -9,7 +9,7 @@ import { getSiteName, getSiteDescription, getLogoSrc, getFaviconSrc, applyFavico
 import { SEOHead } from './components/SEOHead';
 import { GTM } from './components/GTM';
 import { GoogleAnalytics } from './components/GoogleAnalytics';
-import { useCustomCode } from './hooks/useCustomCode';
+import { useCustomCode } from '@/hooks/useCustomCode';
 import { getThemeUrl, getPageUrl, getHomeUrl } from './utils/urls';
 
 interface TenantLandingProps {

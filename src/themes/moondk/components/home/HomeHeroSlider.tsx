@@ -2,7 +2,7 @@ import { useEffect, useMemo, useState } from "react";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { Button } from "@/components/ui/button";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 import slide1 from "../../assets/tea/barleytea_2800x1664_smaller_right_1.png";
 import slide2 from "../../assets/20240514_161154.jpg";

@@ -8,7 +8,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 import teaImg from "../../assets/tea.jpg";
 import oilImg from "../../assets/oil.jpg";

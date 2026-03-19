@@ -1,4 +1,4 @@
-import { ThemeNavLink } from "../ThemeLink";
+import { ThemeNavLink } from "@/components/ThemeLink";
 
 const aboutPages = [
   { name: "Our Story", path: "/about/our-story" },

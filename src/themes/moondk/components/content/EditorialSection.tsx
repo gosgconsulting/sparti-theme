@@ -1,6 +1,6 @@
 import foundersImage from "../../../e-shop/assets/founders.png";
 import { ArrowRight } from "lucide-react";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 const EditorialSection = () => {
   return (

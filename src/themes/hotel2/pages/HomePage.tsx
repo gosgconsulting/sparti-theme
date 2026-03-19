@@ -20,7 +20,7 @@ const HomePage: React.FC<Props> = ({ basePath }) => {
   const [children, setChildren] = useState(0);
 
   return (
-    <div className="bg-brand-main">
+    <div className="bg-background">
       <HeroSection
         destination={destination}
         onDestinationChange={setDestination}

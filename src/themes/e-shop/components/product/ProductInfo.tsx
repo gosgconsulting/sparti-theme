@@ -9,7 +9,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 const ProductInfo = () => {
   const [quantity, setQuantity] = useState(1);

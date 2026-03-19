@@ -130,7 +130,7 @@ Frontend theme system for **Sparti CMS**: a React-based multi-tenant theme runti
 
 ## Known Tech Debt
 
-- **Package name:** `package.json` still has `"name": "vite_react_shadcn_ts"`; could be renamed to `sparti-theme` for clarity.
+- **Package name:** Resolved — `package.json` name is `sparti-theme`.
 - **Duplicate theme logic:** Some themes duplicate helpers (e.g. `useThemeBasePath`, `useCustomCode`) that could live in shared hooks or `src/hooks/`.
 - **Root README vs theme docs:** Deeper theme system docs live in `src/themes/README.md` and `src/themes/master/README.md`; root README is high-level; consider a single `docs/` index.
 - **Tests:** Limited test scripts (`test:contact`, `test:form`, `test:unit`); no documented E2E or theme regression strategy.

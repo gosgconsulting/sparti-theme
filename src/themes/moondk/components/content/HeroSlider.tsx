@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import slider1 from "../../assets/slider-1.png";

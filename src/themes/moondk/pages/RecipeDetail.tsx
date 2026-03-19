@@ -2,7 +2,7 @@ import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ThemeLink } from "../components/ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 import {
   Breadcrumb,
   BreadcrumbItem,

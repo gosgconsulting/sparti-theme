@@ -1,23 +1,49 @@
 @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap');
 
-/* Hotel2 Theme Custom Styles - Modern Urban Hospitality (premium/editorial) */
+/* Hotel2 Theme - Design system tokens (see docs/DESIGN_SYSTEM_GUIDELINE.md) */
 
 .theme-hotel2 {
-  /* Brand / Style Guide */
-  --brand-accent: #A35E47;
-  --brand-black: #000000;
-  --brand-text-dark: #464646;
-  --brand-muted: #9C9A9A;
+  /* Canonical design tokens (override defaults from tokens.css) */
+  --background: 30 14% 96%;
+  --foreground: 0 0% 0%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 0%;
+  --primary: 17 39% 46%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 30 10% 94%;
+  --secondary-foreground: 0 0% 0%;
+  --muted: 30 10% 94%;
+  --muted-foreground: 0 0% 61%;
+  --accent: 17 39% 92%;
+  --accent-foreground: 17 39% 35%;
+  --border: 0 0% 88%;
+  --input: 0 0% 92%;
+  --ring: 0 0% 0%;
+  --radius: 0.625rem;
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
 
-  /* Surfaces */
-  --brand-bg-main: #f6f4f2;
-  --brand-surface: #ffffff;
-  --brand-border: rgba(0, 0, 0, 0.12);
-
-  background-color: var(--brand-bg-main);
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
-  color: var(--brand-black);
+  background-color: hsl(var(--background));
+  color: hsl(var(--foreground));
+  font-family: var(--font-sans);
   line-height: 1.6;
+}
+
+.theme-hotel2.dark {
+  --background: 220 13% 8%;
+  --foreground: 0 0% 94%;
+  --card: 220 13% 11%;
+  --card-foreground: 0 0% 94%;
+  --primary: 17 39% 55%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 220 13% 14%;
+  --secondary-foreground: 0 0% 94%;
+  --muted: 220 13% 14%;
+  --muted-foreground: 0 0% 63%;
+  --accent: 17 30% 18%;
+  --accent-foreground: 17 50% 75%;
+  --border: 220 13% 18%;
+  --input: 220 13% 18%;
+  --ring: 17 39% 55%;
 }
 
 /* Global button shape: no rounded corners */
@@ -25,69 +51,65 @@
   border-radius: 0 !important;
 }
 
+/* Typography (design system: use --font-sans) */
 .theme-hotel2 .font-headline {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 600;
   letter-spacing: -0.02em;
   line-height: 1.1;
-  font-feature-settings: 'kern' 1, 'liga' 1;
+  font-feature-settings: "kern" 1, "liga" 1;
 }
 
 .theme-hotel2 .font-body {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
   font-weight: 400;
   line-height: 1.6;
 }
 
-.theme-hotel2 .text-brand-accent {
-  color: var(--brand-accent) !important;
-}
-.theme-hotel2 .text-brand-muted {
-  color: var(--brand-muted) !important;
-}
-.theme-hotel2 .text-brand-dark {
-  color: var(--brand-text-dark) !important;
-}
-
-.theme-hotel2 .bg-brand-main {
-  background-color: var(--brand-bg-main) !important;
-}
-.theme-hotel2 .bg-brand-surface {
-  background-color: var(--brand-surface) !important;
-}
+/* Design system semantic utilities */
+.theme-hotel2 .text-primary { color: hsl(var(--primary)) !important; }
+.theme-hotel2 .text-muted-foreground { color: hsl(var(--muted-foreground)) !important; }
+.theme-hotel2 .text-foreground { color: hsl(var(--foreground)) !important; }
+.theme-hotel2 .bg-background { background-color: hsl(var(--background)) !important; }
+.theme-hotel2 .bg-card { background-color: hsl(var(--card)) !important; }
+.theme-hotel2 .bg-primary { background-color: hsl(var(--primary)) !important; }
+.theme-hotel2 .bg-muted { background-color: hsl(var(--muted)); }
+.theme-hotel2 .border-border { border-color: hsl(var(--border)); }
+.theme-hotel2 .border-foreground { border-color: hsl(var(--foreground)); }
+.theme-hotel2 .bg-border { background-color: hsl(var(--border)); }
+.theme-hotel2 .ring-ring { --tw-ring-color: hsl(var(--ring) / 0.3); }
 
 .theme-hotel2 .btn-primary {
-  background-color: var(--brand-accent) !important;
-  color: #fff !important;
-  font-family: 'Inter', sans-serif;
+  background-color: hsl(var(--primary)) !important;
+  color: hsl(var(--primary-foreground)) !important;
+  font-family: var(--font-sans);
   font-weight: 500;
-  border-radius: 10px;
+  border-radius: var(--radius);
   padding: 12px 18px;
   transition: transform 0.18s ease, box-shadow 0.18s ease, background-color 0.18s ease;
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
+  box-shadow: var(--shadow-offset-x) var(--shadow-offset-y) var(--shadow-blur) var(--shadow-spread) hsl(var(--shadow-color) / var(--shadow-opacity));
 }
 .theme-hotel2 .btn-primary:hover {
   transform: translateY(-1px);
-  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.18);
+  box-shadow: 0 14px 34px hsl(var(--shadow-color) / 0.18);
 }
 .theme-hotel2 .btn-primary:active {
   transform: translateY(0);
-  box-shadow: 0 10px 26px rgba(0, 0, 0, 0.14);
 }
 
 .theme-hotel2 .btn-secondary {
   background-color: transparent !important;
-  color: var(--brand-black) !important;
-  font-family: 'Inter', sans-serif;
+  color: hsl(var(--foreground)) !important;
+  font-family: var(--font-sans);
   font-weight: 500;
-  border-radius: 10px;
+  border-radius: var(--radius);
   padding: 12px 18px;
-  border: 1px solid rgba(0, 0, 0, 0.2);
+  border: 1px solid hsl(var(--border));
   transition: background-color 0.18s ease, border-color 0.18s ease;
 }
 .theme-hotel2 .btn-secondary:hover {
-  background-color: rgba(0, 0, 0, 0.04) !important;
-  border-color: rgba(0, 0, 0, 0.28);
+  background-color: hsl(var(--muted)) !important;
+  border-color: hsl(var(--border));
 }
 
 .theme-hotel2 .container {
@@ -98,17 +120,15 @@
   padding-right: 16px;
 }
 
-/* Header should always read as white (even at top). */
 .theme-hotel2 header {
-  background-color: rgba(255, 255, 255, 0.96) !important;
-  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  background-color: hsl(var(--card) / 0.96) !important;
+  border-bottom: 1px solid hsl(var(--border));
   -webkit-backdrop-filter: blur(10px);
   backdrop-filter: blur(10px);
 }
 
-/* Booking bar: match minimal editorial underline style */
 .theme-hotel2 input[type="date"] {
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: var(--font-sans);
 }
 
 @media (min-width: 640px) {
@@ -144,7 +164,7 @@
   height: 10px;
 }
 .theme-hotel2 .hotel2-rail::-webkit-scrollbar-thumb {
-  background: rgba(0, 0, 0, 0.16);
+  background: hsl(var(--foreground) / 0.16);
   border-radius: 999px;
 }
 .theme-hotel2 .hotel2-rail::-webkit-scrollbar-track {
@@ -152,8 +172,7 @@
 }
 
 .theme-hotel2 .hotel2-results-page {
-  background: var(--brand-bg-main);
-  /* Header is fixed; keep results from being hidden underneath it. */
+  background: hsl(var(--background));
   padding-top: 84px;
 }
 
@@ -217,18 +236,18 @@
   align-items: center;
   height: 28px;
   padding: 0 10px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
+  border: 1px solid hsl(var(--border));
   border-radius: 999px;
-  background: rgba(255, 255, 255, 0.8);
+  background: hsl(var(--card) / 0.8);
   backdrop-filter: blur(8px);
   font-size: 12px;
-  color: var(--brand-text-dark);
+  color: hsl(var(--foreground));
 }
 
 .theme-hotel2 .hotel2-results-toolbar {
-  border: 1px solid rgba(0, 0, 0, 0.10);
-  background: #fff;
-  border-radius: 8px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  border-radius: var(--radius);
   padding: 16px 12px;
 }
 
@@ -277,9 +296,9 @@
   align-items: center;
   height: 56px;
   padding: 8px 10px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  border-radius: 8px;
-  background: #fff;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--card));
   min-width: 150px;
 }
 
@@ -292,7 +311,7 @@
 }
 
 .theme-hotel2 .hotel2-control.hotel2-control-dropdown button {
-  color: var(--brand-text-dark);
+  color: hsl(var(--foreground));
 }
 
 .theme-hotel2 .hotel2-control.hotel2-control-dropdown button span {
@@ -306,8 +325,8 @@
 }
 
 .theme-hotel2 .hotel2-control.hotel2-control-dropdown:focus-within {
-  border-color: rgba(0, 0, 0, 0.22);
-  box-shadow: 0 0 0 2px rgba(0, 0, 0, 0.06);
+  border-color: hsl(var(--ring));
+  box-shadow: 0 0 0 2px hsl(var(--ring) / 0.2);
 }
 
 @media (min-width: 1024px) {
@@ -350,7 +369,7 @@
   font-size: 11px;
   letter-spacing: 0.08em;
   text-transform: uppercase;
-  color: var(--brand-muted);
+  color: hsl(var(--muted-foreground));
   margin-bottom: 4px;
 }
 
@@ -360,51 +379,51 @@
   border: 0;
   outline: 0;
   font-size: 13px;
-  color: var(--brand-text-dark);
+  color: hsl(var(--foreground));
   background: transparent;
 }
 
 .theme-hotel2 .hotel2-control:hover {
-  border-color: rgba(0, 0, 0, 0.18);
+  border-color: hsl(var(--border));
 }
 
 .theme-hotel2 .hotel2-btn-tool {
   height: 56px;
   padding: 0 12px;
-  border: 1px solid rgba(0, 0, 0, 0.14);
-  background: #fff;
-  border-radius: 8px;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  border-radius: var(--radius);
   font-size: 13px;
   font-weight: 500;
-  color: var(--brand-black);
+  color: hsl(var(--foreground));
 }
 
 .theme-hotel2 .hotel2-btn-tool:hover {
-  background: rgba(0, 0, 0, 0.03);
+  background: hsl(var(--muted));
 }
 
 .theme-hotel2 .hotel2-btn-search {
   height: 56px;
   padding: 0 14px;
-  border: 1px solid color-mix(in srgb, var(--brand-accent) 55%, #000 45%);
-  background: var(--brand-accent);
-  color: #fff;
-  border-radius: 8px;
+  border: 1px solid hsl(var(--primary) / 0.8);
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+  border-radius: var(--radius);
   font-size: 13px;
   font-weight: 600;
 }
 
 .theme-hotel2 .hotel2-btn-search:hover {
-  background: color-mix(in srgb, var(--brand-accent) 86%, #000 14%);
+  filter: brightness(1.08);
 }
 
 .theme-hotel2 .hotel2-btn-search:active {
-  background: color-mix(in srgb, var(--brand-accent) 78%, #000 22%);
+  filter: brightness(0.95);
 }
 
 .theme-hotel2 .hotel2-results-count {
   font-size: 13px;
-  color: var(--brand-text-dark);
+  color: hsl(var(--foreground));
 }
 
 .theme-hotel2 .hotel2-results-sort {
@@ -412,20 +431,20 @@
   align-items: center;
   gap: 8px;
   font-size: 12px;
-  color: var(--brand-muted);
+  color: hsl(var(--muted-foreground));
 }
 
 .theme-hotel2 .hotel2-results-sortLabel {
-  color: var(--brand-muted);
+  color: hsl(var(--muted-foreground));
 }
 
 .theme-hotel2 .hotel2-results-sortSelect {
   height: 34px;
   padding: 0 10px;
-  border-radius: 8px;
-  border: 1px solid rgba(0, 0, 0, 0.12);
-  background: #fff;
-  color: var(--brand-text-dark);
+  border-radius: var(--radius);
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--card));
+  color: hsl(var(--foreground));
   font-size: 12px;
 }
 
@@ -440,26 +459,26 @@
 .theme-hotel2 .hotel2-result-card {
   display: grid;
   grid-template-columns: 40% minmax(0, 60%);
-  border: 1px solid rgba(0, 0, 0, 0.10);
-  border-radius: 10px;
-  background: #fff;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--card));
   overflow: hidden;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.02);
+  box-shadow: 0 1px 0 hsl(var(--foreground) / 0.04);
   outline: none;
 }
 
 .theme-hotel2 .hotel2-result-card:hover {
-  border-color: rgba(0, 0, 0, 0.16);
+  border-color: hsl(var(--foreground) / 0.16);
 }
 
 .theme-hotel2 .hotel2-result-card.is-active {
-  border-color: rgba(163, 94, 71, 0.55);
-  box-shadow: 0 0 0 2px rgba(163, 94, 71, 0.16);
+  border-color: hsl(var(--primary) / 0.6);
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
 }
 
 .theme-hotel2 .hotel2-result-image {
   position: relative;
-  background: rgba(0, 0, 0, 0.04);
+  background: hsl(var(--muted));
 }
 
 .theme-hotel2 .hotel2-result-image img {
@@ -473,12 +492,12 @@
   position: absolute;
   left: 10px;
   top: 10px;
-  background: rgba(255, 255, 255, 0.92);
-  border: 1px solid rgba(0, 0, 0, 0.10);
+  background: hsl(var(--card) / 0.92);
+  border: 1px solid hsl(var(--border));
   border-radius: 999px;
   padding: 6px 10px;
   font-size: 12px;
-  color: var(--brand-black);
+  color: hsl(var(--foreground));
   backdrop-filter: blur(10px);
 }
 
@@ -504,7 +523,7 @@
 .theme-hotel2 .hotel2-result-title {
   font-size: 16px;
   line-height: 1.25;
-  color: var(--brand-black);
+  color: hsl(var(--foreground));
   margin: 0;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -529,7 +548,7 @@
 .theme-hotel2 .hotel2-result-priceValue {
   font-size: 15px;
   font-weight: 600;
-  color: var(--brand-black);
+  color: hsl(var(--foreground));
   line-height: 1.1;
 }
 
@@ -543,7 +562,7 @@
   flex-wrap: wrap;
   gap: 6px 12px;
   font-size: 12px;
-  color: var(--brand-text-dark);
+  color: hsl(var(--foreground));
 }
 
 .theme-hotel2 .hotel2-fact {
@@ -569,16 +588,16 @@
   align-items: center;
   gap: 6px;
   font-size: 12px;
-  color: var(--brand-text-dark);
+  color: hsl(var(--foreground));
   white-space: nowrap;
 }
 
 .theme-hotel2 .hotel2-star {
-  color: var(--brand-accent);
+  color: hsl(var(--primary));
 }
 
 .theme-hotel2 .hotel2-dot {
-  color: var(--brand-muted);
+  color: hsl(var(--muted-foreground));
 }
 
 .theme-hotel2 .hotel2-result-amenities {
@@ -592,19 +611,19 @@
 .theme-hotel2 .hotel2-amenity {
   font-size: 12px;
   padding: 3px 8px;
-  border: 1px solid rgba(0, 0, 0, 0.08);
-  border-radius: 8px;
-  color: var(--brand-text-dark);
-  background: #fff;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  color: hsl(var(--foreground));
+  background: hsl(var(--card));
   white-space: nowrap;
 }
 
 .theme-hotel2 .hotel2-map-shell {
   height: 100%;
-  border: 1px solid rgba(0, 0, 0, 0.10);
-  border-radius: 10px;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
   overflow: hidden;
-  background: #fff;
+  background: hsl(var(--card));
   display: flex;
   flex-direction: column;
   position: relative;
@@ -613,25 +632,25 @@
 .theme-hotel2 .hotel2-map-nav {
   height: 32px;
   padding: 0 10px;
-  border: 1px solid color-mix(in srgb, var(--brand-accent) 55%, #000 45%);
-  border-radius: 8px;
-  background: var(--brand-accent);
-  color: #fff;
+  border: 1px solid hsl(var(--primary) / 0.8);
+  border-radius: var(--radius);
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
   font-size: 12px;
   font-weight: 600;
 }
 
 .theme-hotel2 .hotel2-map-nav:hover {
-  background: color-mix(in srgb, var(--brand-accent) 86%, #000 14%);
+  filter: brightness(1.08);
 }
 
 .theme-hotel2 .hotel2-map-nav:active {
-  background: color-mix(in srgb, var(--brand-accent) 78%, #000 22%);
+  filter: brightness(0.95);
 }
 
 .theme-hotel2 .hotel2-map-index {
   font-size: 12px;
-  color: var(--brand-text-dark);
+  color: hsl(var(--foreground));
 }
 
 .theme-hotel2 .hotel2-map {
@@ -670,23 +689,23 @@
   width: 100%;
   height: 100%;
   border-radius: 999px;
-  background: rgba(17, 17, 17, 0.86);
-  border: 2px solid #fff;
-  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.18);
+  background: hsl(var(--foreground) / 0.86);
+  border: 2px solid hsl(var(--card));
+  box-shadow: 0 6px 16px hsl(var(--shadow-color) / 0.18);
 }
 
 .theme-hotel2 .hotel2-map-pin--active .hotel2-map-pinDot {
-  background: #000;
+  background: hsl(var(--foreground));
   width: 18px;
   height: 18px;
 }
 
 .theme-hotel2 .hotel2-map-fallback {
   padding: 10px 12px;
-  border-top: 1px solid rgba(0, 0, 0, 0.06);
+  border-top: 1px solid hsl(var(--border));
   font-size: 12px;
-  color: var(--brand-text-dark);
-  background: rgba(0, 0, 0, 0.02);
+  color: hsl(var(--foreground));
+  background: hsl(var(--muted));
 }
 
 @media (max-width: 1023px) {

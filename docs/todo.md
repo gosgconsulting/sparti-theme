@@ -15,6 +15,7 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 ## Next
 
 - [ ] **Align remaining themes with design system token set** — Master, sissonne, landingpage updated. Other themes (str, gosgconsulting, nail-queen, etc.) can adopt canonical tokens in `theme.css` gradually; new themes must follow from day one.
+- [ ] **Execute refactor plan (Phases 3–5)** — Phase 1 & 2 done: TenantPage and debugLogger removed, package renamed to `sparti-theme`, root TODO added; shared `useThemeBasePath`, `ThemeLink`/themeHref, and `useCustomCode` in place; e-shop, moondk, nail-queen, str migrated. Remaining: shared schemaHelpers/settings (Phase 3), ThankYouPage/ContactModal/NotFound consolidation and Sissonne UI audit (Phase 4), deps and docs (Phase 5). See `docs/REFACTOR_PLAN.md`.
 
 ---
 
@@ -65,7 +66,7 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 - **Shared theme hooks:** Move `useThemeBasePath`, `useCustomCode` (and similar) to `src/hooks/` or `src/themes/shared/` to avoid per-theme duplication.
 - **Theme asset helper:** Centralize `asset(path)` / `getThemeAssetUrl` usage so themes don’t reimplement the same wrapper.
 - **Package name:** Rename `package.json` name from `vite_react_shadcn_ts` to `sparti-theme` for clarity.
-- **Docs index:** Add `docs/README.md` that links to root README, theme README, master README, and this todo.
+- **Docs index:** Add `docs/README.md` that links to root README, theme README, master README, this todo, and `docs/REFACTOR_PLAN.md`.
 
 ---
 

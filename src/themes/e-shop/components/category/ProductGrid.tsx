@@ -1,6 +1,6 @@
 import { Card, CardContent } from "@/components/ui/card";
 import Pagination from "./Pagination";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 import pantheonImage from "../../assets/pantheon.jpg";
 import eclipseImage from "../../assets/eclipse.jpg";

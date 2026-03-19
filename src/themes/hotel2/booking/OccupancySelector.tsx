@@ -62,17 +62,17 @@ export default function OccupancySelector({
         type="button"
         className={
           variant === "underline"
-            ? "w-full h-12 px-0 bg-transparent border-b border-black/20 text-left flex items-center justify-between gap-3 hover:border-black/35 transition-colors"
+            ? "w-full h-12 px-0 bg-transparent border-b border-border text-left flex items-center justify-between gap-3 hover:border-foreground/35 transition-colors"
             : variant === "compact"
               ? "w-full h-7 px-0 bg-transparent border-0 text-left flex items-center justify-between gap-2 hover:opacity-90 transition-opacity"
-            : "w-full h-12 px-4 rounded-xl bg-brand-surface border border-black/15 text-left flex items-center justify-between gap-3 hover:border-black/25 transition-colors"
+            : "w-full h-12 px-4 rounded-xl bg-card border border-border text-left flex items-center justify-between gap-3 hover:border-foreground/25 transition-colors"
         }
         aria-haspopup="dialog"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         onKeyDown={onButtonKeyDown}
       >
-        <span className="font-body text-sm text-brand-dark">{label}</span>
+        <span className="font-body text-sm text-foreground">{label}</span>
         <span
           className={`shrink-0 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
           aria-hidden="true"
@@ -85,7 +85,7 @@ export default function OccupancySelector({
 
       <div
         ref={panelRef}
-        className={`absolute left-0 right-0 mt-2 z-[80] origin-top rounded-lg bg-white border border-black/10 shadow-[0_18px_50px_rgba(0,0,0,0.18)] overflow-hidden transition-all duration-200 ${
+        className={`absolute left-0 right-0 mt-2 z-[80] origin-top rounded-lg bg-card border border-border shadow-xl overflow-hidden transition-all duration-200 ${
           open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"
         }`}
         role="dialog"
@@ -94,25 +94,25 @@ export default function OccupancySelector({
         <div className="px-4 py-4">
           <div className="flex items-center justify-between gap-4 py-2">
             <div>
-              <div className="font-body text-sm text-brand-dark">Adults</div>
-              <div className="font-body text-xs text-brand-muted">Ages 12+</div>
+              <div className="font-body text-sm text-foreground">Adults</div>
+              <div className="font-body text-xs text-muted-foreground">Ages 12+</div>
             </div>
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="h-9 w-9 rounded-lg border border-black/15 hover:border-black/25 hover:bg-black/5 active:bg-black/10 transition-colors"
+                className="h-9 w-9 rounded-lg border border-border hover:border-foreground/25 hover:bg-muted active:bg-muted transition-colors"
                 aria-label="Decrease adults"
                 onClick={() => step("adults", -1)}
                 disabled={adults <= 1}
               >
                 <span className="text-lg leading-none">−</span>
               </button>
-              <div className="w-8 text-center font-body text-sm text-brand-dark tabular-nums">
+              <div className="w-8 text-center font-body text-sm text-foreground tabular-nums">
                 {adults}
               </div>
               <button
                 type="button"
-                className="h-9 w-9 rounded-lg border border-black/15 hover:border-black/25 hover:bg-black/5 active:bg-black/10 transition-colors"
+                className="h-9 w-9 rounded-lg border border-border hover:border-foreground/25 hover:bg-muted active:bg-muted transition-colors"
                 aria-label="Increase adults"
                 onClick={() => step("adults", 1)}
               >
@@ -121,29 +121,29 @@ export default function OccupancySelector({
             </div>
           </div>
 
-          <div className="my-3 h-px bg-black/10" />
+          <div className="my-3 h-px bg-border" />
 
           <div className="flex items-center justify-between gap-4 py-2">
             <div>
-              <div className="font-body text-sm text-brand-dark">Children</div>
-              <div className="font-body text-xs text-brand-muted">Ages 2–11</div>
+              <div className="font-body text-sm text-foreground">Children</div>
+              <div className="font-body text-xs text-muted-foreground">Ages 2–11</div>
             </div>
             <div className="flex items-center gap-2">
               <button
                 type="button"
-                className="h-9 w-9 rounded-lg border border-black/15 hover:border-black/25 hover:bg-black/5 active:bg-black/10 transition-colors"
+                className="h-9 w-9 rounded-lg border border-border hover:border-foreground/25 hover:bg-muted active:bg-muted transition-colors"
                 aria-label="Decrease children"
                 onClick={() => step("children", -1)}
                 disabled={children <= 0}
               >
                 <span className="text-lg leading-none">−</span>
               </button>
-              <div className="w-8 text-center font-body text-sm text-brand-dark tabular-nums">
+              <div className="w-8 text-center font-body text-sm text-foreground tabular-nums">
                 {children}
               </div>
               <button
                 type="button"
-                className="h-9 w-9 rounded-lg border border-black/15 hover:border-black/25 hover:bg-black/5 active:bg-black/10 transition-colors"
+                className="h-9 w-9 rounded-lg border border-border hover:border-foreground/25 hover:bg-muted active:bg-muted transition-colors"
                 aria-label="Increase children"
                 onClick={() => step("children", 1)}
               >

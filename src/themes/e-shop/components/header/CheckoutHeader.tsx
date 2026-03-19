@@ -1,5 +1,5 @@
 import { ChevronLeft } from "lucide-react";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 import logoSrc from "../../assets/LINEA-1.svg";
 

@@ -1,4 +1,4 @@
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 import haloImage from "../../../e-shop/assets/halo.jpg";
 import eclipseImage from "../../../e-shop/assets/eclipse.jpg";

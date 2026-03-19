@@ -2,7 +2,7 @@ import { X } from "lucide-react";
 import { useEffect, useState, useRef, useCallback } from "react";
 import { Button } from "@/components/ui/button";
 
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 import ShoppingBag from "./ShoppingBag";
 import { useCart } from "../../contexts/CartContext";
 import ContactFormSheet from "../ContactFormSheet";

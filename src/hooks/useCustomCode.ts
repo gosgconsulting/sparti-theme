@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { getApiUrl } from '../../../utils/api';
+import { getApiUrl } from '@/utils/api';
 
 export interface CustomCodeSettings {
   head: string;
@@ -10,9 +10,8 @@ export interface CustomCodeSettings {
 }
 
 /**
- * Hook to fetch custom code settings from CMS
- * Note: This requires a public API endpoint. If the endpoint requires auth,
- * you may need to pass customCode as a prop or use server-side injection.
+ * Hook to fetch custom code settings from CMS.
+ * Use from any theme that needs tenant-specific head/body/analytics code.
  */
 export const useCustomCode = (tenantId?: string): {
   customCode: CustomCodeSettings | null;
@@ -34,19 +33,13 @@ export const useCustomCode = (tenantId?: string): {
       setError(null);
 
       try {
-        // Try to fetch from public API endpoint
-        // If this endpoint requires auth, you may need to use server-side injection instead
         const response = await fetch(getApiUrl(`/api/custom-code?tenantId=${encodeURIComponent(tenantId)}`), {
           method: 'GET',
-          headers: {
-            Accept: 'application/json',
-          },
+          headers: { Accept: 'application/json' },
         });
 
         if (!response.ok) {
-          // If unauthorized, that's okay - custom code might be injected server-side
           if (response.status === 401 || response.status === 403) {
-            console.log('[testing] Custom code API requires authentication, skipping client-side fetch');
             setLoading(false);
             return;
           }
@@ -62,9 +55,6 @@ export const useCustomCode = (tenantId?: string): {
           gscVerification: data.gscVerification || '',
         });
       } catch (err) {
-        const errorMessage = err instanceof Error ? err.message : 'Failed to fetch custom code';
-        console.error('[testing] Error fetching custom code:', errorMessage);
-        // Don't set error state - custom code might be injected server-side
         setError(null);
       } finally {
         setLoading(false);

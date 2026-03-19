@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { ArrowRight, Utensils } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 import ContactFormSheet from "../ContactFormSheet";
 
 import imgMain from "../../assets/rice.jpg";

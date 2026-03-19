@@ -1,7 +1,7 @@
 import { Utensils, Clock } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 import potatoNoodleImg from "../../assets/potato_noodle.jpg";
 import saladImg from "../../assets/salad.jpg";

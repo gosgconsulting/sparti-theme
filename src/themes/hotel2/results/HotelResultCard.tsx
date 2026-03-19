@@ -28,14 +28,14 @@ export default function HotelResultCard({ hotel, active, onHover, onFocus }: Pro
           <div className="hotel2-result-titleWrap">
             <div className="hotel2-result-title font-headline">{hotel.name}</div>
             <div className="hotel2-result-location font-body">
-              <span className="text-brand-muted">{hotel.city}</span>
-              <span className="text-brand-muted"> · </span>
-              <span className="text-brand-dark">{hotel.country}</span>
+              <span className="text-muted-foreground">{hotel.city}</span>
+              <span className="text-muted-foreground"> · </span>
+              <span className="text-foreground">{hotel.country}</span>
             </div>
           </div>
           <div className="hotel2-result-price font-body">
             <div className="hotel2-result-priceValue tabular-nums">${hotel.pricePerNight}</div>
-            <div className="hotel2-result-priceUnit text-brand-muted">/ night</div>
+            <div className="hotel2-result-priceUnit text-muted-foreground">/ night</div>
           </div>
         </div>
 
@@ -60,7 +60,7 @@ export default function HotelResultCard({ hotel, active, onHover, onFocus }: Pro
             <span className="hotel2-dot" aria-hidden="true">
               ·
             </span>
-            <span className="text-brand-muted tabular-nums">{hotel.reviews.toLocaleString()} reviews</span>
+            <span className="text-muted-foreground tabular-nums">{hotel.reviews.toLocaleString()} reviews</span>
           </div>
 
           <div className="hotel2-result-amenities font-body">

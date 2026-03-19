@@ -1,5 +1,6 @@
 import logoSrc from "../../assets/Linea_Jewelry_Inc-2.svg";
-import { useThemeBasePath, themeHref } from "../ThemeLink";
+import { useThemeBasePath } from "@/hooks/useThemeBasePath";
+import { themeHref } from "@/components/ThemeLink";
 
 const Footer = () => {
   const basePath = useThemeBasePath();

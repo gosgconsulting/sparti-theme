@@ -2,7 +2,7 @@ import { ArrowRight, X, Minus, Plus } from "lucide-react";
 import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 import ShoppingBag, { type CartItem } from "./ShoppingBag";
 
 import logoSrc from "../../assets/LINEA-1.svg";

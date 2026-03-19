@@ -1,6 +1,6 @@
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 import pantheonImage from "../../assets/pantheon.jpg";
 import eclipseImage from "../../assets/eclipse.jpg";

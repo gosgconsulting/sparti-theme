@@ -1,4 +1,4 @@
-import { ThemeLink } from "../components/ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 import {
   Breadcrumb,
   BreadcrumbItem,

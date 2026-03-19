@@ -51,6 +51,7 @@ const TenantLandingPage: React.FC = () => {
   // When deploy theme at root, basePath is '' so links use /services not /theme/gosgconsulting/services
   const isDeployAtRoot = !!deploySlug && !location.pathname.startsWith('/theme/');
   const basePath = isDeployAtRoot ? '' : undefined;
+  const resolvedBasePath = basePath !== undefined ? basePath : `/theme/${slug}`;
 
   // Extract full page path from location for nested routes like /booking/classes
   const fullPageSlug = useMemo(() => {
@@ -120,7 +121,7 @@ const TenantLandingPage: React.FC = () => {
   }
 
   return (
-    <ThemeBasePathContext.Provider value={basePath}>
+    <ThemeBasePathContext.Provider value={resolvedBasePath}>
       <Suspense fallback={<div />}>
         <ThemeComponent
           tenantName={tenantName}

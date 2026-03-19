@@ -1,6 +1,7 @@
 import { useState } from "react";
 import logoSrc from "../../assets/moondk_logo.png";
-import { useThemeBasePath, themeHref } from "../ThemeLink";
+import { useThemeBasePath } from "@/hooks/useThemeBasePath";
+import { themeHref } from "@/components/ThemeLink";
 import ContactFormSheet from "../ContactFormSheet";
 
 const Footer = () => {

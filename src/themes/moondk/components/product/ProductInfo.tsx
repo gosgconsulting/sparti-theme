@@ -9,7 +9,7 @@ import {
   BreadcrumbPage,
   BreadcrumbSeparator,
 } from "@/components/ui/breadcrumb";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 import { useCart } from "../../contexts/CartContext";
 import { products } from "../category/products";
 import { AddToBagNotification } from "../ui/AddToBagNotification";

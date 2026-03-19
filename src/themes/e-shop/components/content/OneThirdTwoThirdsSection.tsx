@@ -1,4 +1,4 @@
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 import pantheonImage from "../../assets/pantheon.jpg";
 import obliqueImage from "../../assets/oblique.jpg";

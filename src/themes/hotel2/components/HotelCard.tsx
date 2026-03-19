@@ -8,7 +8,7 @@ type Props = {
 export default function HotelCard({ hotel }: Props) {
   return (
     <article
-      className="min-w-[280px] w-[280px] sm:min-w-[320px] sm:w-[320px] lg:min-w-[340px] lg:w-[340px] rounded-2xl bg-transparent border border-black/10 overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.10)] hover:shadow-[0_20px_54px_rgba(0,0,0,0.14)] transition-shadow"
+      className="min-w-[280px] w-[280px] sm:min-w-[320px] sm:w-[320px] lg:min-w-[340px] lg:w-[340px] rounded-2xl bg-transparent border border-border overflow-hidden shadow-[0_16px_40px_rgba(0,0,0,0.10)] hover:shadow-[0_20px_54px_rgba(0,0,0,0.14)] transition-shadow"
     >
       <div className="relative">
         <div className="aspect-[4/3]">
@@ -16,7 +16,7 @@ export default function HotelCard({ hotel }: Props) {
         </div>
         {hotel.tag && (
           <div className="absolute left-4 top-4">
-            <span className="inline-flex items-center rounded-full bg-white/90 backdrop-blur px-3 py-1 text-[12px] font-body text-black border border-black/10">
+            <span className="inline-flex items-center rounded-full bg-card/90 backdrop-blur px-3 py-1 text-[12px] font-body text-foreground border border-border">
               {hotel.tag}
             </span>
           </div>
@@ -26,30 +26,30 @@ export default function HotelCard({ hotel }: Props) {
       <div className="p-5">
         <div className="flex items-start justify-between gap-4">
           <div className="min-w-0">
-            <h3 className="font-headline text-lg text-black truncate">{hotel.name}</h3>
-            <p className="mt-1 font-body text-sm text-brand-dark">
-              <span className="text-brand-muted">{hotel.city}</span>
-              <span className="text-brand-muted"> · </span>
-              <span className="text-brand-dark">{hotel.country}</span>
+            <h3 className="font-headline text-lg text-foreground truncate">{hotel.name}</h3>
+            <p className="mt-1 font-body text-sm text-foreground">
+              <span className="text-muted-foreground">{hotel.city}</span>
+              <span className="text-muted-foreground"> · </span>
+              <span className="text-foreground">{hotel.country}</span>
             </p>
           </div>
           <div className="shrink-0 text-right">
-            <p className="font-body text-sm text-black tabular-nums">
+            <p className="font-body text-sm text-foreground tabular-nums">
               <span className="font-medium">${hotel.pricePerNight}</span>
-              <span className="text-brand-muted"> / night</span>
+              <span className="text-muted-foreground"> / night</span>
             </p>
           </div>
         </div>
 
         <div className="mt-4 flex items-center justify-between gap-3">
           <div className="flex items-center gap-2">
-            <span className="inline-flex items-center gap-1 rounded-full border border-black/10 px-2.5 py-1 font-body text-xs text-black">
-              <span className="text-brand-accent" aria-hidden="true">
+            <span className="inline-flex items-center gap-1 rounded-full border border-border px-2.5 py-1 font-body text-xs text-foreground">
+              <span className="text-primary" aria-hidden="true">
                 ★
               </span>
               <span className="tabular-nums">{hotel.rating.toFixed(1)}</span>
             </span>
-            <span className="font-body text-xs text-brand-muted tabular-nums">
+            <span className="font-body text-xs text-muted-foreground tabular-nums">
               {hotel.reviews.toLocaleString()} reviews
             </span>
           </div>
@@ -59,7 +59,7 @@ export default function HotelCard({ hotel }: Props) {
           {hotel.amenities.slice(0, 3).map((a) => (
             <span
               key={a}
-              className="inline-flex items-center rounded-full border border-black/10 px-3 py-1 font-body text-xs text-brand-dark"
+              className="inline-flex items-center rounded-full border border-border px-3 py-1 font-body text-xs text-foreground"
             >
               {a}
             </span>

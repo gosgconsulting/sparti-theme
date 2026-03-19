@@ -1,7 +1,7 @@
 import { useState } from "react";
 import Header from "../components/header/Header";
 import Footer from "../components/footer/Footer";
-import { ThemeLink } from "../components/ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 import { ArrowRight } from "lucide-react";
 import {
   Accordion,

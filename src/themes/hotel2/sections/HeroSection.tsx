@@ -92,11 +92,11 @@ export default function HeroSection({
       {/* Booking widget below hero */}
       <section className="relative -mt-10 sm:-mt-12 lg:-mt-14 pb-10 lg:pb-14 overflow-visible">
         <div className="container mx-auto">
-          <div className="relative z-[70] bg-white border border-black/10 shadow-[0_22px_60px_rgba(0,0,0,0.16)] px-5 sm:px-6 py-5">
+          <div className="relative z-[70] bg-card border border-border shadow-xl px-5 sm:px-6 py-5">
             <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end">
               {/* Destination */}
               <div className="lg:col-span-3">
-                <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-brand-muted">
+                <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
                   <span aria-hidden="true">📍</span>
                   <span>Destination</span>
                 </div>
@@ -113,7 +113,7 @@ export default function HeroSection({
               {/* Dates */}
               <div className="lg:col-span-5">
                 <div className="flex items-center justify-between gap-4">
-                  <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-brand-muted">
+                  <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
                     <span aria-hidden="true">🗓️</span>
                     <span>{Math.max(1, nightsBetween(checkIn, checkOut))} NIGHT</span>
                   </div>
@@ -122,8 +122,8 @@ export default function HeroSection({
                 <div className="mt-2 flex items-center gap-4">
                   <div className="flex-1">
                     <div className="relative h-12">
-                      <div className="h-full flex items-center border-b border-black/20">
-                        <span className="font-body text-sm text-brand-dark">
+                      <div className="h-full flex items-center border-b border-border">
+                        <span className="font-body text-sm text-foreground">
                           {formatShortDate(checkIn)}
                         </span>
                       </div>
@@ -136,11 +136,11 @@ export default function HeroSection({
                       />
                     </div>
                   </div>
-                  <div className="shrink-0 font-body text-sm text-brand-muted">–</div>
+                  <div className="shrink-0 font-body text-sm text-muted-foreground">–</div>
                   <div className="flex-1">
                     <div className="relative h-12">
-                      <div className="h-full flex items-center border-b border-black/20">
-                        <span className="font-body text-sm text-brand-dark">
+                      <div className="h-full flex items-center border-b border-border">
+                        <span className="font-body text-sm text-foreground">
                           {formatShortDate(checkOut)}
                         </span>
                       </div>
@@ -158,7 +158,7 @@ export default function HeroSection({
 
               {/* Guests */}
               <div className="lg:col-span-2">
-                <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-brand-muted">
+                <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
                   <span aria-hidden="true">👤</span>
                   <span>Guests</span>
                 </div>
@@ -177,7 +177,7 @@ export default function HeroSection({
               <div className="lg:col-span-2">
                 <button
                   type="button"
-                  className="w-full h-14 lg:h-16 bg-black text-white font-body text-[15px] font-medium tracking-wide hover:bg-black/90 transition-colors whitespace-nowrap"
+                  className="w-full h-14 lg:h-16 btn-primary font-body text-[15px] font-medium tracking-wide whitespace-nowrap"
                   onClick={() => {
                     onFindHotels({ destination, checkIn, checkOut, adults, children });
                   }}

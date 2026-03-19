@@ -1,8 +1,6 @@
-import React, { useEffect, useMemo, useContext } from "react";
+import React, { useEffect, useMemo } from "react";
 import { useLocation, useParams } from "react-router-dom";
-import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import "./theme.css";
-import { ThemeBasePathProvider } from "./components/ThemeLink";
 
 import IndexPage from "./pages/Index";
 import CategoryPage from "./pages/Category";
@@ -37,8 +35,6 @@ const EShopTheme: React.FC<EShopThemeProps> = ({
 }) => {
   const location = useLocation();
   const params = useParams<{ pageSlug?: string }>();
-  const ctxBasePath = useContext(ThemeBasePathContext);
-  const basePath = ctxBasePath ?? `/theme/${tenantSlug}`;
 
   const current = useMemo(() => {
     const n = normalizeSlug(pageSlug);
@@ -112,11 +108,9 @@ const EShopTheme: React.FC<EShopThemeProps> = ({
   };
 
   return (
-    <ThemeBasePathProvider basePath={basePath}>
-      <div className="eshop-theme min-h-screen bg-background text-foreground">
-        {renderPage()}
-      </div>
-    </ThemeBasePathProvider>
+    <div className="eshop-theme min-h-screen bg-background text-foreground">
+      {renderPage()}
+    </div>
   );
 };
 

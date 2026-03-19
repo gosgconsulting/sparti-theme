@@ -1,6 +1,6 @@
 import { X, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 
 export interface CartItem {
   id: number;

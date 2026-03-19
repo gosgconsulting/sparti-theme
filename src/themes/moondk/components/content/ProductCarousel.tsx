@@ -2,7 +2,7 @@ import { useState, useEffect } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
 import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel";
 import { Card, CardContent } from "@/components/ui/card";
-import { ThemeLink } from "../ThemeLink";
+import { ThemeLink } from "@/components/ThemeLink";
 import { products } from "../category/products";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 

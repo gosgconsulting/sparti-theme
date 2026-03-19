@@ -4,7 +4,7 @@ import { getSiteName, getSiteDescription, getLogoSrc, getFaviconSrc, applyFavico
 import { SEOHead } from './SEOHead';
 import { GTM } from './GTM';
 import { GoogleAnalytics } from './GoogleAnalytics';
-import { useCustomCode } from '../hooks/useCustomCode';
+import { useCustomCode } from '@/hooks/useCustomCode';
 import { STR_ASSETS } from '../config/assets';
 
 interface PageWrapperProps {

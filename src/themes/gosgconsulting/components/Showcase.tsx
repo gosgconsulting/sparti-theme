@@ -1,5 +1,5 @@
 import React from 'react';
-import { extractPropsFromItems, getArrayItems, getImage, SchemaItem } from '../utils/schemaHelpers';
+import { extractPropsFromItems, getArrayItems, getImage, SchemaItem } from '@/utils/schemaHelpers';
 
 interface ShowcaseProps {
   title?: string;

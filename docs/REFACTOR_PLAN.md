@@ -1,7 +1,7 @@
 # Sparti Theme — Tech Stack Audit & Refactor Plan
 
 **Date:** 2025-03-19  
-**Status:** Phase 1 & 2 executed; Phases 3–5 pending  
+**Status:** Refactor plan complete. Phases 1–5 done (NotFound consolidated; Sissonne UI documented as theme overrides; Astro deps removed).  
 **Related:** `README.md`, `docs/todo.md`, `TODO.md`
 
 ---
@@ -131,27 +131,22 @@ Sissonne ships a full set of UI components (button, card, dialog, etc.). Many of
 
 ### Phase 3 — Shared schema and settings
 
-7. **Shared `schemaHelpers`**  
-   Add `src/utils/schemaHelpers.ts` (or `src/themes/shared/schemaHelpers.ts`) with unified types and helpers. Migrate gosgconsulting, landingpage, and str one by one, fixing API differences.
+7. **Shared `schemaHelpers`** — DONE. Added `src/utils/schemaHelpers.ts`; gosgconsulting and str use it (theme copies removed); landingpage has thin layer re-exporting shared + getFAQItems, getTestimonialItems, getServiceItems, getResultSlides, SchemaComponent.
 
-8. **Shared theme settings helper**  
+8. **Shared theme settings helper** — DONE. Added `src/utils/themeSettings.ts` (getSiteName, getSiteTagline, getSiteDescription, getLogoSrc, getFaviconSrc, getCountry, getTimezone, getLanguage, applyFavicon). gosgconsulting, landingpage, nail-queen, str have thin `utils/settings.ts` that re-export with theme-specific fallbacks.  
    Extract common “site name, logo, favicon” logic to `src/utils/` or shared theme util; keep theme-specific overrides in theme folders.
 
-### Phase 4 — Shared pages and components
+### Phase 4 — Shared pages and components (partial)
 
-9. **Consolidate ThankYouPage / ContactModal / PrivacyPolicy / NotFound**  
-   Prefer shared or master-theme implementations; replace theme-level copies where behavior is equivalent.
+9. **Consolidate NotFound** — DONE. Shared `src/pages/NotFound.tsx` uses ThemeLink and design tokens; gosgconsulting and sissonne import from `@/pages/NotFound` (local files removed); e-shop and moondk re-export from `@/pages/NotFound`. nail-queen keeps its custom NotFoundPage (blog slug check + redirect). ThankYouPage, ContactModal, PrivacyPolicy left as theme-specific (optimalconsulting already uses master ThankYouPage/PrivacyPolicy).
 
-10. **Sissonne UI audit**  
-    List sissonne `components/ui` files that are pure wrappers of `@/components/ui`; remove or replace with shared imports.
+10. **Sissonne UI audit** — Documented. Sissonne `components/ui` are theme overrides (many import from `@/components/ui` internally but add local variants/styling); not pure wrappers. Optional later: migrate to `@/components/ui` with theme-specific variant names.
 
 ### Phase 5 — Dependencies and docs
 
-11. **Astro and unused deps**  
-    Confirm whether Astro (and related packages) are used anywhere; if not, remove and document.
+11. **Astro and unused deps** — DONE. Removed from package.json: astro, astro-compress, astro-embed, astro-icon, @astrojs/mdx, @astrojs/node, @astrojs/partytown, @astrojs/react, @astrojs/rss, @astrojs/sitemap, @astrolib/analytics, @astrolib/seo. `npm install` run; build passes.
 
-12. **Docs index**  
-    Ensure one place (e.g. `docs/README.md`) links root README, theme README, master README, design system guideline, `docs/todo.md`, and this refactor plan.
+12. **Docs index** — DONE. `docs/README.md` links root README, root TODO, design system guideline, theme README, master README, todo.md, and this refactor plan.
 
 ---
 
@@ -182,13 +177,13 @@ Sissonne ships a full set of UI components (button, card, dialog, etc.). Many of
 |----------|--------|--------|
 | Unused | `TenantPage.tsx` | Remove |
 | Unused | `debugLogger.js` | Remove or wire once |
-| Unused | Astro in package.json | Confirm usage; remove if unused |
+| Unused | Astro in package.json | Removed (Phase 5) |
 | Duplicate | schemaHelpers (3 themes) | Shared `src/utils` or `themes/shared` |
 | Duplicate | settings.ts (4 themes) | Shared util + theme overrides |
 | Duplicate | useCustomCode (2 themes) | Single hook in `src/hooks` |
 | Duplicate | useThemeBasePath/ThemeLink (e-shop, moondk) | Use shared context + optional hook |
-| Duplicate | ThankYouPage, ContactModal, PrivacyPolicy, NotFound | Prefer shared or master; migrate themes |
-| Duplicate | Sissonne UI (44 files) | Audit; remove pure wrappers |
+| Duplicate | ThankYouPage, ContactModal, PrivacyPolicy, NotFound | NotFound consolidated (Phase 4); rest theme-specific |
+| Duplicate | Sissonne UI (44 files) | Documented as theme overrides; optional migration later |
 | Duplicate | lib/utils (3 places) | Clarify; centralize `cn`, keep theme-specific separate |
 | Naming | package.json name | Rename to `sparti-theme` |
 | Docs | TODO location | Root `TODO.md` + link to docs |

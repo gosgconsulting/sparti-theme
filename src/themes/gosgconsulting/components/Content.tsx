@@ -1,5 +1,5 @@
 import React from 'react';
-import { extractPropsFromItems, getTextByKey, SchemaItem } from '../utils/schemaHelpers';
+import { extractPropsFromItems, getTextByKey, SchemaItem } from '@/utils/schemaHelpers';
 
 interface ContentProps {
   content?: string;

@@ -15,7 +15,7 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 ## Next
 
 - [ ] **Align remaining themes with design system token set** — Master, sissonne, landingpage updated. Other themes (str, gosgconsulting, nail-queen, etc.) can adopt canonical tokens in `theme.css` gradually; new themes must follow from day one.
-- [ ] **Execute refactor plan (Phases 3–5)** — Phase 1 & 2 done: TenantPage and debugLogger removed, package renamed to `sparti-theme`, root TODO added; shared `useThemeBasePath`, `ThemeLink`/themeHref, and `useCustomCode` in place; e-shop, moondk, nail-queen, str migrated. Remaining: shared schemaHelpers/settings (Phase 3), ThankYouPage/ContactModal/NotFound consolidation and Sissonne UI audit (Phase 4), deps and docs (Phase 5). See `docs/REFACTOR_PLAN.md`.
+- [x] **Execute refactor plan (Phases 4–5)** — Done: shared NotFound (gosgconsulting, sissonne, e-shop, moondk use it; nail-queen keeps custom); Sissonne UI documented as theme overrides; Astro and @astrojs/@astrolib deps removed. See `docs/REFACTOR_PLAN.md`.
 
 ---
 

@@ -7,7 +7,7 @@ import Programs from "./pages/Programs";
 import Faculty from "./pages/Faculty";
 import Gallery from "./pages/Gallery";
 import About from "./pages/About";
-import NotFound from "./pages/NotFound";
+import NotFound from "@/pages/NotFound";
 import Baskerville from "./pages/Baskerville";
 import EbGaramond from "./pages/EbGaramond";
 import Lora from "./pages/Lora";

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
-import { extractPropsFromItems, getTextByKey, getButton, SchemaItem } from '../utils/schemaHelpers';
+import { extractPropsFromItems, getTextByKey, getButton, SchemaItem } from '@/utils/schemaHelpers';
 
 interface NewsletterProps {
   title?: string;

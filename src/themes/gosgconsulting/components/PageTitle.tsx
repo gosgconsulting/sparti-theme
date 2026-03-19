@@ -1,5 +1,5 @@
 import React from 'react';
-import { extractPropsFromItems, getHeading, getTextByKey, SchemaItem } from '../utils/schemaHelpers';
+import { extractPropsFromItems, getHeading, getTextByKey, SchemaItem } from '@/utils/schemaHelpers';
 
 interface PageTitleProps {
   title?: string;

@@ -18,7 +18,7 @@ import Cart from './pages/Cart';
 import Product from './pages/Product';
 import Checkout from './pages/Checkout';
 import CheckoutSuccess from './pages/CheckoutSuccess';
-import NotFound from './pages/NotFound';
+import NotFound from '@/pages/NotFound';
 import { ThankYouPage } from './components/ThankYouPage';
 import Blog from './components/Blog';
 

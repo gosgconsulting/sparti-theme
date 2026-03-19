@@ -1,7 +1,7 @@
 import React from 'react';
 import { Button } from '@/components/ui/button';
 import { Menu, X } from 'lucide-react';
-import { extractPropsFromItems, getImage, getHeading, getButton, getTextByKey, SchemaItem } from '../utils/schemaHelpers';
+import { extractPropsFromItems, getImage, getHeading, getButton, getTextByKey, SchemaItem } from '@/utils/schemaHelpers';
 import { STR_ASSETS } from '../config/assets';
 import { getThemeUrl, getPageUrl, getHomeUrl } from '../utils/urls';
 

@@ -1,5 +1,5 @@
 import React from 'react';
-import { extractPropsFromItems, getArrayItems, SchemaItem } from '../utils/schemaHelpers';
+import { extractPropsFromItems, getArrayItems, SchemaItem } from '@/utils/schemaHelpers';
 
 interface ReviewItem {
   id?: string;

@@ -35,7 +35,6 @@
   ],
   "exclude": [
     "src/themes/**/node_modules/**",
-    "src/themes/masterastrowind/**",
     "src/themes/migrations/**"
   ]
 }

@@ -1,5 +1,5 @@
 import React from 'react';
-import { SchemaItem } from '../utils/schemaHelpers';
+import { SchemaItem } from '@/utils/schemaHelpers';
 
 interface FeaturesSectionProps {
   items?: SchemaItem[];

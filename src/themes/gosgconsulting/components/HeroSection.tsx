@@ -1,6 +1,6 @@
 import React from 'react';
 import { Button } from './ui/button';
-import { extractPropsFromItems, getImage, getHeading, getButton, getTextByKey, SchemaItem } from '../utils/schemaHelpers';
+import { extractPropsFromItems, getImage, getHeading, getButton, getTextByKey, SchemaItem } from '@/utils/schemaHelpers';
 
 interface HeroSectionProps {
   tenantName?: string;

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Mail, Phone, MapPin, Clock } from 'lucide-react';
-import { SchemaItem } from '../utils/schemaHelpers'; // type only
-import { getTextByKey } from '../utils/schemaHelpers';
+import { SchemaItem, getTextByKey } from '@/utils/schemaHelpers';
 
 interface ContactInfoProps {
   items?: SchemaItem[];

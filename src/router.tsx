@@ -5,6 +5,7 @@ import ErrorBoundary from '@/components/common/ErrorBoundary';
 import NotFound from "./pages/NotFound";
 import PublicDashboard from "./pages/PublicDashboard";
 import TenantLandingPage from "./pages/TenantLandingPage";
+import DesignSystemPage from "./pages/DesignSystemPage";
 
 // When a theme is deployed, theme components manage their own SEO.
 // Only run global SEO for the dev dashboard (no DEPLOY_THEME_SLUG).
@@ -52,6 +53,23 @@ export const router = createBrowserRouter(
           <ErrorBoundary>
             <TenantLandingPage />
           </ErrorBoundary>
+        </RootLayout>
+      ),
+    },
+    // Design system: component reference and preview (all themes + Flowbite)
+    {
+      path: "/design-system",
+      element: (
+        <RootLayout>
+          <DesignSystemPage />
+        </RootLayout>
+      ),
+    },
+    {
+      path: "/design-system/:componentId",
+      element: (
+        <RootLayout>
+          <DesignSystemPage />
         </RootLayout>
       ),
     },

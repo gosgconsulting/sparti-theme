@@ -1,7 +1,7 @@
 # Sparti Theme — Tech Stack Audit & Refactor Plan
 
 **Date:** 2025-03-19  
-**Status:** Refactor plan complete. Phases 1–5 done (NotFound consolidated; Sissonne UI documented as theme overrides; Astro deps removed).  
+**Status:** Refactor plan complete. Phases 1–6 done (NotFound consolidated; Sissonne UI documented as theme overrides; Astro deps removed; theme-level lib/utils.ts removed — gosgconsulting and sissonne use @/lib/utils).  
 **Related:** `README.md`, `docs/todo.md`, `TODO.md`
 
 ---
@@ -105,13 +105,13 @@ Sissonne ships a full set of UI components (button, card, dialog, etc.). Many of
 
 **Refactor:** Audit each file under `themes/sissonne/components/ui/`: if it only re-exports or wraps `@/components/ui/*`, consider removing the local file and importing from `@/components/ui` in the theme. If it adds theme-specific styling/behavior, keep but document; optionally move truly shared variants to `src/components/ui/`.
 
-### 4.7 Theme-level `lib/utils.ts`
+### 4.7 Theme-level `lib/utils.ts` ✅ DONE
 
-- `src/lib/utils.ts`
-- `themes/sissonne/lib/utils.ts`
-- `themes/gosgconsulting/lib/utils.ts`
+- `src/lib/utils.ts` — canonical `cn()`.
+- ~~`themes/sissonne/lib/utils.ts`~~ — removed; theme components use `@/lib/utils`.
+- ~~`themes/gosgconsulting/lib/utils.ts`~~ — removed; theme components use `@/lib/utils`.
 
-**Refactor:** Clarify which are `cn()`/classname helpers vs theme-specific helpers. If they only differ by theme, consider one shared `cn` in `src/lib/utils.ts` and theme-specific helpers in theme folders with distinct names.
+**Refactor:** Done. Single shared `cn` in `src/lib/utils.ts`; gosgconsulting and sissonne components now import from `@/lib/utils`.
 
 ---
 
@@ -147,6 +147,10 @@ Sissonne ships a full set of UI components (button, card, dialog, etc.). Many of
 11. **Astro and unused deps** — DONE. Removed from package.json: astro, astro-compress, astro-embed, astro-icon, @astrojs/mdx, @astrojs/node, @astrojs/partytown, @astrojs/react, @astrojs/rss, @astrojs/sitemap, @astrolib/analytics, @astrolib/seo. `npm install` run; build passes.
 
 12. **Docs index** — DONE. `docs/README.md` links root README, root TODO, design system guideline, theme README, master README, todo.md, and this refactor plan.
+
+### Phase 6 — Unify theme-level `lib/utils.ts` ✅ DONE
+
+13. **Centralize `cn()`** — DONE. gosgconsulting and sissonne had identical `lib/utils.ts` (only `cn()`). All theme components now import from `@/lib/utils`. Removed `src/themes/gosgconsulting/lib/utils.ts` and `src/themes/sissonne/lib/utils.ts`. Build passes.
 
 ---
 
@@ -186,6 +190,6 @@ Sissonne ships a full set of UI components (button, card, dialog, etc.). Many of
 | Duplicate | useThemeBasePath/ThemeLink (e-shop, moondk) | Use shared context + optional hook |
 | Duplicate | ThankYouPage, ContactModal, PrivacyPolicy, NotFound | NotFound consolidated (Phase 4); rest theme-specific |
 | Duplicate | Sissonne UI (44 files) | Documented as theme overrides; optional migration later |
-| Duplicate | lib/utils (3 places) | Clarify; centralize `cn`, keep theme-specific separate |
+| Duplicate | lib/utils (3 places) | Done — single `src/lib/utils.ts`; theme copies removed (Phase 6) |
 | Naming | package.json name | Rename to `sparti-theme` |
 | Docs | TODO location | Root `TODO.md` + link to docs |

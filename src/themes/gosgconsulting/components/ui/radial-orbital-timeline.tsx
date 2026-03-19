@@ -1,6 +1,6 @@
 "use client";
 import { useState, useEffect, useRef } from "react";
-import { cn } from "../../lib/utils";
+import { cn } from "@/lib/utils";
 import { ArrowRight, Link, Zap } from "lucide-react";
 import { Badge } from "./badge";
 import { Button } from "./button";

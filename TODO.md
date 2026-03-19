@@ -12,6 +12,10 @@
 
 - (None at this time.)
 
+## Refactor (2025-03-19)
+
+- **Phase 6 — Unify theme-level lib/utils** — gosgconsulting and sissonne now use `@/lib/utils` for `cn()`; removed `src/themes/gosgconsulting/lib/utils.ts` and `src/themes/sissonne/lib/utils.ts`. Build passes. See `docs/REFACTOR_PLAN.md`.
+
 ## Completed (project-doc-planner)
 
 - **Design system previews** — Added Flowbite CTA, FAQ, Page Title and Master Banner Section previews; 7 components now have live previews on `/design-system`.

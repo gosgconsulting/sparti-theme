@@ -2,7 +2,7 @@ import React, { useEffect } from "react";
 import { Dialog } from "./ui/dialog";
 import * as DialogPrimitive from "@radix-ui/react-dialog";
 import { Button } from "./ui/button";
-import { cn } from "../lib/utils";
+import { cn } from "@/lib/utils";
 import ModalContactForm from "./ModalContactForm";
 import { X } from "lucide-react";
 import AvatarGroup from "./AvatarGroup";

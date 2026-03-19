@@ -12,9 +12,15 @@
 
 - (None at this time.)
 
+## Design system previews (2025-03-19)
+
+- **STR Testimonials Section** — Extracted inline testimonials from `str/index.tsx` to `themes/str/components/STRTestimonialsSection.tsx`; added `STRTestimonialsSectionPreview.tsx` with mock data; registered in `DesignSystemPreview.tsx`. Systematic process documented in `docs/DESIGN_SYSTEM_PREVIEW_PLAN.md` (§5).
+- **All themes** — Implemented previews for every design system registry entry: Flowbite (15), Master (5), Gosgconsulting (9), STR (11), Landingpage (7), Sissonne (5), E-shop (5), Nail-queen (2). Added `InlineSectionPlaceholder.tsx` for STR inline-only sections (about, programmes, gallery, team, FAQ, CTA, footer). All 59 registry IDs now have `hasPreview(id) === true` and a lazy-loaded preview in `DesignSystemPreview.tsx`.
+
 ## Refactor (2025-03-19)
 
 - **Phase 6 — Unify theme-level lib/utils** — gosgconsulting and sissonne now use `@/lib/utils` for `cn()`; removed `src/themes/gosgconsulting/lib/utils.ts` and `src/themes/sissonne/lib/utils.ts`. Build passes. See `docs/REFACTOR_PLAN.md`.
+- **Refactor verify loop** — Phases 1–6 complete; no new duplicates. Build ✅, test:unit ✅ (39 tests). Lint ⚠️ fails on pre-existing issues (out of refactor scope). Optional next: ThankYouPage/ContactModal/PrivacyPolicy consolidation; Sissonne UI migration; lint-cleanup pass.
 
 ## Completed (project-doc-planner)
 

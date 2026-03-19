@@ -167,8 +167,9 @@ Deploy with Framework Preset: **Vite**, Build: `npm run build`, Output: `dist`. 
 
 ### Docs
 
+- **Onboarding & new theme:** `docs/ONBOARDING_NEW_THEME_AND_DEPLOY.md` — create a new theme or project so it’s immediately available and deployable on Vercel (checklist, systems, doc map).
 - **Design system (cross-theme):** `docs/DESIGN_SYSTEM_GUIDELINE.md` — tokens, components, styling rules for all themes.
-- **Design system page:** `/design-system` (dev and deploy) — live catalog of Header, Footer, Hero, Sections from every theme and Flowbite; register new components in `src/config/designSystemRegistry.ts` and add previews in `src/pages/design-system/` so new themes can reuse them as templates.
+- **Design system page:** `/design-system` (dev and deploy) — live catalog of Header, Footer, Hero, Sections from every theme and Flowbite; register new components in `src/config/designSystemRegistry.ts` and add previews in `src/pages/design-system/` so new themes can reuse them as templates. To add a theme component and its preview systematically (including extracting inline sections), see **`docs/DESIGN_SYSTEM_PREVIEW_PLAN.md`** §5.
 - Theme system and structure: `src/themes/README.md`
 - Master theme (duplicate this for new themes): `src/themes/master/README.md`
 - Project TODO and verification: `docs/todo.md`

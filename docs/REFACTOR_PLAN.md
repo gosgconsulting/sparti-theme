@@ -1,8 +1,10 @@
 # Sparti Theme — Tech Stack Audit & Refactor Plan
 
 **Date:** 2025-03-19  
-**Status:** Refactor plan complete. Phases 1–6 done (NotFound consolidated; Sissonne UI documented as theme overrides; Astro deps removed; theme-level lib/utils.ts removed — gosgconsulting and sissonne use @/lib/utils).  
+**Status:** Refactor plan complete. Phases 1–6 done (NotFound consolidated; Sissonne UI documented as theme overrides; Astro deps removed; theme-level lib/utils.ts removed — gosgconsulting and sissonne use @/lib/utils). No remaining mandatory refactor tasks.  
 **Related:** `README.md`, `docs/todo.md`, `TODO.md`
+
+**Refactor execution (verify loop):** Build ✅ `npm run build`. Unit tests ✅ `npm run test:unit` (39 tests). Lint ⚠️ `npm run lint` fails on pre-existing issues (AuthProvider, ThemeLink, carousel, etc.) — not introduced by refactor phases; can be addressed in a separate lint-cleanup pass.
 
 ---
 
@@ -151,6 +153,12 @@ Sissonne ships a full set of UI components (button, card, dialog, etc.). Many of
 ### Phase 6 — Unify theme-level `lib/utils.ts` ✅ DONE
 
 13. **Centralize `cn()`** — DONE. gosgconsulting and sissonne had identical `lib/utils.ts` (only `cn()`). All theme components now import from `@/lib/utils`. Removed `src/themes/gosgconsulting/lib/utils.ts` and `src/themes/sissonne/lib/utils.ts`. Build passes.
+
+### Post–Phase 6 (optional / follow-up)
+
+- **ThankYouPage / ContactModal / PrivacyPolicy:** Left as theme-specific per plan; optional future consolidation into shared or master implementation where behavior matches.
+- **Sissonne UI (44 files):** Documented as theme overrides; optional later migration to `@/components/ui` with theme-specific variant names.
+- **Lint:** Pre-existing ESLint failures (no-empty, no-explicit-any, no-restricted-syntax, etc.) in `src/components/`, `src/context/`, etc.; fix in a dedicated lint-cleanup task if desired.
 
 ---
 

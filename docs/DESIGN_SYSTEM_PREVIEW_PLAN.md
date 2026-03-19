@@ -83,16 +83,41 @@ For wrappers that expect specific child structure (e.g. layout with header/foote
 
 ---
 
-## 5. Registry
+## 5. Systematic Process: Theme Component + Preview
 
-| Component ID | Source | Preview |
-|--------------|--------|---------|
-| str-page-wrapper | STR | ✅ Implemented |
+Use this workflow when adding a **new theme component** or when a component is **inline** in a theme page and you want it in the design system with a live preview.
+
+| Step | Action |
+|------|--------|
+| 1 | **Register** — Ensure the component is in `src/config/designSystemRegistry.ts` (id, source, name, category, pathHint). |
+| 2 | **Extract (if inline)** — If the UI lives inline in a theme file (e.g. `themes/str/index.tsx`), extract it to a presentational component under `themes/<slug>/components/` with clear props (title, data, loading, etc.). Update the theme page to use that component. |
+| 3 | **Preview wrapper** — Create `src/pages/design-system/previews/<Source><ComponentName>Preview.tsx` that imports the theme component and passes **mock/static data** (no API calls in preview). |
+| 4 | **Wire preview** — In `src/pages/design-system/DesignSystemPreview.tsx`: add a `lazy()` import, add the id to `PREVIEW_MAP`, and add the same id to `PRELOAD_LOADERS`. |
+| 5 | **Verify** — `npm run build`, `npm run lint`, then open `/design-system` and select the component to confirm the preview renders. |
+
+**Example (STR Testimonials):** The testimonials block was inline in `str/index.tsx`. It was extracted to `themes/str/components/STRTestimonialsSection.tsx` (props: title, buttonText, buttonUrl, testimonials, placeInfo, loading). The theme page and `STRTestimonialsSectionPreview.tsx` both use that component; the preview passes mock testimonials and placeInfo so no Google API is called.
 
 ---
 
-## 6. Docs to Update
+## 6. Registry
 
-- **docs/todo.md** — Add "STR Page Wrapper preview" to Done.
+All registry entries now have a preview (real component or inline placeholder). Summary by source:
+
+| Source | Preview count |
+|--------|----------------|
+| Flowbite | 15 (header, footer, hero, CTA, FAQ, content, testimonials, features, pain-point, whats-included, why-choose-us, newsletter, page-title, section) |
+| Master | 5 (header, footer, banner-section, our-services-section, contact-form-modal) |
+| Gosgconsulting | 9 (header, footer, hero, features, services-showcase, content, CTA, testimonials, newsletter) |
+| STR | 11 (page-wrapper, hero, about, programmes, gallery, testimonials, team, FAQ, CTA, footer, contact-modal; inline sections use InlineSectionPlaceholder) |
+| Landingpage | 7 (header, footer, hero, CTA, FAQ, services, testimonials) |
+| Sissonne | 5 (layout, hero-slider, testimonial-slider, faculty-slider, gallery-slider) |
+| E-shop | 5 (header, footer, category-header, product-grid, large-hero) |
+| Nail-queen | 2 (layout, contact-panel) |
+
+---
+
+## 7. Docs to Update
+
+- **docs/todo.md** — Add completed preview tasks to Done.
 - **docs/DESIGN_SYSTEM_GUIDELINE.md** — §4.1 already documents the pattern; no change needed unless adding a new section.
-- **README.md** — No change unless design system section is expanded.
+- **README.md** — Design system page paragraph references this plan; link to `docs/DESIGN_SYSTEM_PREVIEW_PLAN.md` for "how to add a preview".

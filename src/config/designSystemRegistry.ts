@@ -67,7 +67,7 @@ export const DESIGN_SYSTEM_ENTRIES: DesignSystemEntry[] = [
   { id: "str-about-section", source: "STR", name: "About Us Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #about)" },
   { id: "str-programmes-section", source: "STR", name: "Programmes Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #programmes)" },
   { id: "str-gallery-section", source: "STR", name: "Gallery Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #gallery)" },
-  { id: "str-testimonials-section", source: "STR", name: "Testimonials Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #testimonials)" },
+  { id: "str-testimonials-section", source: "STR", name: "Testimonials Section", category: "Sections", pathHint: "themes/str/components/STRTestimonialsSection" },
   { id: "str-team-section", source: "STR", name: "Our Team Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #team)" },
   { id: "str-faq-section", source: "STR", name: "FAQ Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #faq)" },
   { id: "str-cta-section", source: "STR", name: "CTA Banner Section", category: "Sections", pathHint: "themes/str/index.tsx (inline #contact)" },

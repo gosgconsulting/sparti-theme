@@ -1,5 +1,6 @@
 # Sparti Theme — Documentation
 
+- **[Onboarding & new theme / deploy](ONBOARDING_NEW_THEME_AND_DEPLOY.md)** — Single guide for onboarding and creating a new theme or project so it’s immediately available and deployable on Vercel (systems, checklist, doc map).
 - **[Project README](../README.md)** — Overview, architecture, module responsibilities, conventions, key decisions, tech debt, and getting started.
 - **[Vercel deployment & build rules](VERCEL_DEPLOYMENT.md)** — `vercel.json`, env vars (`DEPLOY_THEME_SLUG`, `SITE_URL`, `VITE_API_BASE_URL`), rewrites, API routes, single-theme vs multi-tenant, and `.vercelignore`.
 - **[Root TODO](../TODO.md)** — Quick links to execution ledger and refactor plan.

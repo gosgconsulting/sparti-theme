@@ -159,7 +159,11 @@ Open [http://localhost:8080](http://localhost:8080). In dev, `/` shows the theme
 npm run build
 ```
 
-Output: `dist/`. For theme-only static build: `npm run build:theme`. Deploy to Vercel with Framework Preset: Vite, Build: `npm run build`, Output: `dist`. Set `DEPLOY_THEME_SLUG` to serve a single theme at root.
+Output: `dist/`. For theme-only static build: `npm run build:theme`.
+
+### Deploy (Vercel)
+
+Deploy with Framework Preset: **Vite**, Build: `npm run build`, Output: `dist`. Set **`DEPLOY_THEME_SLUG`** (e.g. `landingpage`, `gosgconsulting`) to serve a single theme at root; set **`SITE_URL`** and **`VITE_API_BASE_URL`** for SEO and CMS. Full configuration, env vars, rewrites, and build rules: **`docs/VERCEL_DEPLOYMENT.md`**.
 
 ### Docs
 

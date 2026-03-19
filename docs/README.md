@@ -1,6 +1,7 @@
 # Sparti Theme — Documentation
 
 - **[Project README](../README.md)** — Overview, architecture, module responsibilities, conventions, key decisions, tech debt, and getting started.
+- **[Vercel deployment & build rules](VERCEL_DEPLOYMENT.md)** — `vercel.json`, env vars (`DEPLOY_THEME_SLUG`, `SITE_URL`, `VITE_API_BASE_URL`), rewrites, API routes, single-theme vs multi-tenant, and `.vercelignore`.
 - **[Root TODO](../TODO.md)** — Quick links to execution ledger and refactor plan.
 - **[Design system guideline](DESIGN_SYSTEM_GUIDELINE.md)** — Canonical design tokens, component usage, and styling rules for all themes; use for every new theme and UI development. **Design system page:** `/design-system` — live catalog of Header, Footer, Hero, Sections from every theme and Flowbite; registry in `src/config/designSystemRegistry.ts`.
 - **[Design system preview plan](DESIGN_SYSTEM_PREVIEW_PLAN.md)** — How to add missing previews (e.g. "Preview not yet implemented"); Vercel best practices for lazy loading and preload.

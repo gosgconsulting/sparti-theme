@@ -10,14 +10,15 @@ import {
   AccordionTrigger,
 } from "@/components/ui/accordion";
 import { motion } from "framer-motion";
-import steakHero from "../assets/small_bowl.jpg";
-import aboutBrokImage from "../assets/IMG_20240523_135412_907.jpg";
-import reserveImage from "../assets/IMG_20240521_161614_496_1.jpg";
-import riceImage from "../assets/rice.jpg";
+import heroImage from "../assets/PrivateDinning/20241107_160428.jpg";
+import aboutBrokImage from "../assets/PrivateDinning/20241111_141148.jpg";
+import reserveImage from "../assets/PrivateDinning/20241125_170824.jpg";
+import faqImage from "../assets/PrivateDinning/IMG_4205.jpg";
 import ContactFormSheet from "../components/ContactFormSheet";
 
 export default function BrokPrivateDinningPage() {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
+  const [isAboutExpanded, setIsAboutExpanded] = useState(false);
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -25,7 +26,7 @@ export default function BrokPrivateDinningPage() {
       {/* Hero Section with Image Background */}
       <section className="relative w-full min-h-[650px] overflow-hidden">
         <img
-          src={steakHero}
+          src={heroImage}
           alt="Private Dining Experience"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -36,7 +37,7 @@ export default function BrokPrivateDinningPage() {
         <div className="relative z-20 flex items-center justify-center min-h-[650px]">
           <div className="w-full px-2">
             <div className="mx-auto max-w-6xl flex justify-center">
-              <main className="max-w-2xl">
+              <main className="max-w-4xl">
                 <motion.div 
                   className="text-center"
                   initial={{ opacity: 0, y: 30 }}
@@ -45,14 +46,23 @@ export default function BrokPrivateDinningPage() {
                 >
                   {/* Main Heading */}
                   <h1 className="font-body text-5xl md:text-6xl leading-[0.95] tracking-tight mb-6">
-                    <span className="whitespace-nowrap"><span className="text-white/70">Intimate</span> <span className="font-heading italic font-normal text-white">Private</span></span>
-                    <span className="block text-white/70">Dining</span>
+                    <span className="whitespace-nowrap"><span className="text-white">Intimate</span> <span className="font-heading italic font-normal text-white">Private</span></span>
+                    <span className="block text-white">Dining</span>
                   </h1>
 
                   {/* Description */}
-                  <p className="text-base md:text-lg font-body text-white/80 mb-8 max-w-xl mx-auto leading-relaxed">
-                    Experience the essence of culinary artistry in our exclusive private dining service. Each experience is a blend of exceptional cuisine and personalized service, perfect for elevating your special occasions.
-                  </p>
+                  <div className="text-base md:text-lg font-body text-white mb-8 max-w-2xl mx-auto leading-relaxed space-y-4">
+                    <p>
+                      This is a space that holds the calm, warmth, and sincerity of the Korean dining table. So that a meal may be more than just a meal.
+                      <br />
+                      Bēok tells the story of Korea, beyond its food.
+                    </p>
+                    <p className="text-white">
+                      이곳은 한국의 식탁이 가진 고요함과 따뜻함, 그리고 정성을 담아내는 공간입니다.
+                      <br />
+                      한 끼 식사가 그저 한 끼로 끝나지 않도록. 비옥은 음식 너머의 한국을 이야기합니다.
+                    </p>
+                  </div>
 
                   {/* Buttons */}
                   <div className="flex items-center justify-center gap-4 flex-wrap">
@@ -85,12 +95,12 @@ export default function BrokPrivateDinningPage() {
       </section>
 
       {/* About Brok Section */}
-      <section className="px-2 py-16">
+      <section className="px-2 pt-16 pb-16 md:pt-24">
         <div className="mx-auto max-w-6xl">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-center">
-            {/* Left: Image */}
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8 md:gap-12 items-start">
+            {/* Left: Image (sticky on desktop) */}
             <motion.div 
-              className="order-1 md:order-1"
+              className="order-1 md:order-1 md:sticky md:top-48"
               initial={{ opacity: 0, y: 50 }}
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true, margin: "-100px" }}
@@ -116,13 +126,50 @@ export default function BrokPrivateDinningPage() {
               <h2 className="text-3xl md:text-4xl font-heading tracking-tight mb-6">
                 Experience our private dining
               </h2>
-              <div className="space-y-4">
-                <p className="text-base md:text-lg font-body text-foreground/70 leading-relaxed">
-                  Bēok brings natural flavour to the forefront through Korean contemporary cuisine.
+              <div className="space-y-4 text-base md:text-lg font-body text-foreground/70 leading-relaxed">
+                <p>
+                  We constantly reflect on what truly matters in Korean cooking.
                 </p>
-                <p className="text-base md:text-lg font-body text-foreground/70 leading-relaxed">
-                  Seasonal ingredients, clean seasoning, and thoughtful technique come together in dishes that feel familiar yet unexpectedly new. Here, Korean taste is not shouted, it is revealed, slowly, beautifully, and meant to be shared in Singapore.
+                <p>
+                  More than flashy techniques or decorative plating, we value what is made by hand, the time spent with care, and the heart poured into each dish.
                 </p>
+                <p>
+                  We see cooking not as something to be made, but something to be built — something to be quietly and honestly prepared, piece by piece, at the table.
+                </p>
+                <div
+                  id="about-brok-more"
+                  role="region"
+                  aria-hidden={!isAboutExpanded}
+                  className={`overflow-hidden transition-[max-height,opacity] duration-300 ease-[cubic-bezier(0.22,1,0.36,1)] space-y-4 ${isAboutExpanded ? "max-h-[2000px] opacity-100" : "max-h-0 opacity-0"}`}
+                >
+                  <p>
+                    Just as rich soil nurtures the pure taste of nature, our cooking follows the flow of seasons and time.
+                  </p>
+                  <p>
+                    We are focused more deeply. Our menu changes naturally with the seasons, and Bēok moves slowly and gently — but with quiet strength.
+                  </p>
+                  <p>
+                    한식의 본질을 조용히 풀어내는 공간, 비옥은 한국의 요리에서 가장 중요한 것들이 무엇인지 늘 고민합니다.
+                  </p>
+                  <p>
+                    화려한 기술이나 장식보다, 손으로 직접 만들고 오래 바라본 시간, 그리고 그 안에 담긴 마음을 더 중요하게 생각합니다.
+                  </p>
+                  <p>
+                    우리는 음식을 &lsquo;만드는 일&rsquo;이 아니라 &lsquo;짓는 일&rsquo;이라 여기며, 식탁 위의 모든 것을 조용히, 정직하게 준비합니다. 비옥한 토양에서 자라난 자연의 맛을 담아내듯, 계절과 시간의 흐름을 그대로 따르며 요리를 짓습니다.
+                  </p>
+                  <p>
+                    더 깊게 집중하며, 계절에 따라 자연스럽게 바뀝니다. 비옥은 그렇게 작고 느리게, 하지만 단단하게 움직이는 다이닝입니다.
+                  </p>
+                </div>
+                <button
+                  type="button"
+                  onClick={() => setIsAboutExpanded((prev) => !prev)}
+                  aria-expanded={isAboutExpanded}
+                  aria-controls="about-brok-more"
+                  className="text-primary font-medium hover:underline focus:outline-none focus:underline"
+                >
+                  {isAboutExpanded ? "Read less" : "Read more..."}
+                </button>
               </div>
             </motion.div>
           </div>
@@ -246,7 +293,7 @@ Reservations are confirmed upon payment of deposit within 12 hours. Otherwise, t
             >
               <div className="rounded-[1.5rem] overflow-hidden bg-white shadow-md">
                 <img
-                  src={riceImage}
+                  src={faqImage}
                   alt="Korean BBQ grilling experience"
                   className="w-full h-auto object-cover aspect-[4/3]"
                 />

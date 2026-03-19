@@ -3,35 +3,41 @@
  * Converts theme styles JSON to CSS variables and applies them
  */
 
+/**
+ * Theme styles from CMS. Maps to canonical design tokens (see docs/DESIGN_SYSTEM_GUIDELINE.md).
+ */
 export interface ThemeStyles {
-  // Primary Colors
   primary?: string;
   primaryForeground?: string;
-  
-  // Secondary Colors
   secondary?: string;
   secondaryForeground?: string;
-  
-  // Base Colors
   background?: string;
   foreground?: string;
   card?: string;
   cardForeground?: string;
-  
-  // Accent Colors
+  popover?: string;
+  popoverForeground?: string;
   accent?: string;
   accentForeground?: string;
   muted?: string;
   mutedForeground?: string;
-  
-  // Additional Colors
   border?: string;
   input?: string;
   ring?: string;
   destructive?: string;
   destructiveForeground?: string;
-  
-  // Typography
+  /** Sidebar background (canonical token: --sidebar) */
+  sidebar?: string;
+  sidebarForeground?: string;
+  sidebarPrimary?: string;
+  sidebarPrimaryForeground?: string;
+  sidebarAccent?: string;
+  sidebarAccentForeground?: string;
+  sidebarBorder?: string;
+  sidebarRing?: string;
+  radius?: string;
+  spacing?: string;
+  letterSpacing?: string;
   typography?: {
     fontSans?: string;
     fontSerif?: string;
@@ -158,6 +164,45 @@ export function applyThemeStyles(styles: ThemeStyles | null, selector: string = 
   }
   if (styles.destructiveForeground) {
     cssVariables.push(`--destructive-foreground: ${hexToHsl(styles.destructiveForeground) || styles.destructiveForeground};`);
+  }
+  if (styles.popover) {
+    cssVariables.push(`--popover: ${hexToHsl(styles.popover) || styles.popover};`);
+  }
+  if (styles.popoverForeground) {
+    cssVariables.push(`--popover-foreground: ${hexToHsl(styles.popoverForeground) || styles.popoverForeground};`);
+  }
+  if (styles.sidebar) {
+    cssVariables.push(`--sidebar: ${hexToHsl(styles.sidebar) || styles.sidebar};`);
+  }
+  if (styles.sidebarForeground) {
+    cssVariables.push(`--sidebar-foreground: ${hexToHsl(styles.sidebarForeground) || styles.sidebarForeground};`);
+  }
+  if (styles.sidebarPrimary) {
+    cssVariables.push(`--sidebar-primary: ${hexToHsl(styles.sidebarPrimary) || styles.sidebarPrimary};`);
+  }
+  if (styles.sidebarPrimaryForeground) {
+    cssVariables.push(`--sidebar-primary-foreground: ${hexToHsl(styles.sidebarPrimaryForeground) || styles.sidebarPrimaryForeground};`);
+  }
+  if (styles.sidebarAccent) {
+    cssVariables.push(`--sidebar-accent: ${hexToHsl(styles.sidebarAccent) || styles.sidebarAccent};`);
+  }
+  if (styles.sidebarAccentForeground) {
+    cssVariables.push(`--sidebar-accent-foreground: ${hexToHsl(styles.sidebarAccentForeground) || styles.sidebarAccentForeground};`);
+  }
+  if (styles.sidebarBorder) {
+    cssVariables.push(`--sidebar-border: ${hexToHsl(styles.sidebarBorder) || styles.sidebarBorder};`);
+  }
+  if (styles.sidebarRing) {
+    cssVariables.push(`--sidebar-ring: ${hexToHsl(styles.sidebarRing) || styles.sidebarRing};`);
+  }
+  if (styles.radius) {
+    cssVariables.push(`--radius: ${styles.radius};`);
+  }
+  if (styles.spacing) {
+    cssVariables.push(`--spacing: ${styles.spacing};`);
+  }
+  if (styles.letterSpacing) {
+    cssVariables.push(`--letter-spacing: ${styles.letterSpacing};`);
   }
 
   // Typography variables

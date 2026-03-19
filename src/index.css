@@ -1,112 +1,46 @@
 @config "../tailwind.config.js";
 @import "tailwindcss";
+/* Canonical design tokens (see docs/DESIGN_SYSTEM_GUIDELINE.md) */
+@import "./themes/tokens.css";
 
 @layer base {
   :root {
-    --background: 0 0% 96%;
-    --foreground: 210 100% 12%;
-
-    --card: 0 0% 100%;
-    --card-foreground: 210 100% 12%;
-
-    --popover: 0 0% 100%;
-    --popover-foreground: 210 100% 12%;
-
-    --primary: 270 70% 60%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 210 50% 90%;
-    --secondary-foreground: 210 100% 12%;
-
-    --muted: 210 50% 90%;
-    --muted-foreground: 210 50% 40%;
-
-    --accent: 210 50% 90%;
-    --accent-foreground: 210 100% 12%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 210 50% 85%;
-    --input: 210 50% 85%;
-    --ring: 270 70% 60%;
-
-    /* Additional brand colors */
+    /* Legacy brand variables (themes and components may still reference these) */
     --brand-teal: 174 80% 45%;
     --brand-blue: 210 100% 50%;
     --brand-gold: 36 100% 65%;
     --brand-purple: 270 70% 60%;
     --coral: 5 88% 62%;
-
-    /* Global theme variables (customizable) */
     --brand-primary: #9b87f5;
     --brand-secondary: #7E69AB;
     --brand-accent: #F94E40;
     --brand-background: #FFFFFF;
     --brand-text: #333333;
 
-    /* Cross-theme semantic variables (used by Flowbite + theme components) */
+    /* Cross-theme semantic aliases (Flowbite + theme components) */
     --bg-primary: var(--brand-background);
     --bg-secondary: #f8fafc;
-
     --text-primary: var(--brand-text);
     --text-secondary: color-mix(in srgb, var(--brand-text) 85%, transparent);
     --text-muted: color-mix(in srgb, var(--brand-text) 60%, transparent);
-
     --border-color: color-mix(in srgb, var(--brand-text) 12%, transparent);
     --border-color-strong: color-mix(in srgb, var(--brand-text) 18%, transparent);
-
     --tint-secondary: color-mix(in srgb, var(--brand-secondary) 12%, white);
     --tint-accent: color-mix(in srgb, var(--brand-accent) 12%, white);
 
     --shadow-1: 0 1px 2px 0 rgb(2 6 23 / 0.06);
     --shadow-2: 0 10px 40px -18px rgb(2 6 23 / 0.22);
     --shadow-3: 0 24px 80px -24px rgb(2 6 23 / 0.28);
-
-    /* Enhanced color variables for advanced styling */
     --gradient-start: #9b87f5;
     --gradient-end: #7E69AB;
     --label-color: #666666;
     --footer-dark-text: #FFFFFF;
 
-    /* Global typography variables */
-    --font-heading: "Inter", sans-serif;
-    --font-body: "Inter", sans-serif;
+    --font-heading: "Inter", var(--font-sans);
+    --font-body: "Inter", var(--font-sans);
     --font-base-size: 16px;
     --font-heading-weight: 700;
     --font-body-weight: 400;
-
-    --radius: 0.65rem;
-  }
-
-  .dark {
-    --background: 210 100% 12%;
-    --foreground: 0 0% 98%;
-
-    --card: 210 100% 10%;
-    --card-foreground: 0 0% 98%;
-
-    --popover: 210 100% 10%;
-    --popover-foreground: 0 0% 98%;
-
-    --primary: 270 70% 60%;
-    --primary-foreground: 0 0% 98%;
-
-    --secondary: 210 100% 18%;
-    --secondary-foreground: 0 0% 98%;
-
-    --muted: 210 50% 25%;
-    --muted-foreground: 0 0% 83%;
-
-    --accent: 210 50% 25%;
-    --accent-foreground: 0 0% 98%;
-
-    --destructive: 0 84.2% 60.2%;
-    --destructive-foreground: 0 0% 98%;
-
-    --border: 210 50% 18%;
-    --input: 210 50% 18%;
-    --ring: 270 70% 60%;
   }
 }
 

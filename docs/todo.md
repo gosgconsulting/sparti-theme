@@ -14,7 +14,7 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ## Next
 
-- [ ] **Align remaining themes with design system token set** — Master, sissonne, landingpage updated. Other themes (str, gosgconsulting, nail-queen, etc.) can adopt canonical tokens in `theme.css` gradually; new themes must follow from day one.
+- [x] **Align remaining themes with design system token set** — Master, sissonne, landingpage, hotel2 already aligned. str, gosgconsulting, nail-queen updated with full canonical tokens (sidebar, chart, spacing, typography, shadow) in `theme.css`. Remaining themes (e-shop, moondk, hotel, etc.) can adopt the same pattern; new themes must follow from day one.
 - [x] **Execute refactor plan (Phases 4–5)** — Done: shared NotFound (gosgconsulting, sissonne, e-shop, moondk use it; nail-queen keeps custom); Sissonne UI documented as theme overrides; Astro and @astrojs/@astrolib deps removed. See `docs/REFACTOR_PLAN.md`.
 
 ---
@@ -46,9 +46,7 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ### Logic
 
-- Duplicate logic found in:
-  - `useThemeBasePath` in multiple themes (moondk, e-shop) — consider moving to `src/hooks/`.
-  - `useCustomCode` in str and nail-queen — could be shared in `src/hooks/` or a shared theme util.
+- Resolved: `useThemeBasePath` and `useCustomCode` now live in `src/hooks/` and are used by themes (e-shop, moondk, str, nail-queen, etc.). No remaining theme-level duplicates for these.
 
 ### Components
 
@@ -57,16 +55,17 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ### Design tokens
 
-- `src/themes/tokens.css` is the shared canonical default; Tailwind uses `--sidebar` (not `--sidebar-background`). Themes that still use `--sidebar-background` should set `--sidebar: var(--sidebar-background)`. Remaining themes can adopt the full canonical set in `theme.css` over time.
+- `src/themes/tokens.css` is the shared canonical default; Tailwind uses `--sidebar` (not `--sidebar-background`). Master, sissonne, landingpage, hotel2, str, gosgconsulting, nail-queen now define the full canonical set in `theme.css`. Other themes (e-shop, moondk, hotel, etc.) can adopt the same pattern from `docs/DESIGN_SYSTEM_GUIDELINE.md`.
 
 ---
 
 ## Refactor Opportunities
 
-- **Shared theme hooks:** Move `useThemeBasePath`, `useCustomCode` (and similar) to `src/hooks/` or `src/themes/shared/` to avoid per-theme duplication.
+- **Shared theme hooks:** Done — `useThemeBasePath`, `useCustomCode` (and shared `ThemeLink`, `schemaHelpers`, `themeSettings`) live in `src/hooks/`, `src/components/`, `src/utils/`.
 - **Theme asset helper:** Centralize `asset(path)` / `getThemeAssetUrl` usage so themes don’t reimplement the same wrapper.
-- **Package name:** Rename `package.json` name from `vite_react_shadcn_ts` to `sparti-theme` for clarity.
+- **Package name:** Done — `package.json` name is `sparti-theme`.
 - **Docs index:** Add `docs/README.md` that links to root README, theme README, master README, this todo, and `docs/REFACTOR_PLAN.md`.
+- **Tests / E2E:** `test:unit` runs Vitest (src and server tests); add more coverage for shared utils. No in-repo E2E; document manual theme preview and deploy verification.
 
 ---
 

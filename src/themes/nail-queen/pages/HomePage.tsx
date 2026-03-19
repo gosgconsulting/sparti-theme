@@ -1,5 +1,6 @@
 import { useEffect } from "react";
 import { getThemeAssetUrl } from "../../../utils/themeAssets";
+import { debugLog } from "@/utils/debugLogger";
 import { Layout } from "../components/Layout";
 
 const THEME_SLUG = "nail-queen";
@@ -17,7 +18,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
   useEffect(() => {
     // Check if Trustindex script is already loaded to prevent duplicates
     if (document.querySelector('script[src*="trustindex.io"]')) {
-      console.log("[testing] Trustindex script already exists, skipping");
+      debugLog("[testing] Trustindex script already exists, skipping");
       return;
     }
 
@@ -28,7 +29,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
     existingWidgets.forEach((widget) => {
       if ((widget as HTMLElement).id !== "trustindex-container") {
         widget.remove();
-        console.log("[testing] Removed existing Trustindex widget");
+        debugLog("[testing] Removed existing Trustindex widget");
       }
     });
 
@@ -42,14 +43,14 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
     const container = document.getElementById("trustindex-container");
     if (container && container.parentNode) {
       container.parentNode.insertBefore(script, container.nextSibling);
-      console.log("[testing] Trustindex script added to DOM");
+      debugLog("[testing] Trustindex script added to DOM");
     }
 
     // Cleanup
     return () => {
       if (script.parentNode) {
         script.parentNode.removeChild(script);
-        console.log("[testing] Trustindex script removed from DOM");
+        debugLog("[testing] Trustindex script removed from DOM");
       }
     };
   }, []);
@@ -93,7 +94,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
           
           if (hasTabs || hasSummary || hasRating) {
             firstChild.style.display = "none";
-            console.log("[testing] Hidden summary section");
+            debugLog("[testing] Hidden summary section");
           }
         }
       }

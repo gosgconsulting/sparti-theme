@@ -15,6 +15,7 @@ import { ThankYouPage } from './components/ThankYouPage';
 import BlogListPage from './pages/blog/BlogListPage';
 import BlogPostPage from './pages/blog/BlogPostPage';
 import { useThemeSettings, useThemeBranding } from '../../hooks/useThemeSettings';
+import { debugLog, debugWarn } from '@/utils/debugLogger';
 import { getSiteName, getLogoSrc, getFaviconSrc, applyFavicon } from './utils/settings';
 
 interface TenantLandingProps {
@@ -54,7 +55,7 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
   
   // Log tenant ID for debugging
   if (effectiveTenantId) {
-    console.log('[testing] Theme using tenant ID:', effectiveTenantId);
+    debugLog('[testing] Theme using tenant ID:', effectiveTenantId);
   }
   
   // Fetch branding settings from database
@@ -140,7 +141,7 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
   
   // Log any errors but continue with fallback values
   if (brandingError) {
-    console.warn('[testing] Error loading branding settings, using defaults:', brandingError);
+    debugWarn('[testing] Error loading branding settings, using defaults:', brandingError);
   }
   
   const asset = (p: string) => getThemeAssetUrl(ctxBasePath ?? undefined, p, tenantSlug);
@@ -201,7 +202,7 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
 
   // Render blog pages
   if (isBlogPage) {
-    console.log('[testing] Blog page detected:', { pageSlug, resolvedPageSlug, slugParts, topLevelSlug, pathname: location.pathname });
+    debugLog('[testing] Blog page detected:', { pageSlug, resolvedPageSlug, slugParts, topLevelSlug, pathname: location.pathname });
     
     // Determine if it's a blog post or blog list page
     // Check pathname directly for more reliable detection

@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { debugLog } from '@/utils/debugLogger';
 
 interface GoogleAnalyticsProps {
   gaId?: string | null;
@@ -14,7 +15,7 @@ export const GoogleAnalytics: React.FC<GoogleAnalyticsProps> = ({ gaId }) => {
 
     // Check if GA is already loaded
     if (document.querySelector('script[src*="googletagmanager.com/gtag"]')) {
-      console.log('[testing] Google Analytics already loaded, skipping');
+      debugLog('[testing] Google Analytics already loaded, skipping');
       return;
     }
 
@@ -39,7 +40,7 @@ export const GoogleAnalytics: React.FC<GoogleAnalyticsProps> = ({ gaId }) => {
     `;
     document.head.appendChild(script2);
 
-    console.log('[testing] Google Analytics injected:', gaId.trim());
+    debugLog('[testing] Google Analytics injected:', gaId.trim());
 
     return () => {
       // Cleanup on unmount (optional, usually not needed for GA)

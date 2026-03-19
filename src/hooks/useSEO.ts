@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getApiUrl } from '../utils/api';
+import { debugLog, debugError } from '@/utils/debugLogger';
 
 interface SEOSettings {
   site_name?: string;
@@ -60,7 +61,7 @@ export const useSEO = (options: SEOOptions = {}) => {
     const fetchSEOSettings = async () => {
       try {
         const seoUrl = getApiUrl('/api/seo');
-        console.log('[testing] SEO URL:', seoUrl);
+        debugLog('[testing] SEO URL:', seoUrl);
         const response = await fetch(getApiUrl('/api/seo'));
 
         if (!response.ok) {
@@ -69,9 +70,9 @@ export const useSEO = (options: SEOOptions = {}) => {
 
         const settings = await response.json();
         setSeoSettings(settings);
-        console.log('[testing] SEO settings loaded:', settings);
+        debugLog('[testing] SEO settings loaded:', settings);
       } catch (err) {
-        console.error('[testing] Error loading SEO settings:', err);
+        debugError('[testing] Error loading SEO settings:', err);
         setError(err instanceof Error ? err.message : 'Failed to load SEO settings');
 
         // Fallback to default settings
@@ -157,7 +158,7 @@ export const useSEO = (options: SEOOptions = {}) => {
     }
 
 
-    console.log('[testing] SEO meta tags updated:', {
+    debugLog('[testing] SEO meta tags updated:', {
       title,
       description,
       keywords,
@@ -174,7 +175,7 @@ export const useSEO = (options: SEOOptions = {}) => {
     updateSEO: (newOptions: SEOOptions) => {
       // This would trigger a re-render with new options
       // For now, we'll just log it
-      console.log('[testing] SEO update requested:', newOptions);
+      debugLog('[testing] SEO update requested:', newOptions);
     }
   };
 };

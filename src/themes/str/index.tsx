@@ -20,6 +20,7 @@ import { STRTestimonialsSection } from './components/STRTestimonialsSection';
 import { STR_ASSETS, getPersonalTrainingGalleryImages, getGroupClassGalleryImages, getPhysiotherapyGalleryImages } from './config/assets';
 import { fetchSTRReviews, type STRTestimonial, type STRPlaceInfo } from './services/googleReviews';
 import { useThemeBranding } from '../../hooks/useThemeSettings';
+import { debugLog, debugError } from '@/utils/debugLogger';
 import { getSiteName, getSiteDescription, getLogoSrc, getFaviconSrc, applyFavicon } from './utils/settings';
 import { SEOHead } from './components/SEOHead';
 import { GTM } from './components/GTM';
@@ -199,10 +200,10 @@ const STRTheme: React.FC<TenantLandingProps> = ({
   // Log branding loading state for debugging
   useEffect(() => {
     if (brandingError) {
-      console.error('[testing] Error loading branding settings:', brandingError);
+      debugError('[testing] Error loading branding settings:', brandingError);
     }
     if (branding) {
-      console.log('[testing] Branding settings loaded:', branding);
+      debugLog('[testing] Branding settings loaded:', branding);
     }
   }, [branding, brandingError]);
 
@@ -304,7 +305,7 @@ const STRTheme: React.FC<TenantLandingProps> = ({
           ]);
         }
       } catch (error) {
-        console.error('[testing] Failed to load Google reviews:', error);
+        debugError('[testing] Failed to load Google reviews:', error);
       } finally {
         setTestimonialsLoading(false);
       }

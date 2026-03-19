@@ -1,5 +1,6 @@
 import type { Config } from "tailwindcss";
 import flowbitePlugin from "flowbite/plugin";
+import tailwindcssAnimate from "tailwindcss-animate";
 
 const config: Config = {
   content: [
@@ -156,7 +157,7 @@ const config: Config = {
     }
   },
   plugins: [
-    require("tailwindcss-animate"),
+    tailwindcssAnimate,
     flowbitePlugin
   ],
 };

@@ -11,6 +11,7 @@ import ContactModal from './components/ContactModal';
 import SocialProofNotification from './components/SocialProofNotification';
 import { PopupProvider, usePopup } from './contexts/PopupContext';
 import { useThemeBranding, useThemeStyles } from '../../hooks/useThemeSettings';
+import { debugLog, debugError } from '@/utils/debugLogger';
 import { applyThemeStyles } from '../../utils/applyThemeStyles';
 import { getSiteName, getSiteTagline, getSiteDescription, getLogoSrc, getFaviconSrc, applyFavicon } from './utils/settings';
 import Shop from './pages/Shop';
@@ -71,9 +72,9 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
   useEffect(() => {
     if (styles) {
       applyThemeStyles(styles);
-      console.log('[testing] Applied theme styles from database');
+      debugLog('[testing] Applied theme styles from database');
     } else if (stylesError) {
-      console.error('[testing] Error loading theme styles:', stylesError);
+      debugError('[testing] Error loading theme styles:', stylesError);
     }
     
     // Cleanup on unmount
@@ -119,10 +120,10 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
   // Log branding loading state for debugging
   useEffect(() => {
     if (brandingError) {
-      console.error('[testing] Error loading branding settings:', brandingError);
+      debugError('[testing] Error loading branding settings:', brandingError);
     }
     if (branding) {
-      console.log('[testing] Branding settings loaded:', branding);
+      debugLog('[testing] Branding settings loaded:', branding);
     }
   }, [branding, brandingError]);
 
@@ -1160,9 +1161,9 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
   useEffect(() => {
     if (styles) {
       applyThemeStyles(styles);
-      console.log('[testing] Applied theme styles from database');
+      debugLog('[testing] Applied theme styles from database');
     } else if (stylesError) {
-      console.error('[testing] Error loading theme styles:', stylesError);
+      debugError('[testing] Error loading theme styles:', stylesError);
     }
     
     // Cleanup on unmount
@@ -1206,10 +1207,10 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
   // Log branding loading state for debugging
   useEffect(() => {
     if (brandingError) {
-      console.error('[testing] Error loading branding settings:', brandingError);
+      debugError('[testing] Error loading branding settings:', brandingError);
     }
     if (branding) {
-      console.log('[testing] Branding settings loaded:', branding);
+      debugLog('[testing] Branding settings loaded:', branding);
     }
   }, [branding, brandingError]);
 

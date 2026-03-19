@@ -4,6 +4,8 @@
  * @param link - The link value from the button schema (e.g., "popup:contact", "https://example.com", "/about")
  * @param onPopupOpen - Callback function to open a popup by name
  */
+import { debugWarn } from '@/utils/debugLogger';
+
 export const handleButtonLink = (
   link: string | undefined,
   onPopupOpen?: (popupName: string) => void
@@ -16,7 +18,7 @@ export const handleButtonLink = (
     if (onPopupOpen) {
       onPopupOpen(popupName);
     } else {
-      console.warn('[testing] Popup handler not provided for:', popupName);
+      debugWarn('[testing] Popup handler not provided for:', popupName);
     }
     return;
   }

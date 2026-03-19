@@ -3,10 +3,12 @@
  * Provides Google Maps, Reviews, and Translator services
  */
 
+import { debugWarn } from '@/utils/debugLogger';
+
 // Extend Window interface to include Google APIs
 declare global {
   interface Window {
-    google?: any;
+    google?: unknown;
   }
 }
 
@@ -51,7 +53,7 @@ export class GoogleAPIClient {
   constructor(apiKey?: string) {
     this.apiKey = apiKey || import.meta.env.VITE_GOOGLE_API_KEY || '';
     if (!this.apiKey) {
-      console.warn('[testing] Google API key not found. Set VITE_GOOGLE_API_KEY environment variable.');
+      debugWarn('[testing] Google API key not found. Set VITE_GOOGLE_API_KEY environment variable.');
     }
   }
 

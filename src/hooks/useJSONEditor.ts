@@ -6,6 +6,7 @@ import 'prismjs/themes/prism.css';
 import { ComponentSchema } from '../types/schema';
 import { JSON_EDITOR_CONFIG } from '../utils/componentHelpers';
 import { validateJSON } from '../utils/validation';
+import { debugError } from '@/utils/debugLogger';
 
 interface UseJSONEditorOptions {
   components: ComponentSchema[];
@@ -86,7 +87,7 @@ export const useJSONEditor = ({ components, onComponentsChange }: UseJSONEditorO
         element.focus();
       }, JSON_EDITOR_CONFIG.FOCUS_DELAY);
     } catch (error) {
-      console.error('[testing] Error initializing CodeJar:', error);
+      debugError('[testing] Error initializing CodeJar:', error);
     }
   }, [components, onComponentsChange]);
 

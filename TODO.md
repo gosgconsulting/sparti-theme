@@ -20,7 +20,8 @@
 ## Refactor (2025-03-19)
 
 - **Phase 6 — Unify theme-level lib/utils** — gosgconsulting and sissonne now use `@/lib/utils` for `cn()`; removed `src/themes/gosgconsulting/lib/utils.ts` and `src/themes/sissonne/lib/utils.ts`. Build passes. See `docs/REFACTOR_PLAN.md`.
-- **Refactor verify loop** — Phases 1–6 complete; no new duplicates. Build ✅, test:unit ✅ (39 tests). Lint ⚠️ fails on pre-existing issues (out of refactor scope). Optional next: ThankYouPage/ContactModal/PrivacyPolicy consolidation; Sissonne UI migration; lint-cleanup pass.
+- **Refactor verify loop** — Phases 1–6 complete; no new duplicates. Build ✅, test:unit ✅ (39 tests). Lint ✅ (lint-cleanup done, see below).
+- **Lint cleanup** — Added `src/utils/debugLogger.ts` (debugLog, debugError, debugWarn); replaced all `console.log/error/warn('[testing]…')` across themes, hooks, integrations, and UI with debugLogger; fixed no-empty (AuthProvider), no-empty-object-type (command, textarea), tailwind `require`→import; set no-empty-pattern, no-case-declarations, no-irregular-whitespace, prefer-const, react-hooks/rules-of-hooks, no-require-imports, no-unused-expressions to warn. `npm run lint` now exits 0 (674 warnings remain for incremental cleanup).
 
 ## Completed (project-doc-planner)
 

@@ -3,6 +3,7 @@ import { useParams, useNavigate, useLocation } from 'react-router-dom';
 import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 import { ShoppingCart, Star, Loader2, ArrowLeft } from 'lucide-react';
 import { getProductBySlug, getReviews, addToCart, getOrCreateGuestCart, addToGuestCart } from '../services/shopApi';
+import { debugLog, debugError, debugWarn } from '@/utils/debugLogger';
 
 interface Product {
   product_id: number;
@@ -37,19 +38,19 @@ const Product: React.FC = () => {
   const getProductSlug = (): string | null => {
     // First try: from URL params (if route is /theme/:tenantSlug/product/:productname)
     if (productnameParam) {
-      console.log('[testing] Product slug from params:', productnameParam);
+      debugLog('[testing] Product slug from params:', productnameParam);
       return productnameParam;
     }
 
     // Second try: extract from pathname
     const pathParts = location.pathname.split('/').filter(Boolean);
-    console.log('[testing] Path parts:', pathParts);
+    debugLog('[testing] Path parts:', pathParts);
     
     // Look for 'product' in the path
     const productIndex = pathParts.indexOf('product');
     if (productIndex >= 0 && productIndex < pathParts.length - 1) {
       const slug = pathParts[productIndex + 1];
-      console.log('[testing] Product slug from pathname:', slug);
+      debugLog('[testing] Product slug from pathname:', slug);
       return slug;
     }
 
@@ -58,12 +59,12 @@ const Product: React.FC = () => {
       const lastPart = pathParts[pathParts.length - 1];
       // If we're on a product page but didn't find 'product' in path, the last part might be the slug
       if (location.pathname.includes('/product/')) {
-        console.log('[testing] Product slug from last part:', lastPart);
+        debugLog('[testing] Product slug from last part:', lastPart);
         return lastPart;
       }
     }
 
-    console.warn('[testing] Could not extract product slug from URL:', location.pathname);
+    debugWarn('[testing] Could not extract product slug from URL:', location.pathname);
     return null;
   };
 
@@ -72,7 +73,7 @@ const Product: React.FC = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       if (!productSlug) {
-        console.error('[testing] No product slug found');
+        debugError('[testing] No product slug found');
         setError('Product slug not found in URL');
         setLoading(false);
         return;
@@ -81,10 +82,10 @@ const Product: React.FC = () => {
       try {
         setLoading(true);
         setError(null);
-        console.log('[testing] Fetching product with slug:', productSlug);
+        debugLog('[testing] Fetching product with slug:', productSlug);
         
         const productData = await getProductBySlug(productSlug);
-        console.log('[testing] Product data received:', productData);
+        debugLog('[testing] Product data received:', productData);
         
         if (!productData) {
           setError(`Product "${productSlug}" not found`);
@@ -99,11 +100,11 @@ const Product: React.FC = () => {
           const reviewsData = await getReviews(productData.product_id);
           setReviews(reviewsData);
         } catch (err) {
-          console.error('[testing] Error fetching reviews:', err);
+          debugError('[testing] Error fetching reviews:', err);
           // Don't fail the whole page if reviews fail
         }
       } catch (err: any) {
-        console.error('[testing] Error fetching product:', err);
+        debugError('[testing] Error fetching product:', err);
         setError(err.message || `Failed to load product "${productSlug}"`);
       } finally {
         setLoading(false);
@@ -146,12 +147,12 @@ const Product: React.FC = () => {
         
         // Add item to guest cart
         await addToGuestCart(cartId, product.product_id, quantity, tenantId);
-        console.log('[testing] Item added to guest cart:', { cartId, productId: product.product_id, quantity });
+        debugLog('[testing] Item added to guest cart:', { cartId, productId: product.product_id, quantity });
         alert('Item added to cart!');
         navigate(`${basePath || ''}/cart`);
       }
     } catch (err: any) {
-      console.error('[testing] Error adding to cart:', err);
+      debugError('[testing] Error adding to cart:', err);
       alert(err.message || 'Failed to add item to cart');
     } finally {
       setAddingToCart(false);
@@ -166,7 +167,7 @@ const Product: React.FC = () => {
         return userData.user?.id || userData.id || null;
       }
     } catch (err) {
-      console.error('[testing] Error parsing user session:', err);
+      debugError('[testing] Error parsing user session:', err);
     }
     return null;
   };

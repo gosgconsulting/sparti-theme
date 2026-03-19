@@ -1,6 +1,7 @@
 import { useCallback } from 'react';
 import { ComponentSchema } from '../types/schema';
 import { isValidComponentsArray } from '../utils/componentHelpers';
+import { debugError } from '@/utils/debugLogger';
 
 interface UseComponentOperationsOptions {
   components: ComponentSchema[];
@@ -17,7 +18,7 @@ export const useComponentOperations = ({
 }: UseComponentOperationsOptions) => {
   const removeComponent = useCallback((index: number) => {
     if (!isValidComponentsArray(components)) {
-      console.error('[testing] Cannot remove component: components is not an array');
+      debugError('[testing] Cannot remove component: components is not an array');
       return;
     }
     const newComponents = components.filter((_, i) => i !== index);
@@ -32,7 +33,7 @@ export const useComponentOperations = ({
 
   const updateComponent = useCallback((index: number, updatedComponent: ComponentSchema) => {
     if (!isValidComponentsArray(components)) {
-      console.error('[testing] Cannot update component: components is not an array');
+      debugError('[testing] Cannot update component: components is not an array');
       return;
     }
     const newComponents = [...components];

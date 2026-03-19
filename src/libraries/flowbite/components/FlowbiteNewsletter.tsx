@@ -3,6 +3,7 @@
 import React, { useState } from "react";
 import type { ComponentSchema } from "@/types/schema";
 import FlowbiteSection from "./FlowbiteSection";
+import { debugLog } from "@/utils/debugLogger";
 import { Button, TextInput } from "flowbite-react";
 
 interface FlowbiteNewsletterProps {
@@ -63,7 +64,7 @@ const FlowbiteNewsletter: React.FC<FlowbiteNewsletterProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implement newsletter subscription API call
-    console.log('[testing] Newsletter subscription:', email);
+    debugLog('[testing] Newsletter subscription:', email);
     setEmail("");
   };
 

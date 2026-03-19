@@ -3,6 +3,8 @@
  * Centralized exports for all API integrations
  */
 
+import { debugLog } from '@/utils/debugLogger';
+
 // Google API Integration (Maps, Reviews, Translator)
 export {
   GoogleAPIClient,
@@ -22,6 +24,6 @@ export const checkIntegrationStatus = () => {
     google: !!import.meta.env.VITE_GOOGLE_API_KEY,
   };
 
-  console.log('[testing] Integration Status:', status);
+  debugLog('[testing] Integration Status:', status);
   return status;
 };

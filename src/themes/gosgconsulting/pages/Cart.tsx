@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 import { ShoppingCart, Trash2, Plus, Minus, Loader2, ArrowRight } from 'lucide-react';
 import { getCart, getCartById, getOrCreateGuestCart, updateCartItem, updateGuestCartItem, removeFromCart, removeFromGuestCart, associateCartWithUser } from '../services/shopApi';
+import { debugLog, debugError, debugWarn } from '@/utils/debugLogger';
 
 interface CartItem {
   id: number;
@@ -51,7 +52,7 @@ const Cart: React.FC = () => {
         return parseInt(cartId);
       }
     } catch (err) {
-      console.error('[testing] Error parsing guest cart ID:', err);
+      debugError('[testing] Error parsing guest cart ID:', err);
     }
     return null;
   };
@@ -68,11 +69,11 @@ const Cart: React.FC = () => {
           try {
             // Associate guest cart with user
             await associateCartWithUser(guestCartId, tenantId);
-            console.log('[testing] Associated guest cart with user:', guestCartId);
+            debugLog('[testing] Associated guest cart with user:', guestCartId);
             // Clear guest cart ID from localStorage
             localStorage.removeItem('sparti-guest-cart-id');
           } catch (err: any) {
-            console.warn('[testing] Failed to associate guest cart (may already be associated):', err);
+            debugWarn('[testing] Failed to associate guest cart (may already be associated):', err);
             // Clear guest cart ID anyway
             localStorage.removeItem('sparti-guest-cart-id');
           }
@@ -85,7 +86,7 @@ const Cart: React.FC = () => {
           const data = await getCart(userId, tenantId);
           setCart(data);
         } catch (err: any) {
-          console.error('[testing] Error fetching cart:', err);
+          debugError('[testing] Error fetching cart:', err);
           setError(err.message || 'Failed to load cart');
         } finally {
           setLoading(false);
@@ -110,14 +111,14 @@ const Cart: React.FC = () => {
           if (cartId) {
             // Fetch cart by ID
             const cartData = await getCartById(cartId, tenantId);
-            console.log('[testing] Guest cart loaded:', cartData);
+            debugLog('[testing] Guest cart loaded:', cartData);
             setCart(cartData);
           } else {
             // Empty guest cart
             setCart({ id: 0, user_id: 0, items: [] });
           }
         } catch (err: any) {
-          console.error('[testing] Error loading guest cart:', err);
+          debugError('[testing] Error loading guest cart:', err);
           setError(err.message || 'Failed to load cart');
         } finally {
           setLoading(false);
@@ -156,7 +157,7 @@ const Cart: React.FC = () => {
         }
       }
     } catch (err: any) {
-      console.error('[testing] Error updating cart item:', err);
+      debugError('[testing] Error updating cart item:', err);
       alert(err.message || 'Failed to update cart item');
     } finally {
       setUpdating(null);
@@ -186,7 +187,7 @@ const Cart: React.FC = () => {
         }
       }
     } catch (err: any) {
-      console.error('[testing] Error removing cart item:', err);
+      debugError('[testing] Error removing cart item:', err);
       alert(err.message || 'Failed to remove item');
     } finally {
       setUpdating(null);

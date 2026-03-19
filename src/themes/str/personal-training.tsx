@@ -10,6 +10,7 @@ import HeroSection from './components/HeroSection';
 import { STR_ASSETS, getPersonalTrainingGalleryImages } from './config/assets';
 import { fetchSTRReviews, type STRTestimonial, type STRPlaceInfo, formatReviewDate, getInitials } from './services/googleReviews';
 import { useThemeBranding } from '../../hooks/useThemeSettings';
+import { debugError } from '@/utils/debugLogger';
 import { getSiteName, getSiteDescription, getLogoSrc, getFaviconSrc, applyFavicon } from './utils/settings';
 import { SEOHead } from './components/SEOHead';
 import { GTM } from './components/GTM';
@@ -211,7 +212,7 @@ const PersonalTrainingPage: React.FC<TenantLandingProps> = ({
           ]);
         }
       } catch (error) {
-        console.error('[testing] Failed to load Google reviews:', error);
+        debugError('[testing] Failed to load Google reviews:', error);
         // Keep default testimonials on error
       } finally {
         setTestimonialsLoading(false);

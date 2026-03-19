@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode, useCallback, useRef } from 'react';
 import { Tenant } from '../admin/PostgresIntegration';
 import { STORAGE_KEYS } from '@/utils/constants';
+import { debugError } from '@/utils/debugLogger';
 
 interface User {
   id: string;
@@ -128,7 +129,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         tenantIdToSet = 'tenant-gosg';
         try {
           localStorage.setItem(STORAGE_KEYS.CURRENT_TENANT_ID, tenantIdToSet);
-        } catch {}
+        } catch { /* ignore localStorage in private mode */ }
       }
 
       setCurrentTenantId(tenantIdToSet);
@@ -175,7 +176,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         // Check if response is ok and has content
         if (!response.ok) {
           // Try to parse error response as JSON
-          let errorData: any = {};
+          let errorData: { message?: string; error?: string } = {};
           let rawText = '';
           try {
             rawText = await response.text();
@@ -201,7 +202,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
             }
           }
 
-          console.error('[testing] Login failed:', errorMessage);
+          debugError('[testing] Login failed:', errorMessage);
           return { 
             success: false, 
             error: errorMessage
@@ -217,7 +218,7 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
           }
           data = JSON.parse(text);
         } catch (parseError) {
-          console.error('[testing] Failed to parse login response:', parseError);
+          debugError('[testing] Failed to parse login response:', parseError);
           return { 
             success: false, 
             error: 'Invalid response from server. Please try again.' 
@@ -251,14 +252,14 @@ export const AuthProvider: React.FC<AuthProviderProps> = ({ children }) => {
         } else {
           // Return the specific error message from the server, or fallback to generic message
           const errorMessage = data.message || data.error || 'Invalid credentials';
-          console.error('[testing] Login failed:', errorMessage);
+          debugError('[testing] Login failed:', errorMessage);
           return { 
             success: false, 
             error: errorMessage
           };
         }
       } catch (error) {
-        console.error('[testing] Login error:', error);
+        debugError('[testing] Login error:', error);
         // Check if it's a network error and we have retries left
         if (error instanceof TypeError && error.message.includes('fetch') && attempt < maxRetries) {
           lastError = error;

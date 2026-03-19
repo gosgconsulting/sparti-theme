@@ -4,6 +4,7 @@
  */
 
 import { GoogleAPIClient, type GoogleReview, type GooglePlace } from '@/integrations';
+import { debugLog, debugError, debugWarn } from '@/utils/debugLogger';
 
 // STR Fitness Club Place ID
 const STR_PLACE_ID = 'ChIJv7t_CmsZ2jERP-SsgPB3gds';
@@ -68,7 +69,7 @@ function getInitials(name: string): string {
  */
 export async function fetchSTRReviews(limit: number = 10): Promise<STRReviewsData> {
   try {
-    console.log('[testing] Fetching Google reviews for STR Fitness Club...');
+    debugLog('[testing] Fetching Google reviews for STR Fitness Club...');
     
     // Fetch place details including reviews
     const placeDetails = await strGoogleClient.getPlaceDetails(STR_PLACE_ID);
@@ -81,7 +82,7 @@ export async function fetchSTRReviews(limit: number = 10): Promise<STRReviewsDat
     };
 
     if (!placeDetails.reviews || placeDetails.reviews.length === 0) {
-      console.warn('[testing] No reviews found for STR Fitness Club');
+      debugWarn('[testing] No reviews found for STR Fitness Club');
       return {
         place,
         reviews: [],
@@ -112,7 +113,7 @@ export async function fetchSTRReviews(limit: number = 10): Promise<STRReviewsDat
       reviews: testimonials,
     };
   } catch (error) {
-    console.error('[testing] Error fetching Google reviews:', error);
+    debugError('[testing] Error fetching Google reviews:', error);
     // Return empty data on error to prevent breaking the UI
     return {
       place: {
@@ -142,7 +143,7 @@ export async function getSTRReviews(useCache: boolean = true): Promise<STRReview
   
   // Return cached reviews if available and not expired
   if (useCache && cachedReviewsData && (now - cacheTimestamp) < CACHE_DURATION) {
-    console.log('[testing] Returning cached reviews');
+    debugLog('[testing] Returning cached reviews');
     return cachedReviewsData;
   }
 

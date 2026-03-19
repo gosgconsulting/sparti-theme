@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { Button } from './ui/button';
 import { Input } from './ui/input';
 import { extractPropsFromItems, getTextByKey, getButton, SchemaItem } from '@/utils/schemaHelpers';
+import { debugLog } from '@/utils/debugLogger';
 
 interface NewsletterProps {
   title?: string;
@@ -38,7 +39,7 @@ const Newsletter: React.FC<NewsletterProps> = ({
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
     // TODO: Implement newsletter subscription
-    console.log('[testing] Newsletter subscription:', email);
+    debugLog('[testing] Newsletter subscription:', email);
     setEmail('');
   };
 

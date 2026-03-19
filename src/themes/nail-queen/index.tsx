@@ -17,6 +17,7 @@ import TermsAndConditions from "./pages/TermsAndConditions";
 import NotFoundPage from "./pages/NotFoundPage";
 import { ThankYouPage } from "./components/ThankYouPage";
 import { useThemeBranding } from '../../hooks/useThemeSettings';
+import { debugLog, debugError } from '@/utils/debugLogger';
 import { getSiteName, getSiteDescription, getLogoSrc, getFaviconSrc, applyFavicon } from './utils/settings';
 import { SEOHead } from './components/SEOHead';
 import { GTM } from './components/GTM';
@@ -90,10 +91,10 @@ const NailQueenTheme: React.FC<NailQueenThemeProps> = ({
   // Log branding loading state for debugging
   useEffect(() => {
     if (brandingError) {
-      console.error('[testing] Error loading branding settings:', brandingError);
+      debugError('[testing] Error loading branding settings:', brandingError);
     }
     if (branding) {
-      console.log('[testing] Branding settings loaded:', branding);
+      debugLog('[testing] Branding settings loaded:', branding);
     }
   }, [branding, brandingError]);
 

@@ -3,6 +3,7 @@
  * Provides easy-to-use functions for tracking page views and events
  */
 import { getApiUrl } from '../utils/api';
+import { debugLog, debugWarn } from '@/utils/debugLogger';
 
 // Generate a unique session ID
 const generateSessionId = (): string => {
@@ -97,10 +98,10 @@ export const trackPageView = async (options: {
     });
 
     if (!response.ok) {
-      console.warn('[testing] Failed to track page view:', response.statusText);
+      debugWarn('[testing] Failed to track page view:', response.statusText);
     }
   } catch (error) {
-    console.warn('[testing] Analytics tracking error:', error);
+    debugWarn('[testing] Analytics tracking error:', error);
   }
 };
 
@@ -144,10 +145,10 @@ export const trackEvent = async (
     });
 
     if (!response.ok) {
-      console.warn('[testing] Failed to track event:', response.statusText);
+      debugWarn('[testing] Failed to track event:', response.statusText);
     }
   } catch (error) {
-    console.warn('[testing] Analytics event tracking error:', error);
+    debugWarn('[testing] Analytics event tracking error:', error);
   }
 };
 
@@ -317,7 +318,7 @@ export const initializeAnalytics = () => {
   pageStartTime = Date.now();
   maxScrollPercentage = 0;
 
-  console.log('[testing] Analytics initialized for:', window.location.pathname);
+  debugLog('[testing] Analytics initialized for:', window.location.pathname);
 };
 
 // Auto-initialize if not in admin or test environment

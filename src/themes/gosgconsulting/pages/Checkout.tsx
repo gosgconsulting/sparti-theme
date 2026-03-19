@@ -4,6 +4,7 @@ import { ThemeBasePathContext } from '../../../context/ThemeBasePathContext';
 import { Loader2, CheckCircle, AlertCircle } from 'lucide-react';
 import { getCart, getCartById, getOrCreateGuestCart, createOrder } from '../services/shopApi';
 import { StripeCheckout } from '../../../components/checkout/StripeCheckout';
+import { debugLog, debugError } from '@/utils/debugLogger';
 import { getStripePublishableKey, createOrderWithPayment } from '../services/stripeCheckout';
 
 interface CartItem {
@@ -77,7 +78,7 @@ const Checkout: React.FC = () => {
         return parseInt(cartId);
       }
     } catch (err) {
-      console.error('[testing] Error parsing guest cart ID:', err);
+      debugError('[testing] Error parsing guest cart ID:', err);
     }
     return null;
   };
@@ -143,7 +144,7 @@ const Checkout: React.FC = () => {
 
         setCart(cartData);
       } catch (err: any) {
-        console.error('[testing] Error fetching cart:', err);
+        debugError('[testing] Error fetching cart:', err);
         setError(err.message || 'Failed to load cart');
       } finally {
         setLoading(false);
@@ -269,7 +270,7 @@ const Checkout: React.FC = () => {
       setClientSecret(secret);
       setShowStripeCheckout(true);
     } catch (err: any) {
-      console.error('[testing] Error initializing Stripe:', err);
+      debugError('[testing] Error initializing Stripe:', err);
       setError(err.message || 'Failed to initialize payment form');
       setFormData((prev) => ({ ...prev, payment_method: '' })); // Reset payment method
     } finally {
@@ -567,7 +568,7 @@ const Checkout: React.FC = () => {
                 clientSecret={clientSecret}
                 publishableKey={stripePublishableKey}
                 onSuccess={(paymentIntent) => {
-                  console.log('[testing] Payment succeeded:', paymentIntent);
+                  debugLog('[testing] Payment succeeded:', paymentIntent);
                   navigate(`${basePath || ''}/checkout/success`, {
                     state: { orderId, paymentIntentId: paymentIntent.id }
                   });

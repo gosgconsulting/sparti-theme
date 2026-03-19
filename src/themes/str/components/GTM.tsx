@@ -1,4 +1,5 @@
 import { useEffect } from 'react';
+import { debugLog } from '@/utils/debugLogger';
 
 interface GTMProps {
   gtmId?: string | null;
@@ -14,7 +15,7 @@ export const GTM: React.FC<GTMProps> = ({ gtmId }) => {
 
     // Check if GTM is already loaded
     if (document.querySelector('script[src*="googletagmanager.com/gtm.js"]')) {
-      console.log('[testing] GTM already loaded, skipping');
+      debugLog('[testing] GTM already loaded, skipping');
       return;
     }
 
@@ -38,7 +39,7 @@ j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
     noscript.appendChild(iframe);
     document.body.insertBefore(noscript, document.body.firstChild);
 
-    console.log('[testing] GTM injected:', gtmId.trim());
+    debugLog('[testing] GTM injected:', gtmId.trim());
 
     return () => {
       // Cleanup on unmount (optional, usually not needed for GTM)

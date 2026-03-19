@@ -1,5 +1,6 @@
 import React from 'react';
 import { componentRegistry, ComponentType } from './registry';
+import { debugLog, debugError, debugWarn } from '@/utils/debugLogger';
 
 interface ComponentSchema {
   key: string;
@@ -28,20 +29,20 @@ interface DynamicPageRendererProps {
  */
 export const DynamicPageRenderer: React.FC<DynamicPageRendererProps> = ({ schema, onContactClick, onPopupOpen, tenantSlug }) => {
   if (!schema?.components) {
-    console.warn('[testing] No components found in schema');
+    debugWarn('[testing] No components found in schema');
     return null;
   }
   
   // Handle case where components might not be an array
   if (!Array.isArray(schema.components)) {
-    console.error('[testing] Components is not an array:', typeof schema.components);
+    debugError('[testing] Components is not an array:', typeof schema.components);
     // Try to convert to array if it's a string
     if (typeof schema.components === 'string') {
       try {
         schema.components = JSON.parse(schema.components);
-        console.log('[testing] Successfully parsed components string to array');
+        debugLog('[testing] Successfully parsed components string to array');
       } catch (e) {
-        console.error('[testing] Failed to parse components string:', e);
+        debugError('[testing] Failed to parse components string:', e);
         return (
           <div className="p-4 bg-red-100 text-red-800 rounded">
             Error: Components data is not in the expected format
@@ -57,13 +58,13 @@ export const DynamicPageRenderer: React.FC<DynamicPageRendererProps> = ({ schema
     }
   }
   
-  console.log('[testing] Rendering components:', schema.components.length);
+  debugLog('[testing] Rendering components:', schema.components.length);
   
   return (
     <>
       {schema.components.map((component: ComponentSchema, index: number) => {
         // Debug component
-        console.log(`[testing] Component ${index}:`, component.key, component.type);
+        debugLog(`[testing] Component ${index}:`, component.key, component.type);
         
         // Get the component from the registry based on its type
         const Component = componentRegistry[component.type as ComponentType];

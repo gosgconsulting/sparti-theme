@@ -2,6 +2,7 @@ import { useState, useEffect } from "react";
 import { Layout } from "../components/Layout";
 import { Link } from "react-router-dom";
 import { getApiUrl } from "../../../utils/api";
+import { debugError } from "@/utils/debugLogger";
 
 interface BlogPost {
   id: number;
@@ -115,7 +116,7 @@ function processBlogContent(html: string): string {
     // Return the processed HTML
     return body.innerHTML;
   } catch (error) {
-    console.error('[testing] Error processing blog content:', error);
+    debugError('[testing] Error processing blog content:', error);
     return html; // Return original HTML on error
   }
 }
@@ -186,7 +187,7 @@ export default function BlogPostPage({
         }
       } catch (err: any) {
         if (!cancelled) {
-          console.error("[testing] Error fetching blog post:", err);
+          debugError("[testing] Error fetching blog post:", err);
           const message =
             err.message?.toLowerCase().includes("json") || err instanceof SyntaxError
               ? "Blog is temporarily unavailable. Please try again later."

@@ -4,6 +4,7 @@
  */
 
 import { api } from '../../../utils/api';
+import { debugError, debugLog } from '@/utils/debugLogger';
 
 const TENANT_ID = 'tenant-gosg'; // Default tenant ID for gosgconsulting
 
@@ -19,7 +20,7 @@ export async function getProducts(tenantId: string = TENANT_ID) {
     const result = await response.json();
     return result.data || [];
   } catch (error) {
-    console.error('[testing] Error fetching products:', error);
+    debugError('[testing] Error fetching products:', error);
     throw error;
   }
 }
@@ -29,24 +30,24 @@ export async function getProducts(tenantId: string = TENANT_ID) {
  */
 export async function getProductBySlug(slug: string, tenantId: string = TENANT_ID) {
   try {
-    console.log('[testing] getProductBySlug called with:', { slug, tenantId });
+    debugLog('[testing] getProductBySlug called with:', { slug, tenantId });
     const response = await api.get(`/api/shop/products/slug/${encodeURIComponent(slug)}`, { tenantId });
-    console.log('[testing] API response status:', response.status, response.ok);
+    debugLog('[testing] API response status:', response.status, response.ok);
     
     if (!response.ok) {
       if (response.status === 404) {
-        console.log('[testing] Product not found (404)');
+        debugLog('[testing] Product not found (404)');
         return null;
       }
       const errorData = await response.json().catch(() => ({}));
-      console.error('[testing] API error response:', errorData);
+      debugError('[testing] API error response:', errorData);
       throw new Error(errorData.error || `Failed to fetch product: ${response.status} ${response.statusText}`);
     }
     const result = await response.json();
-    console.log('[testing] Product data received:', result);
+    debugLog('[testing] Product data received:', result);
     return result.data || null;
   } catch (error: any) {
-    console.error('[testing] Error fetching product by slug:', error);
+    debugError('[testing] Error fetching product by slug:', error);
     throw error;
   }
 }
@@ -65,7 +66,7 @@ export async function getOrCreateGuestCart(tenantId: string = TENANT_ID) {
     const result = await response.json();
     return result.data || { id: null, user_id: null, items: [] };
   } catch (error) {
-    console.error('[testing] Error fetching guest cart:', error);
+    debugError('[testing] Error fetching guest cart:', error);
     throw error;
   }
 }
@@ -85,7 +86,7 @@ export async function getCartById(cartId: number, tenantId: string = TENANT_ID) 
     const result = await response.json();
     return result.data || { id: cartId, user_id: null, items: [] };
   } catch (error) {
-    console.error('[testing] Error fetching cart by ID:', error);
+    debugError('[testing] Error fetching cart by ID:', error);
     throw error;
   }
 }
@@ -105,7 +106,7 @@ export async function associateCartWithUser(cartId: number, tenantId: string = T
     const result = await response.json();
     return result.data;
   } catch (error) {
-    console.error('[testing] Error associating cart with user:', error);
+    debugError('[testing] Error associating cart with user:', error);
     throw error;
   }
 }
@@ -123,7 +124,7 @@ export async function getCart(userId: number, tenantId: string = TENANT_ID) {
     const result = await response.json();
     return result.data || { id: null, user_id: userId, items: [] };
   } catch (error) {
-    console.error('[testing] Error fetching cart:', error);
+    debugError('[testing] Error fetching cart:', error);
     throw error;
   }
 }
@@ -155,7 +156,7 @@ export async function addToGuestCart(
     const result = await response.json();
     return result.data;
   } catch (error) {
-    console.error('[testing] Error adding to guest cart:', error);
+    debugError('[testing] Error adding to guest cart:', error);
     throw error;
   }
 }
@@ -183,7 +184,7 @@ export async function addToCart(
     const result = await response.json();
     return result.data;
   } catch (error) {
-    console.error('[testing] Error adding to cart:', error);
+    debugError('[testing] Error adding to cart:', error);
     throw error;
   }
 }
@@ -213,7 +214,7 @@ export async function updateGuestCartItem(
     const result = await response.json();
     return result.data;
   } catch (error) {
-    console.error('[testing] Error updating guest cart item:', error);
+    debugError('[testing] Error updating guest cart item:', error);
     throw error;
   }
 }
@@ -240,7 +241,7 @@ export async function updateCartItem(
     const result = await response.json();
     return result.data;
   } catch (error) {
-    console.error('[testing] Error updating cart item:', error);
+    debugError('[testing] Error updating cart item:', error);
     throw error;
   }
 }
@@ -260,7 +261,7 @@ export async function removeFromGuestCart(cartItemId: number, tenantId: string =
     }
     return true;
   } catch (error) {
-    console.error('[testing] Error removing from guest cart:', error);
+    debugError('[testing] Error removing from guest cart:', error);
     throw error;
   }
 }
@@ -278,7 +279,7 @@ export async function removeFromCart(cartItemId: number, tenantId: string = TENA
     }
     return true;
   } catch (error) {
-    console.error('[testing] Error removing from cart:', error);
+    debugError('[testing] Error removing from cart:', error);
     throw error;
   }
 }
@@ -305,7 +306,7 @@ export async function createOrder(orderData: {
     const result = await response.json();
     return result.data;
   } catch (error) {
-    console.error('[testing] Error creating order:', error);
+    debugError('[testing] Error creating order:', error);
     throw error;
   }
 }
@@ -322,7 +323,7 @@ export async function getReviews(productId: number, tenantId: string = TENANT_ID
     const result = await response.json();
     return result.data || [];
   } catch (error) {
-    console.error('[testing] Error fetching reviews:', error);
+    debugError('[testing] Error fetching reviews:', error);
     throw error;
   }
 }
@@ -339,7 +340,7 @@ export async function getCategories(tenantId: string = TENANT_ID) {
     const result = await response.json();
     return result.data || [];
   } catch (error) {
-    console.error('[testing] Error fetching categories:', error);
+    debugError('[testing] Error fetching categories:', error);
     throw error;
   }
 }
@@ -372,7 +373,7 @@ export async function getProductCategoryRelations(tenantId: string = TENANT_ID):
     }
     return {};
   } catch (error) {
-    console.error('[testing] Error fetching product categories:', error);
+    debugError('[testing] Error fetching product categories:', error);
     // Return empty mapping - filtering will show all products
     return {};
   }

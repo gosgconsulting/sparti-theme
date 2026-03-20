@@ -12,6 +12,12 @@
 
 - (None at this time.)
 
+## Completed (2025-03-20)
+
+- **hotel2 Search results sort control** — `ResultsSort` + `theme.css`: removed pill background/border on sort `<select>`; custom chevron via `.hotel2-results-sortTrigger` / `.hotel2-results-sortChevron`; focus-visible ring for accessibility.
+- **hotel2 Search results Filter** — `SearchResultsPage.tsx`, `results/ResultsFilterPanel.tsx`, `theme.css`: Scrim + panel; **amenities** grid (AND match, More/Less), min rating, collections; no price slider. Dashed section dividers; primary-colored “More” link.
+- **hotel2 Sort dropdown** — Custom listbox in `ResultsSort.tsx`, `results/hotel2Sort.ts`, `theme.css`: seven options (default, price low/high, rating, featured first, date old/new); navy selected row, muted hover/highlight; solid caret; `listedAt` on `Hotel2Hotel` + seed data for date sorts.
+
 ## Design system previews (2025-03-19)
 
 - **STR Testimonials Section** — Extracted inline testimonials from `str/index.tsx` to `themes/str/components/STRTestimonialsSection.tsx`; added `STRTestimonialsSectionPreview.tsx` with mock data; registered in `DesignSystemPreview.tsx`. Systematic process documented in `docs/DESIGN_SYSTEM_PREVIEW_PLAN.md` (§5).

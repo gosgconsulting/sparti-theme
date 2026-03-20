@@ -1,7 +1,7 @@
 import type { Hotel2Hotel } from "../types";
 
 export function getHotel2Hotels(): Hotel2Hotel[] {
-  const seed: Omit<Hotel2Hotel, "id">[] = [
+  const seed: Omit<Hotel2Hotel, "id" | "listedAt">[] = [
     {
       name: "Atelier Arcadia",
       city: "Bangkok",
@@ -128,6 +128,7 @@ export function getHotel2Hotels(): Hotel2Hotel[] {
       name: i < seed.length ? base.name : `${base.name} ${i - seed.length + 2}`,
       pricePerNight: base.pricePerNight + (i % 5) * 15,
       reviews: base.reviews + i * 7,
+      listedAt: new Date(2024, 0, 1 + i).toISOString().slice(0, 10),
     });
   }
   return expanded;

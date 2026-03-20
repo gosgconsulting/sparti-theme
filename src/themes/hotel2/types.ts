@@ -16,5 +16,7 @@ export type Hotel2Hotel = {
   image: string;
   tag?: string;
   collections: CollectionKey[];
+  /** ISO date (YYYY-MM-DD) for listing / sort by date */
+  listedAt: string;
 };
 

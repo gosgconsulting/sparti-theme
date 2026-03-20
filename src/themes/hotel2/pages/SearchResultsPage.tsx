@@ -1,20 +1,22 @@
-import React, { useMemo, useState } from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { Hotel2Destination } from "../booking/countries";
-import type { Hotel2Hotel } from "../types";
+import type { CollectionKey } from "../types";
 import DestinationDropdown from "../booking/DestinationDropdown";
 import OccupancySelector from "../booking/OccupancySelector";
 import { getHotel2Hotels } from "../data/hotels";
-import { buildHotel2SearchHref } from "../utils/searchUrl";
-import HotelsMap from "../results/HotelsMap";
 import HotelResultCard from "../results/HotelResultCard";
+import HotelsMap from "../results/HotelsMap";
+import { sortHotel2Results, type Hotel2SortKey } from "../results/hotel2Sort";
+import ResultsFilterPanel from "../results/ResultsFilterPanel";
 import ResultsSort from "../results/ResultsSort";
+import { buildHotel2SearchHref } from "../utils/searchUrl";
 
 type Props = {
   basePath: string;
 };
 
-type SortKey = "default" | "price_low" | "rating_high" | "reviews_high";
+const FILTER_PANEL_ID = "hotel2-search-filters";
 
 function clampInt(v: string | null, fallback: number, min: number, max: number) {
   const n = Number(v);
@@ -32,14 +34,6 @@ function readSearchParams(search: string) {
   return { destination, checkIn, checkOut, adults, children };
 }
 
-function sortHotels(hotels: Hotel2Hotel[], sort: SortKey) {
-  const copy = [...hotels];
-  if (sort === "price_low") copy.sort((a, b) => a.pricePerNight - b.pricePerNight);
-  else if (sort === "rating_high") copy.sort((a, b) => b.rating - a.rating);
-  else if (sort === "reviews_high") copy.sort((a, b) => b.reviews - a.reviews);
-  return copy;
-}
-
 export default function SearchResultsPage({ basePath }: Props) {
   const location = useLocation();
   const navigate = useNavigate();
@@ -52,16 +46,68 @@ export default function SearchResultsPage({ basePath }: Props) {
   const [checkOut, setCheckOut] = useState(initial.checkOut);
   const [adults, setAdults] = useState(initial.adults);
   const [children, setChildren] = useState(initial.children);
-  const [sort, setSort] = useState<SortKey>("default");
+  const [sort, setSort] = useState<Hotel2SortKey>("default");
 
-  const filtered = useMemo(() => {
+  const [filterOpen, setFilterOpen] = useState(false);
+  const [minRating, setMinRating] = useState(0);
+  const [selectedCollections, setSelectedCollections] = useState<CollectionKey[]>([]);
+  const [selectedAmenities, setSelectedAmenities] = useState<string[]>([]);
+
+  const destinationMatches = useMemo(() => {
     if (destination === "All") return hotels;
     return hotels.filter((h) => h.country === destination);
   }, [hotels, destination]);
 
-  const ordered = useMemo(() => sortHotels(filtered, sort), [filtered, sort]);
+  useEffect(() => {
+    setMinRating(0);
+    setSelectedCollections([]);
+    setSelectedAmenities([]);
+  }, [destination]);
+
+  const collectionOptions = useMemo(() => {
+    const s = new Set<CollectionKey>();
+    destinationMatches.forEach((h) => h.collections.forEach((c) => s.add(c)));
+    return [...s].sort((a, b) => a.localeCompare(b));
+  }, [destinationMatches]);
+
+  const amenityOptions = useMemo(() => {
+    const s = new Set<string>();
+    destinationMatches.forEach((h) => h.amenities.forEach((a) => s.add(a)));
+    return [...s].sort((a, b) => a.localeCompare(b));
+  }, [destinationMatches]);
+
+  const filtered = useMemo(() => {
+    let list = destinationMatches;
+    if (selectedAmenities.length > 0) {
+      list = list.filter((h) => selectedAmenities.every((a) => h.amenities.includes(a)));
+    }
+    if (minRating > 0) list = list.filter((h) => h.rating >= minRating);
+    if (selectedCollections.length > 0) {
+      list = list.filter((h) => selectedCollections.some((c) => h.collections.includes(c)));
+    }
+    return list;
+  }, [destinationMatches, selectedAmenities, minRating, selectedCollections]);
+
+  const ordered = useMemo(() => sortHotel2Results(filtered, sort), [filtered, sort]);
 
   const [activeHotelId, setActiveHotelId] = useState<string | null>(ordered[0]?.id ?? null);
+
+  useEffect(() => {
+    setActiveHotelId((prev) => {
+      if (!ordered.length) return null;
+      if (prev && ordered.some((h) => h.id === prev)) return prev;
+      return ordered[0]!.id;
+    });
+  }, [ordered]);
+
+  useEffect(() => {
+    if (!filterOpen) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") setFilterOpen(false);
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [filterOpen]);
 
   const activeIdx = useMemo(() => {
     if (!activeHotelId) return -1;
@@ -76,6 +122,20 @@ export default function SearchResultsPage({ basePath }: Props) {
       buildHotel2SearchHref(basePath, { destination, checkIn, checkOut, adults, children }),
       { replace: false }
     );
+  };
+
+  const toggleCollection = (c: CollectionKey) => {
+    setSelectedCollections((prev) => (prev.includes(c) ? prev.filter((x) => x !== c) : [...prev, c]));
+  };
+
+  const toggleAmenity = (name: string) => {
+    setSelectedAmenities((prev) => (prev.includes(name) ? prev.filter((x) => x !== name) : [...prev, name]));
+  };
+
+  const clearAllFilters = () => {
+    setMinRating(0);
+    setSelectedCollections([]);
+    setSelectedAmenities([]);
   };
 
   return (
@@ -159,7 +219,14 @@ export default function SearchResultsPage({ basePath }: Props) {
               </div>
 
               <div className="hotel2-results-toolbarActions">
-                <button type="button" className="hotel2-btn-tool" aria-label="Filter">
+                <button
+                  type="button"
+                  className={`hotel2-btn-tool${filterOpen ? " hotel2-btn-tool-active" : ""}`}
+                  aria-label="Filter"
+                  aria-expanded={filterOpen}
+                  aria-controls={FILTER_PANEL_ID}
+                  onClick={() => setFilterOpen((o) => !o)}
+                >
                   Filter
                 </button>
                 <button type="button" className="hotel2-btn-search" onClick={applySearch}>
@@ -167,7 +234,9 @@ export default function SearchResultsPage({ basePath }: Props) {
                 </button>
               </div>
             </div>
+          </div>
 
+          <div className="hotel2-results-content">
             <div className="hotel2-results-utilityStrip">
               <div className="hotel2-results-count font-body">
                 <span className="tabular-nums">{ordered.length}</span>{" "}
@@ -175,27 +244,50 @@ export default function SearchResultsPage({ basePath }: Props) {
               </div>
               <ResultsSort sort={sort} onChange={setSort} />
             </div>
-          </div>
 
-          <div className="hotel2-results-list" role="list">
-            {ordered.map((h) => (
-              <HotelResultCard
-                key={h.id}
-                hotel={h}
-                active={h.id === activeHotelId}
-                onHover={() => setActiveHotelId(h.id)}
-                onFocus={() => setActiveHotelId(h.id)}
-              />
-            ))}
-
-            {!ordered.length && (
-              <div className="hotel2-results-empty">
-                <div className="font-headline text-xl">No results</div>
-                <div className="font-body text-sm text-foreground/80 mt-1">
-                  Try a different destination.
-                </div>
-              </div>
+            {filterOpen && (
+              <>
+                <div
+                  className="hotel2-results-filterScrim"
+                  onClick={() => setFilterOpen(false)}
+                  aria-hidden
+                />
+                <ResultsFilterPanel
+                  id={FILTER_PANEL_ID}
+                  amenityOptions={amenityOptions}
+                  selectedAmenities={selectedAmenities}
+                  onToggleAmenity={toggleAmenity}
+                  minRating={minRating}
+                  onMinRatingChange={setMinRating}
+                  collectionOptions={collectionOptions}
+                  selectedCollections={selectedCollections}
+                  onToggleCollection={toggleCollection}
+                  onClearAll={clearAllFilters}
+                  onClose={() => setFilterOpen(false)}
+                />
+              </>
             )}
+
+            <div className="hotel2-results-list" role="list">
+              {ordered.map((h) => (
+                <HotelResultCard
+                  key={h.id}
+                  hotel={h}
+                  active={h.id === activeHotelId}
+                  onHover={() => setActiveHotelId(h.id)}
+                  onFocus={() => setActiveHotelId(h.id)}
+                />
+              ))}
+
+              {!ordered.length && (
+                <div className="hotel2-results-empty">
+                  <div className="font-headline text-xl">No results</div>
+                  <div className="font-body text-sm text-foreground/80 mt-1">
+                    Try a different destination or adjust filters.
+                  </div>
+                </div>
+              )}
+            </div>
           </div>
         </div>
 
@@ -221,4 +313,3 @@ export default function SearchResultsPage({ basePath }: Props) {
     </div>
   );
 }
-

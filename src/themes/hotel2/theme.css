@@ -46,6 +46,11 @@
   --ring: 17 39% 55%;
 }
 
+/* Fixed Header overlays the top of <main>; avoid an extra opaque white strip over the theme background */
+.theme-hotel2 > main {
+  background-color: transparent;
+}
+
 /* Global button shape: no rounded corners */
 .theme-hotel2 button {
   border-radius: 0 !important;
@@ -120,7 +125,8 @@
   padding-right: 16px;
 }
 
-.theme-hotel2 header {
+/* Only the theme’s top site header (direct child). In-page <header>s (e.g. hotel detail) must stay transparent. */
+.theme-hotel2 > header {
   background-color: hsl(var(--card) / 0.96) !important;
   border-bottom: 1px solid hsl(var(--border));
   -webkit-backdrop-filter: blur(10px);
@@ -774,11 +780,23 @@
   outline: none;
 }
 
-.theme-hotel2 .hotel2-result-card:hover {
+.theme-hotel2 .hotel2-result-card-link {
+  display: block;
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--radius);
+}
+
+.theme-hotel2 .hotel2-result-card-link:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+.theme-hotel2 .hotel2-result-card-link:hover .hotel2-result-card {
   border-color: hsl(var(--foreground) / 0.16);
 }
 
-.theme-hotel2 .hotel2-result-card.is-active {
+.theme-hotel2 .hotel2-result-card-link.is-active .hotel2-result-card {
   border-color: hsl(var(--primary) / 0.6);
   box-shadow: 0 0 0 2px hsl(var(--primary) / 0.2);
 }
@@ -1019,5 +1037,859 @@
   .theme-hotel2 .hotel2-results-shell {
     padding-bottom: 10px;
   }
+}
+
+/* —— Hotel detail & room booking —— */
+.theme-hotel2 .hotel2-detail-page {
+  /* No solid panel behind title/locale — show theme page background through */
+  background: transparent;
+  /* Fixed hotel Header (shared hotel1 nav) overlaps content without layout offset */
+  padding-top: max(
+    clamp(5.25rem, 11vw, 6.75rem),
+    calc(env(safe-area-inset-top, 0px) + 4.5rem)
+  );
+}
+
+.theme-hotel2 .hotel2-detail-shell {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: clamp(8px, 1.5vw, 16px) clamp(16px, 4vw, 28px) 48px;
+}
+
+.theme-hotel2 .hotel2-detail-header {
+  margin-bottom: 28px;
+  background: transparent;
+  border-bottom: none;
+  box-shadow: none;
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+}
+
+.theme-hotel2 .hotel2-detail-headerTop {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-bottom: 20px;
+}
+
+.theme-hotel2 .hotel2-detail-back,
+.theme-hotel2 .hotel2-detail-editSearch {
+  font-size: 14px;
+  text-decoration: none;
+  color: hsl(var(--foreground));
+  font-weight: 500;
+}
+
+.theme-hotel2 .hotel2-detail-editSearch {
+  color: hsl(var(--muted-foreground));
+}
+
+.theme-hotel2 .hotel2-detail-editSearch:hover {
+  color: hsl(var(--primary));
+}
+
+.theme-hotel2 .hotel2-detail-headingBlock {
+  margin-bottom: 24px;
+}
+
+.theme-hotel2 .hotel2-detail-title {
+  font-size: clamp(1.6rem, 2.8vw, 2.125rem);
+  line-height: 1.2;
+  margin: 0;
+  padding-top: 0.06em; /* avoid tight crop on ascenders next to fixed nav */
+  color: hsl(var(--foreground));
+  letter-spacing: -0.03em;
+}
+
+.theme-hotel2 .hotel2-detail-locale {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 14px 0 0;
+  font-size: 15px;
+  line-height: 1.45;
+}
+
+.theme-hotel2 .hotel2-detail-localeIconWrap {
+  flex-shrink: 0;
+  width: 22px;
+  height: 22px;
+  margin-top: 2px;
+  color: hsl(var(--primary));
+  opacity: 0.9;
+}
+
+.theme-hotel2 .hotel2-detail-localeSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.theme-hotel2 .hotel2-detail-localeText {
+  flex: 1;
+  min-width: 0;
+}
+
+.theme-hotel2 .hotel2-detail-stayRow {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 18px 0;
+  margin-top: 0;
+  padding: 20px 18px;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--card));
+  box-shadow:
+    0 1px 2px hsl(0 0% 0% / 0.04),
+    0 10px 28px hsl(0 0% 0% / 0.06);
+}
+
+@media (min-width: 640px) {
+  .theme-hotel2 .hotel2-detail-stayRow {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0;
+    padding: 22px 24px;
+  }
+
+  .theme-hotel2 .hotel2-detail-stayItem:nth-child(n + 2) {
+    border-left: 1px solid hsl(var(--border));
+    padding-left: 22px;
+    margin-left: 0;
+  }
+}
+
+@media (max-width: 639px) {
+  .theme-hotel2 .hotel2-detail-stayItem:nth-child(2n) {
+    border-left: 1px solid hsl(var(--border));
+    padding-left: 18px;
+  }
+}
+
+.theme-hotel2 .hotel2-detail-stayItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  min-width: 0;
+}
+
+.theme-hotel2 .hotel2-detail-stayIconWrap {
+  flex-shrink: 0;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--radius);
+  background: hsl(var(--muted));
+  color: hsl(var(--primary));
+}
+
+.theme-hotel2 .hotel2-detail-staySvg {
+  width: 22px;
+  height: 22px;
+  display: block;
+}
+
+.theme-hotel2 .hotel2-detail-stayBody {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 0;
+  padding-top: 2px;
+}
+
+.theme-hotel2 .hotel2-detail-stayLabel {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  color: hsl(var(--muted-foreground));
+  font-weight: 500;
+}
+
+.theme-hotel2 .hotel2-detail-stayValue {
+  font-size: 15px;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  line-height: 1.3;
+}
+
+.theme-hotel2 .hotel2-detail-gallery {
+  margin-bottom: 28px;
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+}
+
+/* Full width of shell (same as stay summary card). Do not combine aspect-ratio + max-height here —
+   that shrinks the box width below 100% to satisfy height. */
+.theme-hotel2 .hotel2-detail-galleryMain {
+  width: 100%;
+  max-width: 100%;
+  min-width: 0;
+  border-radius: var(--radius);
+  overflow: hidden;
+  border: 1px solid hsl(var(--border));
+  background: hsl(var(--muted));
+  aspect-ratio: 16 / 9;
+}
+
+.theme-hotel2 .hotel2-detail-galleryHero {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.theme-hotel2 .hotel2-detail-galleryThumbs {
+  display: flex;
+  gap: 8px;
+  margin-top: 10px;
+  overflow-x: auto;
+  padding-bottom: 4px;
+}
+
+.theme-hotel2 .hotel2-detail-thumb {
+  flex: 0 0 72px;
+  height: 52px;
+  border-radius: calc(var(--radius) * 0.85);
+  overflow: hidden;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  background: hsl(var(--muted));
+}
+
+.theme-hotel2 .hotel2-detail-thumb img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.theme-hotel2 .hotel2-detail-thumb.is-on {
+  border-color: hsl(var(--primary));
+}
+
+.theme-hotel2 .hotel2-detail-sectionTitle {
+  font-size: 1.25rem;
+  margin: 0 0 14px;
+  color: hsl(var(--foreground));
+}
+
+.theme-hotel2 .hotel2-detail-roomsSection {
+  margin-bottom: 32px;
+}
+
+.theme-hotel2 .hotel2-detail-roomGrid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 12px;
+}
+
+@media (min-width: 768px) {
+  .theme-hotel2 .hotel2-detail-roomGrid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+.theme-hotel2 .hotel2-room-card {
+  display: flex;
+  flex-direction: column;
+  text-align: left;
+  width: 100%;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--card));
+  overflow: hidden;
+  cursor: pointer;
+  transition:
+    border-color 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.theme-hotel2 .hotel2-room-card:hover {
+  border-color: hsl(var(--foreground) / 0.14);
+}
+
+.theme-hotel2 .hotel2-room-card.is-selected {
+  border-color: hsl(var(--primary) / 0.65);
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.18);
+}
+
+.theme-hotel2 .hotel2-room-card-media {
+  position: relative;
+  aspect-ratio: 4 / 3;
+  background: hsl(var(--muted));
+}
+
+.theme-hotel2 .hotel2-room-card-img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.theme-hotel2 .hotel2-room-card-dots {
+  position: absolute;
+  bottom: 8px;
+  left: 0;
+  right: 0;
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+}
+
+.theme-hotel2 .hotel2-room-card-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 999px;
+  border: 0;
+  padding: 0;
+  background: hsl(var(--card) / 0.55);
+  cursor: pointer;
+}
+
+.theme-hotel2 .hotel2-room-card-dot.is-on {
+  background: hsl(var(--card));
+  box-shadow: 0 0 0 1px hsl(var(--foreground) / 0.2);
+}
+
+.theme-hotel2 .hotel2-room-card-badge {
+  position: absolute;
+  left: 10px;
+  top: 10px;
+  font-size: 11px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: hsl(var(--card) / 0.92);
+  border: 1px solid hsl(var(--border));
+}
+
+.theme-hotel2 .hotel2-room-card-urgent {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  font-size: 11px;
+  padding: 5px 9px;
+  border-radius: 999px;
+  background: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
+}
+
+.theme-hotel2 .hotel2-room-card-body {
+  padding: 12px 14px 14px;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.theme-hotel2 .hotel2-room-card-name {
+  font-size: 15px;
+  line-height: 1.3;
+  color: hsl(var(--foreground));
+}
+
+.theme-hotel2 .hotel2-room-card-meta {
+  font-size: 12px;
+}
+
+.theme-hotel2 .hotel2-room-card-price {
+  margin-top: 4px;
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 4px 8px;
+}
+
+.theme-hotel2 .hotel2-room-card-from {
+  font-size: 12px;
+}
+
+.theme-hotel2 .hotel2-room-card-amount {
+  font-size: 17px;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.theme-hotel2 .hotel2-room-card-unit {
+  font-size: 12px;
+}
+
+.theme-hotel2 .hotel2-detail-booking {
+  border-top: 1px solid hsl(var(--border));
+  padding-top: 28px;
+}
+
+.theme-hotel2 .hotel2-detail-bookingPanel {
+  max-width: 720px;
+}
+
+.theme-hotel2 .hotel2-detail-panelSection {
+  margin-bottom: 26px;
+}
+
+.theme-hotel2 .hotel2-detail-panelHeading {
+  font-size: 1.05rem;
+  margin: 0 0 12px;
+  color: hsl(var(--foreground));
+}
+
+.theme-hotel2 .hotel2-detail-prose {
+  font-size: 14px;
+  line-height: 1.55;
+  margin: 0;
+}
+
+.theme-hotel2 .hotel2-detail-textBtn {
+  margin-top: 8px;
+  padding: 0;
+  border: 0;
+  background: none;
+  font-size: 14px;
+  font-weight: 500;
+  color: hsl(var(--primary));
+  cursor: pointer;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+.theme-hotel2 .hotel2-detail-amenities {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(1, minmax(0, 1fr));
+  gap: 8px 16px;
+  font-size: 14px;
+}
+
+@media (min-width: 480px) {
+  .theme-hotel2 .hotel2-detail-amenities {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+.theme-hotel2 .hotel2-detail-amenities li {
+  padding-left: 18px;
+  position: relative;
+}
+
+.theme-hotel2 .hotel2-detail-amenities li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.55em;
+  width: 6px;
+  height: 6px;
+  border-radius: 999px;
+  background: hsl(var(--primary));
+}
+
+.theme-hotel2 .hotel2-rate-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.theme-hotel2 .hotel2-rate-card {
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  background: hsl(var(--card));
+  overflow: hidden;
+}
+
+.theme-hotel2 .hotel2-rate-card.is-selected {
+  border-color: hsl(var(--primary) / 0.6);
+  box-shadow: 0 0 0 2px hsl(var(--primary) / 0.12);
+}
+
+.theme-hotel2 .hotel2-rate-selectRow {
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+  width: 100%;
+  padding: 14px 14px 0;
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+
+.theme-hotel2 .hotel2-rate-radioUi {
+  width: 18px;
+  height: 18px;
+  border-radius: 999px;
+  border: 2px solid hsl(var(--border));
+  flex-shrink: 0;
+  margin-top: 3px;
+  position: relative;
+}
+
+.theme-hotel2 .hotel2-rate-radioUi.is-on {
+  border-color: hsl(var(--primary));
+}
+
+.theme-hotel2 .hotel2-rate-radioUi.is-on::after {
+  content: "";
+  position: absolute;
+  inset: 3px;
+  border-radius: 999px;
+  background: hsl(var(--primary));
+}
+
+.theme-hotel2 .hotel2-rate-card-top {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+@media (min-width: 520px) {
+  .theme-hotel2 .hotel2-rate-card-top {
+    flex-direction: row;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 12px;
+  }
+}
+
+.theme-hotel2 .hotel2-rate-title {
+  font-size: 15px;
+}
+
+.theme-hotel2 .hotel2-rate-price {
+  font-size: 16px;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+}
+
+.theme-hotel2 .hotel2-rate-per {
+  font-weight: 400;
+  font-size: 13px;
+}
+
+.theme-hotel2 .hotel2-rate-card-inner {
+  padding: 0 14px 14px 44px;
+}
+
+.theme-hotel2 .hotel2-rate-summary {
+  font-size: 13px;
+  margin: 10px 0 0;
+}
+
+.theme-hotel2 .hotel2-rate-tax {
+  margin: 6px 0 0;
+}
+
+.theme-hotel2 .hotel2-rate-detail {
+  font-size: 13px;
+  line-height: 1.5;
+  margin: 8px 0 0;
+  color: hsl(var(--foreground) / 0.88);
+}
+
+.theme-hotel2 .hotel2-rate-policies {
+  display: grid;
+  gap: 12px;
+  margin-top: 14px;
+  padding-top: 12px;
+  border-top: 1px solid hsl(var(--border));
+  font-size: 12px;
+  color: hsl(var(--foreground) / 0.85);
+}
+
+.theme-hotel2 .hotel2-rate-policyLabel {
+  display: block;
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+  color: hsl(var(--muted-foreground));
+  margin-bottom: 4px;
+}
+
+.theme-hotel2 .hotel2-rate-inclusions {
+  list-style: none;
+  margin: 12px 0 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  font-size: 12px;
+  color: hsl(var(--muted-foreground));
+}
+
+.theme-hotel2 .hotel2-rate-inclusionItem {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 0;
+  line-height: 1.4;
+}
+
+.theme-hotel2 .hotel2-rate-inclusionIcon {
+  flex-shrink: 0;
+  width: 18px;
+  height: 18px;
+  margin-top: 1px;
+  color: hsl(var(--foreground) / 0.55);
+}
+
+.theme-hotel2 .hotel2-rate-inclusionSvg {
+  display: block;
+  width: 100%;
+  height: 100%;
+}
+
+.theme-hotel2 .hotel2-rate-inclusionText {
+  flex: 1;
+  min-width: 0;
+}
+
+/* Add-ons: card container, strict 3-zone rows (control | content | price/stepper). */
+.theme-hotel2 .hotel2-addon-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  overflow: hidden;
+  background: hsl(var(--card));
+}
+
+.theme-hotel2 .hotel2-addon-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 16px;
+  padding: 14px 18px;
+  border-bottom: 1px solid hsl(var(--border));
+  min-height: 56px;
+  box-sizing: border-box;
+}
+
+.theme-hotel2 .hotel2-addon-row:last-child {
+  border-bottom: 0;
+}
+
+.theme-hotel2 .hotel2-addon-row:hover {
+  background: hsl(var(--muted) / 0.35);
+}
+
+/* Left: fixed control column + flexible content so all titles align. */
+.theme-hotel2 .hotel2-addon-left {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  align-items: flex-start;
+  gap: 12px;
+}
+
+.theme-hotel2 .hotel2-addon-control {
+  flex-shrink: 0;
+  width: 24px;
+  height: 24px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-top: 2px;
+}
+
+/* Add-on checkbox: native input is visually hidden; custom span shows theme primary (brown) when checked. */
+.theme-hotel2 .hotel2-addon-control {
+  position: relative;
+}
+
+.theme-hotel2 .hotel2-addon-checkbox-input {
+  position: absolute;
+  inset: 0;
+  width: 24px;
+  height: 24px;
+  margin: 0;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 1;
+}
+
+.theme-hotel2 .hotel2-addon-checkbox-visual {
+  display: block;
+  width: 18px;
+  height: 18px;
+  border: 2px solid hsl(var(--border));
+  border-radius: 4px;
+  background-color: hsl(var(--card));
+  flex-shrink: 0;
+  transition:
+    background-color 0.15s ease,
+    border-color 0.15s ease;
+}
+
+.theme-hotel2 .hotel2-addon-control:hover .hotel2-addon-checkbox-visual {
+  border-color: hsl(var(--primary) / 0.55);
+}
+
+.theme-hotel2 .hotel2-addon-control:has(.hotel2-addon-checkbox-input:checked) .hotel2-addon-checkbox-visual {
+  background-color: hsl(var(--primary));
+  border-color: hsl(var(--primary));
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23ffffff' stroke-width='3' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='M20 6L9 17l-5-5'/%3E%3C/svg%3E");
+  background-size: 12px 12px;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.theme-hotel2 .hotel2-addon-checkbox-input:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
+}
+
+.theme-hotel2 .hotel2-addon-control-spacer {
+  display: block;
+  width: 18px;
+  height: 18px;
+  flex-shrink: 0;
+}
+
+.theme-hotel2 .hotel2-addon-content {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.theme-hotel2 .hotel2-addon-titleWrap {
+  cursor: pointer;
+  margin: 0;
+}
+
+.theme-hotel2 .hotel2-addon-title {
+  font-weight: 600;
+  font-size: 14px;
+  color: hsl(var(--foreground));
+  min-width: 0;
+  display: block;
+}
+
+.theme-hotel2 .hotel2-addon-desc {
+  font-size: 13px;
+  margin: 0;
+  color: hsl(var(--muted-foreground));
+  line-height: 1.4;
+}
+
+/* Right: fixed width, price then stepper or spacer so all rows share same vertical rhythm. */
+.theme-hotel2 .hotel2-addon-right {
+  flex-shrink: 0;
+  width: 170px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  gap: 10px;
+}
+
+.theme-hotel2 .hotel2-addon-price {
+  font-size: 14px;
+  font-weight: 600;
+  color: hsl(var(--foreground));
+  text-align: right;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-width: 100%;
+}
+
+.theme-hotel2 .hotel2-addon-stepper-spacer {
+  display: block;
+  width: 100%;
+  height: 36px;
+  min-height: 36px;
+}
+
+.theme-hotel2 .hotel2-addon-stepper {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 4px 6px;
+  background: hsl(var(--background));
+  height: 36px;
+  box-sizing: border-box;
+}
+
+.theme-hotel2 .hotel2-addon-stepper button {
+  width: 28px;
+  height: 28px;
+  border: 0;
+  border-radius: calc(var(--radius) * 0.75);
+  background: hsl(var(--muted));
+  cursor: pointer;
+  font-size: 16px;
+  line-height: 1;
+  color: hsl(var(--foreground));
+}
+
+.theme-hotel2 .hotel2-addon-stepper button:hover:not(:disabled) {
+  background: hsl(var(--muted) / 1.2);
+}
+
+.theme-hotel2 .hotel2-addon-stepper button:disabled {
+  opacity: 0.35;
+  cursor: not-allowed;
+}
+
+.theme-hotel2 .hotel2-detail-textarea {
+  width: 100%;
+  border: 1px solid hsl(var(--border));
+  border-radius: var(--radius);
+  padding: 12px 14px;
+  font-size: 14px;
+  background: hsl(var(--background));
+  color: hsl(var(--foreground));
+  resize: vertical;
+  min-height: 100px;
+}
+
+.theme-hotel2 .hotel2-detail-textarea::placeholder {
+  color: hsl(var(--muted-foreground) / 0.7);
+}
+
+.theme-hotel2 .hotel2-detail-textarea::-webkit-input-placeholder {
+  color: hsl(var(--muted-foreground) / 0.7);
+}
+
+.theme-hotel2 .hotel2-detail-textarea:focus {
+  outline: 2px solid hsl(var(--primary) / 0.35);
+  outline-offset: 1px;
+}
+
+.theme-hotel2 .hotel2-detail-cta {
+  margin-top: 8px;
+  padding-top: 20px;
+  border-top: 1px solid hsl(var(--border));
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.theme-hotel2 .hotel2-detail-continue {
+  align-self: flex-start;
+}
+
+.theme-hotel2 .hotel2-detail-notFound {
+  max-width: 520px;
+  padding: 32px 0;
+}
+
+.theme-hotel2 .hotel2-detail-primaryLink {
+  color: hsl(var(--primary));
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
 }
 

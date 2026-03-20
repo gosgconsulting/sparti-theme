@@ -3,21 +3,11 @@ import type { Hotel2Hotel } from "../types";
 
 type Props = {
   hotel: Hotel2Hotel;
-  active: boolean;
-  onHover: () => void;
-  onFocus: () => void;
 };
 
-export default function HotelResultCard({ hotel, active, onHover, onFocus }: Props) {
+export default function HotelResultCard({ hotel }: Props) {
   return (
-    <article
-      className={`hotel2-result-card ${active ? "is-active" : ""}`}
-      tabIndex={0}
-      onMouseEnter={onHover}
-      onFocus={onFocus}
-      role="listitem"
-      aria-label={hotel.name}
-    >
+    <article className="hotel2-result-card" role="listitem" aria-label={hotel.name}>
       <div className="hotel2-result-image">
         <img src={hotel.image} alt={hotel.name} loading="lazy" />
         {hotel.tag && <div className="hotel2-result-badge">{hotel.tag}</div>}

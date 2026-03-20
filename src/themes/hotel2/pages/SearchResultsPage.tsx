@@ -5,11 +5,13 @@ import type { CollectionKey } from "../types";
 import DestinationDropdown from "../booking/DestinationDropdown";
 import OccupancySelector from "../booking/OccupancySelector";
 import { getHotel2Hotels } from "../data/hotels";
+import HotelCardLink from "../detail/HotelCardLink";
 import HotelResultCard from "../results/HotelResultCard";
 import HotelsMap from "../results/HotelsMap";
 import { sortHotel2Results, type Hotel2SortKey } from "../results/hotel2Sort";
 import ResultsFilterPanel from "../results/ResultsFilterPanel";
 import ResultsSort from "../results/ResultsSort";
+import { buildHotelDetailHref } from "../utils/hotelDetailUrl";
 import { buildHotel2SearchHref } from "../utils/searchUrl";
 
 type Props = {
@@ -270,13 +272,21 @@ export default function SearchResultsPage({ basePath }: Props) {
 
             <div className="hotel2-results-list" role="list">
               {ordered.map((h) => (
-                <HotelResultCard
+                <HotelCardLink
                   key={h.id}
-                  hotel={h}
+                  to={buildHotelDetailHref(basePath, h.slug, {
+                    destination,
+                    checkIn,
+                    checkOut,
+                    adults,
+                    children,
+                  })}
                   active={h.id === activeHotelId}
-                  onHover={() => setActiveHotelId(h.id)}
+                  onMouseEnter={() => setActiveHotelId(h.id)}
                   onFocus={() => setActiveHotelId(h.id)}
-                />
+                >
+                  <HotelResultCard hotel={h} />
+                </HotelCardLink>
               ))}
 
               {!ordered.length && (

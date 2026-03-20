@@ -12,6 +12,10 @@
 
 - (None at this time.)
 
+## Completed (2025-03-20) — hotel2 detail flow
+
+- **hotel2 hotel detail + room booking UI** — Slug routes `…/hotels/:slug` (via theme `pageSlug`), `hotelSlugFromName` + `buildHotelDetailHref`, extended `Hotel2Hotel` / room / rate / add-on types, `buildHotel2Rooms` mock data for all listings, `HotelDetailPage` + detail components, clickable search result cards, not-found state, stay query params preserved. Verification: `npm run build` pass.
+
 ## Completed (2025-03-20)
 
 - **hotel2 Search results sort control** — `ResultsSort` + `theme.css`: removed pill background/border on sort `<select>`; custom chevron via `.hotel2-results-sortTrigger` / `.hotel2-results-sortChevron`; focus-visible ring for accessibility.

@@ -56,7 +56,7 @@ export default function OccupancySelector({
   };
 
   return (
-    <div className="relative">
+    <div className="relative isolate overflow-visible">
       <button
         ref={buttonRef}
         type="button"
@@ -85,7 +85,7 @@ export default function OccupancySelector({
 
       <div
         ref={panelRef}
-        className={`absolute left-0 right-0 mt-2 z-[80] origin-top rounded-lg bg-card border border-border shadow-xl overflow-hidden transition-all duration-200 ${
+        className={`absolute left-0 top-full z-[85] mt-2 w-max min-w-[max(100%,17.5rem)] max-w-[calc(100vw-1.5rem)] origin-top-left rounded-lg bg-card border border-border shadow-xl transition-all duration-200 ${
           open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"
         }`}
         role="dialog"
@@ -93,11 +93,11 @@ export default function OccupancySelector({
       >
         <div className="px-4 py-4">
           <div className="flex items-center justify-between gap-4 py-2">
-            <div>
+            <div className="min-w-0 flex-1 pr-1">
               <div className="font-body text-sm text-foreground">Adults</div>
               <div className="font-body text-xs text-muted-foreground">Ages 12+</div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <button
                 type="button"
                 className="h-9 w-9 rounded-lg border border-border hover:border-foreground/25 hover:bg-muted active:bg-muted transition-colors"
@@ -124,11 +124,11 @@ export default function OccupancySelector({
           <div className="my-3 h-px bg-border" />
 
           <div className="flex items-center justify-between gap-4 py-2">
-            <div>
+            <div className="min-w-0 flex-1 pr-1">
               <div className="font-body text-sm text-foreground">Children</div>
               <div className="font-body text-xs text-muted-foreground">Ages 2–11</div>
             </div>
-            <div className="flex items-center gap-2">
+            <div className="flex shrink-0 items-center gap-2">
               <button
                 type="button"
                 className="h-9 w-9 rounded-lg border border-border hover:border-foreground/25 hover:bg-muted active:bg-muted transition-colors"

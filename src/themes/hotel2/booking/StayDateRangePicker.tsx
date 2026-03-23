@@ -1,4 +1,4 @@
-import React, { useMemo, useState } from "react";
+import React, { useMemo, useRef, useState } from "react";
 import { addDays, differenceInCalendarDays, isAfter, isSameDay, startOfDay } from "date-fns";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
@@ -49,6 +49,8 @@ function DateFieldChevron() {
 }
 
 export default function StayDateRangePicker({ checkIn, checkOut, onRangeChange }: Props) {
+  const triggerRef = useRef<HTMLButtonElement>(null);
+  const [portalContainer, setPortalContainer] = useState<HTMLElement | undefined>(undefined);
   const [open, setOpen] = useState(false);
   const [phase, setPhase] = useState<Phase>("checkIn");
   const [draftIn, setDraftIn] = useState<Date | undefined>(() => parseYmd(checkIn));
@@ -63,6 +65,7 @@ export default function StayDateRangePicker({ checkIn, checkOut, onRangeChange }
 
   const handleOpenChange = (next: boolean) => {
     if (next) {
+      setPortalContainer(triggerRef.current?.closest(".theme-hotel2") ?? undefined);
       syncDraftsFromProps();
     }
     setOpen(next);
@@ -156,6 +159,7 @@ export default function StayDateRangePicker({ checkIn, checkOut, onRangeChange }
     <Popover open={open} onOpenChange={handleOpenChange}>
       <PopoverTrigger asChild>
         <button
+          ref={triggerRef}
           type="button"
           aria-label={label}
           className="mt-2 w-full rounded-sm text-left focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 focus-visible:ring-offset-background"
@@ -176,6 +180,7 @@ export default function StayDateRangePicker({ checkIn, checkOut, onRangeChange }
       <PopoverContent
         align="start"
         sideOffset={8}
+        portalContainer={portalContainer}
         className="z-[100] w-auto max-w-[min(100vw-1.5rem,42rem)] p-0 overflow-x-auto border-border bg-card text-card-foreground shadow-xl"
       >
         <div className="flex border-b border-border px-2 pt-2 font-body text-sm">
@@ -215,6 +220,7 @@ export default function StayDateRangePicker({ checkIn, checkOut, onRangeChange }
           </button>
         </div>
         <Calendar
+          className="hotel2-stay-calendar"
           mode="single"
           numberOfMonths={2}
           showOutsideDays={false}
@@ -229,25 +235,38 @@ export default function StayDateRangePicker({ checkIn, checkOut, onRangeChange }
             ...(stayModifiers.stayBetween ? { stayBetween: stayModifiers.stayBetween } : {}),
           }}
           modifiersClassNames={{
+            today: cn(
+              "!opacity-100 shadow-none",
+              "hover:bg-muted/70 hover:text-foreground",
+              "focus-visible:bg-muted/70 focus-visible:text-foreground",
+              "relative after:pointer-events-none after:absolute after:bottom-1 after:left-1/2 after:z-[1] after:-translate-x-1/2 after:h-1 after:w-1 after:rounded-full after:bg-primary after:content-['']",
+              "aria-selected:after:hidden"
+            ),
             stayCheckIn: cn(
-              "!opacity-100 z-[1] rounded-md font-semibold",
+              "!opacity-100 z-[1] rounded-full font-semibold",
               "bg-primary text-primary-foreground shadow-sm",
               "hover:bg-primary hover:text-primary-foreground",
-              "focus-visible:bg-primary focus-visible:text-primary-foreground"
+              "focus-visible:bg-primary focus-visible:text-primary-foreground",
+              "after:!hidden"
             ),
             stayCheckOut: cn(
-              "!opacity-100 z-[1] rounded-md font-semibold",
+              "!opacity-100 z-[1] rounded-full font-semibold",
               "bg-primary text-primary-foreground shadow-sm",
               "hover:bg-primary hover:text-primary-foreground",
-              "focus-visible:bg-primary focus-visible:text-primary-foreground"
+              "focus-visible:bg-primary focus-visible:text-primary-foreground",
+              "after:!hidden"
             ),
             stayBetween: cn(
-              "!opacity-100 rounded-none bg-primary/20 text-foreground",
-              "hover:bg-primary/25 focus-visible:bg-primary/25"
+              "!opacity-100 relative z-[1] rounded-full bg-transparent text-foreground shadow-none",
+              "hover:bg-transparent hover:text-foreground",
+              "focus-visible:bg-transparent focus-visible:text-foreground focus-visible:ring-0 focus-visible:ring-offset-0",
+              "before:pointer-events-none before:absolute before:inset-[5px] before:z-0 before:rounded-full before:bg-primary/22 before:content-['']",
+              "hover:before:bg-primary/32 focus-visible:before:bg-primary/32"
             ),
           }}
           classNames={{
             months: "flex flex-col sm:flex-row gap-6 sm:gap-8",
+            cell: "h-9 w-9 text-center text-sm p-0 relative focus-within:relative focus-within:z-20 [&:has([aria-selected])]:bg-transparent",
           }}
         />
         <div className="flex items-center justify-between gap-4 border-t border-border px-3 py-2.5">

@@ -87,8 +87,8 @@ export default function HeroSection({
       {/* Booking widget below hero */}
       <section className="relative -mt-10 sm:-mt-12 lg:-mt-14 pb-10 lg:pb-14 overflow-visible">
         <div className="container mx-auto">
-          <div className="relative z-[70] bg-card border border-border shadow-xl px-5 sm:px-6 py-5">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end">
+          <div className="relative z-[70] overflow-visible bg-card border border-border shadow-xl px-5 sm:px-6 py-5">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end overflow-visible">
               {/* Destination */}
               <div className="lg:col-span-3">
                 <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
@@ -124,12 +124,12 @@ export default function HeroSection({
               </div>
 
               {/* Guests */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-2 overflow-visible min-w-0">
                 <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
                   <span aria-hidden="true">👤</span>
                   <span>Guests</span>
                 </div>
-                <div className="mt-2">
+                <div className="mt-2 overflow-visible">
                   <OccupancySelector
                     adults={adults}
                     children={children}

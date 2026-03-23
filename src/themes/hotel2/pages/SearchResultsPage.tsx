@@ -40,6 +40,10 @@ export default function SearchResultsPage({ basePath }: Props) {
   const location = useLocation();
   const navigate = useNavigate();
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, left: 0, behavior: "auto" });
+  }, [location.pathname, location.search]);
+
   const hotels = useMemo(() => getHotel2Hotels(), []);
   const initial = useMemo(() => readSearchParams(location.search), [location.search]);
 

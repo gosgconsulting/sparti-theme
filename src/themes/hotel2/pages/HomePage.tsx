@@ -32,8 +32,20 @@ const HomePage: React.FC<Props> = ({ basePath }) => {
           navigate(buildHotel2SearchHref(basePath, payload));
         }}
       />
-      <HotelResultsSection hotels={hotels} destination={destination} />
-      <CollectionsSection hotels={hotels} />
+      <HotelResultsSection
+        basePath={basePath}
+        hotels={hotels}
+        destination={destination}
+        adults={adults}
+        children={children}
+      />
+      <CollectionsSection
+        basePath={basePath}
+        hotels={hotels}
+        destination={destination}
+        adults={adults}
+        children={children}
+      />
     </div>
   );
 };

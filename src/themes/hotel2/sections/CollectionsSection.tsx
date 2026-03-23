@@ -1,7 +1,10 @@
 import React, { useMemo, useState } from "react";
+import type { Hotel2Destination } from "../booking/countries";
 import type { CollectionKey, Hotel2Hotel } from "../types";
 import HorizontalRail from "../components/HorizontalRail";
 import HotelCard from "../components/HotelCard";
+import HotelCardLink from "../detail/HotelCardLink";
+import { buildHotelDetailHref } from "../utils/hotelDetailUrl";
 
 const TABS: CollectionKey[] = [
   "Luxury Escapes",
@@ -11,10 +14,14 @@ const TABS: CollectionKey[] = [
 ];
 
 type Props = {
+  basePath: string;
   hotels: Hotel2Hotel[];
+  destination: Hotel2Destination;
+  adults: number;
+  children: number;
 };
 
-export default function CollectionsSection({ hotels }: Props) {
+export default function CollectionsSection({ basePath, hotels, destination, adults, children }: Props) {
   const [active, setActive] = useState<CollectionKey>("Luxury Escapes");
 
   const filtered = useMemo(() => {
@@ -68,7 +75,12 @@ export default function CollectionsSection({ hotels }: Props) {
         <HorizontalRail asSection={false}>
         {filtered.map((h) => (
           <div key={h.id} data-rail-card className="transition-opacity duration-200">
-            <HotelCard hotel={h} />
+            <HotelCardLink
+              variant="rail"
+              to={buildHotelDetailHref(basePath, h.slug, { destination, adults, children })}
+            >
+              <HotelCard hotel={h} />
+            </HotelCardLink>
           </div>
         ))}
         </HorizontalRail>

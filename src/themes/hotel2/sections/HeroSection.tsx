@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import StayDateRangePicker from "../booking/StayDateRangePicker";
 import DestinationDropdown from "../booking/DestinationDropdown";
 import OccupancySelector from "../booking/OccupancySelector";
 import type { Hotel2Destination } from "../booking/countries";
@@ -24,12 +25,6 @@ function yyyyMmDd(d: Date) {
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
-}
-
-function formatShortDate(value: string) {
-  const d = new Date(`${value}T00:00:00`);
-  if (Number.isNaN(d.getTime())) return value;
-  return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
 }
 
 function nightsBetween(start: string, end: string) {
@@ -118,42 +113,14 @@ export default function HeroSection({
                     <span>{Math.max(1, nightsBetween(checkIn, checkOut))} NIGHT</span>
                   </div>
                 </div>
-
-                <div className="mt-2 flex items-center gap-4">
-                  <div className="flex-1">
-                    <div className="relative h-12">
-                      <div className="h-full flex items-center border-b border-border">
-                        <span className="font-body text-sm text-foreground">
-                          {formatShortDate(checkIn)}
-                        </span>
-                      </div>
-                      <input
-                        aria-label="Check-in"
-                        type="date"
-                        value={checkIn}
-                        onChange={(e) => setCheckIn(e.target.value)}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                      />
-                    </div>
-                  </div>
-                  <div className="shrink-0 font-body text-sm text-muted-foreground">–</div>
-                  <div className="flex-1">
-                    <div className="relative h-12">
-                      <div className="h-full flex items-center border-b border-border">
-                        <span className="font-body text-sm text-foreground">
-                          {formatShortDate(checkOut)}
-                        </span>
-                      </div>
-                      <input
-                        aria-label="Check-out"
-                        type="date"
-                        value={checkOut}
-                        onChange={(e) => setCheckOut(e.target.value)}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                      />
-                    </div>
-                  </div>
-                </div>
+                <StayDateRangePicker
+                  checkIn={checkIn}
+                  checkOut={checkOut}
+                  onRangeChange={({ checkIn: nextIn, checkOut: nextOut }) => {
+                    setCheckIn(nextIn);
+                    setCheckOut(nextOut);
+                  }}
+                />
               </div>
 
               {/* Guests */}
@@ -192,4 +159,3 @@ export default function HeroSection({
     </>
   );
 }
-

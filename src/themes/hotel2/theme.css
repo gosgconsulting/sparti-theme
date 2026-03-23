@@ -1472,19 +1472,25 @@
 }
 
 .theme-hotel2 .hotel2-detail-amenities li {
-  padding-left: 18px;
-  position: relative;
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
 }
 
-.theme-hotel2 .hotel2-detail-amenities li::before {
-  content: "";
-  position: absolute;
-  left: 0;
-  top: 0.55em;
-  width: 6px;
-  height: 6px;
-  border-radius: 999px;
-  background: hsl(var(--primary));
+.theme-hotel2 .hotel2-detail-amenityIcon {
+  flex-shrink: 0;
+  margin-top: 1px;
+  width: 18px;
+  height: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: hsl(var(--primary));
+}
+
+.theme-hotel2 .hotel2-detail-amenityIconSvg {
+  width: 16px;
+  height: 16px;
 }
 
 .theme-hotel2 .hotel2-rate-stack {
@@ -1608,45 +1614,6 @@
   letter-spacing: 0.04em;
   color: hsl(var(--muted-foreground));
   margin-bottom: 4px;
-}
-
-.theme-hotel2 .hotel2-rate-inclusions {
-  list-style: none;
-  margin: 12px 0 0;
-  padding: 0;
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-  font-size: 12px;
-  color: hsl(var(--muted-foreground));
-}
-
-.theme-hotel2 .hotel2-rate-inclusionItem {
-  display: flex;
-  align-items: flex-start;
-  gap: 10px;
-  margin: 0;
-  padding: 0;
-  line-height: 1.4;
-}
-
-.theme-hotel2 .hotel2-rate-inclusionIcon {
-  flex-shrink: 0;
-  width: 18px;
-  height: 18px;
-  margin-top: 1px;
-  color: hsl(var(--foreground) / 0.55);
-}
-
-.theme-hotel2 .hotel2-rate-inclusionSvg {
-  display: block;
-  width: 100%;
-  height: 100%;
-}
-
-.theme-hotel2 .hotel2-rate-inclusionText {
-  flex: 1;
-  min-width: 0;
 }
 
 /* Add-ons: card container, strict 3-zone rows (control | content | price/stepper). */

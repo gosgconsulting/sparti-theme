@@ -14,6 +14,7 @@
 
 ## Completed (2025-03-23)
 
+- **hotel2 destination dropdown brand styling** — `DestinationDropdown.tsx`: scoped `hotel2-destination-*` classes; `theme.css`: token-based trigger (boxed / underline / compact), panel shadow, list scrollbar, selected `accent` row + primary check + active rail; overrides global square buttons. `HeroSection` + `SearchResultsPage`: Lucide `MapPin` in primary. `.hotel2-control-icon` uses primary. Verification: `npm run build` pass.
 - **hotel2 home rail cards → detail** — `HotelResultsSection`, `CollectionsSection`: wrap `HotelCard` with `HotelCardLink` + `buildHotelDetailHref` (destination, adults, children); `HotelCardLink` `variant="rail"` + `.hotel2-rail-card-link` in `theme.css`. `HomePage` passes `basePath` and occupancy. Verification: `npm run build` pass.
 - **hotel2 detail amenities icons** — `AmenitiesList.tsx`: Lucide icons per amenity label (substring rules; `Tv` for flat-screen TV, etc.); `theme.css`: flex rows, primary-colored icon slot, removed dot `::before`. Verification: `npm run build` pass.
 - **hotel2 rate card inclusions** — `RateOptionCard.tsx`: removed bottom inclusion row (Accommodation, Wi‑Fi, breakfast, etc.) and `InclusionGlyph`; dropped unused `.hotel2-rate-inclusion*` rules from `theme.css`. `Hotel2Rate.inclusions` remains on mock data for possible future use. Verification: `npm run build` pass.

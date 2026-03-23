@@ -74,31 +74,34 @@ export default function DestinationDropdown({
     }
   };
 
+  const triggerClass =
+    variant === "underline"
+      ? "hotel2-destination-trigger hotel2-destination-trigger--underline"
+      : variant === "compact"
+        ? "hotel2-destination-trigger hotel2-destination-trigger--compact"
+        : "hotel2-destination-trigger hotel2-destination-trigger--boxed";
+
   return (
-    <div className="relative">
+    <div className="relative hotel2-destination">
       <button
         ref={buttonRef}
         type="button"
-        className={
-          variant === "underline"
-            ? "w-full h-12 px-0 bg-transparent border-b border-border text-left flex items-center justify-between gap-3 hover:border-foreground/35 transition-colors"
-            : variant === "compact"
-              ? "w-full h-7 px-0 bg-transparent border-0 text-left flex items-center justify-between gap-2 hover:opacity-90 transition-opacity"
-            : "w-full h-12 px-4 rounded-xl bg-card border border-border text-left flex items-center justify-between gap-3 hover:border-foreground/25 transition-colors"
-        }
+        className={`${triggerClass}${open ? " hotel2-destination-trigger--open" : ""}`}
         aria-haspopup="listbox"
         aria-expanded={open}
         onClick={() => setOpen((v) => !v)}
         onKeyDown={onButtonKeyDown}
       >
-        <span className={`font-body text-sm ${value ? "text-foreground" : "text-muted-foreground"}`}>
+        <span
+          className={`hotel2-destination-value font-body ${value ? "text-foreground" : "text-muted-foreground"}`}
+        >
           {label}
         </span>
         <span
-          className={`shrink-0 transition-transform duration-200 ${open ? "rotate-180" : "rotate-0"}`}
+          className={`hotel2-destination-chevron shrink-0 ${open ? "is-open" : ""}`}
           aria-hidden="true"
         >
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" className="hotel2-destination-chevronSvg">
             <path d="M6 9l6 6 6-6" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
           </svg>
         </span>
@@ -106,8 +109,8 @@ export default function DestinationDropdown({
 
       <div
         ref={panelRef}
-        className={`absolute left-0 right-0 mt-2 z-[80] origin-top rounded-lg bg-card border border-border shadow-xl overflow-hidden transition-all duration-200 ${
-          open ? "opacity-100 translate-y-0 pointer-events-auto" : "opacity-0 -translate-y-1 pointer-events-none"
+        className={`hotel2-destination-panel ${
+          open ? "is-open" : "is-closed"
         }`}
         role="presentation"
       >
@@ -117,7 +120,7 @@ export default function DestinationDropdown({
           tabIndex={-1}
           aria-label="Destination country"
           onKeyDown={onOptionKeyDown}
-          className="max-h-64 overflow-auto py-1"
+          className="hotel2-destination-list"
         >
           {options.map((country, idx) => {
             const isSelected = value === country;
@@ -127,30 +130,24 @@ export default function DestinationDropdown({
                 <button
                   type="button"
                   data-opt={idx}
-                  className={`w-full px-4 py-3 text-left font-body text-sm transition-colors ${
-                    isSelected
-                      ? "bg-muted text-foreground"
-                      : "text-foreground/90 hover:bg-muted/80 active:bg-muted"
-                  } ${isActive ? "outline-none ring-2 ring-ring" : ""}`}
+                  className={`hotel2-destination-option font-body${isSelected ? " hotel2-destination-option--selected" : ""}${isActive ? " hotel2-destination-option--active" : ""}`}
                   onMouseEnter={() => setActiveIndex(idx)}
                   onClick={() => selectAt(idx)}
                 >
-                  <div className="flex items-center justify-between gap-4">
-                    <span>{country}</span>
-                    {isSelected && (
-                      <span className="text-primary" aria-hidden="true">
-                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-                          <path
-                            d="M20 6L9 17l-5-5"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                          />
-                        </svg>
-                      </span>
-                    )}
-                  </div>
+                  <span className="hotel2-destination-option-label">{country}</span>
+                  {isSelected && (
+                    <span className="hotel2-destination-option-check" aria-hidden="true">
+                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+                        <path
+                          d="M20 6L9 17l-5-5"
+                          stroke="currentColor"
+                          strokeWidth="2.5"
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                        />
+                      </svg>
+                    </span>
+                  )}
                 </button>
               </li>
             );

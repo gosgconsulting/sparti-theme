@@ -1,4 +1,5 @@
 import React, { useMemo, useState } from "react";
+import { MapPin } from "lucide-react";
 import StayDateRangePicker from "../booking/StayDateRangePicker";
 import DestinationDropdown from "../booking/DestinationDropdown";
 import OccupancySelector from "../booking/OccupancySelector";
@@ -92,7 +93,7 @@ export default function HeroSection({
               {/* Destination */}
               <div className="lg:col-span-3">
                 <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
-                  <span aria-hidden="true">📍</span>
+                  <MapPin className="h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={2} aria-hidden />
                   <span>Destination</span>
                 </div>
                 <div className="mt-2">

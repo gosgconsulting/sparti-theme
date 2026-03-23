@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo, useState } from "react";
+import { MapPin } from "lucide-react";
 import { useLocation, useNavigate } from "react-router-dom";
 import type { Hotel2Destination } from "../booking/countries";
 import type { CollectionKey } from "../types";
@@ -210,7 +211,7 @@ export default function SearchResultsPage({ basePath }: Props) {
 
                 <div className="hotel2-control hotel2-control-dropdown">
                   <div className="hotel2-control-icon" aria-hidden="true">
-                    📍
+                    <MapPin className="h-[18px] w-[18px]" strokeWidth={2} />
                   </div>
                   <div className="hotel2-control-body">
                     <div className="hotel2-control-label">Destination</div>

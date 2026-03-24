@@ -94,34 +94,30 @@ export default function ContactFormSheet({
 
   return (
     <Sheet open={open} onOpenChange={handleOpenChange}>
-      <SheetContent 
-        side="right" 
-        className="w-full sm:max-w-lg overflow-y-auto bg-background p-0 border-0 [&>button]:hidden flex flex-col h-full max-h-screen"
+      <SheetContent
+        side="right"
+        className="moondk-theme flex h-full max-h-screen w-full flex-col overflow-y-auto border-0 border-l border-border/25 bg-background px-0 pt-0 pb-[max(2.5rem,env(safe-area-inset-bottom,0px)+1.5rem)] text-foreground shadow-none sm:max-w-lg sm:pb-12 [&>button]:hidden"
       >
-        {/* Premium Card Container */}
-        <div className="flex-1 flex flex-col min-h-0">
-          {/* Card with rounded corners and soft shadow */}
-          <div className="m-4 sm:m-6 mb-4 sm:mb-6 bg-white rounded-[20px] shadow-[0_4px_24px_rgba(0,0,0,0.08)] flex flex-col relative will-change-transform min-h-fit">
-            {/* Custom Close Button */}
+        <div className="flex min-h-0 flex-1 flex-col">
+          <div className="relative mx-4 mt-4 mb-0 flex min-h-fit flex-col rounded-card bg-card text-card-foreground shadow-lg ring-1 ring-border/20 sm:mx-6 sm:mt-6">
             <button
+              type="button"
               onClick={() => handleOpenChange(false)}
-              className="absolute top-6 right-6 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-card/90 hover:bg-card border border-border text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-105 shadow-sm"
+              className="absolute top-6 right-6 z-10 w-8 h-8 flex items-center justify-center rounded-full bg-secondary/90 hover:bg-secondary border border-border/30 text-muted-foreground hover:text-primary transition-all duration-200 hover:scale-105 shadow-sm"
               aria-label="Close"
             >
               <X className="h-4 w-4" />
             </button>
 
-            {/* Header Section with more padding */}
-            <SheetHeader className="px-8 pt-10 pb-6 border-b border-border">
+            <SheetHeader className="px-8 pt-10 pb-6 border-b border-border/20 text-left">
               <SheetTitle className="text-3xl font-heading tracking-tight text-primary mb-3">
                 Contact Us
               </SheetTitle>
-              <SheetDescription className="text-sm font-body text-muted-foreground leading-relaxed">
+              <SheetDescription className="text-sm font-body text-muted-foreground/90 leading-relaxed">
               We’re here to assist you. Share your details and we’ll get back to you as soon as possible.
               </SheetDescription>
             </SheetHeader>
 
-            {/* Form Section with increased padding */}
             <form onSubmit={handleSubmit} className="flex flex-col px-8 py-8 space-y-6">
               <div className="space-y-3">
                 <Label 
@@ -137,7 +133,7 @@ export default function ContactFormSheet({
                   required
                   value={formData.fullName}
                   onChange={handleChange}
-                  className="h-11 bg-background border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-200"
+                  className="h-11 rounded-lg border-border/40 bg-background text-foreground placeholder:text-muted-foreground/80 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/25 transition-all duration-200"
                   placeholder="Your full name"
                 />
               </div>
@@ -156,7 +152,7 @@ export default function ContactFormSheet({
                   required
                   value={formData.email}
                   onChange={handleChange}
-                  className="h-11 bg-background border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-200"
+                  className="h-11 rounded-lg border-border/40 bg-background text-foreground placeholder:text-muted-foreground/80 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/25 transition-all duration-200"
                   placeholder="your.email@example.com"
                 />
               </div>
@@ -168,24 +164,35 @@ export default function ContactFormSheet({
                 >
                   Phone number
                 </Label>
-                {/* Unified phone field with seamless connection */}
-                <div className="flex gap-0 bg-background border border-border rounded-lg overflow-hidden focus-within:ring-2 focus-within:ring-primary/20 focus-within:border-primary transition-all duration-200">
+                <div className="flex gap-0 overflow-hidden rounded-lg border border-border/40 bg-background focus-within:border-primary focus-within:ring-2 focus-within:ring-ring/25 transition-all duration-200">
                   <Select
                     value={formData.countryCode}
                     onValueChange={(value) =>
                       setFormData((prev) => ({ ...prev, countryCode: value }))
                     }
                   >
-                    <SelectTrigger className="w-20 h-11 border-0 border-r border-border rounded-none bg-transparent focus:ring-0 focus:ring-offset-0 text-foreground">
+                    <SelectTrigger className="h-11 w-20 rounded-none border-0 border-r border-border/40 bg-transparent text-foreground focus:ring-0 focus:ring-offset-0">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent className="bg-card border-border">
-                      <SelectItem value="SG" className="focus:bg-accent">SG</SelectItem>
-                      <SelectItem value="US" className="focus:bg-accent">US</SelectItem>
-                      <SelectItem value="UK" className="focus:bg-accent">UK</SelectItem>
-                      <SelectItem value="KR" className="focus:bg-accent">KR</SelectItem>
-                      <SelectItem value="MY" className="focus:bg-accent">MY</SelectItem>
-                      <SelectItem value="ID" className="focus:bg-accent">ID</SelectItem>
+                    <SelectContent className="moondk-theme border-border/40 bg-popover text-popover-foreground">
+                      <SelectItem value="SG" className="focus:bg-accent">
+                        SG
+                      </SelectItem>
+                      <SelectItem value="US" className="focus:bg-accent">
+                        US
+                      </SelectItem>
+                      <SelectItem value="UK" className="focus:bg-accent">
+                        UK
+                      </SelectItem>
+                      <SelectItem value="KR" className="focus:bg-accent">
+                        KR
+                      </SelectItem>
+                      <SelectItem value="MY" className="focus:bg-accent">
+                        MY
+                      </SelectItem>
+                      <SelectItem value="ID" className="focus:bg-accent">
+                        ID
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                   <Input
@@ -195,7 +202,7 @@ export default function ContactFormSheet({
                     required
                     value={formData.phone}
                     onChange={handleChange}
-                    className="flex-1 h-11 border-0 rounded-none bg-transparent text-foreground placeholder:text-muted-foreground focus-visible:ring-0 focus-visible:ring-offset-0"
+                    className="h-11 flex-1 rounded-none border-0 bg-transparent text-foreground placeholder:text-muted-foreground/80 focus-visible:ring-0 focus-visible:ring-offset-0"
                     placeholder="1234 5678"
                   />
                 </div>
@@ -214,17 +221,16 @@ export default function ContactFormSheet({
                   required
                   value={formData.message}
                   onChange={handleChange}
-                  className="w-full min-h-[140px] resize-none bg-background border-border rounded-lg text-foreground placeholder:text-muted-foreground focus-visible:ring-2 focus-visible:ring-primary/20 focus-visible:border-primary transition-all duration-200"
+                  className="min-h-[140px] w-full resize-none rounded-lg border-border/40 bg-background text-foreground placeholder:text-muted-foreground/80 focus-visible:border-primary focus-visible:ring-2 focus-visible:ring-ring/25 transition-all duration-200"
                   placeholder="How can we help you? Feel free to include any questions or requests."
                 />
               </div>
 
-              {/* Green CTA Button with pill shape */}
               <div className="pt-2">
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="w-full h-12 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground font-medium text-sm tracking-wide transition-all duration-300 hover:shadow-md hover:shadow-primary/20 active:scale-[0.98] disabled:opacity-50 disabled:cursor-not-allowed"
+                  className="h-12 w-full rounded-full bg-primary font-medium text-sm tracking-wide text-primary-foreground transition-all duration-300 hover:bg-primary/90 hover:shadow-md hover:shadow-primary/15 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50"
                 >
                   {isSubmitting ? "Sending..." : "Contact Us"}
                 </Button>

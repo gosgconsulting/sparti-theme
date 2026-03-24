@@ -50,27 +50,30 @@ const ProductCarousel = ({ excludeProductId, onApiChange }: ProductCarouselProps
               key={product.id}
               className="basis-1/2 md:basis-1/3 lg:basis-1/4 pr-2 md:pr-4"
             >
-              <ThemeLink to={`/product/${product.id}`}>
-                <Card className="border-none shadow-none bg-transparent group">
+              <ThemeLink to={`/product/${product.id}`} className="block h-full">
+                <Card className="group h-full border-0 bg-transparent shadow-none ring-0">
                   <CardContent className="p-0">
-                    <div className="aspect-square mb-3 overflow-hidden bg-muted/10 relative">
+                    <div className="relative mb-3 aspect-square overflow-hidden rounded-2xl bg-muted/15">
                       <img
                         src={product.image}
                         alt={product.name}
-                        className="w-full h-full object-cover transition-all duration-300 group-hover:opacity-90"
+                        className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.02]"
                       />
-                      <div className="absolute inset-0 bg-black/[0.02]"></div>
                       {product.isNew && (
-                        <div className="absolute top-2 left-2 px-2 py-1 text-xs font-body font-medium text-primary bg-background/90">
-                          NEW
-                        </div>
+                        <span className="absolute left-3 top-3 z-10 rounded-full bg-primary/92 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground shadow-sm">
+                          New
+                        </span>
                       )}
                     </div>
-                    <div className="space-y-1">
-                      <p className="text-sm font-body font-light text-foreground/70">{product.category}</p>
-                      <div className="flex justify-between items-center">
-                        <h3 className="text-sm font-heading font-medium text-foreground">{product.name}</h3>
-                        <p className="text-sm font-body font-light text-foreground">{product.price}</p>
+                    <div className="space-y-1.5 px-0.5">
+                      <p className="text-xs font-body font-medium uppercase tracking-[0.08em] text-foreground/45">
+                        {product.category}
+                      </p>
+                      <div className="flex items-start justify-between gap-3">
+                        <h3 className="text-balance text-sm font-medium leading-snug text-foreground font-body transition-colors group-hover:text-primary">
+                          {product.name}
+                        </h3>
+                        <p className="shrink-0 text-sm font-semibold tabular-nums text-foreground">{product.price}</p>
                       </div>
                     </div>
                   </CardContent>

@@ -8,7 +8,7 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ## In Progress
 
-- [x] **gosgconsulting hardcoded brand cleanup** — Phase 2 complete (component fallbacks updated)
+- [ ] _(none)_
 
 ---
 
@@ -19,29 +19,7 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 - [ ] Verify all links after documentation restructure
 - [ ] Test SEO metadata rendering in browser for sample themes
 
-<<<<<<< HEAD
 ---
-=======
-## Completed (2025-03-23)
-
-- **hotel2 destination dropdown brand styling** — `DestinationDropdown.tsx`: scoped `hotel2-destination-*` classes; `theme.css`: token-based trigger (boxed / underline / compact), panel shadow, list scrollbar, selected `accent` row + primary check + active rail; overrides global square buttons. `HeroSection` + `SearchResultsPage`: Lucide `MapPin` in primary. `.hotel2-control-icon` uses primary. Verification: `npm run build` pass.
-- **hotel2 home rail cards → detail** — `HotelResultsSection`, `CollectionsSection`: wrap `HotelCard` with `HotelCardLink` + `buildHotelDetailHref` (destination, adults, children); `HotelCardLink` `variant="rail"` + `.hotel2-rail-card-link` in `theme.css`. `HomePage` passes `basePath` and occupancy. Verification: `npm run build` pass.
-- **hotel2 detail amenities icons** — `AmenitiesList.tsx`: Lucide icons per amenity label (substring rules; `Tv` for flat-screen TV, etc.); `theme.css`: flex rows, primary-colored icon slot, removed dot `::before`. Verification: `npm run build` pass.
-- **hotel2 rate card inclusions** — `RateOptionCard.tsx`: removed bottom inclusion row (Accommodation, Wi‑Fi, breakfast, etc.) and `InclusionGlyph`; dropped unused `.hotel2-rate-inclusion*` rules from `theme.css`. `Hotel2Rate.inclusions` remains on mock data for possible future use. Verification: `npm run build` pass.
-- **hotel2 hero date range popover** — `StayDateRangePicker.tsx`: Radix Popover + `Calendar` with **`mode="single"`** and **Check-in / Check-out tabs** (react-day-picker `mode="range"` `addToRange` keeps `from` when both ends exist and only moves `to` for most clicks). Two months; check-out disables days before check-in; pick check-in then check-out (or switch tabs). Verification: `npm run build` pass.
-
-## Completed (2025-03-20) — hotel2 detail flow
-
-- **hotel2 hotel detail + room booking UI** — Slug routes `…/hotels/:slug` (via theme `pageSlug`), `hotelSlugFromName` + `buildHotelDetailHref`, extended `Hotel2Hotel` / room / rate / add-on types, `buildHotel2Rooms` mock data for all listings, `HotelDetailPage` + detail components, clickable search result cards, not-found state, stay query params preserved. Verification: `npm run build` pass.
-
-## Completed (2025-03-20)
-
-- **hotel2 Search results sort control** — `ResultsSort` + `theme.css`: removed pill background/border on sort `<select>`; custom chevron via `.hotel2-results-sortTrigger` / `.hotel2-results-sortChevron`; focus-visible ring for accessibility.
-- **hotel2 Search results Filter** — `SearchResultsPage.tsx`, `results/ResultsFilterPanel.tsx`, `theme.css`: Scrim + panel; **amenities** grid (AND match, More/Less), min rating, collections; no price slider. Dashed section dividers; primary-colored “More” link.
-- **hotel2 Sort dropdown** — Custom listbox in `ResultsSort.tsx`, `results/hotel2Sort.ts`, `theme.css`: seven options (default, price low/high, rating, featured first, date old/new); navy selected row, muted hover/highlight; solid caret; `listedAt` on `Hotel2Hotel` + seed data for date sorts.
-
-## Design system previews (2025-03-19)
->>>>>>> 2d1e00159b113bbebbd3757ec27573b42f6ea594
 
 ## Blocked
 
@@ -50,6 +28,26 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 ---
 
 ## Completed
+
+### Moondk product detail (2026-03-24)
+
+- [x] **Product cards: no outline** — `ProductCarousel.tsx`: `border-0` / `ring-0`, dropped image ring. `ProductGrid.tsx`: `border-0 ring-0` so shadcn `Card` default border is gone. Verification: `npm run build` pass.
+- [x] **You might also like cards** — `ProductCarousel.tsx`: `rounded-2xl` image wells, subtle ring/border, hover scale; `New` pill aligned with shop grid; typography tweaks. `products.ts`: `isNew` on gift set, Seoriju, red rice + 5-color noodles for visible badges in carousel. Verification: `npm run build` pass.
+- [x] **Low stock badge spread** — `products.ts`: `productShowsLowStockBadge(id)` stable pseudo-random (~45% of SKUs); removed per-item `stock` used only for UI. `ProductInfo.tsx` uses helper. Verification: `npm run build` pass.
+- [x] **Quantity ± no fill** — `ProductInfo.tsx`: stepper shell `bg-background`; − / + `bg-transparent` with `hover:!bg-transparent` so ghost `accent` fill is gone; value column unchanged. Verification: `npm run build` pass.
+- [x] **Add to Bag pill shape** — `ProductInfo.tsx`: CTA `rounded-full` + horizontal padding for a full pill on product detail. Verification: `npm run build` pass.
+- [x] **Purchase panel: no card chrome** — `ProductInfo.tsx`: removed `bg-card`, border, shadow, and ring from quantity/CTA wrapper so the block sits on page background. Verification: `npm run build` pass.
+- [x] **Premium product info / purchase panel** — `ProductInfo.tsx`: clearer vertical rhythm; parenthetical titles split for lighter Hangul line; stronger price; elevated `bg-card` purchase block (ring + shadow); compact quantity stepper; low-stock as bordered badge with dot; CTA `rounded-xl` with hover/active/focus polish. `ProductDetailBreadcrumb.tsx`: subtler crumb typography; `ProductDetail.tsx`: mobile crumb spacing. Verification: `npm run build` pass.
+- [x] **Product page refactor** — Single breadcrumb UI via `ProductDetailBreadcrumb.tsx`; catalog helpers `getProductByRouteId`, `FALLBACK_PRODUCT_DISPLAY_NAME`, `getProductLongDescription` + consolidated long descriptions in `products.ts`; removed duplicate/unused description map from `ProductInfo.tsx`; `ProductDescription.tsx` imports getter; dropped unused `products` import. Verification: `npm run build`, `npm run lint` pass.
+- [x] **Product hero copy & layout** — `ProductInfo.tsx` + `ProductDetail.tsx` (mobile crumb): category eyebrow (Tea, Oil, …) replaces generic “Product”; title uses `font-body` + `text-balance` for Latin/Hangul consistency; tighter vertical rhythm; purchase card `bg-secondary/35`, border, padding; quantity row alignment + “Low stock — only a few left”; desktop/mobile breadcrumb `line-clamp-2` for long names. Verification: `npm run build` pass.
+- [x] **Remove "Product Information" heading** — `ProductDescription.tsx`: dropped uppercase section label; `ProductAccordion` unchanged. Verification: `npm run build` pass.
+- [x] **Gallery thumbs: visible selection + no clip** — `ProductImageGallery.tsx`: dropped offset ring stack; selected = **outer** `border-2 border-primary` (no `shadow-md` on selected); image in inner `overflow-hidden rounded-md` well so the border isn’t covered by the photo (inset `ring` sat under full-bleed img and disappeared); unselected `border-transparent` (only selected shows green frame); carousel viewport `p-1 -m-1`; grid path matches; `type="button"`; `focus-visible` ring for keyboard. Verification: `npm run build` pass.
+
+### Moondk private dining (2026-03-24)
+
+- [x] **ProductAccordion close sync** — `ProductAccordion.tsx`: collapse uses only `grid-template-rows` (no outer/inner opacity); left rule stays `border-primary/20` and is clipped with content via `overflow-hidden`, fixing line disappearing before panel finishes closing. Verification: `npm run build` pass.
+- [x] **ContactFormSheet moondk tokens** — `ContactFormSheet.tsx`: scoped panel with `moondk-theme` so portaled sheet uses moondk HSL tokens; inner card `bg-card` + `rounded-card` + `ring-border/20`; softer field borders and `ring-ring` focus; close control uses `secondary` cream; `SelectContent` carries `moondk-theme` for dropdown. Verification: `npm run build` pass.
+- [x] **beok-private-dinning design polish** — `BrokPrivateDinning.tsx`: hero gradient + kicker, `Button` CTAs with focus rings, about eyebrow aligned with home fine-dining section, reserve as single rounded media card, FAQ band + readable list for house rules, menu as numbered courses in a card; copy fixes (grammar, “Bēok”, Marmalade). Removed unused `ThemeLink`. Cleaned git conflict markers from `TODO.md`. Verification: `npm run build` pass.
 
 ### SEO Metadata Update (2026-03-24)
 

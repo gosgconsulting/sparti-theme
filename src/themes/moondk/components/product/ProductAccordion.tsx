@@ -85,20 +85,20 @@ export default function ProductAccordion({ items, defaultOpenIndex = null }: Pro
             <div
               id={`accordion-content-${item.id}`}
               ref={contentRef}
-              className={`grid transition-all ${
-                prefersReducedMotion ? "" : "duration-500 ease-in-out"
-              } ${isOpen ? "grid-rows-[1fr] opacity-100" : "grid-rows-[0fr] opacity-0"}`}
+              className={`grid min-h-0 ${
+                prefersReducedMotion
+                  ? ""
+                  : "transition-[grid-template-rows] duration-500 ease-in-out"
+              } ${isOpen ? "grid-rows-[1fr]" : "grid-rows-[0fr]"}`}
               style={{
-                transitionProperty: prefersReducedMotion ? "none" : "grid-template-rows, opacity",
+                transitionProperty: prefersReducedMotion
+                  ? "none"
+                  : "grid-template-rows",
               }}
             >
-              <div className="overflow-hidden">
-                <div className="pb-6 md:pb-8 pt-0">
-                  <div className={`text-sm md:text-base font-body font-light text-foreground/70 leading-[1.75] max-w-[65ch] space-y-4 transition-opacity ${
-                    prefersReducedMotion ? "" : "duration-500 ease-in-out"
-                  } ${
-                    isOpen ? "border-l border-primary/20 pl-6 md:pl-8 opacity-100" : "opacity-0 border-l border-transparent pl-6 md:pl-8"
-                  }`}>
+              <div className="min-h-0 overflow-hidden">
+                <div className="pb-6 pt-0 md:pb-8">
+                  <div className="max-w-[65ch] space-y-4 border-l border-primary/20 pl-6 font-body text-sm font-light leading-[1.75] text-foreground/70 md:pl-8 md:text-base">
                     {item.content}
                   </div>
                 </div>

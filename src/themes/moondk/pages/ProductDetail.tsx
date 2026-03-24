@@ -1,13 +1,3 @@
-import { ThemeLink } from "@/components/ThemeLink";
-import {
-  Breadcrumb,
-  BreadcrumbItem,
-  BreadcrumbLink,
-  BreadcrumbList,
-  BreadcrumbPage,
-  BreadcrumbSeparator,
-} from "@/components/ui/breadcrumb";
-
 import { useState } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
@@ -17,11 +7,12 @@ import ProductImageGallery from "../components/product/ProductImageGallery";
 import ProductInfo from "../components/product/ProductInfo";
 import ProductDescription from "../components/product/ProductDescription";
 import ProductCarousel from "../components/content/ProductCarousel";
-import { products } from "../components/category/products";
+import { ProductDetailBreadcrumb } from "../components/product/ProductDetailBreadcrumb";
+import { FALLBACK_PRODUCT_DISPLAY_NAME, getProductByRouteId } from "../components/category/products";
 
 export default function ProductDetailPage({ productId }: { productId: string }) {
-  const product = products.find((p) => p.id.toString() === productId);
-  const productName = product?.name || "Hovenia Dulcis Extract (헛개수)";
+  const product = getProductByRouteId(productId);
+  const productName = product?.name ?? FALLBACK_PRODUCT_DISPLAY_NAME;
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
   return (
     <div className="min-h-screen bg-background">
@@ -29,28 +20,7 @@ export default function ProductDetailPage({ productId }: { productId: string }) 
 
       <main className="pt-8">
         <section className="w-full px-6">
-          {/* Breadcrumb - Show above image on smaller screens */}
-          <div className="lg:hidden mb-6">
-            <Breadcrumb>
-              <BreadcrumbList>
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <ThemeLink to="/" className="font-body font-light text-foreground/70 hover:text-primary">Home</ThemeLink>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbLink asChild>
-                    <ThemeLink to="/category/shop" className="font-body font-light text-foreground/70 hover:text-primary">Shop</ThemeLink>
-                  </BreadcrumbLink>
-                </BreadcrumbItem>
-                <BreadcrumbSeparator />
-                <BreadcrumbItem>
-                  <BreadcrumbPage className="font-body font-light text-foreground">{productName}</BreadcrumbPage>
-                </BreadcrumbItem>
-              </BreadcrumbList>
-            </Breadcrumb>
-          </div>
+          <ProductDetailBreadcrumb productName={productName} className="lg:hidden mb-8 md:mb-10" />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
             <ProductImageGallery productId={productId} />

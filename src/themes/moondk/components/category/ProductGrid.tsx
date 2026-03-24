@@ -76,7 +76,7 @@ export default function ProductGrid({
         {paginatedProducts.map((product) => (
           <Card
             key={product.id}
-            className="rounded-[1.5rem] border-none shadow-md hover:shadow-lg transition-shadow flex flex-col"
+            className="flex flex-col rounded-[1.5rem] border-0 shadow-md ring-0 transition-shadow hover:shadow-lg"
           >
             <CardContent className="p-0 flex flex-col flex-1">
               <ThemeLink to={`/product/${product.id}`} className="block">

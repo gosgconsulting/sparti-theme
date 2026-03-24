@@ -1,4 +1,6 @@
 import React, { useMemo, useState } from "react";
+import { MapPin } from "lucide-react";
+import StayDateRangePicker from "../booking/StayDateRangePicker";
 import DestinationDropdown from "../booking/DestinationDropdown";
 import OccupancySelector from "../booking/OccupancySelector";
 import type { Hotel2Destination } from "../booking/countries";
@@ -24,12 +26,6 @@ function yyyyMmDd(d: Date) {
   const m = String(d.getMonth() + 1).padStart(2, "0");
   const day = String(d.getDate()).padStart(2, "0");
   return `${y}-${m}-${day}`;
-}
-
-function formatShortDate(value: string) {
-  const d = new Date(`${value}T00:00:00`);
-  if (Number.isNaN(d.getTime())) return value;
-  return d.toLocaleDateString(undefined, { weekday: "short", month: "short", day: "numeric" });
 }
 
 function nightsBetween(start: string, end: string) {
@@ -92,12 +88,12 @@ export default function HeroSection({
       {/* Booking widget below hero */}
       <section className="relative -mt-10 sm:-mt-12 lg:-mt-14 pb-10 lg:pb-14 overflow-visible">
         <div className="container mx-auto">
-          <div className="relative z-[70] bg-card border border-border shadow-xl px-5 sm:px-6 py-5">
-            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end">
+          <div className="relative z-[70] overflow-visible bg-card border border-border shadow-xl px-5 sm:px-6 py-5">
+            <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-end overflow-visible">
               {/* Destination */}
               <div className="lg:col-span-3">
                 <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
-                  <span aria-hidden="true">📍</span>
+                  <MapPin className="h-3.5 w-3.5 shrink-0 text-primary" strokeWidth={2} aria-hidden />
                   <span>Destination</span>
                 </div>
                 <div className="mt-2">
@@ -118,51 +114,23 @@ export default function HeroSection({
                     <span>{Math.max(1, nightsBetween(checkIn, checkOut))} NIGHT</span>
                   </div>
                 </div>
-
-                <div className="mt-2 flex items-center gap-4">
-                  <div className="flex-1">
-                    <div className="relative h-12">
-                      <div className="h-full flex items-center border-b border-border">
-                        <span className="font-body text-sm text-foreground">
-                          {formatShortDate(checkIn)}
-                        </span>
-                      </div>
-                      <input
-                        aria-label="Check-in"
-                        type="date"
-                        value={checkIn}
-                        onChange={(e) => setCheckIn(e.target.value)}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                      />
-                    </div>
-                  </div>
-                  <div className="shrink-0 font-body text-sm text-muted-foreground">–</div>
-                  <div className="flex-1">
-                    <div className="relative h-12">
-                      <div className="h-full flex items-center border-b border-border">
-                        <span className="font-body text-sm text-foreground">
-                          {formatShortDate(checkOut)}
-                        </span>
-                      </div>
-                      <input
-                        aria-label="Check-out"
-                        type="date"
-                        value={checkOut}
-                        onChange={(e) => setCheckOut(e.target.value)}
-                        className="absolute inset-0 opacity-0 cursor-pointer"
-                      />
-                    </div>
-                  </div>
-                </div>
+                <StayDateRangePicker
+                  checkIn={checkIn}
+                  checkOut={checkOut}
+                  onRangeChange={({ checkIn: nextIn, checkOut: nextOut }) => {
+                    setCheckIn(nextIn);
+                    setCheckOut(nextOut);
+                  }}
+                />
               </div>
 
               {/* Guests */}
-              <div className="lg:col-span-2">
+              <div className="lg:col-span-2 overflow-visible min-w-0">
                 <div className="flex items-center gap-2 font-body text-[11px] tracking-[0.16em] uppercase text-muted-foreground">
                   <span aria-hidden="true">👤</span>
                   <span>Guests</span>
                 </div>
-                <div className="mt-2">
+                <div className="mt-2 overflow-visible">
                   <OccupancySelector
                     adults={adults}
                     children={children}
@@ -192,4 +160,3 @@ export default function HeroSection({
     </>
   );
 }
-

@@ -1,7 +1,26 @@
+import { hotelSlugFromName } from "../utils/hotelSlug";
 import type { Hotel2Hotel } from "../types";
+import { buildHotel2Rooms } from "./buildHotel2Rooms";
 
-export function getHotel2Hotels(): Hotel2Hotel[] {
-  const seed: Omit<Hotel2Hotel, "id">[] = [
+const GALLERY_POOL = [
+  "https://images.unsplash.com/photo-1522708323590-d24dbb6b0267?w=1200&q=80",
+  "https://images.unsplash.com/photo-1502672260266-1c1ef2d93688?w=1200&q=80",
+  "https://images.unsplash.com/photo-1493809842364-78817add7ffb?w=1200&q=80",
+  "https://images.unsplash.com/photo-1512918728675-ed5a9ecdebdb?w=1200&q=80",
+];
+
+function galleryFor(image: string, index: number): string[] {
+  const a = GALLERY_POOL[index % GALLERY_POOL.length]!;
+  const b = GALLERY_POOL[(index + 1) % GALLERY_POOL.length]!;
+  const c = GALLERY_POOL[(index + 2) % GALLERY_POOL.length]!;
+  return [image, a, b, c];
+}
+
+function buildAllHotels(): Hotel2Hotel[] {
+  const seed: Omit<
+    Hotel2Hotel,
+    "id" | "listedAt" | "slug" | "galleryImages" | "tags" | "rooms"
+  >[] = [
     {
       name: "Atelier Arcadia",
       city: "Bangkok",
@@ -121,15 +140,43 @@ export function getHotel2Hotels(): Hotel2Hotel[] {
 
   const expanded: Hotel2Hotel[] = [];
   for (let i = 0; i < 20; i += 1) {
-    const base = seed[i % seed.length];
+    const base = seed[i % seed.length]!;
+    const id = `h-${i + 1}`;
+    const name = i < seed.length ? base.name : `${base.name} ${i - seed.length + 2}`;
+    const pricePerNight = base.pricePerNight + (i % 5) * 15;
+    const slug = hotelSlugFromName(name);
+    const galleryImages = galleryFor(base.image, i);
+    const tags = [...base.amenities];
+    if (base.tag) tags.unshift(base.tag);
     expanded.push({
-      id: `h-${i + 1}`,
-      ...base,
-      name: i < seed.length ? base.name : `${base.name} ${i - seed.length + 2}`,
-      pricePerNight: base.pricePerNight + (i % 5) * 15,
+      id,
+      slug,
+      name,
+      city: base.city,
+      country: base.country,
+      pricePerNight,
+      rating: base.rating,
       reviews: base.reviews + i * 7,
+      amenities: base.amenities,
+      image: base.image,
+      galleryImages,
+      tags,
+      tag: base.tag,
+      collections: base.collections,
+      listedAt: new Date(2024, 0, 1 + i).toISOString().slice(0, 10),
+      rooms: buildHotel2Rooms(id, base.city, pricePerNight),
     });
   }
   return expanded;
 }
 
+let cache: Hotel2Hotel[] | null = null;
+
+export function getHotel2Hotels(): Hotel2Hotel[] {
+  if (!cache) cache = buildAllHotels();
+  return cache;
+}
+
+export function getHotel2HotelBySlug(slug: string): Hotel2Hotel | undefined {
+  return getHotel2Hotels().find((h) => h.slug === slug);
+}

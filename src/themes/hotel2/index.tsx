@@ -4,6 +4,7 @@ import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import Header from "../hotel1/components/layout/Header";
 import Footer from "./components/layout/Footer";
 import HomePage from "./pages/HomePage";
+import HotelDetailPage from "./pages/HotelDetailPage";
 import SearchResultsPage from "./pages/SearchResultsPage";
 import "./theme.css";
 
@@ -49,7 +50,9 @@ const Hotel2Theme: React.FC<Hotel2ThemeProps> = ({
     return "";
   }, [location.pathname, tenantSlug, params.pageSlug, pageSlug]);
 
-  const topLevelSlug = resolvedPageSlug.split("/").filter(Boolean)[0] || "";
+  const segments = resolvedPageSlug.split("/").filter(Boolean);
+  const topLevelSlug = segments[0] || "";
+  const hotelDetailSlug = segments[0] === "hotels" && segments[1] ? segments[1] : "";
 
   return (
     <div className="theme-hotel2 min-h-screen flex flex-col">
@@ -57,6 +60,8 @@ const Hotel2Theme: React.FC<Hotel2ThemeProps> = ({
       <main className="flex-1">
         {topLevelSlug === "search" ? (
           <SearchResultsPage basePath={resolvedBasePath} />
+        ) : hotelDetailSlug ? (
+          <HotelDetailPage basePath={resolvedBasePath} hotelSlug={hotelDetailSlug} />
         ) : (
           <HomePage basePath={resolvedBasePath} />
         )}

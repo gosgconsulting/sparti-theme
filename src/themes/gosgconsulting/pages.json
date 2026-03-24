@@ -3,12 +3,12 @@
     {
       "page_name": "Homepage",
       "slug": "/",
-      "meta_title": "GO SG Consulting - Full-Stack Digital Growth Solution",
+      "meta_title": "Digital Marketing Agency - Full-Stack Growth Solutions",
       "meta_description": "Helping brands grow their revenue and leads through comprehensive digital marketing services including SEO, SEM, Social Media Ads, Website Design, and Graphic Design.",
       "seo_index": true,
       "status": "published",
       "page_type": "page",
-      "keywords": ["digital marketing", "SEO", "SEM", "social media ads", "website design", "graphic design", "Singapore", "full-stack"],
+      "keywords": ["digital marketing", "SEO", "SEM", "social media ads", "website design", "graphic design", "full-stack"],
       "sections": [
         { "id": "hero", "name": "Advanced Hero Section", "description": "Main landing section with animated value proposition, logo, and marketing badges" },
         { "id": "challenge", "name": "Challenge Section", "description": "Problem/solution layout with animated timeline and pain points" },
@@ -22,12 +22,12 @@
     {
       "page_name": "SEO",
       "slug": "/seo",
-      "meta_title": "GO SG Consulting - Full-Stack Digital Growth Solution",
-      "meta_description": "Helping brands grow their revenue and leads through comprehensive digital marketing services including SEO, SEM, Social Media Ads, Website Design, and Graphic Design.",
+      "meta_title": "SEO Services - Search Engine Optimization Solutions",
+      "meta_description": "Professional SEO services to improve your search rankings and drive organic traffic. Comprehensive optimization strategies for sustainable growth.",
       "seo_index": true,
       "status": "published",
       "page_type": "page",
-      "keywords": ["digital marketing", "SEO", "SEM", "social media ads", "website design", "graphic design", "Singapore", "full-stack"],
+      "keywords": ["SEO", "search engine optimization", "organic traffic", "search rankings", "digital marketing"],
       "sections": [
         { "id": "hero", "name": "Advanced Hero Section", "description": "Main landing section with animated value proposition, logo, and marketing badges" },
         { "id": "challenge", "name": "Challenge Section", "description": "Problem/solution layout with animated timeline and pain points" },
@@ -41,12 +41,12 @@
     {
       "page_name": "Paid Ads",
       "slug": "/paid-ads",
-      "meta_title": "Paid Ads - GO SG Consulting",
-      "meta_description": "Master theme design for paid advertising services and digital marketing solutions.",
+      "meta_title": "Paid Advertising Services - PPC & SEM Solutions",
+      "meta_description": "Expert paid advertising services including PPC, SEM, and social media ads. Maximize ROI with data-driven campaigns.",
       "seo_index": true,
       "status": "published",
       "page_type": "page",
-      "keywords": ["paid ads", "SEM", "PPC", "digital marketing", "advertising", "Singapore"],
+      "keywords": ["paid ads", "SEM", "PPC", "digital marketing", "advertising"],
       "sections": [
         { "id": "hero", "name": "Banner Section", "description": "Hero section with main value proposition" },
         { "id": "challenge", "name": "Pain Point Section", "description": "Challenge/problem section" },
@@ -61,8 +61,8 @@
     {
       "page_name": "Blog",
       "slug": "/blog",
-      "meta_title": "SEO Insights & Expert Tips - GO SG Consulting Blog",
-      "meta_description": "Stay ahead of the curve with our latest SEO strategies, industry insights, and actionable tips to grow your online presence.",
+      "meta_title": "Digital Marketing Insights & Expert Tips - Blog",
+      "meta_description": "Stay ahead with the latest digital marketing strategies, industry insights, and actionable tips to grow your online presence.",
       "seo_index": true,
       "status": "published",
       "page_type": "blog_index"
@@ -70,8 +70,8 @@
     {
       "page_name": "Blog Post",
       "slug": "/blog/:slug",
-      "meta_title": "Blog Post - GO SG Consulting",
-      "meta_description": "Read our latest insights on digital marketing and SEO strategies.",
+      "meta_title": "Blog Post - Digital Marketing Insights",
+      "meta_description": "Read our latest insights on digital marketing and business growth strategies.",
       "seo_index": true,
       "status": "published",
       "page_type": "blog_post"
@@ -79,7 +79,7 @@
     {
       "page_name": "About Us",
       "slug": "/about",
-      "meta_title": "About GO SG Consulting - Digital Marketing Experts",
+      "meta_title": "About Us - Digital Marketing Experts",
       "meta_description": "Learn about our team of digital marketing experts and our mission to help businesses grow online.",
       "seo_index": true,
       "status": "draft",
@@ -88,7 +88,7 @@
     {
       "page_name": "Contact",
       "slug": "/contact",
-      "meta_title": "Contact GO SG Consulting - Get Your Free Consultation",
+      "meta_title": "Contact Us - Get Your Free Consultation",
       "meta_description": "Get in touch with our digital marketing experts for a free consultation and start growing your business online today.",
       "seo_index": true,
       "status": "draft",
@@ -97,8 +97,8 @@
     {
       "page_name": "Thank You",
       "slug": "/thank-you",
-      "meta_title": "Thank You - GO SG Consulting",
-      "meta_description": "Thank you for contacting GO SG Consulting. We'll be in touch soon!",
+      "meta_title": "Thank You - We'll Be In Touch Soon",
+      "meta_description": "Thank you for contacting us. We'll be in touch soon!",
       "seo_index": false,
       "status": "published",
       "page_type": "page"
@@ -106,7 +106,7 @@
     {
       "page_name": "Shop",
       "slug": "/shop",
-      "meta_title": "Shop - GO SG Consulting Digital Marketing Packages",
+      "meta_title": "Shop - Digital Marketing Packages & Services",
       "meta_description": "Browse our digital marketing packages and services. Find the perfect solution for your business growth.",
       "seo_index": true,
       "status": "published",
@@ -115,8 +115,8 @@
     {
       "page_name": "Cart",
       "slug": "/cart",
-      "meta_title": "Shopping Cart - GO SG Consulting",
-      "meta_description": "Review your selected digital marketing packages and proceed to checkout.",
+      "meta_title": "Shopping Cart - Review Your Selection",
+      "meta_description": "Review your selected packages and proceed to checkout.",
       "seo_index": false,
       "status": "published",
       "page_type": "page"
@@ -124,8 +124,8 @@
     {
       "page_name": "Product",
       "slug": "/product/:productname",
-      "meta_title": "Product Details - GO SG Consulting",
-      "meta_description": "View detailed information about our digital marketing packages and services.",
+      "meta_title": "Product Details - Service Information",
+      "meta_description": "View detailed information about our packages and services.",
       "seo_index": true,
       "status": "published",
       "page_type": "page"
@@ -133,8 +133,8 @@
     {
       "page_name": "Checkout",
       "slug": "/checkout",
-      "meta_title": "Checkout - GO SG Consulting",
-      "meta_description": "Complete your order for digital marketing services.",
+      "meta_title": "Checkout - Complete Your Order",
+      "meta_description": "Complete your order and start your journey with us.",
       "seo_index": false,
       "status": "published",
       "page_type": "page"

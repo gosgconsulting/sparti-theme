@@ -6,73 +6,146 @@
 
 /* MoonDk Theme Scoped Styles */
 .moondk-theme {
-  /* Color System - Korean Home Dining Palette */
-  --moondk-background: #F2F2F2;
-  --moondk-primary: #2F5C3E; /* Dark forest green from logo */
-  --moondk-primary-light: #4A7A5E;
-  --moondk-primary-dark: #1F3D2A;
-  --moondk-cream: #F2EFDC;
-  --moondk-sage: #C9CFC7;
-  --moondk-pink: #EAE2E3;
+  /* Color System - Korean Home Dining Palette (HSL format for Tailwind compatibility) */
+  /* Primary: #2F5C3E -> hsl(145, 33%, 28%) */
+  /* Background: #F2F2F2 -> hsl(0, 0%, 95%) */
+  /* Cream: #F2EFDC -> hsl(48, 38%, 91%) */
+  /* Sage: #C9CFC7 -> hsl(100, 9%, 79%) */
+  /* Pink: #EAE2E3 -> hsl(350, 19%, 90%) */
   
-  /* Neutral Palette */
-  --moondk-text: #1A1A1A;
-  --moondk-text-secondary: rgba(26, 26, 26, 0.7);
-  --moondk-text-muted: rgba(26, 26, 26, 0.5);
-  --moondk-border: rgba(26, 26, 26, 0.1);
-  --moondk-border-light: rgba(26, 26, 26, 0.05);
-  --moondk-card: #FFFFFF;
-  --moondk-card-hover: #FAFAFA;
-  --moondk-card-cream: #F2EFDC; /* Cream/beige for card accents */
+  --background: 0 0% 95%;
+  --foreground: 0 0% 10%;
+  --card: 0 0% 100%;
+  --card-foreground: 0 0% 10%;
+  --popover: 0 0% 100%;
+  --popover-foreground: 0 0% 10%;
+  --primary: 145 33% 28%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 48 38% 91%;
+  --secondary-foreground: 0 0% 10%;
+  --muted: 100 9% 79%;
+  --muted-foreground: 0 0% 10%;
+  --accent: 350 19% 90%;
+  --accent-foreground: 0 0% 10%;
+  --destructive: 0 72% 51%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 0 0% 10%;
+  --input: 0 0% 10%;
+  --ring: 145 33% 28%;
+  --radius: 1rem;
   
-  /* Semantic Color Mapping for E-shop Compatibility */
-  --background: var(--moondk-background);
-  --foreground: var(--moondk-text);
-  --card: var(--moondk-card);
-  --card-foreground: var(--moondk-text);
-  --popover: var(--moondk-card);
-  --popover-foreground: var(--moondk-text);
-  --primary: var(--moondk-primary);
-  --primary-foreground: #FFFFFF;
-  --primary-hover: var(--moondk-primary-light);
-  --secondary: var(--moondk-cream);
-  --secondary-foreground: var(--moondk-text);
-  --muted: var(--moondk-sage);
-  --muted-foreground: var(--moondk-text-secondary);
-  --accent: var(--moondk-pink);
-  --accent-foreground: var(--moondk-text);
-  --destructive: #DC2626;
-  --destructive-foreground: #FFFFFF;
-  --border: var(--moondk-border);
-  --input: var(--moondk-border);
-  --ring: var(--moondk-primary);
-  --radius: 1rem; /* Increased for more rounded appearance */
-  --radius-full: 9999px; /* For fully rounded/pill-shaped elements */
-  --radius-card: 1.5rem; /* For cards with large rounded corners */
+  /* Sidebar tokens */
+  --sidebar: 0 0% 95%;
+  --sidebar-foreground: 0 0% 10%;
+  --sidebar-primary: 145 33% 28%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 48 38% 91%;
+  --sidebar-accent-foreground: 0 0% 10%;
+  --sidebar-border: 0 0% 10%;
+  --sidebar-ring: 145 33% 28%;
   
-  /* Navigation */
-  --nav-background: var(--moondk-background);
-  --nav-foreground: var(--moondk-text);
-  --nav-hover: var(--moondk-primary);
+  /* Chart colors */
+  --chart-1: 145 33% 28%;
+  --chart-2: 48 38% 91%;
+  --chart-3: 100 9% 79%;
+  --chart-4: 350 19% 90%;
+  --chart-5: 145 45% 40%;
+  
+  /* Typography tokens */
+  --font-sans: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
+  --font-serif: 'Playfair Display', serif;
+  --font-mono: ui-monospace, monospace;
+  
+  /* Spacing and typography */
+  --spacing: 0.27rem;
+  --letter-spacing: -0.025em;
+  
+  /* Shadow tokens */
+  --shadow-offset-x: 0px;
+  --shadow-offset-y: 2px;
+  --shadow-blur: 3px;
+  --shadow-spread: 0px;
+  --shadow-color: 0 0% 0%;
+  --shadow-opacity: 0.1;
+  
+  /* Legacy moondk-specific tokens (mapped to canonical) */
+  --moondk-background: hsl(var(--background));
+  --moondk-primary: hsl(var(--primary));
+  --moondk-primary-light: hsl(145, 45%, 40%);
+  --moondk-primary-dark: hsl(145, 33%, 18%);
+  --moondk-cream: hsl(var(--secondary));
+  --moondk-sage: hsl(var(--muted));
+  --moondk-pink: hsl(var(--accent));
+  --moondk-text: hsl(var(--foreground));
+  --moondk-text-secondary: hsl(var(--muted-foreground));
+  --moondk-text-muted: hsl(0 0% 10% / 0.5);
+  --moondk-border: hsl(var(--border));
+  --moondk-border-light: hsl(0 0% 10% / 0.05);
+  --moondk-card: hsl(var(--card));
+  --moondk-card-hover: hsl(0 0% 98%);
+  --moondk-card-cream: hsl(var(--secondary));
+  
+  /* Navigation tokens */
+  --nav-background: hsl(var(--background));
+  --nav-foreground: hsl(var(--foreground));
+  --nav-hover: hsl(var(--primary));
   
   /* Transitions */
   --transition-smooth: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
   --transition-bounce: all 0.3s cubic-bezier(0.68, -0.55, 0.265, 1.55);
   
-  /* Typography */
-  --font-heading: 'Playfair Display', serif;
-  --font-body: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', sans-serif;
-  
   /* Spacing for airy feel */
   --spacing-section: 4rem;
   --spacing-element: 2rem;
+  
+  /* Radius variants */
+  --radius-full: 9999px;
+  --radius-card: 1.5rem;
+}
+
+/* Dark mode */
+.moondk-theme.dark {
+  --background: 145 20% 12%;
+  --foreground: 0 0% 94%;
+  --card: 145 20% 15%;
+  --card-foreground: 0 0% 94%;
+  --popover: 145 20% 15%;
+  --popover-foreground: 0 0% 94%;
+  --primary: 145 45% 40%;
+  --primary-foreground: 0 0% 100%;
+  --secondary: 48 20% 20%;
+  --secondary-foreground: 0 0% 94%;
+  --muted: 100 9% 25%;
+  --muted-foreground: 0 0% 63%;
+  --accent: 350 19% 25%;
+  --accent-foreground: 0 0% 94%;
+  --destructive: 0 84% 60%;
+  --destructive-foreground: 0 0% 100%;
+  --border: 145 20% 18%;
+  --input: 145 20% 18%;
+  --ring: 145 45% 40%;
+  
+  --sidebar: 145 20% 10%;
+  --sidebar-foreground: 0 0% 94%;
+  --sidebar-primary: 145 45% 40%;
+  --sidebar-primary-foreground: 0 0% 100%;
+  --sidebar-accent: 145 20% 15%;
+  --sidebar-accent-foreground: 0 0% 94%;
+  --sidebar-border: 145 20% 18%;
+  --sidebar-ring: 145 45% 40%;
+  
+  --chart-1: 145 45% 40%;
+  --chart-2: 48 38% 60%;
+  --chart-3: 100 9% 60%;
+  --chart-4: 350 19% 60%;
+  --chart-5: 145 55% 50%;
 }
 
 /* Base Typography */
 .moondk-theme {
-  font-family: var(--font-body);
-  color: var(--moondk-text);
-  background-color: var(--moondk-background);
+  font-family: var(--font-sans);
+  color: hsl(var(--foreground));
+  background-color: hsl(var(--background));
   line-height: 1.6;
 }
 
@@ -82,44 +155,44 @@
 .moondk-theme h4,
 .moondk-theme h5,
 .moondk-theme h6 {
-  font-family: var(--font-heading);
+  font-family: var(--font-serif);
   font-weight: 600;
   line-height: 1.2;
-  color: var(--moondk-text);
+  color: hsl(var(--foreground));
   letter-spacing: -0.02em;
 }
 
 .moondk-theme .font-heading {
-  font-family: var(--font-heading);
+  font-family: var(--font-serif);
 }
 
 .moondk-theme .font-body {
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
 }
 
 /* Utility Classes */
 .moondk-theme .bg-nav {
-  background-color: var(--nav-background);
+  background-color: hsl(var(--background) / 0.95);
 }
 
 .moondk-theme .text-nav-foreground {
-  color: var(--nav-foreground);
+  color: hsl(var(--foreground));
 }
 
 .moondk-theme .text-nav-hover {
-  color: var(--nav-hover);
+  color: hsl(var(--primary));
 }
 
 .moondk-theme .text-primary {
-  color: var(--moondk-primary);
+  color: hsl(var(--primary));
 }
 
 .moondk-theme .bg-primary {
-  background-color: var(--moondk-primary);
+  background-color: hsl(var(--primary));
 }
 
 .moondk-theme .border-subtle {
-  border-color: var(--moondk-border-light);
+  border-color: hsl(var(--border) / 0.05);
 }
 
 /* Smooth Animations */
@@ -151,61 +224,61 @@
 
 /* Card Styles for Clean, Airy Layout - Rounded */
 .moondk-theme .card-clean {
-  background-color: var(--moondk-card);
+  background-color: hsl(var(--card));
   border: none;
   border-radius: var(--radius-card);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 hsl(var(--shadow-color) / var(--shadow-opacity)), 0 1px 2px -1px hsl(var(--shadow-color) / var(--shadow-opacity));
   transition: var(--transition-smooth);
 }
 
 .moondk-theme .card-clean:hover {
-  background-color: var(--moondk-card-hover);
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  background-color: hsl(var(--card) / 0.98);
+  box-shadow: 0 4px 6px -1px hsl(var(--shadow-color) / var(--shadow-opacity)), 0 2px 4px -2px hsl(var(--shadow-color) / var(--shadow-opacity));
 }
 
 .moondk-theme .card-cream {
-  background-color: var(--moondk-card-cream);
+  background-color: hsl(var(--secondary));
   border: none;
   border-radius: var(--radius-card);
-  box-shadow: 0 1px 3px 0 rgba(0, 0, 0, 0.1), 0 1px 2px -1px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 1px 3px 0 hsl(var(--shadow-color) / var(--shadow-opacity)), 0 1px 2px -1px hsl(var(--shadow-color) / var(--shadow-opacity));
   transition: var(--transition-smooth);
 }
 
 .moondk-theme .card-cream:hover {
-  background-color: #F5F0E0;
-  box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -2px rgba(0, 0, 0, 0.1);
+  background-color: hsl(48 38% 88%);
+  box-shadow: 0 4px 6px -1px hsl(var(--shadow-color) / var(--shadow-opacity)), 0 2px 4px -2px hsl(var(--shadow-color) / var(--shadow-opacity));
 }
 
 /* Button Styles - Fully Rounded */
 .moondk-theme .btn-primary {
-  background-color: var(--moondk-primary);
-  color: #FFFFFF;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-full);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-weight: 500;
   transition: var(--transition-smooth);
 }
 
 .moondk-theme .btn-primary:hover {
-  background-color: var(--moondk-primary-light);
+  background-color: hsl(145 45% 40%);
 }
 
 .moondk-theme .btn-secondary {
   background-color: transparent;
-  color: var(--moondk-primary);
-  border: 1px solid var(--moondk-primary);
+  color: hsl(var(--primary));
+  border: 1px solid hsl(var(--primary));
   padding: 0.75rem 1.5rem;
   border-radius: var(--radius-full);
-  font-family: var(--font-body);
+  font-family: var(--font-sans);
   font-weight: 500;
   transition: var(--transition-smooth);
 }
 
 .moondk-theme .btn-secondary:hover {
-  background-color: var(--moondk-primary);
-  color: #FFFFFF;
+  background-color: hsl(var(--primary));
+  color: hsl(var(--primary-foreground));
 }
 
 /* Rounded Utility Classes */
@@ -223,12 +296,12 @@
 
 /* Link Styles */
 .moondk-theme a {
-  color: var(--moondk-primary);
+  color: hsl(var(--primary));
   transition: var(--transition-smooth);
 }
 
 .moondk-theme a:hover {
-  color: var(--moondk-primary-light);
+  color: hsl(145 45% 40%);
 }
 
 /* Generous Spacing for Airy Feel */

@@ -58,7 +58,7 @@ export default function CategoryPage({ category }: { category: string }) {
 
       <main className="pt-8">
         {/* Tabs + sort on the same row (no item count, no Filters button) */}
-        <section className="w-full px-6 mb-10 border-b border-border-light pb-4">
+        <section className="w-full px-6 mb-10 border-b border-border/10 pb-4">
           <div className="mx-auto max-w-6xl">
             <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-4">
               <div className="flex flex-wrap gap-2 justify-center lg:justify-start">
@@ -86,7 +86,7 @@ export default function CategoryPage({ category }: { category: string }) {
                   <SelectTrigger className="w-auto border-none bg-transparent text-sm font-body font-light shadow-none rounded-none pr-2">
                     <SelectValue />
                   </SelectTrigger>
-                  <SelectContent className="shadow-none border border-border-light rounded-none bg-background">
+                  <SelectContent className="shadow-none border border-border/20 rounded-none bg-background">
                     <SelectItem value="featured" className="hover:bg-muted/50 font-body font-light">
                       Featured
                     </SelectItem>

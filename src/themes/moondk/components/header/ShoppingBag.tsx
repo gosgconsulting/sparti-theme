@@ -1,6 +1,7 @@
 import { X, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeLink } from "@/components/ThemeLink";
+import { DELIVERY_FEE } from "../../constants";
 
 export interface CartItem {
   id: number;
@@ -39,7 +40,7 @@ const ShoppingBag = ({
       <div className="absolute inset-0 bg-black/50 h-screen" onClick={onClose} />
 
       {/* Off-canvas panel */}
-      <div className="absolute right-0 top-0 h-screen w-96 bg-white border-l border-border animate-slide-in-right flex flex-col">
+      <div className="absolute right-0 top-0 h-screen w-96 bg-card border-l border-border animate-slide-in-right flex flex-col">
         {/* Header */}
         <div className="flex items-center justify-between p-6 border-b border-border">
           <h2 className="text-lg font-heading font-medium text-foreground">Shopping Bag</h2>
@@ -95,7 +96,7 @@ const ShoppingBag = ({
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
-                    className="bg-[#F2EFDC] rounded-2xl p-4 relative"
+                    className="bg-secondary rounded-2xl p-4 relative"
                   >
                     {/* Remove button */}
                     <button
@@ -108,7 +109,7 @@ const ShoppingBag = ({
 
                     <div className="flex gap-4">
                       {/* Product image */}
-                      <div className="w-20 h-20 bg-white rounded-xl overflow-hidden flex-shrink-0">
+                      <div className="w-20 h-20 bg-card rounded-xl overflow-hidden flex-shrink-0">
                         <img
                           src={item.image}
                           alt={item.name}
@@ -129,7 +130,7 @@ const ShoppingBag = ({
                           <div className="flex items-center gap-2">
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-foreground hover:bg-white/80 transition-colors"
+                              className="w-8 h-8 bg-card rounded-full flex items-center justify-center text-foreground hover:bg-card/80 transition-colors"
                               aria-label="Decrease quantity"
                             >
                               <Minus size={14} />
@@ -139,7 +140,7 @@ const ShoppingBag = ({
                             </span>
                             <button
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-foreground hover:bg-white/80 transition-colors"
+                              className="w-8 h-8 bg-card rounded-full flex items-center justify-center text-foreground hover:bg-card/80 transition-colors"
                               aria-label="Increase quantity"
                             >
                               <Plus size={14} />
@@ -147,7 +148,7 @@ const ShoppingBag = ({
                           </div>
 
                           {/* Price tag */}
-                          <div className="bg-white rounded-full px-3 py-1">
+                          <div className="bg-card rounded-full px-3 py-1">
                             <span className="text-sm font-medium text-foreground">{item.price}</span>
                           </div>
                         </div>
@@ -158,7 +159,7 @@ const ShoppingBag = ({
               </div>
 
               {/* Amount Summary */}
-              <div className="border-t border-border-light pt-6 mb-6">
+              <div className="border-t border-border/20 pt-6 mb-6">
                 <h3 className="text-base font-semibold text-foreground mb-4">Amount</h3>
                 <div className="space-y-2 mb-4">
                   <div className="flex justify-between items-center">
@@ -169,19 +170,19 @@ const ShoppingBag = ({
                   </div>
                   <div className="flex justify-between items-center">
                     <span className="text-sm font-light text-foreground">Delivery fee</span>
-                    <span className="text-sm font-light text-foreground">$30</span>
+                    <span className="text-sm font-light text-foreground">${DELIVERY_FEE}</span>
                   </div>
-                  <div className="flex justify-between items-center pt-2 border-t border-border-light">
+                  <div className="flex justify-between items-center pt-2 border-t border-border/20">
                     <span className="text-base font-semibold text-foreground">Total</span>
                     <span className="text-base font-semibold text-foreground">
-                      ${(subtotal + 30).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ${(subtotal + DELIVERY_FEE).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>
 
                 {/* Checkout button */}
                 <ThemeLink to="/checkout" className="block" onClick={onClose}>
-                  <Button className="w-full rounded-full bg-primary hover:bg-primary-hover !text-white font-medium h-12">
+                  <Button className="w-full rounded-full bg-primary hover:bg-primary/90 !text-primary-foreground font-medium h-12">
                     Go to Checkout
                   </Button>
                 </ThemeLink>

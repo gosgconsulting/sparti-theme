@@ -10,7 +10,7 @@ interface FooterProps {
 }
 
 const Footer: React.FC<FooterProps> = ({ 
-  tenantName = 'GO SG',
+  tenantName = 'Digital Marketing Agency',
   tenantSlug = 'gosgconsulting',
   logoSrc,
   companyDescription = 'Full-stack digital growth solution helping brands grow their revenue and leads through comprehensive digital marketing services.',
@@ -21,8 +21,8 @@ const Footer: React.FC<FooterProps> = ({
   const basePath = ctxBasePath !== undefined ? ctxBasePath : `/theme/${tenantSlug}`;
   const blogHref = basePath ? `${basePath}/blog` : '/blog';
 
-  // Replace any instance of "sparti" (case-insensitive) with "GO SG"
-  const displayName = tenantName?.replace(/sparti/gi, 'GO SG') || 'GO SG';
+  // Use tenant name as-is, or fallback to generic name
+  const displayName = tenantName || 'Digital Marketing Agency';
 
   return (
     <footer className="bg-slate-900 text-white py-16 px-4">

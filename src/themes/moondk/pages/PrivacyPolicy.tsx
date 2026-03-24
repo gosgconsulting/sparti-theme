@@ -95,7 +95,7 @@ function TableOfContents({ items, activeSection, onSectionChange, isMobile, isOp
       <nav aria-label="Table of contents" className="mb-8 print:hidden">
         <button
           onClick={onToggle}
-          className="w-full flex items-center justify-between p-4 bg-white border border-border rounded-lg hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2"
+          className="w-full flex items-center justify-between p-4 bg-white border border-border rounded-lg hover:bg-background transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           aria-expanded={isOpen}
           aria-controls="toc-content"
         >
@@ -120,9 +120,9 @@ function TableOfContents({ items, activeSection, onSectionChange, isMobile, isOp
                     onClick={(e) => handleClick(e, item.id)}
                     className={`block py-2 px-3 text-sm font-body transition-colors rounded ${
                       activeSection === item.id
-                        ? "text-[#195B3E] font-medium bg-[#195B3E]/5"
-                        : "text-foreground/70 hover:text-[#195B3E] hover:bg-background"
-                    } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-1`}
+                        ? "text-primary font-medium bg-primary/5"
+                        : "text-foreground/70 hover:text-primary hover:bg-background"
+                    } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1`}
                   >
                     <span className="text-foreground/50 mr-2">{item.number}.</span>
                     {item.text.replace(/^\d+\.\s*/, "")}
@@ -152,9 +152,9 @@ function TableOfContents({ items, activeSection, onSectionChange, isMobile, isOp
                 onClick={(e) => handleClick(e, item.id)}
                 className={`block py-2 px-3 text-sm font-body transition-colors rounded ${
                   activeSection === item.id
-                    ? "text-[#195B3E] font-medium bg-[#195B3E]/5"
-                    : "text-foreground/70 hover:text-[#195B3E] hover:bg-background"
-                } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-1`}
+                    ? "text-primary font-medium bg-primary/5"
+                    : "text-foreground/70 hover:text-primary hover:bg-background"
+                } focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-1`}
               >
                 <span className="text-foreground/50 mr-2">{item.number}.</span>
                 {item.text.replace(/^\d+\.\s*/, "")}
@@ -209,17 +209,17 @@ export default function PrivacyPolicyPage() {
       {/* Skip link */}
       <a
         href="#main-content"
-        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-[#195B3E] focus:text-white focus:rounded focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#195B3E]"
+        className="sr-only focus:not-sr-only focus:absolute focus:top-4 focus:left-4 focus:z-50 focus:px-4 focus:py-2 focus:bg-primary focus:text-primary-foreground focus:rounded focus:shadow-lg focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-primary"
       >
         Skip to main content
       </a>
 
       <main id="main-content" className="pt-8 pb-16">
         {/* Hero Header */}
-        <div className="bg-background border-b border-border-light">
+        <div className="bg-background border-b border-border/10">
           <div className="max-w-7xl mx-auto px-6 py-8 md:py-12">
             <div className="max-w-4xl">
-              <h1 className="text-4xl md:text-5xl font-heading font-medium !text-[#195B3E] mb-4">
+              <h1 className="text-4xl md:text-5xl font-heading font-medium !text-primary mb-4">
                 Privacy Policy
               </h1>
               <p className="text-lg font-body font-light text-foreground/70">
@@ -256,7 +256,7 @@ export default function PrivacyPolicyPage() {
 
             {/* Main Content */}
             <article ref={contentRef} className="max-w-none">
-              <div className="bg-white rounded-lg p-6 md:p-8 lg:p-12 shadow-sm border border-border-light">
+              <div className="bg-white rounded-lg p-6 md:p-8 lg:p-12 shadow-sm border border-border/20">
                 {/* Introduction Section */}
                 <section id="introduction" className="mb-12 scroll-mt-24">
                   <div className="prose prose-lg max-w-none">
@@ -271,8 +271,8 @@ export default function PrivacyPolicyPage() {
 
                 {/* Section 1 */}
                 <section id="information-collection" className="mb-16 scroll-mt-24 print:break-inside-avoid">
-                  <div className="border-b border-border-light pb-6 mb-6">
-                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
+                  <div className="border-b border-border/20 pb-6 mb-6">
+                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-primary mb-3">
                       1. Information That We Collect From You
                     </h2>
                   </div>
@@ -286,7 +286,7 @@ export default function PrivacyPolicyPage() {
                   </div>
                   <button
                     onClick={scrollToTop}
-                    className="mt-6 text-sm font-body text-foreground/60 hover:text-[#195B3E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
+                    className="mt-6 text-sm font-body text-foreground/60 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
                   >
                     ↑ Back to top
                   </button>
@@ -294,8 +294,8 @@ export default function PrivacyPolicyPage() {
 
                 {/* Section 2 */}
                 <section id="use-of-information" className="mb-16 scroll-mt-24 print:break-inside-avoid">
-                  <div className="border-b border-border-light pb-6 mb-6">
-                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
+                  <div className="border-b border-border/20 pb-6 mb-6">
+                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-primary mb-3">
                       2. Use Of Your Information
                     </h2>
                   </div>
@@ -318,7 +318,7 @@ export default function PrivacyPolicyPage() {
                   </div>
                   <button
                     onClick={scrollToTop}
-                    className="mt-6 text-sm font-body text-foreground/60 hover:text-[#195B3E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
+                    className="mt-6 text-sm font-body text-foreground/60 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
                   >
                     ↑ Back to top
                   </button>
@@ -326,8 +326,8 @@ export default function PrivacyPolicyPage() {
 
                 {/* Section 3 */}
                 <section id="disclosure" className="mb-16 scroll-mt-24 print:break-inside-avoid">
-                  <div className="border-b border-border-light pb-6 mb-6">
-                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
+                  <div className="border-b border-border/20 pb-6 mb-6">
+                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-primary mb-3">
                       3. Disclosure Of Your Information
                     </h2>
                   </div>
@@ -350,7 +350,7 @@ export default function PrivacyPolicyPage() {
                   </div>
                   <button
                     onClick={scrollToTop}
-                    className="mt-6 text-sm font-body text-foreground/60 hover:text-[#195B3E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
+                    className="mt-6 text-sm font-body text-foreground/60 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
                   >
                     ↑ Back to top
                   </button>
@@ -358,8 +358,8 @@ export default function PrivacyPolicyPage() {
 
                 {/* Section 4 */}
                 <section id="security" className="mb-16 scroll-mt-24 print:break-inside-avoid">
-                  <div className="border-b border-border-light pb-6 mb-6">
-                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
+                  <div className="border-b border-border/20 pb-6 mb-6">
+                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-primary mb-3">
                       4. Security And Data Retention
                     </h2>
                   </div>
@@ -376,7 +376,7 @@ export default function PrivacyPolicyPage() {
                   </div>
                   <button
                     onClick={scrollToTop}
-                    className="mt-6 text-sm font-body text-foreground/60 hover:text-[#195B3E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
+                    className="mt-6 text-sm font-body text-foreground/60 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
                   >
                     ↑ Back to top
                   </button>
@@ -384,8 +384,8 @@ export default function PrivacyPolicyPage() {
 
                 {/* Section 5 */}
                 <section id="accessing" className="mb-16 scroll-mt-24 print:break-inside-avoid">
-                  <div className="border-b border-border-light pb-6 mb-6">
-                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
+                  <div className="border-b border-border/20 pb-6 mb-6">
+                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-primary mb-3">
                       5. Accessing And Updating
                     </h2>
                   </div>
@@ -396,7 +396,7 @@ export default function PrivacyPolicyPage() {
                   </div>
                   <button
                     onClick={scrollToTop}
-                    className="mt-6 text-sm font-body text-foreground/60 hover:text-[#195B3E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
+                    className="mt-6 text-sm font-body text-foreground/60 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
                   >
                     ↑ Back to top
                   </button>
@@ -404,8 +404,8 @@ export default function PrivacyPolicyPage() {
 
                 {/* Section 6 */}
                 <section id="changes" className="mb-16 scroll-mt-24 print:break-inside-avoid">
-                  <div className="border-b border-border-light pb-6 mb-6">
-                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-[#195B3E] mb-3">
+                  <div className="border-b border-border/20 pb-6 mb-6">
+                    <h2 className="text-2xl md:text-3xl font-heading font-medium !text-primary mb-3">
                       6. Changes To Our Privacy Policy
                     </h2>
                   </div>
@@ -416,22 +416,22 @@ export default function PrivacyPolicyPage() {
                   </div>
                   <button
                     onClick={scrollToTop}
-                    className="mt-6 text-sm font-body text-foreground/60 hover:text-[#195B3E] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
+                    className="mt-6 text-sm font-body text-foreground/60 hover:text-primary transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2 focus-visible:rounded px-2 py-1"
                   >
                     ↑ Back to top
                   </button>
             </section>
 
                 {/* Questions/Contact Block */}
-                <div className="mt-16 pt-8 border-t border-border-light">
+                <div className="mt-16 pt-8 border-t border-border/20">
                   <div className="bg-background rounded-lg p-6 md:p-8">
-                    <h3 className="text-xl font-heading font-medium !text-[#195B3E] mb-3">Questions?</h3>
+                    <h3 className="text-xl font-heading font-medium !text-primary mb-3">Questions?</h3>
                     <p className="text-base font-body font-light text-foreground/70 leading-relaxed mb-4">
                       If you have questions about this Privacy Policy, please contact us.
                     </p>
                     <button
                       onClick={() => setIsContactFormOpen(true)}
-                      className="inline-flex items-center px-6 py-3 bg-[#195B3E] text-white font-body font-medium rounded-full hover:bg-[#1F3D2A] transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2"
+                      className="inline-flex items-center px-6 py-3 bg-primary text-primary-foreground font-body font-medium rounded-full hover:bg-primary/90 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
                     >
                       Contact Us
                     </button>

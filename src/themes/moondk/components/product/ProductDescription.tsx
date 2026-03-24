@@ -400,9 +400,6 @@ While it's excellent cold for Singapore's heat, drinking it warm before bed help
 
   return (
     <div className="mt-10 md:mt-12">
-      {/* Section Divider */}
-      <div className="border-t border-border-light mb-6 md:mb-8"></div>
-      
       {/* Section Intro */}
       <div className="mb-6 md:mb-8">
         <p className="text-xs font-body font-light text-foreground/50 uppercase tracking-wider">

@@ -116,7 +116,7 @@ const BlogSection: React.FC<BlogSectionProps> = ({
                 
                 <div className="flex items-center justify-between">
                   <span className="text-sm font-medium">
-                    GO SG Consulting
+                    Digital Marketing Agency
                   </span>
                   
                   <span className="inline-flex items-center text-primary group-hover:text-secondary font-medium text-sm transition-colors duration-300">

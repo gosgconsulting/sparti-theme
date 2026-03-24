@@ -39,10 +39,10 @@ export const AddToBagNotification = ({
         isVisible ? "opacity-100 translate-y-0" : "opacity-0 translate-y-4"
       } transition-all duration-300`}
     >
-      <div className="bg-white rounded-lg shadow-lg border border-border p-3 max-w-xs mx-4 pointer-events-auto">
+      <div className="bg-card rounded-lg shadow-lg border border-border p-3 max-w-xs mx-4 pointer-events-auto">
         <div className="flex items-center gap-2">
           <div className="flex-shrink-0 w-6 h-6 rounded-full bg-primary flex items-center justify-center">
-            <Check className="h-3.5 w-3.5 text-white" />
+            <Check className="h-3.5 w-3.5 text-primary-foreground" />
           </div>
           <div className="flex-1 min-w-0">
             <p className="text-xs font-body font-medium text-foreground">

@@ -5,7 +5,7 @@ import logoSrc from "../../assets/moondk_logo.png";
 
 const CheckoutHeader = () => {
   return (
-    <header className="w-full bg-background border-b border-border-light">
+    <header className="w-full bg-background border-b border-border/10">
       <div className="max-w-7xl mx-auto px-6 py-8">
         <div className="relative flex items-center justify-between">
           {/* Left side - Continue Shopping */}

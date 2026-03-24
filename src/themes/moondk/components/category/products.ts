@@ -5,7 +5,7 @@ import cornExtractImage from "../../assets/tea/corn_tea.jpg";
 import blackBeanTea1 from "../../assets/tea/Blackbean_Tea_fol/1.jpg";
 import blackBeanTeaImage from "../../assets/tea/black_bean_tea_extract.jpg";
 import barleyTea1 from "../../assets/tea/Barley_Tea_fol/1.jpg";
-import barleyTeaImage from "../../../e-shop/assets/barley-tea.png";
+import barleyTeaImage from "../../assets/tea/BEOK-Barleytea1.jpg";
 
 // Oil products
 import sesameOilImage from "../../assets/oil/BEOK-sesameoil1.jpg";

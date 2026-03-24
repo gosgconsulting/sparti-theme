@@ -12,7 +12,7 @@ interface HeaderProps {
 }
 
 const Header: React.FC<HeaderProps> = ({ 
-  tenantName = 'GO SG Consulting',
+  tenantName = 'Digital Marketing Agency',
   tenantSlug = 'gosgconsulting',
   logoSrc,
   onContactClick 

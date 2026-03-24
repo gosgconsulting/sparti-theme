@@ -9,12 +9,6 @@ import ContactFormSheet from "../ContactFormSheet";
 
 import logoSrc from "../../assets/moondk_logo.png";
 
-// Placeholder images - replace with actual product images
-import pantheonImage from "../../../e-shop/assets/pantheon.jpg";
-import eclipseImage from "../../../e-shop/assets/eclipse.jpg";
-import haloImage from "../../../e-shop/assets/halo.jpg";
-import foundersImage from "../../../e-shop/assets/founders.png";
-
 const Navigation = () => {
   // Temporarily hide Recipes in header navigation (easy toggle later).
   const SHOW_RECIPES = false;
@@ -31,16 +25,6 @@ const Navigation = () => {
   const searchButtonRef = useRef<HTMLButtonElement>(null);
   
   const { cartItems, updateQuantity, totalItems, isCartOpen, openCart, closeCart } = useCart();
-
-  // Preload dropdown images for faster display
-  useEffect(() => {
-    const imagesToPreload = [pantheonImage, eclipseImage, haloImage, foundersImage];
-
-    imagesToPreload.forEach((src) => {
-      const img = new Image();
-      img.src = src;
-    });
-  }, []);
 
   // Cleanup timeout on unmount
   useEffect(() => {
@@ -202,19 +186,13 @@ const Navigation = () => {
     <nav
       className="relative bg-nav"
       style={{
-        backgroundColor: "rgba(242, 242, 242, 0.95)",
         backdropFilter: "blur(10px)",
         zIndex: 40,
       }}
     >
       {/* Topbar */}
-      <div
-        className="w-full py-2 px-6 flex items-center justify-center text-sm"
-        style={{
-          backgroundColor: "#B6B8A1", // Updated topbar color
-        }}
-      >
-        <div className="text-[#2F5C3E] font-body font-light">
+      <div className="w-full py-2 px-6 flex items-center justify-center text-sm bg-muted">
+        <div className="text-primary font-body font-light">
           FREE DELIVERY FOR ORDERS OVER $150
         </div>
       </div>
@@ -317,13 +295,11 @@ const Navigation = () => {
                           ref={(el) => {
                             if (el) dropdownRefs.current.set(item.name, el);
                           }}
-                          className="fixed z-50 py-4 px-8 transition-all duration-300 ease-out"
+                          className="fixed z-50 py-4 px-8 transition-all duration-300 ease-out bg-background shadow-md"
                           style={{
                             width: 'max-content',
                             maxWidth: 'min(90vw, 800px)',
-                            backgroundColor: '#F2F2F2',
                             borderRadius: '0',
-                            boxShadow: '0 4px 12px rgba(0, 0, 0, 0.1)',
                           }}
                           onMouseEnter={() => handleDropdownOpen(item.name)}
                           onMouseLeave={handleDropdownClose}

@@ -34,8 +34,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         disabled={isPreviousDisabled}
         className={`px-4 py-2 text-sm font-body font-light transition-colors border ${
           isPreviousDisabled
-            ? "text-foreground/30 border-border-light/30 cursor-not-allowed"
-            : "text-foreground/70 hover:text-primary border-border-light hover:border-primary"
+            ? "text-foreground/30 border-border/20 cursor-not-allowed"
+            : "text-foreground/70 hover:text-primary border-border/20 hover:border-primary"
         }`}
       >
         Previous
@@ -49,7 +49,7 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
             className={`px-4 py-2 text-sm font-body transition-colors border ${
               isActive
                 ? "font-medium text-primary border-primary"
-                : "font-light text-foreground/70 hover:text-primary border-border-light hover:border-primary"
+                : "font-light text-foreground/70 hover:text-primary border-border/20 hover:border-primary"
             }`}
           >
             {page}
@@ -61,8 +61,8 @@ const Pagination = ({ currentPage, totalPages, onPageChange }: PaginationProps) 
         disabled={isNextDisabled}
         className={`px-4 py-2 text-sm font-body font-light transition-colors border ${
           isNextDisabled
-            ? "text-foreground/30 border-border-light/30 cursor-not-allowed"
-            : "text-foreground/70 hover:text-primary border-border-light hover:border-primary"
+            ? "text-foreground/30 border-border/20 cursor-not-allowed"
+            : "text-foreground/70 hover:text-primary border-border/20 hover:border-primary"
         }`}
       >
         Next

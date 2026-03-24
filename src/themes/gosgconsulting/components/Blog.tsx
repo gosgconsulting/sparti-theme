@@ -15,7 +15,7 @@ interface BlogProps {
 }
 
 const Blog: React.FC<BlogProps> = ({ 
-  tenantName = 'GO SG Consulting',
+  tenantName = 'Digital Marketing Agency',
   tenantSlug = 'gosgconsulting'
 }) => {
   const basePath = useContext(ThemeBasePathContext) ?? `/theme/${tenantSlug}`;

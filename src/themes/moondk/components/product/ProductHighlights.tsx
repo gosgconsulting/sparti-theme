@@ -32,7 +32,7 @@ export default function ProductHighlights({ productId }: ProductHighlightsProps)
         return (
           <div
             key={index}
-            className="flex flex-col items-center justify-center p-3 md:p-4 rounded-2xl bg-foreground/[0.02] border border-border-light/50 transition-all duration-200 hover:bg-foreground/[0.04] hover:border-border-light"
+            className="flex flex-col items-center justify-center p-3 md:p-4 rounded-2xl bg-foreground/[0.02] border border-border/20 transition-all duration-200 hover:bg-foreground/[0.04] hover:border-border/30"
           >
             <Icon className="h-4 w-4 md:h-5 md:w-5 text-foreground/60 mb-2 flex-shrink-0" strokeWidth={1.5} />
             <span className="text-xs md:text-sm font-body font-light text-foreground/70 text-center leading-tight">

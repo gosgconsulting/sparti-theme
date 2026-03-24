@@ -1,9 +1,62 @@
 {
   "pages": [
-    { "id": "home", "name": "Home", "slug": "", "component": "Homepage" },
-    { "id": "shop", "name": "Shop", "slug": "shop", "component": "Shop" },
-    { "id": "product", "name": "Product", "slug": "product", "component": "Product" },
-    { "id": "cart", "name": "Cart", "slug": "cart", "component": "Cart" },
-    { "id": "checkout", "name": "Checkout", "slug": "checkout", "component": "Checkout" }
+    {
+      "id": "home",
+      "name": "Home",
+      "slug": "",
+      "component": "Homepage",
+      "meta_title": "Online Store - Shop Quality Products",
+      "meta_description": "Shop our collection of quality products. Easy browsing, secure checkout, and fast shipping.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["online store", "shop", "e-commerce", "products"]
+    },
+    {
+      "id": "shop",
+      "name": "Shop",
+      "slug": "shop",
+      "component": "Shop",
+      "meta_title": "Shop - Browse All Products",
+      "meta_description": "Browse our complete product catalog. Find what you need with easy filtering and sorting.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["shop", "products", "catalog", "browse"]
+    },
+    {
+      "id": "product",
+      "name": "Product",
+      "slug": "product",
+      "component": "Product",
+      "meta_title": "Product Details - View Product",
+      "meta_description": "View detailed product information, specifications, and pricing.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["product", "details", "buy"]
+    },
+    {
+      "id": "cart",
+      "name": "Cart",
+      "slug": "cart",
+      "component": "Cart",
+      "meta_title": "Shopping Cart - Review Your Items",
+      "meta_description": "Review your shopping cart and proceed to checkout.",
+      "seo_index": false,
+      "status": "published",
+      "page_type": "page"
+    },
+    {
+      "id": "checkout",
+      "name": "Checkout",
+      "slug": "checkout",
+      "component": "Checkout",
+      "meta_title": "Checkout - Complete Your Purchase",
+      "meta_description": "Complete your purchase securely with our easy checkout process.",
+      "seo_index": false,
+      "status": "published",
+      "page_type": "page"
+    }
   ]
 }

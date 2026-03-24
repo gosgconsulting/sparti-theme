@@ -3,62 +3,68 @@
     {
       "page_name": "Homepage",
       "slug": "/",
-      "meta_title": "Nail Queen",
-      "meta_description": "Nail Queen by Michelle Tran",
+      "meta_title": "Premium Nail Salon - Professional Manicure & Pedicure Services",
+      "meta_description": "Experience luxury nail care with professional manicure and pedicure services. Expert nail artists, premium products, and exceptional service.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["nail salon", "manicure", "pedicure", "nail art", "nail care", "beauty salon"]
     },
     {
       "page_name": "Pricing",
       "slug": "/pricing",
-      "meta_title": "Pricing — Nail Queen",
-      "meta_description": "View Nail Queen services and pricing.",
+      "meta_title": "Pricing - Nail Services & Packages",
+      "meta_description": "View our nail services and pricing. Affordable luxury with transparent pricing for all treatments.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["nail pricing", "manicure prices", "pedicure prices", "nail packages"]
     },
     {
       "page_name": "Find Us",
       "slug": "/find-us",
-      "meta_title": "Find Us — Nail Queen",
-      "meta_description": "Find Nail Queen at Far East Plaza, Singapore.",
+      "meta_title": "Find Us - Salon Location & Hours",
+      "meta_description": "Visit our nail salon. Find our location, opening hours, and contact information.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["nail salon location", "find us", "salon hours", "contact"]
     },
     {
       "page_name": "Gallery",
       "slug": "/gallery",
-      "meta_title": "Gallery — Nail Queen",
-      "meta_description": "See Nail Queen manicures and services gallery.",
+      "meta_title": "Gallery - Nail Art & Design Showcase",
+      "meta_description": "Browse our gallery of beautiful nail designs and manicure work. Get inspired for your next visit.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["nail gallery", "nail art", "nail designs", "manicure gallery"]
     },
     {
       "page_name": "About",
       "slug": "/about",
-      "meta_title": "Meet Our Team — Nail Queen",
-      "meta_description": "Meet the Nail Queen team.",
+      "meta_title": "Meet Our Team - Expert Nail Artists",
+      "meta_description": "Meet our team of professional nail artists dedicated to providing exceptional service and beautiful results.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["about us", "nail artists", "team", "salon staff"]
     },
     {
       "page_name": "Blog",
       "slug": "/blog",
-      "meta_title": "Blog — Nail Queen",
-      "meta_description": "Nail Queen blog.",
+      "meta_title": "Blog - Nail Care Tips & Trends",
+      "meta_description": "Read our blog for the latest nail care tips, trends, and beauty advice from our expert nail artists.",
       "seo_index": true,
       "status": "published",
-      "page_type": "blog_index"
+      "page_type": "blog_index",
+      "keywords": ["nail blog", "nail care tips", "nail trends", "beauty blog"]
     },
     {
       "page_name": "Privacy Policy",
       "slug": "/privacy",
-      "meta_title": "Privacy Policy — Nail Queen",
-      "meta_description": "Nail Queen privacy policy.",
+      "meta_title": "Privacy Policy - Data Protection",
+      "meta_description": "Our privacy policy explains how we protect your personal information.",
       "seo_index": false,
       "status": "published",
       "page_type": "legal"
@@ -66,8 +72,8 @@
     {
       "page_name": "Terms & Conditions",
       "slug": "/terms",
-      "meta_title": "Terms & Conditions — Nail Queen",
-      "meta_description": "Nail Queen terms and conditions.",
+      "meta_title": "Terms & Conditions - Service Terms",
+      "meta_description": "Read our terms and conditions for booking and using our nail salon services.",
       "seo_index": false,
       "status": "published",
       "page_type": "legal"

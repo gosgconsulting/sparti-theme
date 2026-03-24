@@ -114,7 +114,7 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
           <div className="space-y-3 md:space-y-3">
         <div className="flex items-center gap-4">
           <span className="text-sm font-body font-light text-foreground">Quantity</span>
-              <div className="flex items-center border border-border-light overflow-hidden bg-background">
+              <div className="flex items-center border border-border/20 overflow-hidden bg-background">
             <Button
               variant="ghost"
               size="sm"
@@ -124,7 +124,7 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
             >
               <Minus className="h-4 w-4" />
             </Button>
-                <span className="h-11 flex items-center px-4 text-sm font-body font-light min-w-12 justify-center border-l border-r border-border-light bg-background">
+                <span className="h-11 flex items-center px-4 text-sm font-body font-light min-w-12 justify-center border-l border-r border-border/20 bg-background">
               {quantity}
             </span>
             <Button
@@ -143,7 +143,7 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
         </div>
 
         <Button 
-              className="w-full h-14 bg-primary !text-white hover:bg-primary-hover font-body font-medium rounded-full text-base transition-all duration-200 shadow-sm hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#195B3E] focus-visible:ring-offset-2"
+              className="w-full h-14 bg-primary !text-primary-foreground hover:bg-primary/90 font-body font-medium rounded-full text-base transition-all duration-200 shadow-sm hover:shadow-md focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-primary focus-visible:ring-offset-2"
           onClick={handleAddToBag}
         >
           Add to Bag

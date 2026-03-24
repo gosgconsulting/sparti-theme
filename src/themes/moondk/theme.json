@@ -5,6 +5,8 @@
   "author": "GOSG",
   "is_active": true,
   "category": "ecommerce",
+  "designSystem": "custom",
+  "designSystemTheme": "moondk",
   "tags": ["ecommerce", "korean", "home-dining", "chef-led", "curated"],
   "features": [
     "E-shop landing page",

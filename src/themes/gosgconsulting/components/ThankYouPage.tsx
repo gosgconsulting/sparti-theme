@@ -13,7 +13,7 @@ interface ThankYouPageProps {
 const WHATSAPP_PHONE = '6580246850';
 
 export const ThankYouPage: React.FC<ThankYouPageProps> = ({
-  tenantName = 'GO SG Consulting',
+  tenantName = 'Digital Marketing Agency',
   tenantSlug = 'gosgconsulting',
   tenantId
 }) => {

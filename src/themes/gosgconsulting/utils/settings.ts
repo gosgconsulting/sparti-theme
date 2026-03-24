@@ -8,7 +8,7 @@ import * as themeSettings from '@/utils/themeSettings';
 const FALLBACK_LOGO = getThemeAssetUrl(undefined, 'go-sg-logo-official.png', 'gosgconsulting');
 
 export const getSiteName = (b: Parameters<typeof themeSettings.getSiteName>[0]) =>
-  themeSettings.getSiteName(b, 'GO SG Consulting');
+  themeSettings.getSiteName(b, 'Digital Marketing Agency');
 export const getSiteTagline = (b: Parameters<typeof themeSettings.getSiteTagline>[0]) =>
   themeSettings.getSiteTagline(b, '');
 export const getSiteDescription = (b: Parameters<typeof themeSettings.getSiteDescription>[0]) =>

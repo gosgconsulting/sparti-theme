@@ -43,17 +43,17 @@ export const useSEO = (options: SEOOptions = {}) => {
       setLoading(false);
       // Use default settings when skipped
       setSeoSettings({
-        site_name: 'GO SG',
-        site_tagline: 'Digital Marketing Agency',
-        meta_title: 'GO SG - Digital Marketing Agency',
-        meta_description: 'GO SG - We grow your revenue at the highest ROI through integrated digital marketing solutions.',
-        meta_keywords: 'SEO, digital marketing, Singapore, organic traffic, search rankings',
-        meta_author: 'GO SG',
-        og_title: 'GO SG - Digital Marketing Agency',
-        og_description: 'Integrated marketing solutions for SMEs and high-performing brands.',
+        site_name: 'Sparti Website Builder',
+        site_tagline: 'Build Your Website',
+        meta_title: 'Sparti Website Builder - Create Your Website',
+        meta_description: 'Build beautiful, professional websites with Sparti Website Builder. Modern themes, easy customization, and powerful features.',
+        meta_keywords: 'website builder, website creation, web design, themes, templates',
+        meta_author: 'Sparti',
+        og_title: 'Sparti Website Builder - Create Your Website',
+        og_description: 'Build beautiful, professional websites with Sparti Website Builder.',
         og_type: 'website',
         twitter_card: 'summary_large_image',
-        twitter_site: '@gosgconsulting'
+        twitter_site: '@sparti'
       });
       return;
     }
@@ -77,17 +77,17 @@ export const useSEO = (options: SEOOptions = {}) => {
 
         // Fallback to default settings
         setSeoSettings({
-          site_name: 'GO SG',
-          site_tagline: 'Digital Marketing Agency',
-          meta_title: 'GO SG - Digital Marketing Agency',
-          meta_description: 'GO SG - We grow your revenue at the highest ROI through integrated digital marketing solutions.',
-          meta_keywords: 'SEO, digital marketing, Singapore, organic traffic, search rankings',
-          meta_author: 'GO SG',
-          og_title: 'GO SG - Digital Marketing Agency',
-          og_description: 'Integrated marketing solutions for SMEs and high-performing brands.',
+          site_name: 'Sparti Website Builder',
+          site_tagline: 'Build Your Website',
+          meta_title: 'Sparti Website Builder - Create Your Website',
+          meta_description: 'Build beautiful, professional websites with Sparti Website Builder. Modern themes, easy customization, and powerful features.',
+          meta_keywords: 'website builder, website creation, web design, themes, templates',
+          meta_author: 'Sparti',
+          og_title: 'Sparti Website Builder - Create Your Website',
+          og_description: 'Build beautiful, professional websites with Sparti Website Builder.',
           og_type: 'website',
           twitter_card: 'summary_large_image',
-          twitter_site: '@gosgconsulting'
+          twitter_site: '@sparti'
         });
       } finally {
         setLoading(false);

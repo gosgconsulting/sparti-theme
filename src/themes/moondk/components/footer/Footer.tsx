@@ -9,7 +9,7 @@ const Footer = () => {
   const [isContactFormOpen, setIsContactFormOpen] = useState(false);
 
   return (
-    <footer className="w-full bg-background text-foreground pt-16 pb-8 px-6 border-t border-border-light mt-24">
+    <footer className="w-full bg-background text-foreground pt-16 pb-8 px-6 border-t border-border/10 mt-24">
       <div>
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 mb-12">
           {/* Brand - Left side */}
@@ -102,10 +102,10 @@ const Footer = () => {
       </div>
 
       {/* Bottom section */}
-      <div className="border-t border-border-light pt-8">
+      <div className="border-t border-border/10 pt-8">
         <div className="flex flex-col md:flex-row justify-between items-center">
           <p className="text-sm font-body font-light text-foreground/60 mb-4 md:mb-0">
-            © 2024 MOONDK. All rights reserved.
+            © {new Date().getFullYear()} MOONDK. All rights reserved.
           </p>
           <div className="flex space-x-6">
             <a

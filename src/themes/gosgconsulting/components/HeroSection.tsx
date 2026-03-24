@@ -19,7 +19,7 @@ interface HeroSectionProps {
 }
 
 const HeroSection: React.FC<HeroSectionProps> = ({
-  tenantName = 'GO SG Consulting',
+  tenantName = 'Digital Marketing Agency',
   tenantSlug = 'gosgconsulting',
   title,
   description,

@@ -1,25 +1,24 @@
 {
   "pages": [
     {
-      "page_name": "Hotel2",
+      "page_name": "Homepage",
       "slug": "/",
-      "meta_title": "Hotel2 — Curated stays, refined service",
-      "meta_description": "A premium hotel landing experience with polished booking controls and curated collections.",
+      "meta_title": "Luxury Hotel - Curated Stays & Refined Service",
+      "meta_description": "A premium hotel experience with polished booking controls and curated collections. Discover luxury accommodations.",
       "seo_index": true,
       "status": "published",
       "page_type": "page",
-      "keywords": ["hotel", "luxury", "booking", "collections", "experience", "hotel2"]
+      "keywords": ["hotel", "luxury", "booking", "collections", "experience", "premium hotel"]
     },
     {
-      "page_name": "Hotel2 Search",
+      "page_name": "Search",
       "slug": "/search",
-      "meta_title": "Hotel2 — Search results",
-      "meta_description": "Browse hotels by destination, dates, and guests with map view.",
+      "meta_title": "Search Hotels - Find Your Perfect Stay",
+      "meta_description": "Browse hotels by destination, dates, and guests with interactive map view. Find your ideal accommodation.",
       "seo_index": false,
       "status": "published",
       "page_type": "page",
-      "keywords": ["hotel", "booking", "search", "results", "map", "hotel2"]
+      "keywords": ["hotel", "booking", "search", "results", "map"]
     }
   ]
 }
-

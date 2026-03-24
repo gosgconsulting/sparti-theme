@@ -1,5 +1,6 @@
 import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
 import { CartItem } from "../components/header/ShoppingBag";
+import { debugError } from "@/utils/debugLogger";
 
 interface CartContextType {
   cartItems: CartItem[];
@@ -38,7 +39,7 @@ const loadCartFromStorage = (): CartItem[] => {
       return JSON.parse(stored);
     }
   } catch (error) {
-    console.error("Failed to load cart from localStorage:", error);
+    debugError("Failed to load cart from localStorage:", error);
   }
   return [];
 };
@@ -49,7 +50,7 @@ const saveCartToStorage = (items: CartItem[]) => {
   try {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
   } catch (error) {
-    console.error("Failed to save cart to localStorage:", error);
+    debugError("Failed to save cart to localStorage:", error);
   }
 };
 

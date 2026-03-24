@@ -1,16 +1,144 @@
 {
   "pages": [
-    { "id": "home", "name": "Home", "slug": "", "component": "Index" },
-    { "id": "category", "name": "Category", "slug": "category/shop", "component": "Category" },
-    { "id": "product", "name": "Product Detail", "slug": "product/pantheon", "component": "ProductDetail" },
-    { "id": "checkout", "name": "Checkout", "slug": "checkout", "component": "Checkout" },
-    { "id": "about-our-story", "name": "Our Story", "slug": "about/our-story", "component": "OurStory" },
-    { "id": "about-sustainability", "name": "Sustainability", "slug": "about/sustainability", "component": "Sustainability" },
-    { "id": "about-size-guide", "name": "Size Guide", "slug": "about/size-guide", "component": "SizeGuide" },
-    { "id": "about-store-locator", "name": "Store Locator", "slug": "about/store-locator", "component": "StoreLocator" },
-    { "id": "privacy-policy", "name": "Privacy Policy", "slug": "privacy-policy", "component": "PrivacyPolicy" },
-    { "id": "terms-of-service", "name": "Terms of Service", "slug": "terms-of-service", "component": "TermsOfService" },
-    { "id": "delivery-and-return-policy", "name": "Delivery and Return Policy", "slug": "delivery-and-return-policy", "component": "DeliveryAndReturnPolicy" },
-    { "id": "beok-private-dinning", "name": "Beok Private Dining", "slug": "beok-private-dinning", "component": "BrokPrivateDinning" }
+    {
+      "id": "home",
+      "name": "Home",
+      "slug": "",
+      "component": "Index",
+      "meta_title": "Premium Fashion Store - Luxury Clothing & Accessories",
+      "meta_description": "Discover our curated collection of premium fashion, luxury clothing, and exclusive accessories. Shop the latest trends with exceptional quality.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["fashion", "luxury clothing", "premium accessories", "designer fashion", "online boutique"]
+    },
+    {
+      "id": "category",
+      "name": "Category",
+      "slug": "category/shop",
+      "component": "Category",
+      "meta_title": "Shop All - Browse Our Collection",
+      "meta_description": "Browse our complete collection of premium fashion items. Filter by category, style, and price to find your perfect piece.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["shop", "category", "fashion collection", "browse products"]
+    },
+    {
+      "id": "product",
+      "name": "Product Detail",
+      "slug": "product/pantheon",
+      "component": "ProductDetail",
+      "meta_title": "Product Details - Premium Fashion Item",
+      "meta_description": "View detailed information about this premium fashion item including materials, sizing, care instructions, and availability.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["product details", "fashion item", "buy online"]
+    },
+    {
+      "id": "checkout",
+      "name": "Checkout",
+      "slug": "checkout",
+      "component": "Checkout",
+      "meta_title": "Checkout - Complete Your Order",
+      "meta_description": "Complete your purchase securely. Review your order and enter shipping details.",
+      "seo_index": false,
+      "status": "published",
+      "page_type": "page"
+    },
+    {
+      "id": "about-our-story",
+      "name": "Our Story",
+      "slug": "about/our-story",
+      "component": "OurStory",
+      "meta_title": "Our Story - About Our Brand",
+      "meta_description": "Learn about our journey, values, and commitment to bringing you exceptional fashion and quality.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["about us", "brand story", "company history"]
+    },
+    {
+      "id": "about-sustainability",
+      "name": "Sustainability",
+      "slug": "about/sustainability",
+      "component": "Sustainability",
+      "meta_title": "Sustainability - Our Environmental Commitment",
+      "meta_description": "Discover our commitment to sustainable fashion and environmental responsibility. Learn about our eco-friendly practices.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["sustainability", "eco-friendly", "ethical fashion"]
+    },
+    {
+      "id": "about-size-guide",
+      "name": "Size Guide",
+      "slug": "about/size-guide",
+      "component": "SizeGuide",
+      "meta_title": "Size Guide - Find Your Perfect Fit",
+      "meta_description": "Use our comprehensive size guide to find your perfect fit. Detailed measurements and fitting tips.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["size guide", "sizing", "measurements", "fit guide"]
+    },
+    {
+      "id": "about-store-locator",
+      "name": "Store Locator",
+      "slug": "about/store-locator",
+      "component": "StoreLocator",
+      "meta_title": "Store Locator - Find a Location Near You",
+      "meta_description": "Find our retail locations near you. Store hours, addresses, and contact information.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["store locator", "retail locations", "find store"]
+    },
+    {
+      "id": "privacy-policy",
+      "name": "Privacy Policy",
+      "slug": "privacy-policy",
+      "component": "PrivacyPolicy",
+      "meta_title": "Privacy Policy - Data Protection",
+      "meta_description": "Our privacy policy explains how we collect, use, and protect your personal information.",
+      "seo_index": false,
+      "status": "published",
+      "page_type": "legal"
+    },
+    {
+      "id": "terms-of-service",
+      "name": "Terms of Service",
+      "slug": "terms-of-service",
+      "component": "TermsOfService",
+      "meta_title": "Terms of Service - Terms & Conditions",
+      "meta_description": "Read our terms of service and conditions for using our website and purchasing our products.",
+      "seo_index": false,
+      "status": "published",
+      "page_type": "legal"
+    },
+    {
+      "id": "delivery-and-return-policy",
+      "name": "Delivery and Return Policy",
+      "slug": "delivery-and-return-policy",
+      "component": "DeliveryAndReturnPolicy",
+      "meta_title": "Delivery & Returns - Shipping Information",
+      "meta_description": "Learn about our delivery options, shipping times, and hassle-free return policy.",
+      "seo_index": false,
+      "status": "published",
+      "page_type": "legal"
+    },
+    {
+      "id": "beok-private-dinning",
+      "name": "Beok Private Dining",
+      "slug": "beok-private-dinning",
+      "component": "BrokPrivateDinning",
+      "meta_title": "Private Dining Experience - Exclusive Events",
+      "meta_description": "Book an exclusive private dining experience. Perfect for special occasions and intimate gatherings.",
+      "seo_index": true,
+      "status": "published",
+      "page_type": "page",
+      "keywords": ["private dining", "exclusive events", "special occasions"]
+    }
   ]
 }

@@ -128,7 +128,7 @@ const ModalContactForm: React.FC<ModalContactFormProps> = ({ className = "", ini
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           form_id: 28,
-          form_name: "Contact Modal Form (Steps) - GO SG Consulting",
+          form_name: "Contact Modal Form (Steps) - Digital Marketing",
           name,
           email,
           phone: phone || null,

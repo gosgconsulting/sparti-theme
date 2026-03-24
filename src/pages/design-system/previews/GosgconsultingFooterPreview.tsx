@@ -4,7 +4,7 @@ import Footer from "@/themes/gosgconsulting/components/Footer";
 export function GosgconsultingFooterPreview() {
   return (
     <Footer
-      tenantName="GO SG Consulting"
+      tenantName="Digital Marketing Agency"
       tenantSlug="gosgconsulting"
     />
   );

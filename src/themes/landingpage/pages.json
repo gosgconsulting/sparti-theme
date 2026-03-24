@@ -3,12 +3,12 @@
     {
       "page_name": "Homepage",
       "slug": "/",
-      "meta_title": "Singapore Business Setup In 24 Hours - ACRA Registered | Professional Business Services",
-      "meta_description": "ACRA-registered filing agents providing complete Singapore company incorporation, professional accounting services, and 100% compliance guarantee. Start your business today with expert guidance.",
+      "meta_title": "Professional Business Services - Company Setup & Compliance",
+      "meta_description": "Professional company incorporation and business services. Complete compliance guarantee with expert guidance for your business journey.",
       "seo_index": true,
       "status": "published",
       "page_type": "page",
-      "keywords": ["singapore company incorporation", "acra registered", "business setup", "accounting services", "corporate secretary", "compliance guarantee"],
+      "keywords": ["company incorporation", "business setup", "accounting services", "corporate secretary", "compliance guarantee"],
       "sections": [
         {
           "id": "hero",
@@ -40,8 +40,8 @@
     {
       "page_name": "About Us",
       "slug": "/about",
-      "meta_title": "About ACATR - Professional Singapore Business Services",
-      "meta_description": "Learn about our ACRA-registered filing agents and professional business services team dedicated to helping businesses succeed in Singapore.",
+      "meta_title": "About Us - Professional Business Services",
+      "meta_description": "Learn about our professional business services team dedicated to helping businesses succeed.",
       "seo_index": true,
       "status": "draft",
       "page_type": "page"
@@ -49,8 +49,8 @@
     {
       "page_name": "Contact",
       "slug": "/contact",
-      "meta_title": "Contact Us - Singapore Business Setup Experts",
-      "meta_description": "Get in touch with our ACRA-registered filing agents for professional Singapore company incorporation and business services. Free consultation available.",
+      "meta_title": "Contact Us - Business Setup Experts",
+      "meta_description": "Get in touch with our professional business services team. Free consultation available.",
       "seo_index": true,
       "status": "draft",
       "page_type": "page"
@@ -58,8 +58,8 @@
     {
       "page_name": "Thank You",
       "slug": "/thank-you",
-      "meta_title": "Thank You - ACATR Business Services",
-      "meta_description": "Thank you for contacting ACATR Business Services. We've received your message and will get back to you within 4 hours.",
+      "meta_title": "Thank You - We'll Be In Touch",
+      "meta_description": "Thank you for contacting us. We've received your message and will get back to you soon.",
       "seo_index": false,
       "status": "published",
       "page_type": "page"
@@ -67,8 +67,8 @@
     {
       "page_name": "Privacy Policy",
       "slug": "/privacy-policy",
-      "meta_title": "Privacy Policy - ACATR Business Services",
-      "meta_description": "Privacy policy for ACATR Business Services covering data collection, usage, and protection practices.",
+      "meta_title": "Privacy Policy - Data Protection",
+      "meta_description": "Privacy policy covering data collection, usage, and protection practices.",
       "seo_index": false,
       "status": "draft",
       "page_type": "legal"
@@ -76,8 +76,8 @@
     {
       "page_name": "Terms of Service",
       "slug": "/terms-conditions",
-      "meta_title": "Terms of Service - ACATR Business Services",
-      "meta_description": "Terms and conditions for ACATR Business Services covering service agreements and legal obligations.",
+      "meta_title": "Terms of Service - Service Agreement",
+      "meta_description": "Terms and conditions covering service agreements and legal obligations.",
       "seo_index": false,
       "status": "draft",
       "page_type": "legal"
@@ -85,12 +85,11 @@
     {
       "page_name": "Blog",
       "slug": "/blog",
-      "meta_title": "Blog - ACATR Business Services",
-      "meta_description": "Read our latest articles about Singapore business setup, company incorporation, accounting services, and compliance tips.",
+      "meta_title": "Blog - Business Insights & Tips",
+      "meta_description": "Read our latest articles about business setup, company incorporation, and professional services.",
       "seo_index": true,
       "status": "published",
       "page_type": "page"
     }
   ]
 }
-

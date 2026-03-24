@@ -95,8 +95,8 @@ export default function HomeNewArrivalsSection() {
                           </ThemeLink>
 
                           <div className="mt-4">
-                            <Button asChild className="rounded-full w-full bg-primary hover:bg-primary-hover !text-white">
-                              <ThemeLink to={`/product/${p.id}`} className="!text-white">View product</ThemeLink>
+                            <Button asChild className="rounded-full w-full bg-primary hover:bg-primary/90 !text-primary-foreground">
+                              <ThemeLink to={`/product/${p.id}`} className="!text-primary-foreground">View product</ThemeLink>
                             </Button>
                           </div>
                         </div>
@@ -169,8 +169,8 @@ export default function HomeNewArrivalsSection() {
                   </ThemeLink>
 
                   <div className="mt-4">
-                    <Button asChild className="rounded-full w-full bg-primary hover:bg-primary-hover !text-white">
-                      <ThemeLink to={`/product/${p.id}`} className="!text-white">View product</ThemeLink>
+                    <Button asChild className="rounded-full w-full bg-primary hover:bg-primary/90 !text-primary-foreground">
+                      <ThemeLink to={`/product/${p.id}`} className="!text-primary-foreground">View product</ThemeLink>
                     </Button>
                   </div>
                 </div>

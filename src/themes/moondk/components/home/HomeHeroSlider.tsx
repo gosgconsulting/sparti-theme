@@ -19,7 +19,6 @@ type Slide = {
   ctaTo: string;
   image: string;
   bg: string;
-  accent: string;
   gradient: string;
 };
 
@@ -35,7 +34,6 @@ const slides: Slide[] = [
     ctaTo: "/category/shop",
     image: slide3,
     bg: "#E9C5C9",
-    accent: "#2F5C3E",
     gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
   },
   {
@@ -49,7 +47,6 @@ const slides: Slide[] = [
     ctaTo: "/beok-private-dinning",
     image: slide2,
     bg: "#F3C3B4",
-    accent: "#2F5C3E",
     gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
   },
   {
@@ -63,7 +60,6 @@ const slides: Slide[] = [
     ctaTo: "/category/shop?filter=Tea",
     image: slide1,
     bg: "#F6B7C1",
-    accent: "#B2458A",
     gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
   },
   {
@@ -77,7 +73,6 @@ const slides: Slide[] = [
     ctaTo: "/category/shop?filter=Alcohol",
     image: slide4,
     bg: "#E9C5C9",
-    accent: "#2F5C3E",
     gradient: "linear-gradient(90deg, rgba(245,210,15,0.55) 0%, rgba(245,210,15,0.40) 40%, rgba(245,210,15,0.12) 70%, rgba(245,210,15,0.00) 100%)",
   },
 ];
@@ -136,7 +131,7 @@ export default function HomeHeroSlider() {
 
       <div className="relative mx-auto max-w-6xl px-4 sm:px-6 py-10 sm:py-14 md:py-20 min-h-[500px] sm:min-h-[600px] flex items-center z-20">
         <div className="max-w-xl transition-opacity duration-500 ease-in-out">
-          <h1 className="font-body text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.1] sm:leading-[0.95] tracking-tight text-[#1A1A1A]">
+          <h1 className="font-body text-3xl sm:text-4xl md:text-5xl lg:text-6xl leading-[1.1] sm:leading-[0.95] tracking-tight text-foreground">
             {slide.id === 3 ? (
               <>
                 <span className="whitespace-nowrap">{slide.titleStart} <span className="font-heading italic font-normal text-black">{slide.emphasized}</span> {slide.titleEnd.split(' ')[0]}</span>
@@ -156,16 +151,16 @@ export default function HomeHeroSlider() {
             )}
           </h1>
 
-          <p className={`mt-4 sm:mt-6 text-sm sm:text-base md:text-lg font-body text-[#1A1A1A]/80 leading-relaxed ${slide.id === 3 ? 'max-w-[75%] sm:max-w-md' : 'max-w-md'}`}>
+          <p className={`mt-4 sm:mt-6 text-sm sm:text-base md:text-lg font-body text-foreground/80 leading-relaxed ${slide.id === 3 ? 'max-w-[75%] sm:max-w-md' : 'max-w-md'}`}>
             {slide.description}
           </p>
 
           <div className="mt-6 sm:mt-8">
             <Button
               asChild
-              className="rounded-full px-6 sm:px-8 md:px-10 h-10 sm:h-11 md:h-12 text-sm sm:text-base uppercase tracking-wide bg-primary hover:bg-primary-hover !text-white"
+              className="rounded-full px-6 sm:px-8 md:px-10 h-10 sm:h-11 md:h-12 text-sm sm:text-base uppercase tracking-wide bg-primary hover:bg-primary/90 !text-primary-foreground"
             >
-              <ThemeLink to={slide.ctaTo} className="!text-white">{slide.ctaText}</ThemeLink>
+              <ThemeLink to={slide.ctaTo} className="!text-primary-foreground">{slide.ctaText}</ThemeLink>
             </Button>
           </div>
         </div>
@@ -193,19 +188,19 @@ export default function HomeHeroSlider() {
       {/* Slide Navigation Buttons - Positioned on left and right edges - Hidden on mobile */}
       <button
         type="button"
-        className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/60 hover:bg-white/80 border border-white/40 items-center justify-center transition-colors z-10"
+        className="hidden md:flex absolute left-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-card/60 hover:bg-card/80 border border-card/40 items-center justify-center transition-colors z-10"
         onClick={prev}
         aria-label="Previous slide"
       >
-        <ChevronLeft className="h-5 w-5 text-[#1A1A1A]" />
+        <ChevronLeft className="h-5 w-5 text-foreground" />
       </button>
       <button
         type="button"
-        className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-white/60 hover:bg-white/80 border border-white/40 items-center justify-center transition-colors z-10"
+        className="hidden md:flex absolute right-4 top-1/2 -translate-y-1/2 h-10 w-10 rounded-full bg-card/60 hover:bg-card/80 border border-card/40 items-center justify-center transition-colors z-10"
         onClick={next}
         aria-label="Next slide"
       >
-        <ChevronRight className="h-5 w-5 text-[#1A1A1A]" />
+        <ChevronRight className="h-5 w-5 text-foreground" />
       </button>
     </section>
   );

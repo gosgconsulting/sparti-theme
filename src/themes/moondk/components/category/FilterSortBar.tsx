@@ -37,7 +37,7 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
   const types = ["Chef's Pick", "New Arrival", "Best Seller", "Limited Edition"];
 
   return (
-    <section className="w-full px-6 mb-8 border-b border-border-light pb-4">
+    <section className="w-full px-6 mb-8 border-b border-border/10 pb-4">
       <div className="flex justify-between items-center">
         <p className="text-sm font-body font-light text-foreground/70">{itemCount} items</p>
 
@@ -52,8 +52,8 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                 Filters
               </Button>
             </SheetTrigger>
-            <SheetContent side="right" className="w-80 bg-background border-l border-border-light shadow-none">
-              <SheetHeader className="mb-6 border-b border-border-light pb-4">
+            <SheetContent side="right" className="w-80 bg-background border-l border-border/20 shadow-none">
+              <SheetHeader className="mb-6 border-b border-border/20 pb-4">
                 <SheetTitle className="text-lg font-heading font-medium">Filters</SheetTitle>
               </SheetHeader>
 
@@ -65,7 +65,7 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                       <div key={category} className="flex items-center space-x-3">
                         <Checkbox
                           id={category}
-                          className="border-border-light data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                          className="border-border/20 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                         />
                         <Label
                           htmlFor={category}
@@ -78,7 +78,7 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                   </div>
                 </div>
 
-                <Separator className="border-border-light" />
+                <Separator className="border-border/20" />
 
                 <div>
                   <h3 className="text-sm font-heading font-medium mb-4 text-foreground">Price</h3>
@@ -87,7 +87,7 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                       <div key={range} className="flex items-center space-x-3">
                         <Checkbox
                           id={range}
-                          className="border-border-light data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                          className="border-border/20 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                         />
                         <Label
                           htmlFor={range}
@@ -100,7 +100,7 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                   </div>
                 </div>
 
-                <Separator className="border-border-light" />
+                <Separator className="border-border/20" />
 
                 <div>
                   <h3 className="text-sm font-heading font-medium mb-4 text-foreground">Type</h3>
@@ -109,7 +109,7 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                       <div key={type} className="flex items-center space-x-3">
                         <Checkbox
                           id={type}
-                          className="border-border-light data-[state=checked]:bg-primary data-[state=checked]:border-primary"
+                          className="border-border/20 data-[state=checked]:bg-primary data-[state=checked]:border-primary"
                         />
                         <Label
                           htmlFor={type}
@@ -122,7 +122,7 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
                   </div>
                 </div>
 
-                <Separator className="border-border-light" />
+                <Separator className="border-border/20" />
 
                 <div className="flex flex-col gap-2 pt-4">
                   <Button
@@ -146,7 +146,7 @@ const FilterSortBar = ({ filtersOpen, setFiltersOpen, itemCount }: FilterSortBar
             <SelectTrigger className="w-auto border-none bg-transparent text-sm font-body font-light shadow-none rounded-none pr-2">
               <SelectValue />
             </SelectTrigger>
-            <SelectContent className="shadow-none border border-border-light rounded-none bg-background">
+            <SelectContent className="shadow-none border border-border/20 rounded-none bg-background">
               <SelectItem
                 value="featured"
                 className="hover:bg-muted/50 font-body font-light"

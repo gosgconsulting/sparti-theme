@@ -56,14 +56,14 @@ export default function ProductAccordion({ items, defaultOpenIndex = null }: Pro
         return (
           <div
             key={item.id}
-            className="border-b border-border-light/40 last:border-b-0"
+            className="border-b border-border/20 last:border-b-0"
           >
             <button
               type="button"
               onClick={() => handleToggle(index)}
               aria-expanded={isOpen}
               aria-controls={`accordion-content-${item.id}`}
-              className={`w-full py-5 md:py-6 flex items-center justify-between text-left transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-[#195B3E] focus-visible:ring-offset-4 ${
+              className={`w-full py-5 md:py-6 flex items-center justify-between text-left transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-primary focus-visible:ring-offset-4 ${
                 isOpen 
                   ? "text-foreground" 
                   : "text-foreground/80 hover:text-foreground"
@@ -97,7 +97,7 @@ export default function ProductAccordion({ items, defaultOpenIndex = null }: Pro
                   <div className={`text-sm md:text-base font-body font-light text-foreground/70 leading-[1.75] max-w-[65ch] space-y-4 transition-opacity ${
                     prefersReducedMotion ? "" : "duration-500 ease-in-out"
                   } ${
-                    isOpen ? "border-l border-[#195B3E]/20 pl-6 md:pl-8 opacity-100" : "opacity-0 border-l border-transparent pl-6 md:pl-8"
+                    isOpen ? "border-l border-primary/20 pl-6 md:pl-8 opacity-100" : "opacity-0 border-l border-transparent pl-6 md:pl-8"
                   }`}>
                     {item.content}
                   </div>

@@ -14,6 +14,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
+import { debugLog } from "@/utils/debugLogger";
+import { FREE_DELIVERY_THRESHOLD } from "../constants";
 
 export default function CheckoutPage() {
   const { cartItems, updateQuantity, clearCart } = useCart();
@@ -68,11 +70,11 @@ export default function CheckoutPage() {
       case "express":
         return 35;
       case "standard":
-        return subtotal >= 150 ? 0 : 15;
+        return subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : 15;
       case "self-pickup":
         return 0;
       default:
-        return subtotal >= 150 ? 0 : 15;
+        return subtotal >= FREE_DELIVERY_THRESHOLD ? 0 : 15;
     }
   };
 
@@ -108,7 +110,7 @@ export default function CheckoutPage() {
   };
 
   const handleDiscountSubmit = () => {
-    console.log("Discount code submitted:", discountCode);
+    debugLog("Discount code submitted:", discountCode);
     setShowDiscountInput(false);
   };
 
@@ -163,7 +165,7 @@ export default function CheckoutPage() {
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Order Summary */}
             <div className="lg:col-span-1 lg:order-2">
-              <div className="bg-[#F2EFDC] p-8 rounded-card sticky top-6">
+              <div className="bg-secondary p-8 rounded-card sticky top-6">
                 <h2 className="text-lg font-heading font-medium text-foreground mb-6">Order Summary</h2>
 
                 <div className="space-y-6">
@@ -190,7 +192,7 @@ export default function CheckoutPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => updateQuantity(item.id, item.quantity - 1)}
-                              className="h-8 w-8 p-0 rounded-full border-border-light"
+                              className="h-8 w-8 p-0 rounded-full border-border/20"
                             >
                               <Minus className="h-3 w-3" />
                             </Button>
@@ -201,7 +203,7 @@ export default function CheckoutPage() {
                               variant="outline"
                               size="sm"
                               onClick={() => updateQuantity(item.id, item.quantity + 1)}
-                              className="h-8 w-8 p-0 rounded-full border-border-light"
+                              className="h-8 w-8 p-0 rounded-full border-border/20"
                             >
                               <Plus className="h-3 w-3" />
                             </Button>
@@ -213,7 +215,7 @@ export default function CheckoutPage() {
                   )}
                 </div>
 
-                <div className="mt-8 pt-6 border-t border-border-light">
+                <div className="mt-8 pt-6 border-t border-border/20">
                   {!showDiscountInput ? (
                     <button
                       onClick={() => setShowDiscountInput(true)}
@@ -242,14 +244,14 @@ export default function CheckoutPage() {
                   )}
                 </div>
 
-                <div className="border-t border-border-light mt-4 pt-6">
+                <div className="border-t border-border/20 mt-4 pt-6">
                   <div className="flex justify-between text-sm font-body font-light mb-4">
                     <span className="text-foreground/70">Subtotal</span>
                     <span className="text-foreground">${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                   </div>
                   
                   {subtotal < freeShippingThreshold && (
-                    <div className="mt-4 p-4 bg-white rounded-lg border-2 border-[#2F5C3E]/20">
+                    <div className="mt-4 p-4 bg-white rounded-lg border-2 border-primary/20">
                       <div className="flex items-center justify-between mb-2">
                         <p className="text-sm font-body font-medium text-foreground">
                           Free Standard Shipping
@@ -260,9 +262,9 @@ export default function CheckoutPage() {
                       </div>
                       
                       {/* Progress Bar */}
-                      <div className="w-full h-2 bg-[#E8E6E0] rounded-full overflow-hidden mb-3">
+                      <div className="w-full h-2 bg-muted rounded-full overflow-hidden mb-3">
                         <div 
-                          className="h-full bg-[#2F5C3E] transition-all duration-300 ease-out rounded-full"
+                          className="h-full bg-primary transition-all duration-300 ease-out rounded-full"
                           style={{ 
                             width: `${Math.min((subtotal / freeShippingThreshold) * 100, 100)}%` 
                           }}
@@ -270,16 +272,16 @@ export default function CheckoutPage() {
                       </div>
                       
                       <p className="text-sm font-body font-light text-foreground text-center">
-                        Add <span className="font-medium text-[#2F5C3E]">${amountNeededForFreeShipping.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> more to get free standard shipping
+                        Add <span className="font-medium text-primary">${amountNeededForFreeShipping.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span> more to get free standard shipping
                       </p>
                     </div>
                   )}
                   
                   {subtotal >= freeShippingThreshold && (
-                    <div className="mt-4 p-4 bg-[#2F5C3E]/5 rounded-lg border-2 border-[#2F5C3E]/30">
+                    <div className="mt-4 p-4 bg-primary/5 rounded-lg border-2 border-primary/30">
                       <div className="flex items-center justify-center gap-2">
                         <svg 
-                          className="w-5 h-5 text-[#2F5C3E]" 
+                          className="w-5 h-5 text-primary" 
                           fill="none" 
                           stroke="currentColor" 
                           viewBox="0 0 24 24"
@@ -291,7 +293,7 @@ export default function CheckoutPage() {
                             d="M5 13l4 4L19 7" 
                           />
                         </svg>
-                        <p className="text-sm font-body font-medium text-[#2F5C3E]">
+                        <p className="text-sm font-body font-medium text-primary">
                           You qualify for free standard shipping!
                         </p>
                       </div>
@@ -303,7 +305,7 @@ export default function CheckoutPage() {
 
             {/* Forms */}
             <div className="lg:col-span-2 lg:order-1 space-y-8">
-              <div className="bg-white p-8 rounded-card border border-border-light">
+              <div className="bg-white p-8 rounded-card border border-border/20">
                 <h2 className="text-lg font-heading font-medium text-foreground mb-6">Customer Details</h2>
 
                 <div className="space-y-6">
@@ -364,7 +366,7 @@ export default function CheckoutPage() {
                     />
                   </div>
 
-                  <div className="border-t border-border-light pt-6 mt-8">
+                  <div className="border-t border-border/20 pt-6 mt-8">
                     <h3 className="text-base font-heading font-medium text-foreground mb-2">Shipping Address</h3>
                     <p className="text-sm font-body font-light text-foreground/70 mb-4">
                       Delivery is only available to Singapore addresses.
@@ -416,7 +418,7 @@ export default function CheckoutPage() {
                     </div>
                   </div>
 
-                  <div className="border-t border-border-light pt-6 mt-8">
+                  <div className="border-t border-border/20 pt-6 mt-8">
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="separateBilling"
@@ -540,7 +542,7 @@ export default function CheckoutPage() {
                 </div>
               </div>
 
-              <div className="bg-white p-8 rounded-card border border-border-light">
+              <div className="bg-white p-8 rounded-card border border-border/20">
                 <h2 className="text-lg font-heading font-medium text-foreground mb-6">Shipping Options</h2>
 
                 <RadioGroup value={shippingOption} onValueChange={handleShippingOptionChange} className="space-y-4">
@@ -548,8 +550,8 @@ export default function CheckoutPage() {
                     htmlFor="standard"
                     className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
                       shippingOption === "standard"
-                        ? "border-[#2F5C3E] bg-[#2F5C3E]/5"
-                        : "border-border-light hover:border-[#2F5C3E]/30 hover:bg-[#F2EFDC]/30"
+                        ? "border-primary bg-primary/5"
+                        : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
                     }`}
                   >
                     <div className="flex items-center space-x-3">
@@ -567,8 +569,8 @@ export default function CheckoutPage() {
                     htmlFor="express"
                     className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
                       shippingOption === "express"
-                        ? "border-[#2F5C3E] bg-[#2F5C3E]/5"
-                        : "border-border-light hover:border-[#2F5C3E]/30 hover:bg-[#F2EFDC]/30"
+                        ? "border-primary bg-primary/5"
+                        : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
                     }`}
                   >
                     <div className="flex items-center space-x-3">
@@ -584,8 +586,8 @@ export default function CheckoutPage() {
                     htmlFor="self-pickup"
                     className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
                       shippingOption === "self-pickup"
-                        ? "border-[#2F5C3E] bg-[#2F5C3E]/5"
-                        : "border-border-light hover:border-[#2F5C3E]/30 hover:bg-[#F2EFDC]/30"
+                        ? "border-primary bg-primary/5"
+                        : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
                     }`}
                   >
                     <div className="flex items-center space-x-3">
@@ -600,7 +602,7 @@ export default function CheckoutPage() {
 
                 {/* Conditional fields for Standard and Express Shipping */}
                 {(shippingOption === "standard" || shippingOption === "express") && (
-                  <div className="mt-6 pt-6 border-t border-border-light space-y-6">
+                  <div className="mt-6 pt-6 border-t border-border/20 space-y-6">
                     <div className="flex items-center space-x-2">
                       <Checkbox
                         id="agreeToDoorstep"
@@ -632,7 +634,7 @@ export default function CheckoutPage() {
 
                 {/* Conditional fields for Self Pickup */}
                 {shippingOption === "self-pickup" && (
-                  <div className="mt-6 pt-6 border-t border-border-light space-y-6">
+                  <div className="mt-6 pt-6 border-t border-border/20 space-y-6">
                     <div>
                       <Label htmlFor="pickupDate" className="text-sm font-body font-light text-foreground">
                         Pickup Date * <span className="text-xs text-foreground/60">(Available from {format(getMinSelfPickupDate(), "MMM d, yyyy")})</span>
@@ -675,7 +677,7 @@ export default function CheckoutPage() {
                 )}
               </div>
 
-              <div className="bg-white p-8 rounded-card border border-border-light">
+              <div className="bg-white p-8 rounded-card border border-border/20">
                 <h2 className="text-lg font-heading font-medium text-foreground mb-6">Payment Details</h2>
 
                 {!paymentComplete ? (
@@ -763,7 +765,7 @@ export default function CheckoutPage() {
                       </div>
                     </div>
 
-                    <div className="bg-[#F2EFDC] p-6 rounded-card border border-border-light space-y-3">
+                    <div className="bg-secondary p-6 rounded-card border border-border/20 space-y-3">
                       <div className="flex justify-between text-sm font-body font-light">
                         <span className="text-foreground/70">Subtotal</span>
                         <span className="text-foreground">${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
@@ -776,7 +778,7 @@ export default function CheckoutPage() {
                           {shipping === 0 ? "Free" : `$${shipping}`}
                         </span>
                       </div>
-                      <div className="flex justify-between text-lg font-heading font-medium border-t border-border-light pt-3">
+                      <div className="flex justify-between text-lg font-heading font-medium border-t border-border/20 pt-3">
                         <span className="text-foreground">Total</span>
                         <span className="text-foreground">${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}</span>
                       </div>

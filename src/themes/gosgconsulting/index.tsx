@@ -36,7 +36,7 @@ interface TenantLandingProps {
  * Complete GOSG homepage with dynamic page rendering
  */
 const GOSGContent: React.FC<TenantLandingProps> = ({
-  tenantName = 'GO SG Consulting',
+  tenantName = 'Digital Marketing Agency',
   tenantSlug = 'gosgconsulting',
   pageSlug
 }) => {
@@ -245,7 +245,7 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
           { 
             key: "description", 
             type: "text", 
-            content: "You already have a strong product or service. What's missing is visibility, clarity, and a system that turns attention into revenue. At GO SG, we help great brands get discovered, remembered, and chosen — using a full-stack growth package built to drive real results, not vanity metrics." 
+            content: "You already have a strong product or service. What's missing is visibility, clarity, and a system that turns attention into revenue. We help great brands get discovered, remembered, and chosen — using a full-stack growth package built to drive real results, not vanity metrics." 
           },
           { 
             key: "emailPlaceholder", 
@@ -643,7 +643,7 @@ const GOSGContent: React.FC<TenantLandingProps> = ({
             key: "quoteImage",
             type: "image",
             src: asset("greg-quote.png"),
-            alt: "Greg, founder of GO SG",
+            alt: "Founder testimonial",
           },
           {
             key: "cta",
@@ -1331,7 +1331,7 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
           { 
             key: "description", 
             type: "text", 
-            content: "You already have a strong product or service. What's missing is visibility, clarity, and a system that turns attention into revenue. At GO SG, we help great brands get discovered, remembered, and chosen — using a full-stack growth package built to drive real results, not vanity metrics." 
+            content: "You already have a strong product or service. What's missing is visibility, clarity, and a system that turns attention into revenue. We help great brands get discovered, remembered, and chosen — using a full-stack growth package built to drive real results, not vanity metrics." 
           },
           { 
             key: "emailPlaceholder", 
@@ -1754,7 +1754,7 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
             key: "quoteImage",
             type: "image",
             src: asset("greg-quote.png"),
-            alt: "Greg, founder of GO SG",
+            alt: "Founder testimonial",
           },
           {
             key: "cta",
@@ -1924,8 +1924,8 @@ const PaidAdsPage: React.FC<PaidAdsPageProps> = ({
  * GO SG Consulting Theme
  * Full-stack digital growth solution theme with blog functionality and e-commerce
  */
-const GOSGTheme: React.FC<TenantLandingProps> = ({ 
-  tenantName = 'GO SG Consulting', 
+const GOSGTheme: React.FC<TenantLandingProps> = ({
+  tenantName = 'Digital Marketing Agency',
   tenantSlug = 'gosgconsulting',
   tenantId,
   pageSlug
@@ -2087,7 +2087,7 @@ interface ShopPageLayoutProps {
 
 const ShopPageLayout: React.FC<ShopPageLayoutProps> = ({ 
   children, 
-  tenantName = 'GO SG Consulting',
+  tenantName = 'Digital Marketing Agency',
   tenantSlug = 'gosgconsulting'
 }) => {
   const { contactModalOpen, setContactModalOpen } = usePopup();

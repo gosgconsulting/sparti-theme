@@ -3,56 +3,62 @@
     {
       "page_name": "Homepage",
       "slug": "/",
-      "meta_title": "Optimal Consulting",
-      "meta_description": "Strategic leadership and talent optimisation consulting across Asia.",
+      "meta_title": "Strategic Consulting - Leadership & Talent Optimization",
+      "meta_description": "Strategic leadership and talent optimization consulting services. Expert guidance for organizational excellence.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["consulting", "leadership", "talent optimization", "strategic consulting", "business consulting"]
     },
     {
       "page_name": "Services - Assessments",
       "slug": "/services/assessments",
-      "meta_title": "Assessments - Optimal Consulting",
-      "meta_description": "Evidence-based psychometrics and leadership diagnostics.",
+      "meta_title": "Assessments - Evidence-Based Leadership Diagnostics",
+      "meta_description": "Evidence-based psychometrics and leadership diagnostics. Professional assessment services for organizational development.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["assessments", "psychometrics", "leadership diagnostics", "talent assessment"]
     },
     {
       "page_name": "Services - Academy",
       "slug": "/services/academy",
-      "meta_title": "Academy - Optimal Consulting",
-      "meta_description": "Capability building for leaders and HR teams across Asia.",
+      "meta_title": "Academy - Leadership Development & Training",
+      "meta_description": "Capability building for leaders and HR teams. Professional development programs and training services.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["academy", "leadership development", "training", "capability building"]
     },
     {
       "page_name": "Services - Consulting",
       "slug": "/services/consulting",
-      "meta_title": "Consulting - Optimal Consulting",
-      "meta_description": "Strategic workforce and leadership optimisation consulting.",
+      "meta_title": "Consulting - Strategic Workforce Optimization",
+      "meta_description": "Strategic workforce and leadership optimization consulting. Expert guidance for organizational transformation.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["consulting", "workforce optimization", "leadership consulting", "strategic consulting"]
     },
     {
       "page_name": "Blog",
       "slug": "/blog",
-      "meta_title": "Insights - Optimal Consulting",
-      "meta_description": "Insights for executives and HR leaders.",
+      "meta_title": "Insights - Leadership & HR Resources",
+      "meta_description": "Expert insights for executives and HR leaders. Read our latest articles on leadership and organizational development.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["blog", "insights", "leadership", "HR", "articles"]
     },
     {
       "page_name": "Shop",
       "slug": "/shop",
-      "meta_title": "Offerings - Optimal Consulting",
-      "meta_description": "Starter engagements to begin your talent optimisation journey.",
+      "meta_title": "Services - Consulting Packages & Programs",
+      "meta_description": "Explore our consulting packages and programs. Starter engagements to begin your talent optimization journey.",
       "seo_index": true,
       "status": "published",
-      "page_type": "page"
+      "page_type": "page",
+      "keywords": ["services", "packages", "consulting programs", "offerings"]
     }
   ]
 }

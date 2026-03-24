@@ -17,7 +17,7 @@ export default function HomeAboutSection() {
         <div className="mb-6">
           <h2 className="text-3xl md:text-4xl font-body tracking-tight">About Us</h2>
         </div>
-        <div className="rounded-[2rem] bg-[#F2EFDC] p-6 md:p-8 border-none shadow-md">
+        <div className="rounded-[2rem] bg-secondary p-6 md:p-8 border-none shadow-md">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-10 items-start">
             {/* Left: content card */}
             <div className="rounded-[1.75rem] bg-white/90 backdrop-blur p-6 md:p-8 border-none shadow-md md:order-1">
@@ -55,7 +55,7 @@ export default function HomeAboutSection() {
               <div className="mt-6">
                 <Button 
                   onClick={() => setIsContactFormOpen(true)}
-                  className="rounded-full px-6 bg-primary hover:bg-primary-hover !text-white"
+                  className="rounded-full px-6 bg-primary hover:bg-primary/90 !text-primary-foreground"
                 >
                   Contact Us
                   <ArrowRight className="ml-2 h-4 w-4" />

@@ -7,13 +7,10 @@ description: Execute refactor phases using docs/REFACTOR.md as the single source
 
 ## Authority (must follow)
 
-- `docs/REFACTOR.md` → scope, phases, rules
-- `README.md` → architecture reference
-- `TODO.md` → execution tracking
+- `README.md` → architecture reference, refactor history (see "Tech Debt" and "Completed" sections)
+- `TODO.md` → execution tracking, refactor phases
 
-If conflict exists → follow `docs/REFACTOR.md`.
-
-**Note:** If the project has `docs/REFACTOR_PLAN.md` and no `REFACTOR.md`, treat `REFACTOR_PLAN.md` as the refactor source of truth.
+If conflict exists → follow `README.md` and `TODO.md`.
 
 ---
 
@@ -41,7 +38,7 @@ If conflict exists → follow `docs/REFACTOR.md`.
 
 ### 1. Load Context
 
-- Read: `docs/REFACTOR.md` (or `docs/REFACTOR_PLAN.md` if REFACTOR.md is absent), `README.md`, `TODO.md`.
+- Read: `README.md` (architecture, tech debt), `TODO.md` (refactor phases, completed work).
 - Identify: current phase and next phase to execute.
 
 ### 2. Plan (update TODO.md)
@@ -89,7 +86,7 @@ If any command errors: fix, re-run, repeat until clean.
 
 Update:
 
-- **docs/REFACTOR.md** (or REFACTOR_PLAN.md): progress tracker, change log, decisions.
+- **README.md**: Update "Known Tech Debt" section with resolved items.
 - **TODO.md**: completed tasks, next tasks, blockers.
 
 ---

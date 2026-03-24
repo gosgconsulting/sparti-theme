@@ -8,6 +8,7 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { Textarea } from "@/components/ui/textarea";
+import { debugLog } from "@/utils/debugLogger";
 
 const CustomStar = ({
   filled,
@@ -42,7 +43,7 @@ const ReviewProduct = () => {
 
   const submitReview = () => {
     // In a real app this would send to backend
-    console.log("Review submitted:", { rating, review });
+    debugLog("Review submitted:", { rating, review });
     setIsOpen(false);
     setRating(0);
     setReview("");
@@ -58,7 +59,7 @@ const ReviewProduct = () => {
           Review product
         </Button>
       </DialogTrigger>
-      <DialogContent className="sm:max-w-md !rounded-none bg-background border-border-light">
+      <DialogContent className="sm:max-w-md !rounded-none bg-background border-border/20">
         <DialogHeader>
           <DialogTitle className="font-heading font-medium text-xl">Review product</DialogTitle>
         </DialogHeader>
@@ -82,14 +83,14 @@ const ReviewProduct = () => {
               value={review}
               onChange={(e) => setReview(e.target.value)}
               placeholder="Share your thoughts about this product..."
-              className="min-h-24 resize-none rounded-none font-body font-light border-border-light"
+              className="min-h-24 resize-none rounded-none font-body font-light border-border/20"
             />
           </div>
 
           <Button
             onClick={submitReview}
             disabled={rating === 0 || review.trim() === ""}
-            className="w-full h-12 bg-primary !text-white hover:bg-primary-hover font-body font-medium rounded-full"
+            className="w-full h-12 bg-primary !text-primary-foreground hover:bg-primary/90 font-body font-medium rounded-full"
           >
             Submit review
           </Button>

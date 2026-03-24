@@ -53,7 +53,7 @@ export const KNOWN_THEME_SLUGS: string[] = Object.keys(themeComponentMap);
 const THEME_DISPLAY_NAMES: Record<string, string> = {
   'landingpage': 'ACATR Business Services',
   'sparti-seo-landing': 'Sparti SEO Landing',
-  'gosgconsulting': 'GO SG Consulting',
+  'gosgconsulting': 'Digital Marketing',
   'sissonne': 'Sissonne Dance Academy',
   'storefront': 'Storefront',
   'moondk': 'Moondk',

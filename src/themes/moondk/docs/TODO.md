@@ -8,6 +8,10 @@ Production e-commerce theme with full HSL token system, dark mode support, and c
 
 ## Completed (2026-03-24)
 
+### Bēok private dining page
+
+- [x] **CTA buttons — design system** — `BrokPrivateDinning.tsx`: solid actions use theme tokens; hero “View menu” uses frosted white outline on the image. Verification: `npm run build` pass.
+
 ### SEO Metadata Update
 
 - [x] **pages.json structure update** — Added meta_title, meta_description, seo_index, status, page_type, and keywords fields to all pages. Previously used minimal structure without SEO metadata. Now follows standard pages.json format with proper SEO titles for fashion e-commerce theme.

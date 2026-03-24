@@ -508,7 +508,7 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
         <div className="relative">
           {/* Carousel container - shows exactly 4 images, slides smoothly */}
           <div 
-            className="relative overflow-hidden rounded-lg select-none" 
+            className="relative overflow-hidden rounded-lg select-none p-1 -m-1"
             ref={carouselRef}
             onTouchStart={handleTouchStart}
             onTouchMove={handleTouchMove}
@@ -540,20 +540,23 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
                       setSelectedImage(image);
                     }
                   }}
-                  className={`flex-shrink-0 aspect-square overflow-hidden rounded-lg transition-all duration-200 ${
+                  type="button"
+                  className={`flex-shrink-0 aspect-square rounded-lg p-0 flex flex-col border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                     selectedImage === image
-                      ? "ring-2 ring-primary ring-offset-2 shadow-lg border-2 border-primary"
-                      : "shadow-sm hover:shadow-md hover:opacity-80 border border-transparent"
+                      ? "border-primary"
+                      : "border-transparent shadow-sm hover:shadow-md hover:opacity-80"
                   }`}
                   style={{ 
                     width: `calc((100% - 1.5rem) / ${maxVisible})`
                   }}
                 >
-                  <img
-                    src={image}
-                    alt={`Thumbnail ${index + 1}`}
-                    className="w-full h-full object-cover rounded-lg pointer-events-none"
-                  />
+                  <div className="min-h-0 min-w-0 flex-1 overflow-hidden rounded-md">
+                    <img
+                      src={image}
+                      alt={`Thumbnail ${index + 1}`}
+                      className="h-full w-full object-cover pointer-events-none"
+                    />
+                  </div>
                 </button>
               ))}
             </div>
@@ -600,18 +603,21 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
           {images.map((image, index) => (
             <button
               key={index}
+              type="button"
               onClick={() => setSelectedImage(image)}
-              className={`aspect-square overflow-hidden rounded-lg transition-all duration-200 ${
+              className={`aspect-square rounded-lg p-0 flex flex-col border-2 transition-all duration-200 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 ${
                 selectedImage === image
-                  ? "ring-2 ring-primary ring-offset-2 shadow-lg border-2 border-primary"
-                  : "shadow-sm hover:shadow-md hover:opacity-80 border border-transparent"
+                  ? "border-primary"
+                  : "border-transparent shadow-sm hover:shadow-md hover:opacity-80"
               }`}
             >
-              <img
-                src={image}
-                alt={`Thumbnail ${index + 1}`}
-                className="w-full h-full object-cover rounded-lg"
-              />
+              <div className="min-h-0 min-w-0 flex-1 overflow-hidden rounded-md">
+                <img
+                  src={image}
+                  alt={`Thumbnail ${index + 1}`}
+                  className="h-full w-full object-cover"
+                />
+              </div>
             </button>
           ))}
         </div>

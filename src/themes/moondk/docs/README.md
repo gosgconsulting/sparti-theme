@@ -45,7 +45,7 @@ Dark mode is fully supported via `.moondk-theme.dark` class with adjusted HSL va
 
 ### Component Styling
 
-- **Buttons**: Fully rounded (`--radius-full: 9999px`)
+- **Buttons**: Fully rounded (`--radius-full: 9999px`); prefer semantic Tailwind (`bg-primary`, `text-primary-foreground`, `border-primary`, `ring-ring`) on shared `Button`. On dark full-bleed heroes (e.g. Bēok private dining), a **secondary** outline control may use frosted light treatment (white border/background with opacity + `backdrop-blur`) for contrast; primary CTAs stay on tokens.
 - **Cards**: Large rounded corners (`--radius-card: 1.5rem`)
 - **Shadows**: Subtle, using canonical shadow tokens
 - **Transitions**: Smooth cubic-bezier easing

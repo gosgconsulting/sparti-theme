@@ -202,9 +202,10 @@ export default function BrokPrivateDinningPage() {
                     type="button"
                     onClick={() => setIsContactFormOpen(true)}
                     className={cn(
-                      "group rounded-full px-8 py-6 text-sm font-normal bg-white text-foreground shadow-md",
-                      "hover:bg-white/95 hover:scale-[1.02]",
-                      "focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/40",
+                      "group rounded-full px-8 py-6 text-sm font-body font-medium",
+                      "bg-primary text-primary-foreground shadow-sm",
+                      "hover:bg-primary/90 hover:shadow-md",
+                      "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                     )}
                   >
                     Book now
@@ -350,9 +351,10 @@ export default function BrokPrivateDinningPage() {
                   type="button"
                   onClick={() => setIsContactFormOpen(true)}
                   className={cn(
-                    "group rounded-full px-8 py-6 text-sm font-normal bg-white text-foreground shadow-md",
-                    "hover:bg-white/95 hover:scale-[1.02]",
-                    "focus-visible:ring-2 focus-visible:ring-white focus-visible:ring-offset-2 focus-visible:ring-offset-black/50",
+                    "group rounded-full px-8 py-6 text-sm font-body font-medium",
+                    "bg-primary text-primary-foreground shadow-sm",
+                    "hover:bg-primary/90 hover:shadow-md",
+                    "focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2",
                   )}
                 >
                   Reserve now

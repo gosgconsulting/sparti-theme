@@ -48,7 +48,11 @@ const FlowbiteContent: React.FC<FlowbiteContentProps> = ({
   let finalContent = content;
   if (!finalContent && items.length > 0) {
     const textItems = items
-      .filter((i: any) => i.type === "text" || i.type === "paragraph" || (typeof i.content === "string" && i.content))
+      .filter(
+        (i: any) =>
+          i &&
+          (i.type === "text" || i.type === "paragraph" || (typeof i.content === "string" && i.content))
+      )
       .map((i: any) => i.content)
       .filter(Boolean)
       .join("\n\n");

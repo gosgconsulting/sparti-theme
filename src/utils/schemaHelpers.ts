@@ -19,10 +19,15 @@ export interface SchemaItem {
   [key: string]: unknown;
 }
 
+/** Drop null/undefined entries CMS sometimes stores in item arrays. */
+function safeSchemaItems(items: SchemaItem[] | undefined): SchemaItem[] {
+  if (!items || !Array.isArray(items)) return [];
+  return items.filter((i): i is SchemaItem => i != null && typeof i === 'object');
+}
+
 /** Get item from items array by key (case-insensitive). */
 export function getItemByKey(items: SchemaItem[] | undefined, key: string): SchemaItem | undefined {
-  if (!items || !Array.isArray(items)) return undefined;
-  return items.find((i) => i.key?.toLowerCase() === key.toLowerCase());
+  return safeSchemaItems(items).find((i) => i.key?.toLowerCase() === key.toLowerCase());
 }
 
 /** Get text content by key. */
@@ -36,8 +41,7 @@ export const getContentByKey = getTextByKey;
 
 /** Get heading content; optional key and level filter. */
 export function getHeading(items: SchemaItem[] | undefined, key?: string, level?: number): string {
-  if (!items) return '';
-  const heading = items.find((i) => {
+  const heading = safeSchemaItems(items).find((i) => {
     if (i.type !== 'heading') return false;
     if (key != null && i.key?.toLowerCase() !== key.toLowerCase()) return false;
     if (level != null && i.level !== level) return false;
@@ -48,8 +52,7 @@ export function getHeading(items: SchemaItem[] | undefined, key?: string, level?
 
 /** Get image src by key (or first image if no key). */
 export function getImageSrc(items: SchemaItem[] | undefined, key?: string): string {
-  if (!items) return '';
-  const image = items.find((i) => {
+  const image = safeSchemaItems(items).find((i) => {
     if (i.type !== 'image') return false;
     if (key != null && i.key?.toLowerCase() !== key.toLowerCase()) return false;
     return true;
@@ -59,8 +62,7 @@ export function getImageSrc(items: SchemaItem[] | undefined, key?: string): stri
 
 /** Get image { src, alt } by key (or first image). */
 export function getImage(items: SchemaItem[] | undefined, key?: string): { src: string; alt: string } | null {
-  if (!items) return null;
-  const image = items.find((i) => {
+  const image = safeSchemaItems(items).find((i) => {
     if (i.type !== 'image') return false;
     if (key != null && i.key?.toLowerCase() !== key.toLowerCase()) return false;
     return true;
@@ -80,8 +82,7 @@ export function getButton(
   items: SchemaItem[] | undefined,
   key?: string
 ): { text: string; url: string; content?: string; link?: string; icon?: string } | null {
-  if (!items) return null;
-  const button = items.find((i) => {
+  const button = safeSchemaItems(items).find((i) => {
     if (i.type !== 'button' && i.type !== 'link') return false;
     if (key != null && i.key?.toLowerCase() !== key.toLowerCase()) return false;
     return true;
@@ -100,13 +101,12 @@ export function getButton(
 
 /** Get nested array items by key (or first array). */
 export function getArrayItems(items: SchemaItem[] | undefined, key?: string): SchemaItem[] {
-  if (!items) return [];
-  const arrayItem = items.find((i) => {
+  const arrayItem = safeSchemaItems(items).find((i) => {
     if (i.type !== 'array') return false;
     if (key != null && i.key?.toLowerCase() !== key.toLowerCase()) return false;
     return true;
   });
-  return Array.isArray(arrayItem?.items) ? arrayItem.items : [];
+  return Array.isArray(arrayItem?.items) ? safeSchemaItems(arrayItem.items as SchemaItem[]) : [];
 }
 
 /** Get content of item by key when type is 'text' (alias for getTextByKey). */
@@ -118,24 +118,25 @@ export function getText(items: SchemaItem[] | undefined, key: string): string {
  * Extract common props from items (title, description, image, button, items).
  */
 export function extractPropsFromItems(items: SchemaItem[] | undefined): Record<string, unknown> {
-  if (!items || items.length === 0) return {};
+  const list = safeSchemaItems(items);
+  if (list.length === 0) return {};
 
   const props: Record<string, unknown> = {};
-  props.title = getHeading(items) || getTextByKey(items, 'title') || getTextByKey(items, 'heading');
+  props.title = getHeading(list) || getTextByKey(list, 'title') || getTextByKey(list, 'heading');
   props.description =
-    getTextByKey(items, 'description') || getTextByKey(items, 'text') || getTextByKey(items, 'content');
-  props.subtitle = getTextByKey(items, 'subtitle');
-  props.imageSrc = getImageSrc(items) || getImageSrc(items, 'image');
-  props.image = getImage(items);
-  const btn = getButton(items);
+    getTextByKey(list, 'description') || getTextByKey(list, 'text') || getTextByKey(list, 'content');
+  props.subtitle = getTextByKey(list, 'subtitle');
+  props.imageSrc = getImageSrc(list) || getImageSrc(list, 'image');
+  props.image = getImage(list);
+  const btn = getButton(list);
   props.button = btn;
   props.buttonText = btn?.text;
   props.buttonUrl = btn?.url;
 
-  const arrayItems = getArrayItems(items);
+  const arrayItems = getArrayItems(list);
   if (arrayItems.length > 0) props.items = arrayItems;
 
-  items.forEach((item) => {
+  list.forEach((item) => {
     if (item.props && typeof item.props === 'object') {
       Object.assign(props, item.props);
     }
@@ -162,11 +163,12 @@ export function parseMemberFromSubItems(subItems: SchemaItem[] | undefined): {
   description: string;
   image: string;
 } {
-  if (!subItems || subItems.length === 0) return { name: '', role: '', description: '', image: '' };
-  const img = subItems.find((i) => i.type === 'image');
-  const name = subItems.find((i) => i.type === 'heading' && i.level === 2);
-  const role = subItems.find((i) => i.type === 'heading' && i.level === 4);
-  const bio = subItems.find((i) => i.type === 'text');
+  const list = safeSchemaItems(subItems);
+  if (list.length === 0) return { name: '', role: '', description: '', image: '' };
+  const img = list.find((i) => i.type === 'image');
+  const name = list.find((i) => i.type === 'heading' && i.level === 2);
+  const role = list.find((i) => i.type === 'heading' && i.level === 4);
+  const bio = list.find((i) => i.type === 'text');
   return {
     name: (name?.content as string) ?? '',
     role: (role?.content as string) ?? '',

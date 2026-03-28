@@ -75,15 +75,15 @@ const ChallengeSection: React.FC<ChallengeSectionProps> = ({ items = [] }) => {
 
           {/* Bullet pills - back to pain points */}
           <div className="space-y-5">
-            {bullets.map((b, idx) => (
+            {bullets.filter(Boolean).map((b, idx) => (
               <div
-                key={b.key || idx}
+                key={b?.key || idx}
                 className="flex items-center gap-4 rounded-[20px] border border-white/10 bg-white/5 px-5 py-4"
               >
                 <div className="flex h-9 w-9 items-center justify-center rounded-full bg-red-500/20 text-red-300 ring-1 ring-red-400/30">
-                  {iconMap[b.icon || "x"]}
+                  {iconMap[b?.icon || "x"]}
                 </div>
-                <p className="text-base md:text-lg text-white/90">{b.content}</p>
+                <p className="text-base md:text-lg text-white/90">{b?.content}</p>
               </div>
             ))}
           </div>

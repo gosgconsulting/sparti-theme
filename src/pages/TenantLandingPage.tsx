@@ -4,6 +4,7 @@ import { AlertCircle } from 'lucide-react';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
 import { ThemeBasePathContext } from '@/context/ThemeBasePathContext';
 import { themeComponentMap, getThemeDisplayName } from '@/themes/themeRegistry';
+import { getTenantId } from '@/utils/tenantConfig';
 
 /**
  * Client-side React component for tenant landing pages.
@@ -120,6 +121,11 @@ const TenantLandingPage: React.FC = () => {
     return <ThemeNotFound />;
   }
 
+  // Omit tenantId unless set (e.g. Vite CMS_TENANT / window.__CMS_TENANT__). Passing
+  // tenantId={undefined} overrides each theme's default and breaks CMS hooks (STR, gosg, etc.).
+  const resolvedTenantId = getTenantId();
+  const tenantProps = resolvedTenantId ? { tenantId: resolvedTenantId } : {};
+
   return (
     <ThemeBasePathContext.Provider value={resolvedBasePath}>
       <Suspense fallback={<div />}>
@@ -127,7 +133,7 @@ const TenantLandingPage: React.FC = () => {
           tenantName={tenantName}
           tenantSlug={slug}
           pageSlug={fullPageSlug}
-          tenantId={undefined}
+          {...tenantProps}
           basePath={basePath}
         />
       </Suspense>

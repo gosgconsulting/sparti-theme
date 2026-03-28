@@ -78,7 +78,9 @@ const FlowbiteContentSection: React.FC<FlowbiteContentSectionProps> = ({
     const arr = getArray("content");
     if (arr.length > 0) {
       return arr
-        .map((item: any) => (typeof item === "string" ? item : item.content || item.text || ""))
+        .map((item: any) =>
+          typeof item === "string" ? item : item?.content || item?.text || ""
+        )
         .filter(Boolean);
     }
 

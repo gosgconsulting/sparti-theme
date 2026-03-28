@@ -133,8 +133,10 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({
         
         // Extract features from nested array items if available
         const featuresArray = getArrayItems(serviceItems, 'features');
-        const serviceFeatures = featuresArray.length > 0 
-          ? featuresArray.map(f => getContentByKey([f], 'content') || f.content || '')
+        const serviceFeatures = featuresArray.length > 0
+          ? featuresArray.map((f) =>
+              f ? getContentByKey([f], 'content') || (f as { content?: string }).content || '' : ''
+            )
           : (defaultServices[index]?.features || []);
 
         return {
@@ -234,8 +236,8 @@ const ServicesSection: React.FC<ServicesSectionProps> = ({
                       const serviceSection = servicesArrayItem?.items?.[index];
                       const serviceItems = serviceSection?.items || [];
                       const button = getButton(serviceItems, 'button');
-                      const buttonContent = button.content || 'Contact Us';
-                      const buttonLink = button.link;
+                      const buttonContent = button?.content || 'Contact Us';
+                      const buttonLink = button?.link;
                       
                       return (
                         <Button 

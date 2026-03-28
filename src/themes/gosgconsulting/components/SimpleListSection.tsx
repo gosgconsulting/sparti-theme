@@ -25,10 +25,10 @@ const SimpleListSection: React.FC<SimpleListSectionProps> = ({ items = [] }) => 
           </h2>
         )}
         <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-          {listItems.map((item, index) => (
-            <div key={item.key || index} className="flex items-center p-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
+          {listItems.filter(Boolean).map((item, index) => (
+            <div key={item?.key || index} className="flex items-center p-4 bg-white dark:bg-slate-800 rounded-lg shadow-sm">
               <div className="w-3 h-3 bg-purple-500 rounded-full mr-4 shrink-0"></div>
-              <span className="text-gray-700 dark:text-gray-300">{item.content}</span>
+              <span className="text-gray-700 dark:text-gray-300">{item?.content}</span>
             </div>
           ))}
         </div>

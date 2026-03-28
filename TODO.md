@@ -29,6 +29,12 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ## Completed
 
+### TenantId + null-safe schema (2026-03-28)
+
+- [x] **TenantLandingPage tenantId** — Stopped passing `tenantId={undefined}` (it overrode theme defaults). Now spreads `{ tenantId }` only when `getTenantId()` returns a value (Vite `CMS_TENANT` / `window.__CMS_TENANT__`), so STR and other themes keep their default tenant IDs for CMS hooks when unset.
+- [x] **Cannot read properties of null (reading 'content')** — `schemaHelpers`: filter null/non-object entries in item arrays (`safeSchemaItems`) for getters, `getArrayItems`, `extractPropsFromItems`, `parseMemberFromSubItems`. `FlowbiteContentSection` paragraphs mapper uses `item?.content`. `FlowbiteContent` text-item filter guards null. `HomeHeroSection`, `SimpleListSection`, `ChallengeSection`: optional chaining / filter on list maps. Verification: `npm run build`, `npm run test:unit` pass.
+- [x] **Landingpage / ACATR (`/theme/landingpage`)** — `getButton()` returns null when homepage has no schema `items`; `HeroSection`, `CTASection`, `ServicesSection` now use `button?.content` / `button?.link` and null-safe feature maps. `useThemeBranding` uses `getTenantId()` with fallback `tenant-2960b682`; blog/thank-you receive `cmsTenantId` so CMS calls stay consistent. Removed unused `useThemeSettings` import.
+
 ### Moondk product detail (2026-03-24)
 
 - [x] **Product cards: no outline** — `ProductCarousel.tsx`: `border-0` / `ring-0`, dropped image ring. `ProductGrid.tsx`: `border-0 ring-0` so shadcn `Card` default border is gone. Verification: `npm run build` pass.

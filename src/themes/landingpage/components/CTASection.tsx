@@ -44,8 +44,8 @@ const CTASection: React.FC<CTASectionProps> = ({
                           description || 
                           defaultDescription;
   const button = getButton(items, 'submitButton') || getButton(items, 'button');
-  const finalButtonText = button.content || buttonText || defaultButtonText;
-  const finalButtonLink = button.link || buttonLink || defaultButtonLink;
+  const finalButtonText = button?.content || buttonText || defaultButtonText;
+  const finalButtonLink = button?.link || buttonLink || defaultButtonLink;
 
   const handleButtonClick = () => {
     if (onButtonClick) {

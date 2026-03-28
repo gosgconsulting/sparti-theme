@@ -62,7 +62,7 @@ const HomeHeroSection = ({ items = [], onContactClick, onPopupOpen }: HomeHeroSe
               >
                 <Badge variant="outline" className="px-4 py-2 text-sm font-medium border-brandPurple/20 text-brandPurple bg-brandPurple/5">
                   {badge.icon === 'clock' && <Clock className="w-4 h-4 mr-2" />}
-                  {badge.content}
+                  {badge?.content}
                 </Badge>
               </motion.div>
             )}
@@ -81,7 +81,7 @@ const HomeHeroSection = ({ items = [], onContactClick, onPopupOpen }: HomeHeroSe
                       {headingPrefix?.content ? `${headingPrefix.content} ` : ""}
                     </span>
                     <Highlight className="text-neutral-900 dark:text-white">
-                      {headingEmphasis.content}
+                      {headingEmphasis?.content}
                     </Highlight>
                   </>
                 ) : (
@@ -125,7 +125,7 @@ const HomeHeroSection = ({ items = [], onContactClick, onPopupOpen }: HomeHeroSe
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.6, delay: 0.2 }}
               >
-                {description.content}
+                {description?.content}
               </motion.p>
             )}
 
@@ -148,7 +148,7 @@ const HomeHeroSection = ({ items = [], onContactClick, onPopupOpen }: HomeHeroSe
                   className="bg-gradient-to-r from-purple-500 to-teal-500 hover:from-purple-600 hover:to-teal-600 text-white font-medium px-8 py-6 text-lg rounded-2xl transition-all duration-300 shadow-lg hover:shadow-xl cursor-pointer"
                 >
                   <span className="flex items-center">
-                    {button.content}
+                    {button?.content}
                     {button.icon === 'arrowRight' && <ArrowRight className="ml-2 h-5 w-5" />}
                   </span>
                 </Button>

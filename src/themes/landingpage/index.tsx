@@ -14,9 +14,13 @@ import { ContactFormDialog } from './components/ContactFormDialog';
 import { ThankYouPage } from './components/ThankYouPage';
 import BlogListPage from './pages/blog/BlogListPage';
 import BlogPostPage from './pages/blog/BlogPostPage';
-import { useThemeSettings, useThemeBranding } from '../../hooks/useThemeSettings';
+import { useThemeBranding } from '../../hooks/useThemeSettings';
 import { debugLog, debugWarn } from '@/utils/debugLogger';
 import { getSiteName, getLogoSrc, getFaviconSrc, applyFavicon } from './utils/settings';
+import { getTenantId } from '@/utils/tenantConfig';
+
+/** Default CMS tenant for ACATR / landingpage when no env or prop is set */
+const LANDINGPAGE_DEFAULT_TENANT_ID = 'tenant-2960b682';
 
 interface TenantLandingProps {
   tenantName?: string;
@@ -50,16 +54,18 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
   const ctxBasePath = useContext(ThemeBasePathContext);
   const resolvedBasePath = basePathProp ?? ctxBasePath ?? `/theme/${tenantSlug}`;
   
-  // Get tenant ID from props or environment
-  const effectiveTenantId = tenantId || (typeof window !== 'undefined' && (window as any).__CMS_TENANT__) || null;
-  
-  // Log tenant ID for debugging
-  if (effectiveTenantId) {
-    debugLog('[testing] Theme using tenant ID:', effectiveTenantId);
+  // Tenant for CMS: router prop, then Vite/window injection, else ACATR default (never null for API calls)
+  const effectiveTenantId = tenantId ?? getTenantId() ?? null;
+  const cmsTenantId = effectiveTenantId ?? LANDINGPAGE_DEFAULT_TENANT_ID;
+
+  if (cmsTenantId) {
+    debugLog('[testing] Theme using tenant ID:', cmsTenantId);
   }
-  
-  // Fetch branding settings from database
-  const { branding, loading: brandingLoading, error: brandingError } = useThemeBranding(tenantSlug, 'tenant-2960b682'); // TODO: fix this
+
+  const { branding, loading: brandingLoading, error: brandingError } = useThemeBranding(
+    tenantSlug,
+    cmsTenantId
+  );
   
   const [isContactDialogOpen, setIsContactDialogOpen] = useState(false);
   
@@ -216,7 +222,7 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
         <BlogPostPage
           basePath={resolvedBasePath}
           slug={postSlug}
-          tenantId={effectiveTenantId}
+          tenantId={cmsTenantId}
           tenantName={siteName}
           tenantSlug={tenantSlug}
           logoSrc={logoSrc}
@@ -229,7 +235,7 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
     return (
       <BlogListPage 
         basePath={resolvedBasePath} 
-        tenantId={effectiveTenantId}
+        tenantId={cmsTenantId}
         tenantName={siteName}
         tenantSlug={tenantSlug}
         logoSrc={logoSrc}
@@ -244,7 +250,7 @@ const TenantLanding: React.FC<TenantLandingProps> = ({
       <ThankYouPage 
         tenantName={siteName}
         tenantSlug={tenantSlug}
-        tenantId={effectiveTenantId}
+        tenantId={cmsTenantId}
       />
     );
   }

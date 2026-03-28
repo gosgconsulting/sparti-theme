@@ -53,8 +53,8 @@ const HeroSection: React.FC<HeroSectionProps> = ({
   const finalDescription = descriptionText || description || 'ACRA-registered filing agents providing complete Singapore company incorporation, professional accounting services, and 100% compliance guarantee. Start your business today with expert guidance from day one.';
   const finalImageSrc = heroImage || imageSrc || '/theme/landingpage/assets/hero-business.jpg';
   const finalImageAlt = heroImageAlt || imageAlt || 'Professional business team collaboration';
-  const finalButtonText = button.content || buttonText || 'Start Your Business Journey Today';
-  const finalButtonLink = button.link || buttonLink || '#contact';
+  const finalButtonText = button?.content || buttonText || 'Start Your Business Journey Today';
+  const finalButtonLink = button?.link || buttonLink || '#contact';
 
   // Parse title to extract gradient part if needed
   const titleParts = finalTitle.split(' - ');

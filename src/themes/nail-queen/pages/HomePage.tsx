@@ -1,4 +1,5 @@
 import { useEffect } from "react";
+import { ThemeLink } from "@/components/ThemeLink";
 import { getThemeAssetUrl } from "../../../utils/themeAssets";
 import { debugLog } from "@/utils/debugLogger";
 import { Layout } from "../components/Layout";
@@ -291,7 +292,12 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                   <p className="text-gray-600 text-sm mb-4">
                     Experience meticulous nail care and stunning nail art designs that reflect your unique style and personality, using top-quality products for long-lasting results.
                   </p>
-                  <button className="text-nail-queen-brown text-sm font-medium hover:underline">Learn more</button>
+                  <ThemeLink
+                    to="/pricing"
+                    className="inline-block text-nail-queen-brown text-sm font-medium hover:underline"
+                  >
+                    Learn more
+                  </ThemeLink>
                 </div>
               </div>
 
@@ -308,7 +314,12 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                   <p className="text-gray-600 text-sm mb-4">
                     Pamper your feet with our luxurious pedicure treatments, including exfoliation, massage therapy, and expert nail care, leaving you with healthy, beautiful feet.
                   </p>
-                  <button className="text-nail-queen-brown text-sm font-medium hover:underline">Learn more</button>
+                  <ThemeLink
+                    to="/pricing"
+                    className="inline-block text-nail-queen-brown text-sm font-medium hover:underline"
+                  >
+                    Learn more
+                  </ThemeLink>
                 </div>
               </div>
 
@@ -325,7 +336,12 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                   <p className="text-gray-600 text-sm mb-4">
                     A Four-Senses Ritual crafted from delicate techniques, soft aromas, and layers of nourishing care that unfold slowly on the skin.
                   </p>
-                  <button className="text-nail-queen-brown text-sm font-medium hover:underline">Learn more</button>
+                  <ThemeLink
+                    to="/pricing"
+                    className="inline-block text-nail-queen-brown text-sm font-medium hover:underline"
+                  >
+                    Learn more
+                  </ThemeLink>
                 </div>
               </div>
 
@@ -342,7 +358,12 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                   <p className="text-gray-600 text-sm mb-4">
                     Clean up stray hairs and define your features with our quick shave, brow shaping, and precise threading services for a neat, polished look.
                   </p>
-                  <button className="text-nail-queen-brown text-sm font-medium hover:underline">Learn more</button>
+                  <ThemeLink
+                    to="/pricing"
+                    className="inline-block text-nail-queen-brown text-sm font-medium hover:underline"
+                  >
+                    Learn more
+                  </ThemeLink>
                 </div>
               </div>
             </div>

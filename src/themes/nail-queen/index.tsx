@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useMemo } from "react";
+import React, { useContext, useEffect, useLayoutEffect, useMemo } from "react";
 import { useLocation, useParams } from "react-router-dom";
 
 import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
@@ -113,6 +113,11 @@ const NailQueenTheme: React.FC<NailQueenThemeProps> = ({
     }
     return '';
   }, [location.pathname, themeSlug, params.pageSlug, pageSlug]);
+
+  // Reset scroll on client-side route changes (React Router does not restore scroll).
+  useLayoutEffect(() => {
+    window.scrollTo(0, 0);
+  }, [resolvedPageSlug]);
 
   const slugParts = resolvedPageSlug.split("/").filter(Boolean);
   const topLevel = slugParts[0] || "";

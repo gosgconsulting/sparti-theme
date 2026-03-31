@@ -21,7 +21,10 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
       {/* Service Categories */}
       <section className="py-8 bg-background">
         <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
-          <div className="grid min-w-0 gap-8 lg:grid-cols-2">
+          <div
+            id="pricing-mani-pedi"
+            className="grid min-w-0 scroll-mt-32 gap-8 lg:grid-cols-2 md:scroll-mt-36"
+          >
             {/* Manicures */}
             <div className="min-w-0 max-w-full rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
               <div className="aspect-square bg-gray-200 rounded-2xl mb-6 overflow-hidden">
@@ -341,7 +344,10 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
           </div>
 
           {/* Luxe Spa Mani-Pedi Collection Section */}
-          <div className="mt-16">
+          <div
+            id="pricing-luxe-spa-collection"
+            className="mt-16 scroll-mt-32 md:scroll-mt-36"
+          >
             <div className="text-center mb-12">
               <h2 className="break-words text-3xl font-bold text-nail-queen-brown sm:text-4xl mb-4 px-1">
                 Luxe Spa Mani–Pedi Collection

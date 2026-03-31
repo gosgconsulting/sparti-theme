@@ -293,7 +293,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                     Experience meticulous nail care and stunning nail art designs that reflect your unique style and personality, using top-quality products for long-lasting results.
                   </p>
                   <ThemeLink
-                    to="/pricing"
+                    to="/pricing#pricing-mani-pedi"
                     className="inline-block text-nail-queen-brown text-sm font-medium hover:underline"
                   >
                     Learn more
@@ -315,7 +315,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                     Pamper your feet with our luxurious pedicure treatments, including exfoliation, massage therapy, and expert nail care, leaving you with healthy, beautiful feet.
                   </p>
                   <ThemeLink
-                    to="/pricing"
+                    to="/pricing#pricing-mani-pedi"
                     className="inline-block text-nail-queen-brown text-sm font-medium hover:underline"
                   >
                     Learn more
@@ -337,7 +337,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                     A Four-Senses Ritual crafted from delicate techniques, soft aromas, and layers of nourishing care that unfold slowly on the skin.
                   </p>
                   <ThemeLink
-                    to="/pricing"
+                    to="/pricing#pricing-luxe-spa-collection"
                     className="inline-block text-nail-queen-brown text-sm font-medium hover:underline"
                   >
                     Learn more

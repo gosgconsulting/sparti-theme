@@ -40,6 +40,12 @@ const normalizeSlug = (slug?: string) => {
     .replace(/\/+$/, "");
 };
 
+/** Extra scroll after scrollIntoView for pricing deep-links (fixed header + desired framing). */
+const PRICING_ANCHOR_EXTRA_SCROLL: Record<string, number> = {
+  "pricing-mani-pedi": 80,
+  "pricing-luxe-spa-collection": 80,
+};
+
 const NailQueenTheme: React.FC<NailQueenThemeProps> = ({
   basePath: basePathProp,
   pageSlug,
@@ -114,10 +120,22 @@ const NailQueenTheme: React.FC<NailQueenThemeProps> = ({
     return '';
   }, [location.pathname, themeSlug, params.pageSlug, pageSlug]);
 
-  // Reset scroll on client-side route changes (React Router does not restore scroll).
+  // Reset scroll on route changes unless the URL targets an in-page anchor (e.g. /pricing#pricing-mani-pedi).
   useLayoutEffect(() => {
+    const id = location.hash?.replace(/^#/, "").trim();
+    if (id) {
+      const el = document.getElementById(decodeURIComponent(id));
+      if (el) {
+        el.scrollIntoView({ behavior: "auto", block: "start" });
+        const extra = PRICING_ANCHOR_EXTRA_SCROLL[id];
+        if (extra) {
+          window.scrollBy({ top: extra, behavior: "auto" });
+        }
+        return;
+      }
+    }
     window.scrollTo(0, 0);
-  }, [resolvedPageSlug]);
+  }, [resolvedPageSlug, location.hash]);
 
   const slugParts = resolvedPageSlug.split("/").filter(Boolean);
   const topLevel = slugParts[0] || "";

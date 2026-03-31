@@ -65,7 +65,7 @@ export default function NotFoundPage({
   if (status === "checking") {
     return (
       <Layout basePath={basePath} tenantId={tenantId}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="mx-auto w-full min-w-0 max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-gray-600">Loading...</p>
           </div>
@@ -80,9 +80,9 @@ export default function NotFoundPage({
 
   return (
     <Layout basePath={basePath} tenantId={tenantId}>
-      <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-        <div className="bg-white rounded-lg shadow-lg p-8 text-center">
-          <h1 className="text-6xl font-bold text-nail-queen-brown mb-4">404</h1>
+      <div className="mx-auto w-full min-w-0 max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+        <div className="rounded-lg bg-white p-6 text-center shadow-lg sm:p-8">
+          <h1 className="text-4xl font-bold text-nail-queen-brown sm:text-6xl mb-4">404</h1>
           <p className="text-xl text-gray-700 mb-2">Page Not Found</p>
           <p className="text-gray-600 mb-8">
             The page you're looking for doesn't exist.

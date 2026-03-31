@@ -3,7 +3,7 @@ import { Layout } from "../components/Layout";
 export default function FindUsPage({ basePath, tenantId }: { basePath: string; tenantId?: string }) {
   return (
     <Layout basePath={basePath} tenantId={tenantId}>
-      <section className="relative h-screen">
+      <section className="relative h-screen min-w-0 overflow-x-hidden">
         <div className="absolute inset-0 w-full h-full">
           <iframe
             src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d4731.482296020952!2d103.83075757496566!3d1.30730439868029!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x31da1992a6c0228d%3A0x9c97bfbd3e2323d4!2sNail%20Queen%20By%20Michelle%20Tran!5e1!3m2!1sen!2sth!4v1757583867807!5m2!1sen!2sth"
@@ -18,8 +18,8 @@ export default function FindUsPage({ basePath, tenantId }: { basePath: string; t
           ></iframe>
         </div>
 
-        <div className="absolute z-30 top-1/2 right-8 transform -translate-y-1/2 pointer-events-auto">
-          <div className="bg-white rounded-2xl p-8 shadow-2xl max-w-md">
+        <div className="pointer-events-auto absolute z-30 bottom-6 left-4 right-4 top-auto max-md:mx-auto md:bottom-auto md:right-8 md:left-auto md:top-1/2 md:w-auto md:max-w-md md:-translate-y-1/2">
+          <div className="mx-auto max-h-[min(70vh,32rem)] max-w-full overflow-y-auto rounded-2xl bg-white p-6 shadow-2xl sm:p-8 md:max-w-md">
             <div className="text-center space-y-6">
               <h1 className="text-4xl font-bold text-nail-queen-brown mb-4">Find Us</h1>
 

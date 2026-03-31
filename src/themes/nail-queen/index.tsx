@@ -198,7 +198,7 @@ const NailQueenTheme: React.FC<NailQueenThemeProps> = ({
   };
 
   return (
-    <div className="nail-queen-theme">
+    <div className="nail-queen-theme min-w-0 overflow-x-hidden">
       {/* SEO metadata */}
       <SEOHead meta={pageMeta} favicon={faviconSrc || undefined} />
       

@@ -221,11 +221,13 @@ export default function BlogPage({ basePath, tenantId }: { basePath: string; ten
   return (
     <Layout basePath={basePath} tenantId={tenantId}>
       <section className="py-16 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-6xl font-bold text-center text-nail-queen-brown mb-8">Our Blog</h1>
+        <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="break-words text-4xl font-bold text-center text-nail-queen-brown sm:text-5xl md:text-6xl mb-8">
+            Our Blog
+          </h1>
           
           {/* Category Tabs */}
-          <div className="flex flex-wrap justify-center gap-2 mb-8">
+          <div className="flex min-w-0 flex-wrap justify-center gap-2 mb-8 px-1">
             <button
               onClick={() => handleCategoryChange(null)}
               className={`px-6 py-2 rounded-full text-sm font-medium transition-colors ${
@@ -254,7 +256,7 @@ export default function BlogPage({ basePath, tenantId }: { basePath: string; ten
       </section>
 
       <section className="pb-20 bg-background">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full min-w-0 max-w-4xl px-4 sm:px-6 lg:px-8">
           {isLoading && (
             <div className="text-center py-12">
               <p className="text-gray-600">Loading blog posts...</p>
@@ -277,16 +279,16 @@ export default function BlogPage({ basePath, tenantId }: { basePath: string; ten
             <>
               <div className="space-y-8 mb-12">
                 {posts.map((post) => (
-                  <article key={post.id} className="bg-white rounded-lg overflow-hidden shadow-lg">
-                    <div className="md:flex">
-                      <div className="md:w-1/3">
+                  <article key={post.id} className="min-w-0 bg-white rounded-lg overflow-hidden shadow-lg">
+                    <div className="min-w-0 md:flex">
+                      <div className="min-w-0 md:w-1/3">
                         <img
                           src={getFeaturedImage(post)}
                           alt={post.title}
                           className="w-full h-48 md:h-full object-cover"
                         />
                       </div>
-                      <div className="md:w-2/3 p-6">
+                      <div className="min-w-0 md:w-2/3 p-6">
                         <h2 className="text-xl font-bold text-nail-queen-brown mb-3" dangerouslySetInnerHTML={{ __html: post.title }} />
                         <p className="text-gray-600 text-sm mb-4 leading-relaxed">
                           {post.excerpt || "No excerpt available."}
@@ -310,7 +312,7 @@ export default function BlogPage({ basePath, tenantId }: { basePath: string; ten
 
               {/* Pagination */}
               {totalPages > 1 && (
-                <div className="flex items-center justify-center gap-2 mt-12">
+                <div className="mt-12 flex min-w-0 flex-wrap items-center justify-center gap-2 px-1">
                   <button
                     onClick={() => handlePageChange(currentPage - 1)}
                     disabled={currentPage === 1}

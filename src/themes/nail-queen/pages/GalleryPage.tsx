@@ -824,10 +824,12 @@ export default function GalleryPage({ basePath, tenantId }: { basePath: string; 
         }
       `}</style>
       <section className="py-16 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-6xl font-bold text-center text-nail-queen-brown mb-16">Gallery</h1>
+        <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="break-words text-4xl font-bold text-center text-nail-queen-brown sm:text-5xl md:text-6xl mb-16">
+            Gallery
+          </h1>
 
-          <div className="flex justify-center flex-wrap gap-4 mb-12">
+          <div className="flex min-w-0 justify-center flex-wrap gap-2 sm:gap-4 mb-12 px-1">
             {filterCategories.map((category) => (
               <button
                 key={category.id}
@@ -847,8 +849,8 @@ export default function GalleryPage({ basePath, tenantId }: { basePath: string; 
       </section>
 
       <section className="pb-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+        <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
+          <div className="grid min-w-0 grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
             {filteredItems.map((item) => (
               <div
                 key={item.id}

@@ -12,8 +12,8 @@ export default function PrivacyPolicy({
       <Layout basePath={basePath} tenantId={tenantId}>
         {/* Header */}
       <section className="py-16 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-          <h1 className="text-6xl font-bold text-center text-nail-queen-brown mb-6">
+        <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
+          <h1 className="break-words text-4xl font-bold text-center text-nail-queen-brown sm:text-5xl md:text-6xl mb-6">
             Privacy Policy
           </h1>
           <p className="text-center text-gray-600 max-w-3xl mx-auto">
@@ -24,8 +24,8 @@ export default function PrivacyPolicy({
 
       {/* Content */}
       <section className="py-12 bg-background">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
-          <div className="space-y-12">
+        <div className="mx-auto w-full min-w-0 max-w-4xl px-4 sm:px-6 lg:px-8">
+          <div className="space-y-12 break-words">
             
             {/* Introduction */}
             <div>

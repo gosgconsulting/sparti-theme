@@ -101,8 +101,8 @@ export const ThankYouPage: React.FC<ThankYouPageProps> = ({
     return (
       <Layout basePath={basePath}>
         <div className="min-h-screen bg-white pt-24">
-          <main className="container mx-auto px-4 py-16">
-            <div className="max-w-2xl mx-auto text-center">
+          <main className="mx-auto w-full min-w-0 max-w-4xl px-4 py-16">
+            <div className="mx-auto min-w-0 max-w-2xl text-center break-words">
               <div className="mb-6">
                 <div className="w-24 h-24 mx-auto bg-green-100 rounded-full flex items-center justify-center">
                   <svg className="w-12 h-12 text-green-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -142,8 +142,8 @@ export const ThankYouPage: React.FC<ThankYouPageProps> = ({
     return (
       <Layout basePath={basePath}>
         <div className="min-h-screen bg-white pt-24">
-          <main className="container mx-auto px-4 py-16">
-            <div className="max-w-2xl mx-auto text-center">
+          <main className="mx-auto w-full min-w-0 max-w-4xl px-4 py-16">
+            <div className="mx-auto min-w-0 max-w-2xl text-center break-words">
               <div className="mb-6">
                 <div className="w-24 h-24 mx-auto bg-pink-100 rounded-full flex items-center justify-center">
                   <svg className="w-12 h-12 text-pink-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -183,8 +183,8 @@ export const ThankYouPage: React.FC<ThankYouPageProps> = ({
     return (
       <Layout basePath={basePath}>
         <div className="min-h-screen bg-white pt-24">
-          <main className="container mx-auto px-4 py-16">
-            <div className="max-w-2xl mx-auto text-center">
+          <main className="mx-auto w-full min-w-0 max-w-4xl px-4 py-16">
+            <div className="mx-auto min-w-0 max-w-2xl text-center break-words">
               <div className="mb-6">
                 <div className="w-24 h-24 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
                   <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -224,8 +224,8 @@ export const ThankYouPage: React.FC<ThankYouPageProps> = ({
     return (
       <Layout basePath={basePath}>
         <div className="min-h-screen bg-white pt-24">
-          <main className="container mx-auto px-4 py-16">
-            <div className="max-w-2xl mx-auto text-center">
+          <main className="mx-auto w-full min-w-0 max-w-4xl px-4 py-16">
+            <div className="mx-auto min-w-0 max-w-2xl text-center break-words">
               <div className="mb-6">
                 <div className="w-24 h-24 mx-auto bg-blue-100 rounded-full flex items-center justify-center">
                   <svg className="w-12 h-12 text-blue-600" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -264,8 +264,8 @@ export const ThankYouPage: React.FC<ThankYouPageProps> = ({
   return (
     <Layout basePath={basePath}>
       <div className="min-h-screen bg-white pt-24">
-        <main className="container mx-auto px-4 py-16">
-          <div className="max-w-2xl mx-auto text-center">
+        <main className="mx-auto w-full min-w-0 max-w-4xl px-4 py-16">
+          <div className="mx-auto min-w-0 max-w-2xl text-center break-words">
             {/* Success Icon */}
             <div className="mb-8">
               <div className="w-24 h-24 mx-auto bg-green-100 rounded-full flex items-center justify-center">

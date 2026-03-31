@@ -94,7 +94,7 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
   );
 
   return (
-    <div className="min-h-screen bg-background">
+    <div className="min-h-screen overflow-x-hidden bg-background">
       <SocialMediaSticky basePath={basePath} />
 
       <nav
@@ -246,7 +246,7 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
         </SheetContent>
       </Sheet>
 
-      <main className="pt-16">{children}</main>
+      <main className="min-w-0 max-w-full overflow-x-hidden pt-16">{children}</main>
 
       <ContactPanel open={isContactOpen} onOpenChange={setIsContactOpen} />
 

@@ -10,7 +10,7 @@ interface SocialMediaStickyProps {
 export function SocialMediaSticky({ basePath }: SocialMediaStickyProps) {
   const tiktokLogoSrc = getThemeAssetUrl(basePath, "wall-murals-tiktok-vector-logo.jpg.jpg", THEME_SLUG);
   return (
-    <div className={cn("fixed left-0 top-1/4 z-50 flex flex-col")}> 
+    <div className={cn("fixed left-0 top-1/4 z-50 flex flex-col")}>
       <a
         href="https://www.facebook.com/nailqueenfep"
         target="_blank"

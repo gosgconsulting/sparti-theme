@@ -214,7 +214,7 @@ export default function BlogPostPage({
   if (isLoading) {
     return (
       <Layout basePath={basePath} tenantId={tenantId}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
+        <div className="mx-auto w-full min-w-0 max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
           <div className="text-center">
             <p className="text-gray-600">Loading post...</p>
           </div>
@@ -226,8 +226,8 @@ export default function BlogPostPage({
   if (error || !post) {
     return (
       <Layout basePath={basePath} tenantId={tenantId}>
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 py-16">
-          <div className="bg-white rounded-lg shadow-lg p-8 text-center">
+        <div className="mx-auto w-full min-w-0 max-w-4xl px-4 py-16 sm:px-6 lg:px-8">
+          <div className="rounded-lg bg-white p-6 text-center shadow-lg sm:p-8">
             <h1 className="text-2xl font-bold text-nail-queen-brown mb-4">Post not found</h1>
             <p className="text-gray-600 mb-6">{error || "The article you're looking for doesn't exist."}</p>
             <Link
@@ -247,8 +247,8 @@ export default function BlogPostPage({
 
   return (
     <Layout basePath={basePath} tenantId={tenantId}>
-      <article className="py-16 bg-background">
-        <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
+      <article className="min-w-0 break-words bg-background py-16">
+        <div className="mx-auto w-full min-w-0 max-w-4xl px-4 sm:px-6 lg:px-8">
           {/* Featured Image */}
           {featuredImage && (
             <div className="mb-8">

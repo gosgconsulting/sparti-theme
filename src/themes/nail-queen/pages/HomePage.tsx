@@ -135,10 +135,10 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
     <Layout basePath={basePath} tenantId={tenantId}>
       {/* Hero Section */}
       <section className="bg-background py-12">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-left mb-8">
-            <h1 className="text-6xl md:text-8xl font-bold text-black mb-4">NAIL QUEEN</h1>
-            <p className="text-xl md:text-2xl font-light text-black">By Michelle Tran</p>
+            <h1 className="break-words text-4xl font-bold text-black sm:text-6xl md:text-8xl mb-4">NAIL QUEEN</h1>
+            <p className="text-lg font-light text-black sm:text-xl md:text-2xl">By Michelle Tran</p>
           </div>
           <div className="w-full">
             <img
@@ -152,7 +152,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
 
       {/* Our History Section */}
       <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-start">
             <div>
               <h2 className="text-4xl font-bold text-black mb-8 text-left">
@@ -248,7 +248,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
 
       {/* Our Services Section */}
       <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
           <style>{`
             .services-text-wrapper {
               padding-right: ${servicesTextToLineGap.mobile};
@@ -259,8 +259,8 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
               }
             }
           `}</style>
-          <div className="flex flex-col md:flex-row gap-12 items-start">
-            <div className="relative w-90 md:w-1/3 md:-mr-10 services-text-wrapper">
+          <div className="flex min-w-0 flex-col items-start gap-12 md:flex-row">
+            <div className="relative w-full min-w-0 md:w-1/3 md:-mr-10 services-text-wrapper">
               <h2 className="text-4xl font-bold text-black mb-8">
                 Our
                 <br />
@@ -373,7 +373,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
 
       {/* Why Choose Us Section */}
       <section className="py-20 bg-background">
-        <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+        <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-black mb-8">Why Choose Us</h2>
           </div>
@@ -464,7 +464,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
           style={{ backgroundImage: `url('${asset("review-section.jpg")}')` }}
         />
         <div className="absolute inset-0 bg-black/40" />
-        <div className="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-white">
+        <div className="relative z-10 mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8 text-white">
           <div className="text-center mb-12">
             <h2 className="text-4xl font-bold text-white mb-8">Customer Reviews</h2>
             <p className="text-lg text-white/90 max-w-2xl mx-auto">

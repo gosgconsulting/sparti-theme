@@ -29,6 +29,10 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ## Completed
 
+### Nail Queen mobile header (2026-03-31)
+
+- [x] **`Layout.tsx` (viewports below `md`)** — Logo link on the **left**, hamburger on the **right**; **Book now** inside the `Sheet` **nav**, directly under **Blog** (bordered block, full-width pill; closes menu then opens `ContactPanel`). Drawer `side="right"` below header; `md+` unchanged. Verification: `npm run build` pass.
+
 ### TenantId + null-safe schema (2026-03-28)
 
 - [x] **TenantLandingPage tenantId** — Stopped passing `tenantId={undefined}` (it overrode theme defaults). Now spreads `{ tenantId }` only when `getTenantId()` returns a value (Vite `CMS_TENANT` / `window.__CMS_TENANT__`), so STR and other themes keep their default tenant IDs for CMS hooks when unset.

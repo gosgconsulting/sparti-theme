@@ -12,7 +12,7 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { cn } from "@/lib/utils";
-import { MessageCircle, Camera, FileText, Phone, Loader2, Facebook } from "lucide-react";
+import { MessageCircle, Camera, FileText, Phone, Loader2, Facebook, X } from "lucide-react";
 import { getTenantId } from "../../../utils/tenantConfig";
 import { getApiUrl } from "../../../utils/api";
 
@@ -200,31 +200,47 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
     <Sheet open={open} onOpenChange={onOpenChange}>
       <SheetContent
         side="right"
-        className="
-          fixed right-0 top-0 h-screen w-full sm:w-[460px] z-[60]
-          border-l border-black/5
-          shadow-[inset_10px_0_30px_-20px_rgba(0,0,0,0.35)]
-          data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=open]:duration-300
-          data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=closed]:duration-300
-          ease-in-out
-          bg-white
-        "
+        className={cn(
+          /* Mobile: inset-0 ties the panel to the viewport (fixes width > 100% quirks). Do not use overflow-x on this node — it clips the absolute close control. */
+          "fixed z-[60] flex min-h-0 flex-col border-l border-black/5 bg-white",
+          "box-border max-md:inset-0 max-md:h-dvh max-md:max-h-dvh max-md:w-auto max-md:min-w-0",
+          "sm:inset-y-0 sm:right-0 sm:left-auto sm:h-screen sm:max-h-screen sm:w-[460px] sm:max-w-[460px]",
+          "overflow-y-auto overflow-x-visible overscroll-contain shadow-[inset_10px_0_30px_-20px_rgba(0,0,0,0.35)]",
+          "p-4 pt-12 pb-6 pr-11 sm:p-6 sm:pr-6 sm:pt-6",
+          "data-[state=open]:animate-in data-[state=open]:slide-in-from-right data-[state=open]:duration-300",
+          "data-[state=closed]:animate-out data-[state=closed]:slide-out-to-right data-[state=closed]:duration-300",
+          "ease-in-out",
+          /* Hide shadcn’s default close (direct child <button>) — we render a visible X inside the scroll layer */
+          "[&>button:last-child]:hidden"
+        )}
       >
-        <SheetHeader className="mt-8">
-          <SheetTitle className="text-xl font-semibold">Contact us</SheetTitle>
-          <SheetDescription className="text-sm text-gray-600">
-            Tell us about your goals — we'll tailor the scope after a quick consultation.
-          </SheetDescription>
-        </SheetHeader>
+        <div className="relative flex min-h-0 min-w-0 w-full max-w-full flex-1 flex-col overflow-x-hidden">
+          <button
+            type="button"
+            onClick={() => onOpenChange(false)}
+            className={cn(
+              "absolute right-0 top-0 z-[120] flex h-11 w-11 shrink-0 items-center justify-center rounded-md text-gray-700",
+              "hover:bg-gray-100 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-gray-400 focus-visible:ring-offset-2"
+            )}
+            aria-label="Close contact form"
+          >
+            <X className="h-5 w-5" aria-hidden={true} />
+          </button>
+          <SheetHeader className="mt-0 shrink-0 pr-12 text-left sm:mt-8 sm:pr-0">
+            <SheetTitle className="text-xl font-semibold">Contact us</SheetTitle>
+            <SheetDescription className="break-words text-left text-sm text-gray-600">
+              Tell us about your goals — we'll tailor the scope after a quick consultation.
+            </SheetDescription>
+          </SheetHeader>
 
-        <form onSubmit={handleSubmit} className="mt-6 space-y-6">
+          <form onSubmit={handleSubmit} className="mt-6 w-full min-w-0 max-w-full space-y-6">
           {/* Step 1 */}
           {step === 1 && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">1. How would you like to contact us?</h3>
-              <p className="text-sm text-gray-600">Choose one option, then continue.</p>
+            <div className="min-w-0 max-w-full space-y-4">
+              <h3 className="break-words text-lg font-medium">1. How would you like to contact us?</h3>
+              <p className="break-words text-sm text-gray-600">Choose one option, then continue.</p>
 
-              <div className="space-y-3 text-left">
+              <div className="flex min-w-0 max-w-full flex-col items-stretch space-y-3 text-left">
                 {/* WhatsApp */}
                 <button
                   type="button"
@@ -239,12 +255,12 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                   }}
                   aria-pressed={false}
                   className={cn(
-                    "w-full flex items-center justify-start rounded-xl border p-4 transition-colors text-left hover:bg-gray-50"
+                    "box-border flex w-full max-w-full min-w-0 shrink-0 self-stretch items-center justify-start rounded-xl border p-4 text-left transition-colors hover:bg-gray-50"
                   )}
                 >
-                  <div className="flex items-center gap-3">
-                    <MessageCircle className="h-5 w-5 text-green-600" />
-                    <div>
+                  <div className="flex min-w-0 max-w-full flex-1 items-center gap-3">
+                    <MessageCircle className="h-5 w-5 shrink-0 text-green-600" />
+                    <div className="min-w-0">
                       <div className="font-medium">WhatsApp</div>
                       <div className="text-xs text-gray-600">Fastest reply</div>
                     </div>
@@ -264,12 +280,12 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                   }}
                   aria-pressed={false}
                   className={cn(
-                    "w-full flex items-center justify-start rounded-xl border p-4 transition-colors text-left hover:bg-gray-50"
+                    "box-border flex w-full max-w-full min-w-0 shrink-0 self-stretch items-center justify-start rounded-xl border p-4 text-left transition-colors hover:bg-gray-50"
                   )}
                 >
-                  <div className="flex items-center gap-3">
-                    <Camera className="h-5 w-5 text-pink-500" />
-                    <div>
+                  <div className="flex min-w-0 max-w-full flex-1 items-center gap-3">
+                    <Camera className="h-5 w-5 shrink-0 text-pink-500" />
+                    <div className="min-w-0">
                       <div className="font-medium">Instagram</div>
                       <div className="text-xs text-gray-600">DM us on Instagram</div>
                     </div>
@@ -289,12 +305,12 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                   }}
                   aria-pressed={false}
                   className={cn(
-                    "w-full flex items-center justify-start rounded-xl border p-4 transition-colors text-left hover:bg-gray-50"
+                    "box-border flex w-full max-w-full min-w-0 shrink-0 self-stretch items-center justify-start rounded-xl border p-4 text-left transition-colors hover:bg-gray-50"
                   )}
                 >
-                  <div className="flex items-center gap-3">
-                    <Facebook className="h-5 w-5 text-blue-600" />
-                    <div>
+                  <div className="flex min-w-0 max-w-full flex-1 items-center gap-3">
+                    <Facebook className="h-5 w-5 shrink-0 text-blue-600" />
+                    <div className="min-w-0">
                       <div className="font-medium">Facebook</div>
                       <div className="text-xs text-gray-600">Visit our Facebook page</div>
                     </div>
@@ -307,12 +323,12 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                   onClick={() => setSelectedMethod("form")}
                   aria-pressed={selectedMethod === "form"}
                   className={cn(
-                    "w-full flex items-center justify-start rounded-xl border p-4 transition-colors text-left hover:bg-gray-50"
+                    "box-border flex w-full max-w-full min-w-0 shrink-0 self-stretch items-center justify-start rounded-xl border p-4 text-left transition-colors hover:bg-gray-50"
                   )}
                 >
-                  <div className="flex items-center gap-3">
-                    <FileText className="h-5 w-5 text-gray-900" />
-                    <div>
+                  <div className="flex min-w-0 max-w-full flex-1 items-center gap-3">
+                    <FileText className="h-5 w-5 shrink-0 text-gray-900" />
+                    <div className="min-w-0">
                       <div className="font-medium">Contact form</div>
                       <div className="text-xs text-gray-600">Email follow-up</div>
                     </div>
@@ -333,12 +349,12 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                   }}
                   aria-pressed={false}
                   className={cn(
-                    "w-full flex items-center justify-start rounded-xl border p-4 transition-colors text-left hover:bg-gray-50"
+                    "box-border flex w-full max-w-full min-w-0 shrink-0 self-stretch items-center justify-start rounded-xl border p-4 text-left transition-colors hover:bg-gray-50"
                   )}
                 >
-                  <div className="flex items-center gap-3">
-                    <Phone className="h-5 w-5 text-blue-600" />
-                    <div>
+                  <div className="flex min-w-0 max-w-full flex-1 items-center gap-3">
+                    <Phone className="h-5 w-5 shrink-0 text-blue-600" />
+                    <div className="min-w-0">
                       <div className="font-medium">Call</div>
                       <div className="text-xs text-gray-600">Speak to us directly</div>
                     </div>
@@ -347,19 +363,19 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
               </div>
 
               {submitStatus === "error" && errorMessage && (
-                <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-red-800 text-sm">
+                <div className="min-w-0 max-w-full break-words rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
                   <p className="font-medium">Error</p>
-                  <p className="text-red-600 mt-1">{errorMessage}</p>
+                  <p className="mt-1 text-red-600">{errorMessage}</p>
                 </div>
               )}
 
               {selectedMethod === "form" && (
-                <div className="flex items-center justify-between pt-2">
+                <div className="flex w-full min-w-0 gap-2 pt-2">
                   <Button
                     type="button"
                     variant="outline"
                     disabled
-                    className="min-w-[96px] opacity-60"
+                    className="min-w-0 flex-1 opacity-60"
                   >
                     Back
                   </Button>
@@ -367,7 +383,7 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                     type="button"
                     onClick={goNext}
                     disabled={!canGoNextFromStep1}
-                    className="min-w-[96px]"
+                    className="min-w-0 flex-1"
                   >
                     Next
                   </Button>
@@ -378,11 +394,11 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
 
           {/* Step 2 */}
           {step === 2 && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">2. Your details</h3>
-              <p className="text-sm text-gray-600">Name and email are required.</p>
+            <div className="min-w-0 max-w-full space-y-4">
+              <h3 className="break-words text-lg font-medium">2. Your details</h3>
+              <p className="break-words text-sm text-gray-600">Name and email are required.</p>
 
-              <div className="space-y-4">
+              <div className="min-w-0 max-w-full space-y-4">
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-gray-800 mb-2">
                     Name *
@@ -393,7 +409,7 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                     value={name}
                     onChange={(e) => setName(e.target.value)}
                     disabled={isSubmitting}
-                    className="h-11 rounded-xl bg-white focus-visible:ring-2 focus-visible:ring-nail-queen-brown/20"
+                    className="h-11 max-w-full rounded-xl bg-white focus-visible:ring-2 focus-visible:ring-nail-queen-brown/20"
                   />
                 </div>
                 <div>
@@ -407,7 +423,7 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                     value={email}
                     onChange={(e) => setEmail(e.target.value)}
                     disabled={isSubmitting}
-                    className="h-11 rounded-xl bg-white focus-visible:ring-2 focus-visible:ring-nail-queen-brown/20"
+                    className="h-11 max-w-full rounded-xl bg-white focus-visible:ring-2 focus-visible:ring-nail-queen-brown/20"
                   />
                 </div>
                 <div>
@@ -421,24 +437,24 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                     value={phone}
                     onChange={(e) => setPhone(e.target.value)}
                     disabled={isSubmitting}
-                    className="h-11 rounded-xl bg-white focus-visible:ring-2 focus-visible:ring-nail-queen-brown/20"
+                    className="h-11 max-w-full rounded-xl bg-white focus-visible:ring-2 focus-visible:ring-nail-queen-brown/20"
                   />
                 </div>
               </div>
 
               {submitStatus === "error" && errorMessage && (
-                <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-red-800 text-sm">
+                <div className="min-w-0 max-w-full break-words rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
                   <p className="font-medium">Error</p>
-                  <p className="text-red-600 mt-1">{errorMessage}</p>
+                  <p className="mt-1 text-red-600">{errorMessage}</p>
                 </div>
               )}
 
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex w-full min-w-0 gap-2 pt-2">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={goBack}
-                  className="min-w-[96px]"
+                  className="min-w-0 flex-1"
                 >
                   Back
                 </Button>
@@ -446,7 +462,7 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                   type="button"
                   onClick={goNext}
                   disabled={!canGoNextFromStep2}
-                  className="min-w-[96px]"
+                  className="min-w-0 flex-1"
                 >
                   Next
                 </Button>
@@ -456,9 +472,9 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
 
           {/* Step 3 */}
           {step === 3 && (
-            <div className="space-y-4">
-              <h3 className="text-lg font-medium">3. Tell us about your request</h3>
-              <p className="text-sm text-gray-600">
+            <div className="min-w-0 max-w-full space-y-4">
+              <h3 className="break-words text-lg font-medium">3. Tell us about your request</h3>
+              <p className="break-words text-sm text-gray-600">
                 We'll save your enquiry and show a confirmation page.
               </p>
 
@@ -473,23 +489,23 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                   value={message}
                   onChange={(e) => setMessage(e.target.value)}
                   disabled={isSubmitting}
-                  className="rounded-xl bg-white focus-visible:ring-2 focus-visible:ring-nail-queen-brown/20"
+                  className="min-w-0 max-w-full rounded-xl bg-white focus-visible:ring-2 focus-visible:ring-nail-queen-brown/20"
                 />
               </div>
 
               {submitStatus === "error" && errorMessage && (
-                <div className="rounded-xl bg-red-50 border border-red-200 p-4 text-red-800 text-sm">
+                <div className="min-w-0 max-w-full break-words rounded-xl border border-red-200 bg-red-50 p-4 text-sm text-red-800">
                   <p className="font-medium">Error</p>
-                  <p className="text-red-600 mt-1">{errorMessage}</p>
+                  <p className="mt-1 text-red-600">{errorMessage}</p>
                 </div>
               )}
 
-              <div className="flex items-center justify-between pt-2">
+              <div className="flex w-full min-w-0 gap-2 pt-2">
                 <Button
                   type="button"
                   variant="outline"
                   onClick={goBack}
-                  className="min-w-[96px]"
+                  className="min-w-0 flex-1"
                   disabled={isSubmitting}
                 >
                   Back
@@ -497,7 +513,7 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
                 <Button
                   type="submit"
                   disabled={isSubmitting}
-                  className="min-w-[96px]"
+                  className="min-w-0 flex-1"
                 >
                   {isSubmitting ? (
                     <>
@@ -512,6 +528,7 @@ const ContactPanel: React.FC<ContactPanelProps> = ({ open, onOpenChange }) => {
             </div>
           )}
         </form>
+        </div>
       </SheetContent>
     </Sheet>
   );

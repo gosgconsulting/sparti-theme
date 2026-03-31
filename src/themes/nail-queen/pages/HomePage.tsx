@@ -358,12 +358,15 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                   <p className="text-gray-600 text-sm mb-4">
                     Clean up stray hairs and define your features with our quick shave, brow shaping, and precise threading services for a neat, polished look.
                   </p>
-                  <ThemeLink
-                    to="/pricing"
-                    className="inline-block text-nail-queen-brown text-sm font-medium hover:underline"
+                  <button
+                    type="button"
+                    onClick={() => {
+                      window.dispatchEvent(new CustomEvent("nailqueen:open-contact"));
+                    }}
+                    className="inline-block border-0 bg-transparent p-0 text-left text-nail-queen-brown text-sm font-medium hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-nail-queen-brown focus-visible:ring-offset-2"
                   >
                     Learn more
-                  </ThemeLink>
+                  </button>
                 </div>
               </div>
             </div>

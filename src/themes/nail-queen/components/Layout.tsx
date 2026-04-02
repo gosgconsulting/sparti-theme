@@ -217,7 +217,7 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
                   aria-current={isActive(item.path) ? "page" : undefined}
                   onClick={() => setMobileNavOpen(false)}
                   className={cn(
-                    "box-border flex min-h-12 w-full max-w-full min-w-0 items-center rounded-lg px-4 py-3 text-base font-medium transition-colors",
+                    "box-border flex min-h-12 w-full max-w-full min-w-0 items-center rounded-lg py-3 text-base font-medium transition-colors",
                     isActive(item.path)
                       ? "font-semibold text-nail-queen-brown"
                       : "text-nail-queen-brown/90 hover:bg-nail-queen-brown/5"

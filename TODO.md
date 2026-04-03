@@ -29,6 +29,18 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ## Completed
 
+### Nail Queen Luxe Spa card footers (2026-04-03)
+
+- [x] **`PricingPage.tsx`** — Luxe Spa grid: `items-stretch`; each card `flex h-full flex-col`; body copy in `flex-1` wrapper with `pb-5` before the rule; price row `mt-auto` so border/price aligns per row. Verification: `npm run build`.
+
+### Nail Queen pricing header spacing (2026-04-03)
+
+- [x] **`PricingPage.tsx`** — Tighter stack between “Pricing” and cards: header `pb-6`/`md:pb-8`, title `mb-6`/`sm:mb-8`, service section `pt-4`/`md:pt-5` with preserved bottom padding. Verification: `npm run build`.
+
+### Nail Queen pricing soak-off copy (2026-04-03)
+
+- [x] **`PricingPage.tsx` (Manicures)** — Removed stray non-breaking spaces (U+00A0) before soak-off descriptions and before `</p>` so wrapped lines align with headings. Verification: `npm run build`.
+
 ### Nail Queen Our Services cards (2026-04-03)
 
 - [x] **`HomePage.tsx`** — Service cards: fixed image height (`h-40` / `sm:h-44`, `shrink-0`) so media size does not follow text; text block `px-5` / `md:px-6`; `flex flex-col flex-1` with description `flex-1` and **Learn more** `mt-auto` so links align per row. Verification: `npm run build`.

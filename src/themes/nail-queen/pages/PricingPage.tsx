@@ -10,16 +10,16 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
   return (
     <Layout basePath={basePath} tenantId={tenantId}>
       {/* Header */}
-      <section className="py-16 bg-background">
+      <section className="bg-background pb-6 pt-16 md:pb-8">
         <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
-          <h1 className="break-words text-4xl font-bold text-center text-nail-queen-brown sm:text-5xl md:text-6xl mb-16">
+          <h1 className="mb-6 break-words text-center text-4xl font-bold text-nail-queen-brown sm:mb-8 sm:text-5xl md:text-6xl">
             Pricing
           </h1>
         </div>
       </section>
 
       {/* Service Categories */}
-      <section className="py-8 bg-background">
+      <section className="bg-background pb-10 pt-4 md:pb-12 md:pt-5">
         <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
           <div
             id="pricing-mani-pedi"
@@ -179,8 +179,8 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                   <div className="min-w-0 flex-1 break-words">
                     <h3 className="font-bold text-nail-queen-brown">SOFT GEL/BIAB soak off</h3>
                     <p className="text-sm text-gray-600">
-                      Safe removal of soft gel or Builder in a Bottle without filing down the natural nail.
-                    </p>
+                      Safe removal of soft gel or Builder in a Bottle without filing down the natural nail.
+                    </p>
                   </div>
                   <div className="shrink-0 text-left sm:ml-4 sm:text-right">
                     <span className="font-bold">$16.35/set</span>
@@ -192,8 +192,8 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                   <div className="min-w-0 flex-1 break-words">
                     <h3 className="font-bold text-nail-queen-brown">HARD GEL/ACRYLIC/DIP POWDER soak off</h3>
                     <p className="text-sm text-gray-600">
-                      Professional removal of hard gel, acrylic, or dip powder extensions to minimise damage to the natural nail.
-                    </p>
+                      Professional removal of hard gel, acrylic, or dip powder extensions to minimise damage to the natural nail.
+                    </p>
                   </div>
                   <div className="shrink-0 text-left sm:ml-4 sm:text-right">
                     <span className="font-bold">$27.25/set</span>
@@ -411,20 +411,22 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
               </p>
             </div>
 
-            <div className="grid min-w-0 gap-8 lg:grid-cols-2">
-              <div className="min-w-0 max-w-full rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
+            <div className="grid min-w-0 grid-cols-1 items-stretch gap-8 lg:grid-cols-2">
+              <div className="flex h-full min-w-0 max-w-full flex-col rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
                 <div className="aspect-video bg-gray-200 rounded-2xl mb-6 overflow-hidden">
                   <img src={asset("pricing/spa/matcha-lover.jpg")} alt="Matcha Lover Spa Treatment" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="text-2xl font-bold text-nail-queen-brown mb-2">1. Matcha Lover</h3>
                 <h4 className="text-m font-bold text-nail-queen-brown mb-2">A Quiet Moment of Japanese Calm</h4>
-                <p className="text-gray-600 mb-4">
-                  Matcha Lover captures the serenity of a Japanese morning: soft green hues, gentle warmth on the skin, and a subtle scent that invites stillness. A velvety matcha mask embraces the hands and feet, while slow, intentional massage strokes embody the art of slow beauty — unhurried, grounding, and deeply pure.
-                </p>
-                <p className="text-gray-600 mb-6">
-                  The ritual concludes with a thoughtfully prepared matcha latte, not as a beverage, but as a quiet punctuation mark — a moment to breathe, reset, and return to yourself.
-                </p>
-                <div className="flex flex-col gap-2 border-t pt-4 min-w-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="flex min-h-0 flex-1 flex-col pb-5">
+                  <p className="mb-4 text-gray-600">
+                    Matcha Lover captures the serenity of a Japanese morning: soft green hues, gentle warmth on the skin, and a subtle scent that invites stillness. A velvety matcha mask embraces the hands and feet, while slow, intentional massage strokes embody the art of slow beauty — unhurried, grounding, and deeply pure.
+                  </p>
+                  <p className="text-gray-600">
+                    The ritual concludes with a thoughtfully prepared matcha latte, not as a beverage, but as a quiet punctuation mark — a moment to breathe, reset, and return to yourself.
+                  </p>
+                </div>
+                <div className="mt-auto flex min-w-0 flex-col gap-2 border-t pt-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <span className="min-w-0 font-bold break-words text-nail-queen-brown">LUXE SPA TREATMENT</span>
                   <div className="shrink-0 text-left sm:text-right">
                     <span className="font-bold">$63.22</span>
@@ -433,19 +435,21 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                 </div>
               </div>
 
-              <div className="min-w-0 max-w-full rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
+              <div className="flex h-full min-w-0 max-w-full flex-col rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
                 <div className="aspect-video bg-gray-200 rounded-2xl mb-6 overflow-hidden">
                   <img src={asset("pricing/spa/whisper-rosy.jpg")} alt="Roselle Spa Treatment" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="text-2xl font-bold text-nail-queen-brown mb-2">2. Roselle</h3>
                 <h4 className="text-m font-bold text-nail-queen-brown mb-2">Rosy Elegance in a Modern Ritual</h4>
-                <p className="text-gray-600 mb-4">
-                  Roselle blends the clarity of roselle red with the refined femininity of rose petals — a modern, effortless elegance. A delicate rose mask soothes the skin, while the refining scrub brings back its natural softness and radiance.
-                </p>
-                <p className="text-gray-600 mb-6">
-                  At the end, a cool roselle refreshment is served — a floral whisper that completes the experience and leaves behind a feeling of lightness and graceful confidence.
-                </p>
-                <div className="flex flex-col gap-2 border-t pt-4 min-w-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="flex min-h-0 flex-1 flex-col pb-5">
+                  <p className="mb-4 text-gray-600">
+                    Roselle blends the clarity of roselle red with the refined femininity of rose petals — a modern, effortless elegance. A delicate rose mask soothes the skin, while the refining scrub brings back its natural softness and radiance.
+                  </p>
+                  <p className="text-gray-600">
+                    At the end, a cool roselle refreshment is served — a floral whisper that completes the experience and leaves behind a feeling of lightness and graceful confidence.
+                  </p>
+                </div>
+                <div className="mt-auto flex min-w-0 flex-col gap-2 border-t pt-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <span className="min-w-0 font-bold break-words text-nail-queen-brown">LUXE SPA TREATMENT</span>
                   <div className="shrink-0 text-left sm:text-right">
                     <span className="font-bold">$63.22</span>
@@ -454,19 +458,21 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                 </div>
               </div>
 
-              <div className="min-w-0 max-w-full rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
+              <div className="flex h-full min-w-0 max-w-full flex-col rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
                 <div className="aspect-video bg-gray-200 rounded-2xl mb-6 overflow-hidden">
                   <img src={asset("pricing/spa/golden-expresso.jpg")} alt="Golden Espresso Spa Treatment" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="text-2xl font-bold text-nail-queen-brown mb-2">3. Golden Espresso</h3>
                 <h4 className="text-m font-bold text-nail-queen-brown mb-2">The Warmth of a Slow Morning</h4>
-                <p className="text-gray-600 mb-4">
-                  Golden Espresso is inspired by the quiet luxury of slow, warm mornings. A coffee-based scrub awakens the skin and stimulates circulation, creating a comforting warmth across the hands and feet. The nourishing mask that follows enhances softness and vitality.
-                </p>
-                <p className="text-gray-600 mb-6">
-                  A petite espresso closes the ritual — not for stimulation, but as a sunlit final note, leaving you feeling centred, restored, and gently energised from within.
-                </p>
-                <div className="flex flex-col gap-2 border-t pt-4 min-w-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="flex min-h-0 flex-1 flex-col pb-5">
+                  <p className="mb-4 text-gray-600">
+                    Golden Espresso is inspired by the quiet luxury of slow, warm mornings. A coffee-based scrub awakens the skin and stimulates circulation, creating a comforting warmth across the hands and feet. The nourishing mask that follows enhances softness and vitality.
+                  </p>
+                  <p className="text-gray-600">
+                    A petite espresso closes the ritual — not for stimulation, but as a sunlit final note, leaving you feeling centred, restored, and gently energised from within.
+                  </p>
+                </div>
+                <div className="mt-auto flex min-w-0 flex-col gap-2 border-t pt-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <span className="min-w-0 font-bold break-words text-nail-queen-brown">LUXE SPA TREATMENT</span>
                   <div className="shrink-0 text-left sm:text-right">
                     <span className="font-bold">$63.22</span>
@@ -475,19 +481,21 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                 </div>
               </div>
 
-              <div className="min-w-0 max-w-full rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
+              <div className="flex h-full min-w-0 max-w-full flex-col rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
                 <div className="aspect-video bg-gray-200 rounded-2xl mb-6 overflow-hidden">
                   <img src={asset("pricing/spa/cucumber-escape.jpg")} alt="Mint Cucumber Escape Spa Treatment" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="text-2xl font-bold text-nail-queen-brown mb-2">4. Mint Cucumber Escape</h3>
                 <h4 className="text-m font-bold text-nail-queen-brown mb-2">A Breath of Cool, Clean Air</h4>
-                <p className="text-gray-600 mb-4">
-                  This treatment feels like stepping into a cool, airy garden: a hint of mint, a wash of green, and a refreshing clarity on the skin. The mint mask melts fatigue away, soothing the hands and feet, while gentle massage strokes bring a sense of cleanliness and renewal.
-                </p>
-                <p className="text-gray-600 mb-6">
-                  The ritual ends with a nojito, served as a crisp, delicate finishing touch — a soft breeze that refreshes both body and mood.
-                </p>
-                <div className="flex flex-col gap-2 border-t pt-4 min-w-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="flex min-h-0 flex-1 flex-col pb-5">
+                  <p className="mb-4 text-gray-600">
+                    This treatment feels like stepping into a cool, airy garden: a hint of mint, a wash of green, and a refreshing clarity on the skin. The mint mask melts fatigue away, soothing the hands and feet, while gentle massage strokes bring a sense of cleanliness and renewal.
+                  </p>
+                  <p className="text-gray-600">
+                    The ritual ends with a nojito, served as a crisp, delicate finishing touch — a soft breeze that refreshes both body and mood.
+                  </p>
+                </div>
+                <div className="mt-auto flex min-w-0 flex-col gap-2 border-t pt-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <span className="min-w-0 font-bold break-words text-nail-queen-brown">LUXE SPA TREATMENT</span>
                   <div className="shrink-0 text-left sm:text-right">
                     <span className="font-bold">$63.22</span>
@@ -496,19 +504,21 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                 </div>
               </div>
 
-              <div className="min-w-0 max-w-full rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
+              <div className="flex h-full min-w-0 max-w-full flex-col rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
                 <div className="aspect-video bg-gray-200 rounded-2xl mb-6 overflow-hidden">
                   <img src={asset("pricing/spa/orange-sunset.jpg")} alt="Orange Creamy Spa Treatment" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="text-2xl font-bold text-nail-queen-brown mb-2">5. Orange Creamy</h3>
                 <h4 className="text-m font-bold text-nail-queen-brown mb-2">A Soft, Warm Kind of Happiness</h4>
-                <p className="text-gray-600 mb-4">
-                  Orange Creamy radiates warmth and comfort from the very first touch of its soft citrus hue. A nourishing orange mask adds moisture and lightness, while the rhythmic massage creates a cocoon of ease and contentment.
-                </p>
-                <p className="text-gray-600 mb-6">
-                  A subtly served orange creamy completes the journey — a gentle, uplifting last note that leaves the mind brightened and the body comforted.
-                </p>
-                <div className="flex flex-col gap-2 border-t pt-4 min-w-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="flex min-h-0 flex-1 flex-col pb-5">
+                  <p className="mb-4 text-gray-600">
+                    Orange Creamy radiates warmth and comfort from the very first touch of its soft citrus hue. A nourishing orange mask adds moisture and lightness, while the rhythmic massage creates a cocoon of ease and contentment.
+                  </p>
+                  <p className="text-gray-600">
+                    A subtly served orange creamy completes the journey — a gentle, uplifting last note that leaves the mind brightened and the body comforted.
+                  </p>
+                </div>
+                <div className="mt-auto flex min-w-0 flex-col gap-2 border-t pt-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <span className="min-w-0 font-bold break-words text-nail-queen-brown">LUXE SPA TREATMENT</span>
                   <div className="shrink-0 text-left sm:text-right">
                     <span className="font-bold">$63.22</span>
@@ -517,17 +527,19 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                 </div>
               </div>
 
-              <div className="min-w-0 max-w-full rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
+              <div className="flex h-full min-w-0 max-w-full flex-col rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:p-8">
                 <div className="aspect-video bg-gray-200 rounded-2xl mb-6 overflow-hidden">
                   <img src={asset("pricing/spa/seasonal-spa.jpg")} alt="Seasonal Spa Treatment" className="w-full h-full object-cover" />
                 </div>
                 <h3 className="text-2xl font-bold text-nail-queen-brown mb-2">6. Seasonal Spa</h3>
                 <h4 className="text-m font-bold text-nail-queen-brown mb-2">Seasonal Care Ritual</h4>
-                <p className="text-gray-600 mb-4">A curated hand & foot spa experience that changes throughout the year.</p>
-                <p className="text-gray-600 mb-6">
-                  Inspired by seasons and festive moments, each version focuses on restoring tired hands and feet while enhancing overall comfort.
-                </p>
-                <div className="flex flex-col gap-2 border-t pt-4 min-w-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                <div className="flex min-h-0 flex-1 flex-col pb-5">
+                  <p className="mb-4 text-gray-600">A curated hand & foot spa experience that changes throughout the year.</p>
+                  <p className="text-gray-600">
+                    Inspired by seasons and festive moments, each version focuses on restoring tired hands and feet while enhancing overall comfort.
+                  </p>
+                </div>
+                <div className="mt-auto flex min-w-0 flex-col gap-2 border-t pt-4 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
                   <span className="min-w-0 font-bold break-words text-nail-queen-brown">LUXE SPA TREATMENT</span>
                   <div className="shrink-0 text-left sm:text-right">
                     <span className="font-bold">$63.22</span>

@@ -27,6 +27,9 @@ Production nail salon theme. Build passes, all pages render correctly.
 
 ## Completed
 
+- [x] **Luxe Spa card footer alignment** (2026-04-03) — `PricingPage.tsx`: flex column + `flex-1` body so price rows align per row on `lg` grid.
+- [x] **Pricing title–cards gap** (2026-04-03) — `PricingPage.tsx`: reduced vertical space below “Pricing” and above the grid.
+- [x] **Pricing soak-off text alignment** (2026-04-03) — `PricingPage.tsx`: stripped accidental NBSP padding from SOFT GEL/BIAB and HARD GEL soak-off blurbs.
 - [x] **Our Services cards** (2026-04-03) — `HomePage.tsx`: more horizontal padding on card copy; fixed-height image wells; flex layout so **Learn more** aligns across cards in each grid row.
 - [x] **Navbar height** (2026-04-03) — `Layout.tsx`: nav rows `h-20`, `main` `pt-20`, mobile sheet offset matches `5rem`; `index.tsx`: pricing anchor extra scroll adjusted for taller fixed header.
 - [x] **SEO metadata update** (2026-03-24) — Enhanced pages.json with detailed meta_title and meta_description for all pages. Added keywords for better SEO. Changed from minimal "Nail Queen" titles to descriptive "Premium Nail Salon - Professional Manicure & Pedicure Services" format.

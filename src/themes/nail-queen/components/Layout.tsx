@@ -112,7 +112,7 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
           )}
         >
           {/* Mobile: logo left · hamburger right (Book now lives in the drawer) */}
-          <div className="flex h-16 items-center justify-between gap-3 md:hidden">
+          <div className="flex h-20 items-center justify-between gap-3 md:hidden">
             <Link
               to={joinPath(basePath, "/")}
               className="flex min-w-0 shrink items-center"
@@ -147,7 +147,7 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
           </div>
 
           {/* Desktop / tablet: logo + inline nav + Book now */}
-          <div className="hidden h-16 items-center justify-between md:flex">
+          <div className="hidden h-20 items-center justify-between md:flex">
             <Link to={joinPath(basePath, "/")} className="flex items-center space-x-2">
               {renderBrandLogo()}
             </Link>
@@ -188,7 +188,7 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
           }
           className={cn(
             "box-border w-[min(100vw-2rem,20rem)] max-w-full border-l border-nail-queen-brown/20 bg-white sm:max-w-sm",
-            "!top-16 !bottom-0 !h-[calc(100dvh-4rem)] border-t border-nail-queen-brown/15",
+            "!top-20 !bottom-0 !h-[calc(100dvh-5rem)] border-t border-nail-queen-brown/15",
             "flex flex-col overflow-x-hidden overflow-y-auto p-0 pt-12",
             "[&>button]:text-nail-queen-brown [&>button]:hover:opacity-100",
             "data-[state=open]:duration-300 data-[state=closed]:duration-200",
@@ -246,7 +246,7 @@ export function Layout({ basePath, children, tenantId }: LayoutProps) {
         </SheetContent>
       </Sheet>
 
-      <main className="min-w-0 max-w-full overflow-x-hidden pt-16">{children}</main>
+      <main className="min-w-0 max-w-full overflow-x-hidden pt-20">{children}</main>
 
       <ContactPanel open={isContactOpen} onOpenChange={setIsContactOpen} />
 

@@ -29,6 +29,14 @@ Sparti Theme is a production-ready multi-tenant theme runtime for Sparti CMS. Th
 
 ## Completed
 
+### Nail Queen Our Services cards (2026-04-03)
+
+- [x] **`HomePage.tsx`** — Service cards: fixed image height (`h-40` / `sm:h-44`, `shrink-0`) so media size does not follow text; text block `px-5` / `md:px-6`; `flex flex-col flex-1` with description `flex-1` and **Learn more** `mt-auto` so links align per row. Verification: `npm run build`.
+
+### Nail Queen navbar height (2026-04-03)
+
+- [x] **`Layout.tsx` + `index.tsx`** — Nav row `h-16` → `h-20` (5rem); `main` `pt-16` → `pt-20`; mobile sheet `!top-20` and `!h-[calc(100dvh-5rem)]`; pricing deep-link extra scroll `80` → `96` for fixed header clearance. Verification: `npm run build`.
+
 ### Nail Queen mobile header (2026-03-31)
 
 - [x] **`Layout.tsx` (viewports below `md`)** — Logo link on the **left**, hamburger on the **right**; **Book now** inside the `Sheet` **nav**, directly under **Blog** (bordered block, full-width pill; closes menu then opens `ContactPanel`). Drawer `side="right"` below header; `md+` unchanged. Verification: `npm run build` pass.

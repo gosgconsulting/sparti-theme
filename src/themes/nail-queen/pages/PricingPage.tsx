@@ -96,7 +96,7 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                     </p>
                   </div>
                   <div className="shrink-0 text-left sm:ml-4 sm:text-right">
-                    <span className="font-bold">$87.2</span>
+                    <span className="font-bold">$74.12</span>
                     <p className="text-xs text-gray-500">(inclusive of GST)</p>
                   </div>
                 </div>
@@ -270,7 +270,7 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                     </p>
                   </div>
                   <div className="shrink-0 text-left sm:ml-4 sm:text-right">
-                    <span className="font-bold">$98.10</span>
+                    <span className="font-bold">$85.02</span>
                     <p className="text-xs text-gray-500">(inclusive of GST)</p>
                   </div>
                 </div>
@@ -336,6 +336,52 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                   </div>
                   <div className="shrink-0 text-left sm:ml-4 sm:text-right">
                     <span className="font-bold">$30.52</span>
+                    <p className="text-xs text-gray-500">(inclusive of GST)</p>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Eyebrows */}
+            <div
+              id="pricing-eyebrows"
+              className="min-w-0 max-w-full scroll-mt-32 rounded-3xl bg-white p-4 shadow-lg sm:p-6 md:scroll-mt-36 md:p-8"
+            >
+              <div className="aspect-square bg-gray-200 rounded-2xl mb-6 overflow-hidden">
+                <img
+                  src={asset("browshaping/13.png")}
+                  alt="Eyebrow services"
+                  className="h-full w-full object-cover"
+                />
+              </div>
+              <h2 className="break-words text-2xl font-bold text-nail-queen-brown sm:text-3xl mb-4">Eyebrows</h2>
+              <p className="text-gray-600 mb-8">
+                Define and refine your brows with precise threading and gentle waxing for a polished, balanced look.
+              </p>
+
+              <div className="space-y-6">
+                <div className="flex flex-col gap-2 min-w-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                  <div className="min-w-0 flex-1 break-words">
+                    <h3 className="font-bold text-nail-queen-brown">BROW THREADING</h3>
+                    <p className="text-sm text-gray-600">
+                      Hair removal with thread for clean edges and a natural arch tailored to your face.
+                    </p>
+                  </div>
+                  <div className="shrink-0 text-left sm:ml-4 sm:text-right">
+                    <span className="font-bold">$15</span>
+                    <p className="text-xs text-gray-500">(inclusive of GST)</p>
+                  </div>
+                </div>
+
+                <div className="flex flex-col gap-2 min-w-0 sm:flex-row sm:items-start sm:justify-between sm:gap-4">
+                  <div className="min-w-0 flex-1 break-words">
+                    <h3 className="font-bold text-nail-queen-brown">BROW WAXING</h3>
+                    <p className="text-sm text-gray-600">
+                      Quick waxing to remove unwanted hairs and leave the brow area smooth and neat.
+                    </p>
+                  </div>
+                  <div className="shrink-0 text-left sm:ml-4 sm:text-right">
+                    <span className="font-bold">$18</span>
                     <p className="text-xs text-gray-500">(inclusive of GST)</p>
                   </div>
                 </div>

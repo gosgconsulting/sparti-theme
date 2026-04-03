@@ -43,6 +43,7 @@ const normalizeSlug = (slug?: string) => {
 /** Extra scroll after scrollIntoView for pricing deep-links (fixed header + desired framing). */
 const PRICING_ANCHOR_EXTRA_SCROLL: Record<string, number> = {
   "pricing-mani-pedi": 80,
+  "pricing-eyebrows": 80,
   "pricing-luxe-spa-collection": 80,
 };
 

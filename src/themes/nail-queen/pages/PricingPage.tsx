@@ -83,7 +83,7 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                     </p>
                   </div>
                   <div className="shrink-0 text-left sm:ml-4 sm:text-right">
-                    <span className="font-bold">$54.50</span>
+                    <span className="font-bold">$49.05</span>
                     <p className="text-xs text-gray-500">(inclusive of GST)</p>
                   </div>
                 </div>
@@ -257,7 +257,7 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                     </p>
                   </div>
                   <div className="shrink-0 text-left sm:ml-4 sm:text-right">
-                    <span className="font-bold">$65.40</span>
+                    <span className="font-bold">$59.95</span>
                     <p className="text-xs text-gray-500">(inclusive of GST)</p>
                   </div>
                 </div>
@@ -292,7 +292,7 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                   <div className="min-w-0 flex-1 break-words">
                     <h3 className="font-bold text-nail-queen-brown">FUNGUS TREATMENT</h3>
                     <p className="text-sm text-gray-600">
-                      A targeted solution for early-stage fungal infections. Helps restore nail clarity and prevent further spread — clean, safe, and professionally handled. (includes an antibacterial soak tablet and a topical spray)
+                      A clean, safe solution to restore nail clarity and prevent fungal spread. (Includes in-salon antibacterial soak & treatment and a take-home antifungal treatment for continued care.)
                     </p>
                   </div>
                   <div className="shrink-0 text-left sm:ml-4 sm:text-right">
@@ -397,16 +397,16 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
             </div>
           </div>
 
-          {/* Luxe Spa Mani-Pedi Collection Section */}
+          {/* Luxe Spa Mani–Pedi Collection */}
           <div
             id="pricing-luxe-spa-collection"
-            className="mt-16 scroll-mt-32 md:scroll-mt-36"
+            className="mt-16 scroll-mt-32 md:scroll-mt-36 -mx-4 bg-secondary px-4 py-12 sm:-mx-6 sm:px-6 sm:py-14 md:py-16 lg:-mx-8 lg:px-8"
           >
             <div className="text-center mb-12">
               <h2 className="break-words text-3xl font-bold text-nail-queen-brown sm:text-4xl mb-4 px-1">
                 Luxe Spa Mani–Pedi Collection
               </h2>
-              <p className="text-lg text-gray-600 max-w-3xl mx-auto">
+              <p className="text-lg text-nail-queen-brown/80 max-w-3xl mx-auto leading-relaxed">
                 A Four-Senses Ritual crafted from delicate techniques, soft aromas, and layers of nourishing care that unfold slowly on the skin. Each concept offers its own emotional landscape — guided by color, scent, texture, and a signature refreshment served at the end as the final note of the ritual. This is more than a treatment. It is a sensory journey — aesthetic, emotional, and deeply calming, designed to match the mood you want to slip into today.
               </p>
             </div>

@@ -56,7 +56,7 @@ export default function GalleryPage({ basePath, tenantId }: { basePath: string; 
         id: 5,
         category: "manicures",
         title: "Extension",
-        image: asset("gallery/Nail_Queen/extension/11.jpg"),
+        image: asset("gallery/Nail_Queen/extension/12_2.jpg"),
       },
       {
         id: 6,

@@ -372,7 +372,7 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                         </p>
                       </div>
                       <div className="shrink-0 text-left sm:ml-4 sm:text-right">
-                        <span className="font-bold">$15</span>
+                        <span className="font-bold">$16.35</span>
                         <p className="text-xs text-gray-500">(inclusive of GST)</p>
                       </div>
                     </div>
@@ -387,7 +387,7 @@ export default function PricingPage({ basePath, tenantId }: { basePath: string; 
                         </p>
                       </div>
                       <div className="shrink-0 text-left sm:ml-4 sm:text-right">
-                        <span className="font-bold">$18</span>
+                        <span className="font-bold">$19.62</span>
                         <p className="text-xs text-gray-500">(inclusive of GST)</p>
                       </div>
                     </div>

@@ -5,3 +5,9 @@ export function isMoondkHitPayReturnSearchParams(search: URLSearchParams): boole
   const ref = search.get("reference");
   return Boolean(status && ref);
 }
+
+/** Dedicated storefront return path (set `HITPAY_REDIRECT_URL` to …/checkout/hitpay/callback). */
+export function isMoondkHitPayCallbackPathname(pathname: string): boolean {
+  const p = pathname.replace(/\/+$/, "") || "/";
+  return p.endsWith("/checkout/hitpay/callback");
+}

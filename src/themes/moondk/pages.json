@@ -48,6 +48,17 @@
       "page_type": "page"
     },
     {
+      "id": "checkout-hitpay-callback",
+      "name": "HitPay return",
+      "slug": "checkout/hitpay/callback",
+      "component": "HitPayCallback",
+      "meta_title": "Payment confirmation",
+      "meta_description": "Return from HitPay to confirm your order.",
+      "seo_index": false,
+      "status": "published",
+      "page_type": "page"
+    },
+    {
       "id": "about-our-story",
       "name": "Our Story",
       "slug": "about/our-story",

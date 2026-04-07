@@ -14,7 +14,7 @@ export {
   MOONDK_MEDUSA_PRODUCT_DETAIL_FIELDS,
   MOONDK_MEDUSA_CART_RETRIEVE_FIELDS,
 } from "./fields";
-export { isMoondkHitPayReturnSearchParams } from "./hitPayReturnParams";
+export { isMoondkHitPayReturnSearchParams, isMoondkHitPayCallbackPathname } from "./hitPayReturnParams";
 export {
   fetchMoondkMedusaPaymentProviderOptions,
   pickDefaultMedusaPaymentProviderId,

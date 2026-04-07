@@ -1,5 +1,8 @@
 import { describe, expect, it } from "vitest";
-import { isMoondkHitPayReturnSearchParams } from "./hitPayReturnParams";
+import {
+  isMoondkHitPayCallbackPathname,
+  isMoondkHitPayReturnSearchParams,
+} from "./hitPayReturnParams";
 
 describe("isMoondkHitPayReturnSearchParams", () => {
   it("returns true for explicit storefront flag", () => {
@@ -17,5 +20,14 @@ describe("isMoondkHitPayReturnSearchParams", () => {
   it("returns false when params are missing", () => {
     expect(isMoondkHitPayReturnSearchParams(new URLSearchParams(""))).toBe(false);
     expect(isMoondkHitPayReturnSearchParams(new URLSearchParams("status=completed"))).toBe(false);
+  });
+});
+
+describe("isMoondkHitPayCallbackPathname", () => {
+  it("matches dev and deploy paths", () => {
+    expect(isMoondkHitPayCallbackPathname("/checkout/hitpay/callback")).toBe(true);
+    expect(isMoondkHitPayCallbackPathname("/checkout/hitpay/callback/")).toBe(true);
+    expect(isMoondkHitPayCallbackPathname("/theme/moondk/checkout/hitpay/callback")).toBe(true);
+    expect(isMoondkHitPayCallbackPathname("/checkout")).toBe(false);
   });
 });

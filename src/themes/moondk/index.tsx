@@ -7,6 +7,7 @@ import IndexPage from "./pages/Index";
 import CategoryPage from "./pages/Category";
 import ProductDetailPage from "./pages/ProductDetail";
 import CheckoutPage from "./pages/Checkout";
+import HitPayCallbackPage from "./pages/HitPayCallbackPage";
 import OurStoryPage from "./pages/about/OurStory";
 import SustainabilityPage from "./pages/about/Sustainability";
 import SizeGuidePage from "./pages/about/SizeGuide";
@@ -74,6 +75,10 @@ const MoondkTheme: React.FC<MoondkThemeProps> = ({
     if (current.startsWith("product/")) {
       const productId = current.split("/").slice(1).join("/") || "";
       return <ProductDetailPage productId={productId} />;
+    }
+
+    if (current === "checkout/hitpay/callback") {
+      return <HitPayCallbackPage />;
     }
 
     if (current === "checkout") {

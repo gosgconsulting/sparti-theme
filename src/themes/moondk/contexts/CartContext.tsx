@@ -1,13 +1,23 @@
-import React, { createContext, useContext, useState, useEffect, ReactNode } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback, ReactNode } from "react";
 import { CartItem } from "../components/header/ShoppingBag";
 import { debugError } from "@/utils/debugLogger";
+import {
+  getMoondkMedusa,
+  isMoondkMedusaEnabled,
+  mapMedusaCartLineItemsToCartItems,
+  MOONDK_MEDUSA_CART_RETRIEVE_FIELDS,
+  resolveMoondkMedusaRegionId,
+} from "../lib/medusa";
 
 interface CartContextType {
   cartItems: CartItem[];
-  addToCart: (item: Omit<CartItem, "id">, openCartAfterAdd?: boolean) => void;
-  updateQuantity: (id: number, newQuantity: number) => void;
-  removeFromCart: (id: number) => void;
-  clearCart: () => void;
+  /** Medusa cart id when using Medusa; otherwise null. */
+  medusaCartId: string | null;
+  addToCart: (item: Omit<CartItem, "id">, openCartAfterAdd?: boolean) => Promise<void>;
+  updateQuantity: (id: string, newQuantity: number) => Promise<void>;
+  removeFromCart: (id: string) => Promise<void>;
+  clearCart: () => Promise<void>;
+  refreshMedusaCart: () => Promise<void>;
   totalItems: number;
   openCart: () => void;
   closeCart: () => void;
@@ -29,88 +39,216 @@ interface CartProviderProps {
 }
 
 const CART_STORAGE_KEY = "moondk_cart_items";
+const MEDUSA_CART_STORAGE_KEY = "moondk_medusa_cart_id";
 
-// Load cart from localStorage on mount
-const loadCartFromStorage = (): CartItem[] => {
+function loadLocalCartFromStorage(): CartItem[] {
   if (typeof window === "undefined") return [];
   try {
     const stored = localStorage.getItem(CART_STORAGE_KEY);
     if (stored) {
-      return JSON.parse(stored);
+      const parsed = JSON.parse(stored) as unknown;
+      if (!Array.isArray(parsed)) return [];
+      return parsed.map((row: unknown) => {
+        const r = row as CartItem;
+        return {
+          ...r,
+          id: typeof r.id === "number" ? String(r.id) : String(r.id ?? ""),
+        };
+      });
     }
   } catch (error) {
     debugError("Failed to load cart from localStorage:", error);
   }
   return [];
-};
+}
 
-// Save cart to localStorage
-const saveCartToStorage = (items: CartItem[]) => {
+function saveLocalCartToStorage(items: CartItem[]) {
   if (typeof window === "undefined") return;
   try {
     localStorage.setItem(CART_STORAGE_KEY, JSON.stringify(items));
   } catch (error) {
     debugError("Failed to save cart to localStorage:", error);
   }
-};
+}
+
+function readMedusaCartId(): string | null {
+  if (typeof window === "undefined") return null;
+  const id = localStorage.getItem(MEDUSA_CART_STORAGE_KEY);
+  return id && id.trim() ? id.trim() : null;
+}
+
+function writeMedusaCartId(id: string | null) {
+  if (typeof window === "undefined") return;
+  if (id) localStorage.setItem(MEDUSA_CART_STORAGE_KEY, id);
+  else localStorage.removeItem(MEDUSA_CART_STORAGE_KEY);
+}
 
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
-  const [cartItems, setCartItems] = useState<CartItem[]>(loadCartFromStorage);
+  const medusaMode = isMoondkMedusaEnabled();
+  const [cartItems, setCartItems] = useState<CartItem[]>(() =>
+    medusaMode ? [] : loadLocalCartFromStorage(),
+  );
+  const [medusaCartId, setMedusaCartId] = useState<string | null>(() =>
+    medusaMode ? readMedusaCartId() : null,
+  );
   const [isCartOpen, setIsCartOpen] = useState(false);
 
-  // Save cart to localStorage whenever it changes
+  const refreshMedusaCart = useCallback(async () => {
+    if (!medusaMode) return;
+    const id = readMedusaCartId();
+    if (!id) {
+      setCartItems([]);
+      setMedusaCartId(null);
+      return;
+    }
+    try {
+      const api = getMoondkMedusa();
+      const { cart } = await api.cart.retrieve(id, { fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS });
+      setMedusaCartId(cart?.id ?? id);
+      setCartItems(mapMedusaCartLineItemsToCartItems(cart?.items as unknown[]));
+    } catch (e) {
+      debugError("refreshMedusaCart failed:", e);
+      writeMedusaCartId(null);
+      setMedusaCartId(null);
+      setCartItems([]);
+    }
+  }, [medusaMode]);
+
   useEffect(() => {
-    saveCartToStorage(cartItems);
-  }, [cartItems]);
+    if (!medusaMode) return;
+    let cancelled = false;
+    (async () => {
+      await refreshMedusaCart();
+    })();
+    return () => {
+      cancelled = true;
+      void cancelled;
+    };
+  }, [medusaMode, refreshMedusaCart]);
 
-  const addToCart = (item: Omit<CartItem, "id">, openCartAfterAdd: boolean = false) => {
-    // Check if item already exists in cart
-    const existingItemIndex = cartItems.findIndex(
-      (cartItem) => cartItem.name === item.name
-    );
+  useEffect(() => {
+    if (medusaMode) return;
+    saveLocalCartToStorage(cartItems);
+  }, [cartItems, medusaMode]);
 
-    if (existingItemIndex >= 0) {
-      // If item exists, increase quantity
-      setCartItems((items) =>
-        items.map((cartItem, index) =>
-          index === existingItemIndex
-            ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
-            : cartItem
-        )
-      );
-    } else {
-      // If item doesn't exist, add new item with a unique ID
-      const newId = Math.max(0, ...cartItems.map((item) => item.id)) + 1;
-      setCartItems((items) => [...items, { ...item, id: newId }]);
+  const addToCart = async (item: Omit<CartItem, "id">, openCartAfterAdd: boolean = false) => {
+    if (!medusaMode) {
+      const existingItemIndex = cartItems.findIndex((cartItem) => cartItem.name === item.name);
+      if (existingItemIndex >= 0) {
+        setCartItems((items) =>
+          items.map((cartItem, index) =>
+            index === existingItemIndex
+              ? { ...cartItem, quantity: cartItem.quantity + item.quantity }
+              : cartItem,
+          ),
+        );
+      } else {
+        const numericMax = Math.max(
+          0,
+          ...cartItems.map((i) => {
+            const n = parseInt(String(i.id), 10);
+            return Number.isFinite(n) ? n : 0;
+          }),
+        );
+        const newId = String(numericMax + 1);
+        setCartItems((items) => [...items, { ...item, id: newId }]);
+      }
+      if (openCartAfterAdd) setIsCartOpen(true);
+      return;
     }
 
-    // Only open cart if explicitly requested
-    if (openCartAfterAdd) {
-      setIsCartOpen(true);
+    if (!item.variantId) {
+      debugError("addToCart (Medusa): missing variantId");
+      return;
+    }
+
+    try {
+      const api = getMoondkMedusa();
+      let cartId = readMedusaCartId();
+      if (!cartId) {
+        const regionId = await resolveMoondkMedusaRegionId();
+        const { cart: created } = await api.cart.create(
+          { region_id: regionId },
+          { fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS },
+        );
+        cartId = created?.id ?? null;
+        if (!cartId) throw new Error("Medusa cart.create returned no id");
+        writeMedusaCartId(cartId);
+        setMedusaCartId(cartId);
+      }
+
+      const sameVariant = cartItems.find((i) => i.variantId === item.variantId);
+      if (sameVariant?.id) {
+        const { cart } = await api.cart.updateLineItem(
+          cartId,
+          sameVariant.id,
+          { quantity: sameVariant.quantity + item.quantity },
+          { fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS },
+        );
+        setCartItems(mapMedusaCartLineItemsToCartItems(cart?.items as unknown[]));
+      } else {
+        const { cart } = await api.cart.addLineItem(
+          cartId,
+          { variant_id: item.variantId, quantity: item.quantity },
+          { fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS },
+        );
+        setCartItems(mapMedusaCartLineItemsToCartItems(cart?.items as unknown[]));
+      }
+      if (cartId) setMedusaCartId(cartId);
+      if (openCartAfterAdd) setIsCartOpen(true);
+    } catch (e) {
+      debugError("addToCart (Medusa) failed:", e);
     }
   };
 
-  const updateQuantity = (id: number, newQuantity: number) => {
-    if (newQuantity <= 0) {
-      setCartItems((items) => items.filter((item) => item.id !== id));
-    } else {
-      setCartItems((items) =>
-        items.map((item) =>
-          item.id === id ? { ...item, quantity: newQuantity } : item
-        )
-      );
+  const updateQuantity = async (id: string, newQuantity: number) => {
+    if (!medusaMode) {
+      if (newQuantity <= 0) {
+        setCartItems((items) => items.filter((item) => item.id !== id));
+      } else {
+        setCartItems((items) =>
+          items.map((item) => (item.id === id ? { ...item, quantity: newQuantity } : item)),
+        );
+      }
+      return;
+    }
+
+    const cartId = readMedusaCartId();
+    if (!cartId) return;
+
+    try {
+      const api = getMoondkMedusa();
+      if (newQuantity <= 0) {
+        await api.cart.removeLineItem(cartId, id, { fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS });
+      } else {
+        await api.cart.updateLineItem(
+          cartId,
+          id,
+          { quantity: newQuantity },
+          { fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS },
+        );
+      }
+      await refreshMedusaCart();
+    } catch (e) {
+      debugError("updateQuantity (Medusa) failed:", e);
     }
   };
 
-  const removeFromCart = (id: number) => {
-    setCartItems((items) => items.filter((item) => item.id !== id));
+  const removeFromCart = async (id: string) => {
+    await updateQuantity(id, 0);
   };
 
-  const clearCart = () => {
+  const clearCart = async () => {
+    if (!medusaMode) {
+      setCartItems([]);
+      if (typeof window !== "undefined") {
+        localStorage.removeItem(CART_STORAGE_KEY);
+      }
+      return;
+    }
+    writeMedusaCartId(null);
+    setMedusaCartId(null);
     setCartItems([]);
-    if (typeof window !== "undefined") {
-      localStorage.removeItem(CART_STORAGE_KEY);
-    }
   };
 
   const totalItems = cartItems.reduce((sum, item) => sum + item.quantity, 0);
@@ -122,10 +260,12 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     <CartContext.Provider
       value={{
         cartItems,
+        medusaCartId,
         addToCart,
         updateQuantity,
         removeFromCart,
         clearCart,
+        refreshMedusaCart,
         totalItems,
         openCart,
         closeCart,

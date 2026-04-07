@@ -9,11 +9,22 @@ import ProductDescription from "../components/product/ProductDescription";
 import ProductCarousel from "../components/content/ProductCarousel";
 import { ProductDetailBreadcrumb } from "../components/product/ProductDetailBreadcrumb";
 import { FALLBACK_PRODUCT_DISPLAY_NAME, getProductByRouteId } from "../components/category/products";
+import { isMoondkMedusaEnabled } from "../lib/medusa";
+import { useMoondkMedusaProductQuery } from "../hooks/useMoondkMedusaCatalog";
 
 export default function ProductDetailPage({ productId }: { productId: string }) {
-  const product = getProductByRouteId(productId);
-  const productName = product?.name ?? FALLBACK_PRODUCT_DISPLAY_NAME;
+  const medusa = isMoondkMedusaEnabled();
+  const { data: medusaProduct } = useMoondkMedusaProductQuery(medusa ? productId : undefined);
+  const staticProduct = medusa ? undefined : getProductByRouteId(productId);
+  const productName = medusa
+    ? medusaProduct?.name ?? FALLBACK_PRODUCT_DISPLAY_NAME
+    : staticProduct?.name ?? FALLBACK_PRODUCT_DISPLAY_NAME;
+
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
+
+  const remoteGallery =
+    medusa && medusaProduct?.galleryImages?.length ? medusaProduct.galleryImages : undefined;
+
   return (
     <div className="min-h-screen bg-background">
       <Header />
@@ -23,11 +34,15 @@ export default function ProductDetailPage({ productId }: { productId: string }) 
           <ProductDetailBreadcrumb productName={productName} className="lg:hidden mb-8 md:mb-10" />
 
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-0">
-            <ProductImageGallery productId={productId} />
+            <ProductImageGallery productId={productId} remoteImageUrls={remoteGallery} />
 
             <div className="lg:pl-12 mt-8 lg:mt-0 lg:sticky lg:top-6 lg:h-fit">
               <ProductInfo productId={productId} />
-              <ProductDescription productId={productId} />
+              <ProductDescription
+                productId={productId}
+                isMedusaProduct={Boolean(medusa && medusaProduct)}
+                medusaDescription={medusaProduct?.description}
+              />
             </div>
           </div>
         </section>

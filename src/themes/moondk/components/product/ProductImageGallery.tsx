@@ -131,6 +131,8 @@ import hallabongNoodleImage5 from "../../assets/noodles/BEOK-Hanrabongnoodle5.jp
 
 interface ProductImageGalleryProps {
   productId?: string;
+  /** When set (e.g. Medusa), use these URLs instead of static theme assets. */
+  remoteImageUrls?: string[];
 }
 
 // Map product IDs to their specific images
@@ -150,7 +152,7 @@ const productImageMap: Record<string, string> = {
   "13": hallabongNoodleImage1,
 };
 
-const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
+const ProductImageGallery = ({ productId, remoteImageUrls }: ProductImageGalleryProps) => {
   
   const getDefaultImage = () => {
     return productImageMap[productId || ""] || hoveniaDulcisImage;
@@ -178,7 +180,7 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
   // For other products 1-12, only show their specific image
   // Otherwise, show all default images
   const specificImage = productImageMap[productId || ""];
-  const images = productId === "1"
+  const legacyImages = productId === "1"
     ? [hoveniaTea1, hoveniaTea2, hoveniaTea3, hoveniaTea4, hoveniaTea5, hoveniaTea6, hoveniaTea7, hoveniaTea8, hoveniaTea9, hoveniaTea10, hoveniaTea12, hoveniaTea13, hoveniaTea14, hoveniaTea15, hoveniaTea16, hoveniaTea17, hoveniaTea18, hoveniaTea19, hoveniaTea20]
     : productId === "2"
     ? [cornSilkTea1, cornSilkTea2, cornSilkTea3, cornSilkTea4, cornSilkTea5, cornSilkTea6, cornSilkTea7, cornSilkTea8, cornSilkTea9, cornSilkTea10, cornSilkTea11, cornSilkTea12, cornSilkTea13, cornSilkTea14, cornSilkTea15, cornSilkTea16, cornSilkTea17, cornSilkTea18, cornSilkTea19, cornSilkTea20, cornSilkTea21]
@@ -206,17 +208,37 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
     ? [specificImage]
     : [hoveniaDulcisImage, cornExtractImage, blackBeanTeaImage];
 
-  // Update selected image when productId changes
+  const images =
+    remoteImageUrls && remoteImageUrls.length > 0 ? remoteImageUrls : legacyImages;
+
+  // Update selected image when productId or remote URLs change
   useEffect(() => {
+    if (remoteImageUrls && remoteImageUrls.length > 0) {
+      setSelectedImage(remoteImageUrls[0]);
+      setCarouselIndex(0);
+      return;
+    }
     const imageForProduct = productImageMap[productId || ""];
     if (imageForProduct) {
       setSelectedImage(imageForProduct);
-      setCarouselIndex(0); // Reset carousel when product changes
+      setCarouselIndex(0);
     }
-  }, [productId]);
+  }, [productId, remoteImageUrls]);
 
   // Calculate visible images for carousel (max 4 at a time)
   const maxVisible = 4;
+  const showThumbCarousel =
+    images.length > maxVisible &&
+    (Boolean(remoteImageUrls?.length) ||
+      productId === "1" ||
+      productId === "2" ||
+      productId === "3" ||
+      productId === "4" ||
+      productId === "7" ||
+      productId === "10" ||
+      productId === "11" ||
+      productId === "12" ||
+      productId === "13");
   const maxIndex = Math.max(0, images.length - maxVisible);
   const visibleImages = images.slice(carouselIndex, carouselIndex + maxVisible);
 
@@ -504,7 +526,7 @@ const ProductImageGallery = ({ productId }: ProductImageGalleryProps) => {
       </div>
 
       {/* Thumbnail gallery - Carousel for products 1, 2, 3, 4, 7, 10, 11, 12, and 13, grid for others */}
-      {(productId === "1" || productId === "2" || productId === "3" || productId === "4" || productId === "7" || productId === "10" || productId === "11" || productId === "12" || productId === "13") && images.length > maxVisible ? (
+      {showThumbCarousel ? (
         <div className="relative">
           {/* Carousel container - shows exactly 4 images, slides smoothly */}
           <div 

@@ -4,19 +4,22 @@ import { ThemeLink } from "@/components/ThemeLink";
 import { DELIVERY_FEE } from "../../constants";
 
 export interface CartItem {
-  id: number;
+  /** Line item id (Medusa) or local cart row id (stringified number). */
+  id: string;
   name: string;
   price: string;
   image: string;
   quantity: number;
   category: string;
+  lineItemId?: string;
+  variantId?: string;
 }
 
 interface ShoppingBagProps {
   isOpen: boolean;
   onClose: () => void;
   cartItems: CartItem[];
-  updateQuantity: (id: number, newQuantity: number) => void;
+  updateQuantity: (id: string, newQuantity: number) => void;
   onViewFavorites?: () => void;
 }
 

@@ -11,9 +11,40 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 
 import { ThemeLink } from "@/components/ThemeLink";
 import { products } from "../category/products";
+import { isMoondkMedusaEnabled } from "../../lib/medusa";
+import { useMoondkMedusaProductsListQuery } from "../../hooks/useMoondkMedusaCatalog";
+
+type ArrivalRow = { id: string; name: string; price: string; image: string };
 
 export default function HomeNewArrivalsSection() {
-  const newArrivals = products.filter((p) => p.isNew).slice(0, 4);
+  const medusa = isMoondkMedusaEnabled();
+  const { data: medusaViews } = useMoondkMedusaProductsListQuery(medusa);
+
+  const newArrivals: ArrivalRow[] = useMemo(() => {
+    if (medusa && medusaViews) {
+      const flagged = medusaViews.filter((v) => v.isNew);
+      const pool = flagged.length ? flagged : [...medusaViews].sort((a, b) => {
+        const ta = a.createdAt ? new Date(a.createdAt).getTime() : 0;
+        const tb = b.createdAt ? new Date(b.createdAt).getTime() : 0;
+        return tb - ta;
+      });
+      return pool.slice(0, 4).map((v) => ({
+        id: v.id,
+        name: v.name,
+        price: v.price,
+        image: v.image,
+      }));
+    }
+    return products
+      .filter((p) => p.isNew)
+      .slice(0, 4)
+      .map((p) => ({
+        id: String(p.id),
+        name: p.name,
+        price: p.price,
+        image: p.image,
+      }));
+  }, [medusa, medusaViews]);
   const [api, setApi] = useState<CarouselApi>();
   const [index, setIndex] = useState(0);
 

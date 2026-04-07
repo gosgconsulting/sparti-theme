@@ -3,9 +3,55 @@ import { getProductLongDescription } from "../category/products";
 
 interface ProductDescriptionProps {
   productId?: string;
+  /** When true, show Medusa description + generic panels only (no static 1–13 copy). */
+  isMedusaProduct?: boolean;
+  medusaDescription?: string | null;
 }
 
-const ProductDescription = ({ productId }: ProductDescriptionProps) => {
+const ProductDescription = ({
+  productId,
+  isMedusaProduct,
+  medusaDescription,
+}: ProductDescriptionProps) => {
+  if (isMedusaProduct) {
+    const desc = (medusaDescription ?? "").trim() || "No description available.";
+    const medusaItems = [
+      {
+        id: "description",
+        title: "Description",
+        content: (
+          <div className="space-y-4">
+            {desc.split("\n\n").map((paragraph, idx) =>
+              paragraph.trim() ? (
+                <p key={idx} className="whitespace-pre-line">
+                  {paragraph}
+                </p>
+              ) : null,
+            )}
+          </div>
+        ),
+      },
+      {
+        id: "storage-usage",
+        title: "Storage & Usage",
+        content: (
+          <div className="space-y-4">
+            <ul className="space-y-3">
+              <li>• Store in a cool, dry place away from direct sunlight</li>
+              <li>• Refrigerate after opening when indicated on the product label</li>
+              <li>• Follow the producer&apos;s instructions on the packaging</li>
+            </ul>
+          </div>
+        ),
+      },
+    ];
+    return (
+      <div className="mt-10 md:mt-12">
+        <ProductAccordion items={medusaItems} />
+      </div>
+    );
+  }
+
   const productDescription = getProductLongDescription(productId);
 
   // Build accordion items

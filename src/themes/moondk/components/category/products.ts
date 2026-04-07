@@ -58,9 +58,18 @@ export const products: Product[] = [
  * Product detail only: stable pseudo-random low-stock badge (~45% of ids).
  * Same product always matches the same outcome (no flicker on refresh); not all SKUs show low stock.
  */
-export function productShowsLowStockBadge(productId: number): boolean {
-  const mixed = Math.imul(productId, 7919) + 17;
-  return (mixed >>> 0) % 100 < 45;
+export function productShowsLowStockBadge(productId: string | number): boolean {
+  if (typeof productId === "number" && Number.isFinite(productId)) {
+    const mixed = Math.imul(productId, 7919) + 17;
+    return (mixed >>> 0) % 100 < 45;
+  }
+  const s = String(productId);
+  let h = 2166136261;
+  for (let i = 0; i < s.length; i++) {
+    h ^= s.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return (h >>> 0) % 100 < 45;
 }
 
 export const categoryTabs = [

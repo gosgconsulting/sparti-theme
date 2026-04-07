@@ -5,6 +5,13 @@ import { format } from "date-fns";
 import Footer from "../components/footer/Footer";
 import CheckoutHeader from "../components/header/CheckoutHeader";
 import { useCart } from "../contexts/CartContext";
+import {
+  isMoondkMedusaEnabled,
+  MOONDK_MEDUSA_CART_RETRIEVE_FIELDS,
+  getMoondkMedusa,
+  runMoondkMedusaCheckout,
+  medusaDisplayAmount,
+} from "../lib/medusa";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
 import { Input } from "@/components/ui/input";
@@ -14,11 +21,14 @@ import { Textarea } from "@/components/ui/textarea";
 import { Calendar } from "@/components/ui/calendar";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { cn } from "@/lib/utils";
-import { debugLog } from "@/utils/debugLogger";
+import { debugLog, debugError } from "@/utils/debugLogger";
 import { FREE_DELIVERY_THRESHOLD } from "../constants";
 
+type MedusaShipOption = { id: string; name?: string };
+
 export default function CheckoutPage() {
-  const { cartItems, updateQuantity, clearCart } = useCart();
+  const medusaMode = isMoondkMedusaEnabled();
+  const { cartItems, updateQuantity, clearCart, medusaCartId } = useCart();
   const [showDiscountInput, setShowDiscountInput] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
   const [customerDetails, setCustomerDetails] = useState({
@@ -58,12 +68,88 @@ export default function CheckoutPage() {
   const [isProcessing, setIsProcessing] = useState(false);
   const [paymentComplete, setPaymentComplete] = useState(false);
 
+  const [medusaShipOptions, setMedusaShipOptions] = useState<MedusaShipOption[]>([]);
+  const [medusaShippingOptionId, setMedusaShippingOptionId] = useState("");
+  const [medusaCartTotals, setMedusaCartTotals] = useState({
+    item: 0,
+    shipping: 0,
+    total: 0,
+  });
+  const [medusaCheckoutError, setMedusaCheckoutError] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!medusaMode || !medusaCartId) {
+      setMedusaShipOptions([]);
+      setMedusaShippingOptionId("");
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const api = getMoondkMedusa();
+        const { shipping_options } = await api.checkout.listShippingOptions({ cart_id: medusaCartId });
+        const raw = (shipping_options ?? []) as unknown[];
+        const opts: MedusaShipOption[] = raw
+          .map((o) => {
+            const r = o as Record<string, unknown>;
+            const id = typeof r.id === "string" ? r.id : "";
+            const name = typeof r.name === "string" ? r.name : id;
+            return id ? { id, name } : null;
+          })
+          .filter(Boolean) as MedusaShipOption[];
+        if (!cancelled) {
+          setMedusaShipOptions(opts);
+          setMedusaShippingOptionId((prev) => {
+            if (prev && opts.some((o) => o.id === prev)) return prev;
+            return opts[0]?.id ?? "";
+          });
+        }
+      } catch (e) {
+        debugError("Medusa listShippingOptions failed:", e);
+        if (!cancelled) setMedusaShipOptions([]);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [medusaMode, medusaCartId, cartItems]);
+
+  useEffect(() => {
+    if (!medusaMode || !medusaCartId) {
+      setMedusaCartTotals({ item: 0, shipping: 0, total: 0 });
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const api = getMoondkMedusa();
+        const { cart } = await api.cart.retrieve(medusaCartId, {
+          fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS,
+        });
+        if (cancelled || !cart) return;
+        setMedusaCartTotals({
+          item: medusaDisplayAmount(cart.item_subtotal ?? cart.subtotal),
+          shipping: medusaDisplayAmount(cart.shipping_total),
+          total: medusaDisplayAmount(cart.total),
+        });
+      } catch (e) {
+        debugError("Medusa cart.retrieve (checkout totals) failed:", e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [medusaMode, medusaCartId, cartItems]);
+
   const subtotal = useMemo(() => {
+    if (medusaMode && medusaCartId) {
+      return medusaCartTotals.item;
+    }
     return cartItems.reduce((sum, item) => {
       const price = parseFloat(item.price.replace("$", "").replace(",", ""));
       return sum + price * item.quantity;
     }, 0);
-  }, [cartItems]);
+  }, [medusaMode, medusaCartId, medusaCartTotals.item, cartItems]);
 
   const getShippingCost = () => {
     switch (shippingOption) {
@@ -78,8 +164,8 @@ export default function CheckoutPage() {
     }
   };
 
-  const shipping = getShippingCost();
-  const total = subtotal + shipping;
+  const shipping = medusaMode && medusaCartId ? medusaCartTotals.shipping : getShippingCost();
+  const total = medusaMode && medusaCartId ? medusaCartTotals.total : subtotal + shipping;
   const freeShippingThreshold = 150;
   const amountNeededForFreeShipping = Math.max(0, freeShippingThreshold - subtotal);
 
@@ -131,7 +217,77 @@ export default function CheckoutPage() {
   };
 
   const handleCompleteOrder = async () => {
-    // Validate pickup date if self-pickup is selected
+    setMedusaCheckoutError(null);
+
+    if (medusaMode) {
+      if (!medusaCartId) {
+        setMedusaCheckoutError("No cart. Add items before checkout.");
+        return;
+      }
+      if (!medusaShippingOptionId) {
+        setMedusaCheckoutError("Select a shipping option.");
+        return;
+      }
+      if (
+        !customerDetails.email?.trim() ||
+        !customerDetails.firstName?.trim() ||
+        !customerDetails.lastName?.trim() ||
+        !shippingAddress.address?.trim() ||
+        !shippingAddress.postalCode?.trim()
+      ) {
+        setMedusaCheckoutError("Please complete required customer and shipping fields.");
+        return;
+      }
+      if (hasSeparateBilling) {
+        if (
+          !billingDetails.firstName?.trim() ||
+          !billingDetails.lastName?.trim() ||
+          !billingDetails.address?.trim() ||
+          !billingDetails.postalCode?.trim()
+        ) {
+          setMedusaCheckoutError("Please complete billing details.");
+          return;
+        }
+      }
+
+      setIsProcessing(true);
+      const billingPayload = hasSeparateBilling
+        ? {
+            firstName: billingDetails.firstName,
+            lastName: billingDetails.lastName,
+            address: billingDetails.address,
+            city: "Singapore",
+            postalCode: billingDetails.postalCode,
+            country: billingDetails.country || "Singapore",
+            phone: billingDetails.phone,
+          }
+        : null;
+
+      const result = await runMoondkMedusaCheckout({
+        cartId: medusaCartId,
+        email: customerDetails.email.trim(),
+        shipping: {
+          firstName: customerDetails.firstName,
+          lastName: customerDetails.lastName,
+          address: shippingAddress.address,
+          city: shippingAddress.city || "Singapore",
+          postalCode: shippingAddress.postalCode,
+          country: shippingAddress.country || "Singapore",
+          phone: customerDetails.phone,
+        },
+        billing: billingPayload,
+        shippingOptionId: medusaShippingOptionId,
+      });
+      setIsProcessing(false);
+      if (result.ok) {
+        setPaymentComplete(true);
+        await clearCart();
+      } else {
+        setMedusaCheckoutError(result.message);
+      }
+      return;
+    }
+
     if (shippingOption === "self-pickup") {
       if (!pickupDate) {
         setPickupDateError("Please select a pickup date");
@@ -148,12 +304,7 @@ export default function CheckoutPage() {
     await new Promise((resolve) => setTimeout(resolve, 2000));
     setIsProcessing(false);
     setPaymentComplete(true);
-    
-    // Here you would typically send the order data including pickupDate
-    // Example: await submitOrder({ ...orderData, pickupDate: pickupDate ? format(pickupDate, 'yyyy-MM-dd') : undefined });
-    
-    // Clear cart only after successful order completion
-    clearCart();
+    await clearCart();
   };
 
   return (
@@ -545,63 +696,94 @@ export default function CheckoutPage() {
               <div className="bg-white p-8 rounded-card border border-border/20">
                 <h2 className="text-lg font-heading font-medium text-foreground mb-6">Shipping Options</h2>
 
-                <RadioGroup value={shippingOption} onValueChange={handleShippingOptionChange} className="space-y-4">
-                  <Label
-                    htmlFor="standard"
-                    className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
-                      shippingOption === "standard"
-                        ? "border-primary bg-primary/5"
-                        : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <RadioGroupItem value="standard" id="standard" />
-                      <span className="font-body font-light text-foreground">
-                        Standard Shipping
-                      </span>
-                    </div>
-                    <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">
-                      {subtotal >= 150 ? "Free" : "$15"} • 3-5 business days
-                    </div>
-                  </Label>
+                {medusaMode ? (
+                  medusaShipOptions.length === 0 ? (
+                    <p className="text-sm font-body font-light text-foreground/70">
+                      {medusaCartId
+                        ? "No shipping options returned for this cart. Check fulfillment setup in Medusa."
+                        : "Your cart is empty."}
+                    </p>
+                  ) : (
+                    <RadioGroup
+                      value={medusaShippingOptionId}
+                      onValueChange={setMedusaShippingOptionId}
+                      className="space-y-4"
+                    >
+                      {medusaShipOptions.map((opt) => (
+                        <Label
+                          key={opt.id}
+                          htmlFor={`ship-${opt.id}`}
+                          className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
+                            medusaShippingOptionId === opt.id
+                              ? "border-primary bg-primary/5"
+                              : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
+                          }`}
+                        >
+                          <div className="flex items-center space-x-3">
+                            <RadioGroupItem value={opt.id} id={`ship-${opt.id}`} />
+                            <span className="font-body font-light text-foreground">{opt.name || opt.id}</span>
+                          </div>
+                        </Label>
+                      ))}
+                    </RadioGroup>
+                  )
+                ) : (
+                  <RadioGroup value={shippingOption} onValueChange={handleShippingOptionChange} className="space-y-4">
+                    <Label
+                      htmlFor="standard"
+                      className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
+                        shippingOption === "standard"
+                          ? "border-primary bg-primary/5"
+                          : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <RadioGroupItem value="standard" id="standard" />
+                        <span className="font-body font-light text-foreground">Standard Shipping</span>
+                      </div>
+                      <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">
+                        {subtotal >= 150 ? "Free" : "$15"} • 3-5 business days
+                      </div>
+                    </Label>
 
-                  <Label
-                    htmlFor="express"
-                    className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
-                      shippingOption === "express"
-                        ? "border-primary bg-primary/5"
-                        : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <RadioGroupItem value="express" id="express" />
-                      <span className="font-body font-light text-foreground">
-                        Express Shipping
-                      </span>
-                    </div>
-                    <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">$35 • 1-2 business days</div>
-                  </Label>
+                    <Label
+                      htmlFor="express"
+                      className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
+                        shippingOption === "express"
+                          ? "border-primary bg-primary/5"
+                          : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <RadioGroupItem value="express" id="express" />
+                        <span className="font-body font-light text-foreground">Express Shipping</span>
+                      </div>
+                      <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">
+                        $35 • 1-2 business days
+                      </div>
+                    </Label>
 
-                  <Label
-                    htmlFor="self-pickup"
-                    className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
-                      shippingOption === "self-pickup"
-                        ? "border-primary bg-primary/5"
-                        : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
-                    }`}
-                  >
-                    <div className="flex items-center space-x-3">
-                      <RadioGroupItem value="self-pickup" id="self-pickup" />
-                      <span className="font-body font-light text-foreground">
-                        Self Pickup
-                      </span>
-                    </div>
-                    <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">Free • Pickup from 2 days</div>
-                  </Label>
-                </RadioGroup>
+                    <Label
+                      htmlFor="self-pickup"
+                      className={`flex items-center justify-between p-4 border rounded-card cursor-pointer transition-all duration-200 ${
+                        shippingOption === "self-pickup"
+                          ? "border-primary bg-primary/5"
+                          : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
+                      }`}
+                    >
+                      <div className="flex items-center space-x-3">
+                        <RadioGroupItem value="self-pickup" id="self-pickup" />
+                        <span className="font-body font-light text-foreground">Self Pickup</span>
+                      </div>
+                      <div className="text-xs md:text-sm font-body font-light text-foreground/70 text-right md:text-left">
+                        Free • Pickup from 2 days
+                      </div>
+                    </Label>
+                  </RadioGroup>
+                )}
 
                 {/* Conditional fields for Standard and Express Shipping */}
-                {(shippingOption === "standard" || shippingOption === "express") && (
+                {!medusaMode && (shippingOption === "standard" || shippingOption === "express") && (
                   <div className="mt-6 pt-6 border-t border-border/20 space-y-6">
                     <div className="flex items-center space-x-2">
                       <Checkbox
@@ -633,7 +815,7 @@ export default function CheckoutPage() {
                 )}
 
                 {/* Conditional fields for Self Pickup */}
-                {shippingOption === "self-pickup" && (
+                {!medusaMode && shippingOption === "self-pickup" && (
                   <div className="mt-6 pt-6 border-t border-border/20 space-y-6">
                     <div>
                       <Label htmlFor="pickupDate" className="text-sm font-body font-light text-foreground">
@@ -682,88 +864,99 @@ export default function CheckoutPage() {
 
                 {!paymentComplete ? (
                   <div className="space-y-6">
-                    <div>
-                      <Label htmlFor="cardholderName" className="text-sm font-body font-light text-foreground">
-                        Cardholder Name *
-                      </Label>
-                      <Input
-                        id="cardholderName"
-                        type="text"
-                        value={paymentDetails.cardholderName}
-                        onChange={(e) => handlePaymentDetailsChange("cardholderName", e.target.value)}
-                        className="mt-2 rounded-card text-sm md:text-base"
-                        placeholder="Name on card"
-                      />
-                    </div>
+                    {!medusaMode && (
+                      <>
+                        <div>
+                          <Label htmlFor="cardholderName" className="text-sm font-body font-light text-foreground">
+                            Cardholder Name *
+                          </Label>
+                          <Input
+                            id="cardholderName"
+                            type="text"
+                            value={paymentDetails.cardholderName}
+                            onChange={(e) => handlePaymentDetailsChange("cardholderName", e.target.value)}
+                            className="mt-2 rounded-card text-sm md:text-base"
+                            placeholder="Name on card"
+                          />
+                        </div>
 
-                    <div>
-                      <Label htmlFor="cardNumber" className="text-sm font-body font-light text-foreground">
-                        Card Number *
-                      </Label>
-                      <div className="relative mt-2">
-                        <Input
-                          id="cardNumber"
-                          type="text"
-                          value={paymentDetails.cardNumber}
-                          onChange={(e) => {
-                            const value = e.target.value
-                              .replace(/\s/g, "")
-                              .replace(/(.{4})/g, "$1 ")
-                              .trim();
-                            if (value.length <= 19) {
-                              handlePaymentDetailsChange("cardNumber", value);
-                            }
-                          }}
-                          className="rounded-card pl-10 text-sm md:text-base"
-                          placeholder="4242 4242 4242 4242"
-                          maxLength={19}
-                        />
-                        <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-foreground/50" />
-                      </div>
-                    </div>
+                        <div>
+                          <Label htmlFor="cardNumber" className="text-sm font-body font-light text-foreground">
+                            Card Number *
+                          </Label>
+                          <div className="relative mt-2">
+                            <Input
+                              id="cardNumber"
+                              type="text"
+                              value={paymentDetails.cardNumber}
+                              onChange={(e) => {
+                                const value = e.target.value
+                                  .replace(/\s/g, "")
+                                  .replace(/(.{4})/g, "$1 ")
+                                  .trim();
+                                if (value.length <= 19) {
+                                  handlePaymentDetailsChange("cardNumber", value);
+                                }
+                              }}
+                              className="rounded-card pl-10 text-sm md:text-base"
+                              placeholder="4242 4242 4242 4242"
+                              maxLength={19}
+                            />
+                            <CreditCard className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-foreground/50" />
+                          </div>
+                        </div>
 
-                    <div className="grid grid-cols-2 gap-4">
-                      <div>
-                        <Label htmlFor="expiryDate" className="text-sm font-body font-light text-foreground">
-                          Expiry Date *
-                        </Label>
-                        <Input
-                          id="expiryDate"
-                          type="text"
-                          value={paymentDetails.expiryDate}
-                          onChange={(e) => {
-                            const value = e.target.value
-                              .replace(/\D/g, "")
-                              .replace(/(\d{2})(\d{2})/, "$1/$2");
-                            if (value.length <= 5) {
-                              handlePaymentDetailsChange("expiryDate", value);
-                            }
-                          }}
-                          className="mt-2 rounded-card text-sm md:text-base"
-                          placeholder="MM/YY"
-                          maxLength={5}
-                        />
-                      </div>
-                      <div>
-                        <Label htmlFor="cvv" className="text-sm font-body font-light text-foreground">
-                          CVV *
-                        </Label>
-                        <Input
-                          id="cvv"
-                          type="text"
-                          value={paymentDetails.cvv}
-                          onChange={(e) => {
-                            const value = e.target.value.replace(/\D/g, "");
-                            if (value.length <= 3) {
-                              handlePaymentDetailsChange("cvv", value);
-                            }
-                          }}
-                          className="mt-2 rounded-card text-sm md:text-base"
-                          placeholder="123"
-                          maxLength={3}
-                        />
-                      </div>
-                    </div>
+                        <div className="grid grid-cols-2 gap-4">
+                          <div>
+                            <Label htmlFor="expiryDate" className="text-sm font-body font-light text-foreground">
+                              Expiry Date *
+                            </Label>
+                            <Input
+                              id="expiryDate"
+                              type="text"
+                              value={paymentDetails.expiryDate}
+                              onChange={(e) => {
+                                const value = e.target.value
+                                  .replace(/\D/g, "")
+                                  .replace(/(\d{2})(\d{2})/, "$1/$2");
+                                if (value.length <= 5) {
+                                  handlePaymentDetailsChange("expiryDate", value);
+                                }
+                              }}
+                              className="mt-2 rounded-card text-sm md:text-base"
+                              placeholder="MM/YY"
+                              maxLength={5}
+                            />
+                          </div>
+                          <div>
+                            <Label htmlFor="cvv" className="text-sm font-body font-light text-foreground">
+                              CVV *
+                            </Label>
+                            <Input
+                              id="cvv"
+                              type="text"
+                              value={paymentDetails.cvv}
+                              onChange={(e) => {
+                                const value = e.target.value.replace(/\D/g, "");
+                                if (value.length <= 3) {
+                                  handlePaymentDetailsChange("cvv", value);
+                                }
+                              }}
+                              className="mt-2 rounded-card text-sm md:text-base"
+                              placeholder="123"
+                              maxLength={3}
+                            />
+                          </div>
+                        </div>
+                      </>
+                    )}
+
+                    {medusaMode && (
+                      <p className="text-sm font-body font-light text-foreground/80">
+                        Payment is completed through your Medusa store (system or manual provider). No card details are
+                        entered on this page.
+                      </p>
+                    )}
 
                     <div className="bg-secondary p-6 rounded-card border border-border/20 space-y-3">
                       <div className="flex justify-between text-sm font-body font-light">
@@ -772,10 +965,10 @@ export default function CheckoutPage() {
                       </div>
                       <div className="flex justify-between text-sm font-body font-light">
                         <span className="text-foreground/70">
-                          {shippingOption === "self-pickup" ? "Self Pickup" : "Shipping"}
+                          {medusaMode ? "Shipping" : shippingOption === "self-pickup" ? "Self Pickup" : "Shipping"}
                         </span>
                         <span className="text-foreground">
-                          {shipping === 0 ? "Free" : `$${shipping}`}
+                          {shipping === 0 ? "Free" : `$${shipping.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                         </span>
                       </div>
                       <div className="flex justify-between text-lg font-heading font-medium border-t border-border/20 pt-3">
@@ -784,16 +977,35 @@ export default function CheckoutPage() {
                       </div>
                     </div>
 
+                    {medusaCheckoutError && (
+                      <p className="text-sm text-destructive font-body" role="alert">
+                        {medusaCheckoutError}
+                      </p>
+                    )}
+
                     <Button
-                      onClick={handleCompleteOrder}
+                      onClick={() => void handleCompleteOrder()}
                       disabled={
                         isProcessing ||
-                        !paymentDetails.cardNumber ||
-                        !paymentDetails.expiryDate ||
-                        !paymentDetails.cvv ||
-                        !paymentDetails.cardholderName ||
                         cartItems.length === 0 ||
-                        (shippingOption === "self-pickup" && !pickupDate)
+                        (medusaMode
+                          ? !medusaCartId ||
+                            !medusaShippingOptionId ||
+                            !customerDetails.email?.trim() ||
+                            !customerDetails.firstName?.trim() ||
+                            !customerDetails.lastName?.trim() ||
+                            !shippingAddress.address?.trim() ||
+                            !shippingAddress.postalCode?.trim() ||
+                            (hasSeparateBilling &&
+                              (!billingDetails.firstName?.trim() ||
+                                !billingDetails.lastName?.trim() ||
+                                !billingDetails.address?.trim() ||
+                                !billingDetails.postalCode?.trim()))
+                          : !paymentDetails.cardNumber ||
+                            !paymentDetails.expiryDate ||
+                            !paymentDetails.cvv ||
+                            !paymentDetails.cardholderName ||
+                            (shippingOption === "self-pickup" && !pickupDate))
                       }
                       className="w-full rounded-full h-12 text-base bg-primary hover:bg-primary-hover text-white font-body font-medium"
                     >

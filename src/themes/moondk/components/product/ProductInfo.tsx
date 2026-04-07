@@ -9,12 +9,13 @@ import {
 } from "../category/products";
 import { AddToBagNotification } from "../ui/AddToBagNotification";
 import { ProductDetailBreadcrumb } from "./ProductDetailBreadcrumb";
+import { isMoondkMedusaEnabled } from "../../lib/medusa";
+import { useMoondkMedusaProductQuery } from "../../hooks/useMoondkMedusaCatalog";
 
 interface ProductInfoProps {
   productId?: string;
 }
 
-/** Splits "Title (subtitle)" for lighter typography on parenthetical copy (e.g. Korean), without changing the catalog string. */
 function splitProductDisplayTitle(name: string): { primary: string; paren?: string } {
   const t = name.trim();
   const m = t.match(/^(.+?)\s+\(([^)]+)\)\s*$/);
@@ -23,28 +24,47 @@ function splitProductDisplayTitle(name: string): { primary: string; paren?: stri
 }
 
 const ProductInfo = ({ productId }: ProductInfoProps) => {
+  const medusa = isMoondkMedusaEnabled();
+  const { data: medusaView, isLoading, isError } = useMoondkMedusaProductQuery(
+    medusa ? productId : undefined,
+  );
+
   const [quantity, setQuantity] = useState(1);
   const [showNotification, setShowNotification] = useState(false);
   const { addToCart } = useCart();
 
-  const product = getProductByRouteId(productId);
-  const productName = product?.name ?? FALLBACK_PRODUCT_DISPLAY_NAME;
-  const productPrice = product?.price || "$37";
-  const productImage = product?.image || "";
-  const productCategory = product?.category || "Product";
-  const showLowStock = product ? productShowsLowStockBadge(product.id) : false;
+  const staticProduct = medusa ? undefined : getProductByRouteId(productId);
+
+  const productName = medusa
+    ? medusaView?.name ?? FALLBACK_PRODUCT_DISPLAY_NAME
+    : staticProduct?.name ?? FALLBACK_PRODUCT_DISPLAY_NAME;
+  const productPrice = medusa ? medusaView?.price || "—" : staticProduct?.price || "$37";
+  const productImage = medusa ? medusaView?.image || "" : staticProduct?.image || "";
+  const productCategory = medusa
+    ? medusaView?.category || "Product"
+    : staticProduct?.category || "Product";
+  const variantId = medusa ? medusaView?.variantId : undefined;
+
+  const showLowStock = medusa
+    ? productId
+      ? productShowsLowStockBadge(productId)
+      : false
+    : staticProduct
+      ? productShowsLowStockBadge(staticProduct.id)
+      : false;
 
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
   const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));
 
-  const handleAddToBag = () => {
-    addToCart(
+  const handleAddToBag = async () => {
+    await addToCart(
       {
         name: productName,
         price: productPrice,
         image: productImage,
-        quantity: quantity,
+        quantity,
         category: productCategory,
+        ...(variantId ? { variantId } : {}),
       },
       false,
     );
@@ -52,6 +72,34 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
   };
 
   const { primary: titlePrimary, paren: titleParen } = splitProductDisplayTitle(productName);
+
+  if (medusa && isLoading) {
+    return (
+      <div className="flex flex-col gap-8 md:gap-10 lg:gap-11">
+        <p className="text-sm font-body font-light text-foreground/70">Loading product…</p>
+      </div>
+    );
+  }
+
+  if (medusa && isError) {
+    return (
+      <div className="flex flex-col gap-8 md:gap-10 lg:gap-11">
+        <p className="text-sm text-destructive">Could not load this product from Medusa.</p>
+      </div>
+    );
+  }
+
+  if (medusa && !medusaView) {
+    return (
+      <div className="flex flex-col gap-8 md:gap-10 lg:gap-11">
+        <p className="text-sm font-body font-light text-foreground/70">Product not found.</p>
+      </div>
+    );
+  }
+
+  const showCategoryEyebrow = medusa
+    ? productCategory !== "Product"
+    : staticProduct && productCategory !== "Product";
 
   return (
     <>
@@ -65,7 +113,7 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
           <ProductDetailBreadcrumb productName={productName} className="hidden lg:block" />
 
           <div className="flex flex-col gap-4 md:gap-5">
-            {product && productCategory !== "Product" && (
+            {showCategoryEyebrow && (
               <p className="text-[11px] font-body font-medium uppercase tracking-[0.14em] text-foreground/42">
                 {productCategory}
               </p>
@@ -133,10 +181,7 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
                   className="flex w-full items-center gap-2 rounded-lg border border-primary/18 bg-primary/[0.07] px-3 py-2 sm:w-auto sm:py-1.5"
                   role="status"
                 >
-                  <span
-                    className="size-1.5 shrink-0 rounded-full bg-primary/75"
-                    aria-hidden
-                  />
+                  <span className="size-1.5 shrink-0 rounded-full bg-primary/75" aria-hidden />
                   <span className="text-[11px] font-semibold uppercase tracking-[0.08em] text-primary">
                     Low stock
                   </span>
@@ -147,8 +192,9 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
 
             <Button
               type="button"
-              className="h-auto min-h-[3rem] w-full rounded-full bg-primary px-6 py-3.5 text-[0.9375rem] font-semibold tracking-wide text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary hover:shadow-md hover:brightness-[1.04] active:translate-y-px active:shadow-sm active:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2"
-              onClick={handleAddToBag}
+              disabled={medusa && !variantId}
+              className="h-auto min-h-[3rem] w-full rounded-full bg-primary px-6 py-3.5 text-[0.9375rem] font-semibold tracking-wide text-primary-foreground shadow-sm transition-all duration-200 hover:bg-primary hover:shadow-md hover:brightness-[1.04] active:translate-y-px active:shadow-sm active:brightness-[0.97] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:opacity-50"
+              onClick={() => void handleAddToBag()}
             >
               Add to Bag
             </Button>

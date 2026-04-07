@@ -1,0 +1,44 @@
+---
+description: Sparti Theme — source of truth, layout, workflow, verification
+alwaysApply: true
+---
+
+# Sparti Theme — project rules
+
+## Source of truth
+
+- **Architecture, routing, CMS, Vercel, design system:** root `README.md` only (there is no `architecture.md`).
+- **Task list and verification notes:** root `TODO.md` (there is no `progress.md`). Pick work from `TODO.md` when it applies; mark items done when you finish tracked tasks.
+
+## Principles
+
+- **Architect first (non-trivial work):** Before multi-file refactors, new themes, or new cross-cutting APIs, skim the relevant `README.md` sections and state a short plan (files touched, main idea). Small, localized fixes can use a one-line plan and proceed.
+- **Atomic modules:** Prefer keeping files under ~250 lines; split into smaller components or helpers when growth hurts clarity.
+- **Functional style:** Prefer pure helpers and immutability where it fits existing patterns.
+- **Validation:** Validate external or user input with **Zod** where the codebase already does (e.g. forms with React Hook Form + `@hookform/resolvers`). For CMS JSON, reuse shared validation/helpers when present.
+- **Errors:** Avoid silent failures; follow existing hooks/UI and `src/utils/debugLogger.ts` patterns; render errors and ErrorBoundary behavior per `README.md`.
+
+## Directory structure (this repo)
+
+- **`src/`** — `router.tsx`, `App.tsx`, `pages/`, `components/`, `hooks/`, `context/`, `utils/`, `types/`, `config/`, etc.
+- **`src/themes/<slug>/`** — Theme entry `index.tsx`, `theme.json`, `pages.json`, `theme.css`, plus `components/`, `pages/`, `assets/`, optional `docs/`.
+- **Do not** impose `src/core`, `src/adapters`, or `src/ports` unless the project is explicitly migrated to that layout.
+
+## Reuse (do not duplicate)
+
+Prefer imports called out in `README.md` and `TODO.md`: e.g. `@/utils/api`, `ThemeLink` / `useThemeBasePath`, `schemaHelpers`, `themeSettings`, `getThemeAssetUrl`, tenant helpers.
+
+## Themes
+
+- New themes: copy **`src/themes/master/`**; kebab-case slug; optional friendly name in `themeRegistry.ts`.
+- Use canonical tokens from `src/themes/tokens.css` / per-theme `theme.css` as in `README.md`. **Do not import Tailwind in theme CSS** (global `index.css` already does).
+
+## Workflow: Plan → Act → Reflect
+
+1. **Plan:** Read `README.md` (and `TODO.md` if the change relates to listed work). List affected paths for larger changes.
+2. **Act:** Edit in small batches; match existing naming (PascalCase components, `useX` hooks, kebab-case theme folders).
+3. **Reflect:** Run **`npm run build`**; when behavior or shared utils change, also run **`npm run lint`** and **`npm run test:unit`**. Update `TODO.md` when completing items listed there.
+
+## Stack
+
+React 18, Vite, React Router 6, Tailwind 4, TanStack Query — SPA; CMS via `VITE_API_BASE_URL` (`README.md`).

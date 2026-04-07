@@ -1,0 +1,13 @@
+---
+description: TypeScript and React conventions for Sparti Theme
+globs: "**/*.ts,**/*.tsx"
+alwaysApply: false
+---
+
+# TypeScript & React (Sparti Theme)
+
+- Prefer **strict, explicit types** on new/changed code; narrow `unknown` from API/CMS responses before use.
+- **Comments:** Explain non-obvious *why* (CMS quirks, routing, a11y, perf), not what the code literally does.
+- **Control flow:** Prefer early returns and clear error states in UI; this codebase uses exceptions for async fetch — do not refactor wide areas to Result/Either types unless requested.
+- **Components:** Keep presentational vs data-fetching boundaries consistent with neighboring files in the same theme or `src/pages`.
+- **Imports:** Use `@/` path aliases as existing files do; avoid deep relative chains when a shared module already exists.

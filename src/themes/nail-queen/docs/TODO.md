@@ -27,6 +27,9 @@ Production nail salon theme. Build passes, all pages render correctly.
 
 ## Completed
 
+- [x] **Why Choose Us card copy → button gap (mobile)** (2026-04-07) — `HomePage.tsx`: body copy uses `mb-5` (mobile) / `md:mb-6` and drops `flex-grow` / `min-h-[120px]` below `md`; `md:` restores 3-col alignment; Learn more uses `md:mt-auto` only.
+- [x] **Home section spacing (mobile)** (2026-04-07) — `HomePage.tsx`: reduced vertical padding between Our History ↔ Our Services and Our Services ↔ Why Choose Us (`pt`/`pb`/`py` responsive to `md`); desktop unchanged.
+- [x] **Our Services mobile layout** (2026-04-07) — `HomePage.tsx`: services card grid `grid-cols-1 md:grid-cols-2` so one card per row on mobile, two columns from `md` up.
 - [x] **Luxe Spa card footer alignment** (2026-04-03) — `PricingPage.tsx`: flex column + `flex-1` body so price rows align per row on `lg` grid.
 - [x] **Pricing title–cards gap** (2026-04-03) — `PricingPage.tsx`: reduced vertical space below “Pricing” and above the grid.
 - [x] **Pricing soak-off text alignment** (2026-04-03) — `PricingPage.tsx`: stripped accidental NBSP padding from SOFT GEL/BIAB and HARD GEL soak-off blurbs.

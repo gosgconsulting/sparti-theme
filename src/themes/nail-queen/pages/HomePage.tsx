@@ -151,7 +151,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
       </section>
 
       {/* Our History Section */}
-      <section className="py-20 bg-background">
+      <section className="pt-20 pb-10 md:py-20 bg-background">
         <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="grid md:grid-cols-2 gap-12 items-start">
             <div>
@@ -247,7 +247,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
       </section>
 
       {/* Our Services Section */}
-      <section className="py-20 bg-background">
+      <section className="py-10 md:py-20 bg-background">
         <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
           <style>{`
             .services-text-wrapper {
@@ -278,7 +278,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
               <div className="absolute right-0 top-0 bottom-0 w-0.5 bg-nail-queen-brown hidden md:block"></div>
             </div>
 
-            <div className="grid w-full grid-cols-2 items-stretch gap-3 md:ml-24 md:w-[calc(55%+20px)]">
+            <div className="grid w-full grid-cols-1 md:grid-cols-2 items-stretch gap-3 md:ml-24 md:w-[calc(55%+20px)]">
               <div className="flex h-full flex-col overflow-hidden rounded-lg bg-white shadow-lg">
                 <div className="h-40 w-full shrink-0 overflow-hidden bg-gray-200 sm:h-44">
                   <img
@@ -372,7 +372,7 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
       </section>
 
       {/* Why Choose Us Section */}
-      <section className="py-20 bg-background">
+      <section className="pt-10 pb-20 md:py-20 bg-background">
         <div className="mx-auto w-full min-w-0 max-w-7xl px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-16">
             <h2 className="text-4xl font-bold text-black mb-8">Why Choose Us</h2>
@@ -388,12 +388,12 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                 />
               </div>
               <h3 className="text-xl font-bold text-black mb-4">The "No Package" Difference</h3>
-              <p className="text-gray-600 text-sm mb-6 flex-grow min-h-[120px]">
+              <p className="text-gray-600 text-sm mb-5 md:mb-6 md:flex-grow md:min-h-[120px]">
                 No hidden agendas, just beautiful nails. Unlike package pushing salons, we believe in clear pricing and personalized recommendations. Choose any service you desire, knowing exactly what you're paying for.
               </p>
               <div className="flex justify-center">
                 <button
-                  className="text-nail-queen-brown text-sm font-medium border border-nail-queen-brown px-6 py-2 rounded-full hover:bg-nail-queen-brown hover:text-white transition-colors mt-auto"
+                  className="text-nail-queen-brown text-sm font-medium border border-nail-queen-brown px-6 py-2 rounded-full hover:bg-nail-queen-brown hover:text-white transition-colors md:mt-auto"
                   onClick={() => {
                     const ev = new CustomEvent("nailqueen:open-contact");
                     window.dispatchEvent(ev);
@@ -413,12 +413,12 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                 />
               </div>
               <h3 className="text-xl font-bold text-black mb-4">First-Class Service</h3>
-              <p className="text-gray-600 text-sm mb-6 flex-grow min-h-[120px]">
+              <p className="text-gray-600 text-sm mb-5 md:mb-6 md:flex-grow md:min-h-[120px]">
                 Our dedicated staff go the extra mile to ensure your comfort and satisfaction, providing a first-class service that leaves you feeling pampered and rejuvenated.
               </p>
               <div className="flex justify-center">
                 <button
-                  className="text-nail-queen-brown text-sm font-medium border border-nail-queen-brown px-6 py-2 rounded-full hover:bg-nail-queen-brown hover:text-white transition-colors mt-auto"
+                  className="text-nail-queen-brown text-sm font-medium border border-nail-queen-brown px-6 py-2 rounded-full hover:bg-nail-queen-brown hover:text-white transition-colors md:mt-auto"
                   onClick={() => {
                     const ev = new CustomEvent("nailqueen:open-contact");
                     window.dispatchEvent(ev);
@@ -438,12 +438,12 @@ export default function HomePage({ basePath, tenantId }: { basePath: string; ten
                 />
               </div>
               <h3 className="text-xl font-bold text-black mb-4">Value for Money</h3>
-              <p className="text-gray-600 text-sm mb-6 flex-grow min-h-[120px]">
+              <p className="text-gray-600 text-sm mb-5 md:mb-6 md:flex-grow md:min-h-[120px]">
                 Our dedicated staff go the extra mile to ensure your comfort and satisfaction, providing a first-class service that leaves you feeling pampered and rejuvenated.
               </p>
               <div className="flex justify-center">
                 <button
-                  className="text-nail-queen-brown text-sm font-medium border border-nail-queen-brown px-6 py-2 rounded-full hover:bg-nail-queen-brown hover:text-white transition-colors mt-auto"
+                  className="text-nail-queen-brown text-sm font-medium border border-nail-queen-brown px-6 py-2 rounded-full hover:bg-nail-queen-brown hover:text-white transition-colors md:mt-auto"
                   onClick={() => {
                     const ev = new CustomEvent("nailqueen:open-contact");
                     window.dispatchEvent(ev);

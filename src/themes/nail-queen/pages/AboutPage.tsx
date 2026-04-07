@@ -427,7 +427,7 @@ export default function AboutPage({ basePath, tenantId }: { basePath: string; te
                   return (
                     <CarouselItem
                       key={member}
-                      className="pl-2 md:pl-4 basis-1/2 sm:basis-1/3 md:basis-1/4 lg:basis-1/4"
+                      className="pl-2 md:pl-4"
                     >
                       <div className="group relative h-full">
                         <div

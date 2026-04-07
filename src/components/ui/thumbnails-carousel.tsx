@@ -35,8 +35,8 @@ export function ThumbnailsCarousel({ images, defaultPage = 0 }: ThumbnailsCarous
   }
 
   return (
-    <div className="max-w-4xl p-2 mx-auto">
-      <div className="relative flex items-center gap-2">
+    <div className="mx-auto max-w-4xl px-1 py-1 sm:px-2 sm:py-1">
+      <div className="relative flex items-center gap-2 sm:gap-2">
         {/* Left arrow - positioned outside the image */}
         {images.length > 1 && (
           <button
@@ -48,14 +48,20 @@ export function ThumbnailsCarousel({ images, defaultPage = 0 }: ThumbnailsCarous
           </button>
         )}
         
-        <div className="relative overflow-hidden rounded-lg shadow-lg flex-1" ref={emblaRef}>
-          <div className="flex">
+        <div
+          className="relative h-[min(56vh,440px)] w-full min-w-0 max-w-full flex-1 overflow-hidden rounded-lg bg-transparent sm:h-[min(78vh,720px)]"
+          ref={emblaRef}
+        >
+          <div className="flex h-full">
             {images.map((image, index) => (
-              <div key={index} className="flex-[0_0_100%] min-w-0">
+              <div
+                key={index}
+                className="flex h-full min-w-0 flex-[0_0_100%] items-center justify-center px-1 sm:px-2"
+              >
                 <img
                   src={image.full}
                   alt={`Slide ${index + 1}`}
-                  className="w-full h-[600px] object-cover"
+                  className="mx-auto block h-auto max-h-full w-auto max-w-full object-contain"
                 />
               </div>
             ))}

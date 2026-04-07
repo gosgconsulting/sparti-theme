@@ -27,6 +27,8 @@ Production nail salon theme. Build passes, all pages render correctly.
 
 ## Completed
 
+- [x] **About team carousel** (2026-04-07) — `AboutPage.tsx`: removed `basis-1/2 sm:basis-1/3 md:basis-1/4` overrides on team `CarouselItem` so shared `CarouselItem` default `basis-full` applies (one card per view at all breakpoints).
+- [x] **Gallery lightbox aspect ratio** (2026-04-07) — `thumbnails-carousel.tsx` + `GalleryPage.tsx`: mobile viewport `h-[min(56vh,440px)]`, light wrapper/slide padding, `bg-transparent`; dialog `p-5`/`gap-3`, `mt-2 sm:mt-4` above carousel; `sm:` unchanged; `DialogContent` `shadow-none`; no carousel `shadow-lg`.
 - [x] **Why Choose Us card copy → button gap (mobile)** (2026-04-07) — `HomePage.tsx`: body copy uses `mb-5` (mobile) / `md:mb-6` and drops `flex-grow` / `min-h-[120px]` below `md`; `md:` restores 3-col alignment; Learn more uses `md:mt-auto` only.
 - [x] **Home section spacing (mobile)** (2026-04-07) — `HomePage.tsx`: reduced vertical padding between Our History ↔ Our Services and Our Services ↔ Why Choose Us (`pt`/`pb`/`py` responsive to `md`); desktop unchanged.
 - [x] **Our Services mobile layout** (2026-04-07) — `HomePage.tsx`: services card grid `grid-cols-1 md:grid-cols-2` so one card per row on mobile, two columns from `md` up.

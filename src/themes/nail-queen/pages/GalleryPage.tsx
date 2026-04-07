@@ -874,14 +874,14 @@ export default function GalleryPage({ basePath, tenantId }: { basePath: string; 
       </section>
 
       <Dialog open={!!selectedItem} onOpenChange={(open) => !open && handleCloseDialog()}>
-        <DialogContent className="max-w-6xl max-h-[95vh] overflow-y-auto">
-          <DialogHeader>
-            <DialogTitle className="text-2xl font-bold text-nail-queen-brown">
+        <DialogContent className="max-w-6xl max-h-[95vh] gap-3 overflow-y-auto p-5 shadow-none sm:gap-4 sm:p-6">
+          <DialogHeader className="space-y-0">
+            <DialogTitle className="text-xl font-bold leading-tight text-nail-queen-brown sm:text-2xl">
               {selectedItem?.title}
             </DialogTitle>
           </DialogHeader>
           {selectedItem && (
-            <div className="mt-4">
+            <div className="mt-2 sm:mt-4">
               <ThumbnailsCarousel images={generateCarouselImages(selectedItem)} />
             </div>
           )}

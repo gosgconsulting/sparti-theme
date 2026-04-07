@@ -14,5 +14,17 @@ export {
   MOONDK_MEDUSA_PRODUCT_DETAIL_FIELDS,
   MOONDK_MEDUSA_CART_RETRIEVE_FIELDS,
 } from "./fields";
-export { runMoondkMedusaCheckout, type MedusaCheckoutAddressInput } from "./checkoutFlow";
+export { isMoondkHitPayReturnSearchParams } from "./hitPayReturnParams";
+export {
+  fetchMoondkMedusaPaymentProviderOptions,
+  pickDefaultMedusaPaymentProviderId,
+  labelMedusaPaymentProviderId,
+  type MedusaPaymentProviderOption,
+} from "./paymentProviders";
+export {
+  runMoondkMedusaCheckout,
+  pollMoondkMedusaCartToOrder,
+  type MedusaCheckoutAddressInput,
+  type MoondkMedusaCheckoutResult,
+} from "./checkoutFlow";
 export { medusaDisplayAmount } from "./money";

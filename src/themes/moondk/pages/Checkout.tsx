@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
 import { Check, CreditCard, Minus, Plus, CalendarIcon } from "lucide-react";
 import { format } from "date-fns";
 
@@ -11,6 +12,11 @@ import {
   getMoondkMedusa,
   runMoondkMedusaCheckout,
   medusaDisplayAmount,
+  isMoondkHitPayReturnSearchParams,
+  pollMoondkMedusaCartToOrder,
+  fetchMoondkMedusaPaymentProviderOptions,
+  pickDefaultMedusaPaymentProviderId,
+  type MedusaPaymentProviderOption,
 } from "../lib/medusa";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -27,8 +33,13 @@ import { FREE_DELIVERY_THRESHOLD } from "../constants";
 type MedusaShipOption = { id: string; name?: string };
 
 export default function CheckoutPage() {
+  const location = useLocation();
+  const navigate = useNavigate();
+  const medusaMounted = useRef(true);
   const medusaMode = isMoondkMedusaEnabled();
   const { cartItems, updateQuantity, clearCart, medusaCartId } = useCart();
+  const clearCartRef = useRef(clearCart);
+  clearCartRef.current = clearCart;
   const [showDiscountInput, setShowDiscountInput] = useState(false);
   const [discountCode, setDiscountCode] = useState("");
   const [customerDetails, setCustomerDetails] = useState({
@@ -70,12 +81,59 @@ export default function CheckoutPage() {
 
   const [medusaShipOptions, setMedusaShipOptions] = useState<MedusaShipOption[]>([]);
   const [medusaShippingOptionId, setMedusaShippingOptionId] = useState("");
+  const [medusaPaymentProviders, setMedusaPaymentProviders] = useState<MedusaPaymentProviderOption[]>([]);
+  const [medusaPaymentProviderId, setMedusaPaymentProviderId] = useState("");
   const [medusaCartTotals, setMedusaCartTotals] = useState({
     item: 0,
     shipping: 0,
     total: 0,
   });
   const [medusaCheckoutError, setMedusaCheckoutError] = useState<string | null>(null);
+  const [hitPayConfirming, setHitPayConfirming] = useState(false);
+
+  useEffect(() => {
+    medusaMounted.current = true;
+    return () => {
+      medusaMounted.current = false;
+    };
+  }, []);
+
+  /** HitPay (or other hosted) redirect: confirm order after Medusa webhook captures payment. */
+  useEffect(() => {
+    if (!medusaMode || !medusaCartId) {
+      setHitPayConfirming(false);
+      return;
+    }
+    const qs = new URLSearchParams(location.search);
+    if (!isMoondkHitPayReturnSearchParams(qs)) {
+      setHitPayConfirming(false);
+      return;
+    }
+
+    let ignore = false;
+    setHitPayConfirming(true);
+    setMedusaCheckoutError(null);
+
+    void (async () => {
+      const out = await pollMoondkMedusaCartToOrder(medusaCartId);
+      if (ignore || !medusaMounted.current) return;
+      setHitPayConfirming(false);
+      if (out.ok === false) {
+        setMedusaCheckoutError(out.message);
+        if (out.pending) {
+          navigate({ pathname: location.pathname, search: "" }, { replace: true });
+        }
+        return;
+      }
+      setPaymentComplete(true);
+      await clearCartRef.current();
+      navigate({ pathname: location.pathname, search: "" }, { replace: true });
+    })();
+
+    return () => {
+      ignore = true;
+    };
+  }, [medusaMode, medusaCartId, location.pathname, location.search, navigate]);
 
   useEffect(() => {
     if (!medusaMode || !medusaCartId) {
@@ -134,6 +192,41 @@ export default function CheckoutPage() {
         });
       } catch (e) {
         debugError("Medusa cart.retrieve (checkout totals) failed:", e);
+      }
+    })();
+    return () => {
+      cancelled = true;
+    };
+  }, [medusaMode, medusaCartId, cartItems]);
+
+  useEffect(() => {
+    if (!medusaMode || !medusaCartId) {
+      setMedusaPaymentProviders([]);
+      setMedusaPaymentProviderId("");
+      return;
+    }
+    let cancelled = false;
+    (async () => {
+      try {
+        const api = getMoondkMedusa();
+        const { cart } = await api.cart.retrieve(medusaCartId, { fields: "region_id" });
+        const regionId = cart?.region_id;
+        if (!regionId || cancelled) return;
+        const options = await fetchMoondkMedusaPaymentProviderOptions(regionId);
+        if (cancelled) return;
+        setMedusaPaymentProviders(options);
+        const envPid = import.meta.env.VITE_MEDUSA_PAYMENT_PROVIDER_ID?.trim() ?? null;
+        const ids = options.map((o) => o.id);
+        setMedusaPaymentProviderId((prev) => {
+          if (prev && ids.includes(prev)) return prev;
+          return pickDefaultMedusaPaymentProviderId(ids, envPid) ?? "";
+        });
+      } catch (e) {
+        debugError("Medusa listPaymentProviders (checkout) failed:", e);
+        if (!cancelled) {
+          setMedusaPaymentProviders([]);
+          setMedusaPaymentProviderId("");
+        }
       }
     })();
     return () => {
@@ -228,6 +321,10 @@ export default function CheckoutPage() {
         setMedusaCheckoutError("Select a shipping option.");
         return;
       }
+      if (!medusaPaymentProviderId) {
+        setMedusaCheckoutError("Select a payment method.");
+        return;
+      }
       if (
         !customerDetails.email?.trim() ||
         !customerDetails.firstName?.trim() ||
@@ -277,14 +374,19 @@ export default function CheckoutPage() {
         },
         billing: billingPayload,
         shippingOptionId: medusaShippingOptionId,
+        paymentProviderId: medusaPaymentProviderId,
       });
       setIsProcessing(false);
-      if (result.ok) {
-        setPaymentComplete(true);
-        await clearCart();
-      } else {
+      if (result.ok === false) {
         setMedusaCheckoutError(result.message);
+        return;
       }
+      if (result.flow === "redirect") {
+        window.location.assign(result.redirectUrl);
+        return;
+      }
+      setPaymentComplete(true);
+      await clearCart();
       return;
     }
 
@@ -313,6 +415,15 @@ export default function CheckoutPage() {
 
       <main className="pt-6 pb-12">
         <div className="max-w-7xl mx-auto px-6">
+          {hitPayConfirming && (
+            <div
+              className="mb-6 rounded-card border border-border/30 bg-secondary/80 px-4 py-3 text-sm font-body text-foreground"
+              role="status"
+              aria-live="polite"
+            >
+              Confirming your payment with the store. This usually takes a few seconds.
+            </div>
+          )}
           <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
             {/* Order Summary */}
             <div className="lg:col-span-1 lg:order-2">
@@ -952,10 +1063,42 @@ export default function CheckoutPage() {
                     )}
 
                     {medusaMode && (
-                      <p className="text-sm font-body font-light text-foreground/80">
-                        Payment is completed through your Medusa store (system or manual provider). No card details are
-                        entered on this page.
-                      </p>
+                      <div className="space-y-4">
+                        {medusaPaymentProviders.length === 0 ? (
+                          <p className="text-sm font-body font-light text-foreground/80">
+                            No payment methods are available for this region. In Medusa Admin, open Settings → Regions,
+                            edit the region, enable HitPay (or your provider) for that region, then refresh this page.
+                          </p>
+                        ) : (
+                          <>
+                            <p className="text-sm font-heading font-medium text-foreground">Payment method</p>
+                            <RadioGroup
+                              value={medusaPaymentProviderId}
+                              onValueChange={setMedusaPaymentProviderId}
+                              className="space-y-3"
+                            >
+                              {medusaPaymentProviders.map((p) => (
+                                <Label
+                                  key={p.id}
+                                  htmlFor={`pay-${p.id}`}
+                                  className={`flex items-center gap-3 p-4 border rounded-card cursor-pointer transition-all duration-200 ${
+                                    medusaPaymentProviderId === p.id
+                                      ? "border-primary bg-primary/5"
+                                      : "border-border/20 hover:border-primary/30 hover:bg-secondary/30"
+                                  }`}
+                                >
+                                  <RadioGroupItem value={p.id} id={`pay-${p.id}`} />
+                                  <span className="font-body font-light text-foreground">{p.label}</span>
+                                </Label>
+                              ))}
+                            </RadioGroup>
+                            <p className="text-sm font-body font-light text-foreground/80">
+                              For HitPay and similar providers, secure payment opens on their page. You&apos;ll return
+                              here afterward while we confirm your order.
+                            </p>
+                          </>
+                        )}
+                      </div>
                     )}
 
                     <div className="bg-secondary p-6 rounded-card border border-border/20 space-y-3">
@@ -986,11 +1129,13 @@ export default function CheckoutPage() {
                     <Button
                       onClick={() => void handleCompleteOrder()}
                       disabled={
+                        hitPayConfirming ||
                         isProcessing ||
                         cartItems.length === 0 ||
                         (medusaMode
                           ? !medusaCartId ||
                             !medusaShippingOptionId ||
+                            !medusaPaymentProviderId ||
                             !customerDetails.email?.trim() ||
                             !customerDetails.firstName?.trim() ||
                             !customerDetails.lastName?.trim() ||
@@ -1009,7 +1154,11 @@ export default function CheckoutPage() {
                       }
                       className="w-full rounded-full h-12 text-base bg-primary hover:bg-primary-hover text-white font-body font-medium"
                     >
-                      {isProcessing ? "Processing..." : `Complete Order • $${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
+                      {hitPayConfirming
+                        ? "Confirming payment…"
+                        : isProcessing
+                          ? "Processing..."
+                          : `Complete Order • $${total.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`}
                     </Button>
                   </div>
                 ) : (

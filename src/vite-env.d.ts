@@ -2,6 +2,10 @@
 
 interface ImportMetaEnv {
   readonly DEPLOY_THEME_SLUG: string;
+  /** Medusa v2 backend origin for `@/lib/medusa` (e.g. https://localhost:9000) */
+  readonly VITE_MEDUSA_BACKEND_URL?: string;
+  /** Optional Medusa publishable key for storefront requests */
+  readonly VITE_MEDUSA_PUBLISHABLE_KEY?: string;
   readonly VITE_DATABASE_PUBLIC_URL: string;
   readonly VITE_POSTGRES_DB: string;
   readonly VITE_POSTGRES_USER: string;

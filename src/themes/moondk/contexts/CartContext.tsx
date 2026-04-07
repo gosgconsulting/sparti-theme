@@ -77,6 +77,11 @@ function readMedusaCartId(): string | null {
   return id && id.trim() ? id.trim() : null;
 }
 
+/** Read Medusa cart id from localStorage (use when React state was cleared but id may still be stored). */
+export function readStoredMoondkMedusaCartId(): string | null {
+  return readMedusaCartId();
+}
+
 function writeMedusaCartId(id: string | null) {
   if (typeof window === "undefined") return;
   if (id) localStorage.setItem(MEDUSA_CART_STORAGE_KEY, id);

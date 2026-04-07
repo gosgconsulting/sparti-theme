@@ -1,17 +1,28 @@
 import { useEffect, useRef, useState } from "react";
+import { useLocation } from "react-router-dom";
 import { Check } from "lucide-react";
 
 import CheckoutHeader from "../components/header/CheckoutHeader";
 import Footer from "../components/footer/Footer";
-import { useCart } from "../contexts/CartContext";
-import { isMoondkMedusaEnabled, pollMoondkMedusaCartToOrder } from "../lib/medusa";
+import { useCart, readStoredMoondkMedusaCartId } from "../contexts/CartContext";
+import {
+  isMoondkMedusaEnabled,
+  pollMoondkMedusaCartToOrder,
+  readMoondkHitPayPendingCartId,
+  clearMoondkHitPayPendingCartId,
+} from "../lib/medusa";
 import { Button } from "@/components/ui/button";
 import { ThemeLink } from "@/components/ThemeLink";
 
 type Phase = "confirming" | "success" | "error" | "no_cart";
 
+function resolveCartIdForHitPayReturn(medusaCartId: string | null): string | null {
+  return medusaCartId ?? readMoondkHitPayPendingCartId() ?? readStoredMoondkMedusaCartId();
+}
+
 export default function HitPayCallbackPage() {
   const medusaMode = isMoondkMedusaEnabled();
+  const location = useLocation();
   const { medusaCartId, clearCart } = useCart();
   const mounted = useRef(true);
   const clearRef = useRef(clearCart);
@@ -37,8 +48,17 @@ export default function HitPayCallbackPage() {
       };
     }
 
-    if (!medusaCartId) {
-      setPhase("no_cart");
+    const cartIdForConfirm = resolveCartIdForHitPayReturn(medusaCartId);
+    const hitPayCompleted = new URLSearchParams(location.search).get("status")?.toLowerCase() === "completed";
+
+    if (!cartIdForConfirm) {
+      if (hitPayCompleted) {
+        setPhase("success");
+        clearMoondkHitPayPendingCartId();
+        void clearRef.current();
+      } else {
+        setPhase("no_cart");
+      }
       return () => {
         ignore = true;
       };
@@ -48,9 +68,16 @@ export default function HitPayCallbackPage() {
     setMessage(null);
 
     void (async () => {
-      const out = await pollMoondkMedusaCartToOrder(medusaCartId);
+      const out = await pollMoondkMedusaCartToOrder(cartIdForConfirm);
       if (ignore || !mounted.current) return;
       if (out.ok) {
+        clearMoondkHitPayPendingCartId();
+        setPhase("success");
+        await clearRef.current();
+        return;
+      }
+      if (hitPayCompleted) {
+        clearMoondkHitPayPendingCartId();
         setPhase("success");
         await clearRef.current();
         return;
@@ -62,7 +89,7 @@ export default function HitPayCallbackPage() {
     return () => {
       ignore = true;
     };
-  }, [medusaMode, medusaCartId]);
+  }, [medusaMode, medusaCartId, location.search]);
 
   return (
     <div className="min-h-screen bg-background">
@@ -84,7 +111,9 @@ export default function HitPayCallbackPage() {
               Thank you for your purchase. A confirmation email is on its way.
             </p>
             <Button asChild className="rounded-full">
-              <ThemeLink to="/">Back to home</ThemeLink>
+              <ThemeLink to="/" className="!text-white">
+                Back to home
+              </ThemeLink>
             </Button>
           </div>
         )}
@@ -92,7 +121,8 @@ export default function HitPayCallbackPage() {
         {phase === "no_cart" && (
           <div className="space-y-4">
             <p className="text-sm font-body text-foreground/80">
-              There is no active cart. If you already completed payment, check your email for confirmation.
+              We could not match this return to an open cart. If you already paid, check your email for confirmation or
+              open this page in the same browser tab you used to check out.
             </p>
             <Button asChild variant="outline" className="rounded-full">
               <ThemeLink to="/">Back to home</ThemeLink>

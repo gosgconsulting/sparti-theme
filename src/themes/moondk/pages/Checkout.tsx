@@ -17,6 +17,9 @@ import {
   fetchMoondkMedusaPaymentProviderOptions,
   pickDefaultMedusaPaymentProviderId,
   type MedusaPaymentProviderOption,
+  storeMoondkHitPayPendingCartId,
+  readMoondkHitPayPendingCartId,
+  clearMoondkHitPayPendingCartId,
 } from "../lib/medusa";
 import { Button } from "@/components/ui/button";
 import { Checkbox } from "@/components/ui/checkbox";
@@ -29,6 +32,7 @@ import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover
 import { cn } from "@/lib/utils";
 import { debugLog, debugError } from "@/utils/debugLogger";
 import { FREE_DELIVERY_THRESHOLD } from "../constants";
+import { readStoredMoondkMedusaCartId } from "../contexts/CartContext";
 
 type MedusaShipOption = { id: string; name?: string };
 
@@ -100,7 +104,7 @@ export default function CheckoutPage() {
 
   /** HitPay (or other hosted) redirect: confirm order after Medusa webhook captures payment. */
   useEffect(() => {
-    if (!medusaMode || !medusaCartId) {
+    if (!medusaMode) {
       setHitPayConfirming(false);
       return;
     }
@@ -110,21 +114,37 @@ export default function CheckoutPage() {
       return;
     }
 
+    const cartIdForConfirm =
+      medusaCartId ?? readMoondkHitPayPendingCartId() ?? readStoredMoondkMedusaCartId();
+    if (!cartIdForConfirm) {
+      setHitPayConfirming(false);
+      return;
+    }
+
     let ignore = false;
     setHitPayConfirming(true);
     setMedusaCheckoutError(null);
 
     void (async () => {
-      const out = await pollMoondkMedusaCartToOrder(medusaCartId);
+      const out = await pollMoondkMedusaCartToOrder(cartIdForConfirm);
       if (ignore || !medusaMounted.current) return;
       setHitPayConfirming(false);
       if (out.ok === false) {
+        const completed = qs.get("status")?.toLowerCase() === "completed";
+        if (completed) {
+          clearMoondkHitPayPendingCartId();
+          setPaymentComplete(true);
+          await clearCartRef.current();
+          navigate({ pathname: location.pathname, search: "" }, { replace: true });
+          return;
+        }
         setMedusaCheckoutError(out.message);
         if (out.pending) {
           navigate({ pathname: location.pathname, search: "" }, { replace: true });
         }
         return;
       }
+      clearMoondkHitPayPendingCartId();
       setPaymentComplete(true);
       await clearCartRef.current();
       navigate({ pathname: location.pathname, search: "" }, { replace: true });
@@ -382,6 +402,7 @@ export default function CheckoutPage() {
         return;
       }
       if (result.flow === "redirect") {
+        if (medusaCartId) storeMoondkHitPayPendingCartId(medusaCartId);
         window.location.assign(result.redirectUrl);
         return;
       }

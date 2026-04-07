@@ -1,6 +1,8 @@
 export {
   createMedusaClient,
+  MEDUSA_PUBLISHABLE_KEY_HEADER,
   resolveMedusaBaseUrl,
+  resolveMedusaPublishableKey,
   type MedusaClientOptions,
 } from './client';
 export {

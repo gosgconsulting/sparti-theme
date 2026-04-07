@@ -1,12 +1,15 @@
 import Medusa, { type Config } from '@medusajs/js-sdk';
 
+/** Medusa Store API header; must match backend expectation. */
+export const MEDUSA_PUBLISHABLE_KEY_HEADER = 'x-publishable-api-key' as const;
+
 export type MedusaClientOptions = Pick<
   Config,
-  'globalHeaders' | 'auth' | 'debug'
+  'globalHeaders' | 'auth' | 'debug' | 'apiKey'
 > & {
   /** Medusa server origin, e.g. `https://localhost:9000`. Defaults to `VITE_MEDUSA_BACKEND_URL`. */
   baseUrl?: string;
-  /** Store publishable API key. Defaults to `VITE_MEDUSA_PUBLISHABLE_KEY` when set. */
+  /** Store publishable API key. Defaults to env (see `resolveMedusaPublishableKey`). */
   publishableKey?: string;
 };
 
@@ -28,20 +31,52 @@ export function resolveMedusaBaseUrl(override?: string): string {
   return normalizeBaseUrl(raw);
 }
 
+function firstNonEmpty(...values: Array<string | undefined>): string | undefined {
+  for (const v of values) {
+    const t = v?.trim();
+    if (t) return t;
+  }
+  return undefined;
+}
+
+/**
+ * Publishable key for Store API (`x-publishable-api-key`).
+ * Reads `options.publishableKey`, then `VITE_MEDUSA_PUBLISHABLE_KEY`, then `VITE_MEDUSA_PUBLISHABLE_API_KEY`.
+ */
+export function resolveMedusaPublishableKey(options: MedusaClientOptions = {}): string | undefined {
+  return firstNonEmpty(
+    options.publishableKey,
+    import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY,
+    import.meta.env.VITE_MEDUSA_PUBLISHABLE_API_KEY
+  );
+}
+
 export function createMedusaClient(options: MedusaClientOptions = {}): Medusa {
   const baseUrl =
     options.baseUrl != null && options.baseUrl.trim() !== ''
       ? normalizeBaseUrl(options.baseUrl)
       : resolveMedusaBaseUrl();
 
-  const envKey = import.meta.env.VITE_MEDUSA_PUBLISHABLE_KEY?.trim();
-  const publishableKey =
-    options.publishableKey?.trim() || (envKey ? envKey : undefined);
+  const publishableKey = resolveMedusaPublishableKey(options);
+  const secretApiKey = options.apiKey?.trim();
+
+  if (!publishableKey && !secretApiKey) {
+    throw new Error(
+      'Medusa Store API requires a publishable key. Set VITE_MEDUSA_PUBLISHABLE_KEY in .env (or pass publishableKey). ' +
+        'Create the key in Medusa Admin → Settings → Publishable API Keys. Restart the Vite dev server after changing .env.'
+    );
+  }
+
+  const globalHeaders: Config['globalHeaders'] = {
+    ...(publishableKey ? { [MEDUSA_PUBLISHABLE_KEY_HEADER]: publishableKey } : {}),
+    ...options.globalHeaders,
+  };
 
   const config: Config = {
     baseUrl,
     ...(publishableKey ? { publishableKey } : {}),
-    ...(options.globalHeaders ? { globalHeaders: options.globalHeaders } : {}),
+    ...(secretApiKey ? { apiKey: secretApiKey } : {}),
+    ...(Object.keys(globalHeaders).length > 0 ? { globalHeaders } : {}),
     ...(options.auth ? { auth: options.auth } : {}),
     ...(options.debug !== undefined ? { debug: options.debug } : {}),
   };

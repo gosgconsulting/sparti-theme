@@ -4,8 +4,14 @@ interface ImportMetaEnv {
   readonly DEPLOY_THEME_SLUG: string;
   /** Medusa v2 backend origin for `@/lib/medusa` (e.g. https://localhost:9000) */
   readonly VITE_MEDUSA_BACKEND_URL?: string;
-  /** Optional Medusa publishable key for storefront requests */
+  /** Medusa publishable key for Store API (`x-publishable-api-key`); required when using Medusa storefront */
   readonly VITE_MEDUSA_PUBLISHABLE_KEY?: string;
+  /** Alias for `VITE_MEDUSA_PUBLISHABLE_KEY` */
+  readonly VITE_MEDUSA_PUBLISHABLE_API_KEY?: string;
+  /** Optional default region id for cart.create (moondk) */
+  readonly VITE_MEDUSA_REGION_ID?: string;
+  /** Optional payment provider id for checkout.initiatePaymentSession */
+  readonly VITE_MEDUSA_PAYMENT_PROVIDER_ID?: string;
   readonly VITE_DATABASE_PUBLIC_URL: string;
   readonly VITE_POSTGRES_DB: string;
   readonly VITE_POSTGRES_USER: string;

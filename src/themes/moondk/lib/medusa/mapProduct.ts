@@ -1,4 +1,5 @@
 import { medusaAssetUrl } from "./assetUrl";
+import { formatMedusaCurrencyAmount, moneyFromVariantCalculatedPrice } from "./money";
 
 export interface MoondkMedusaProductView {
   id: string;
@@ -33,31 +34,6 @@ function asRecord(v: unknown): Record<string, unknown> | null {
   return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : null;
 }
 
-function extractVariantMoney(variant: Record<string, unknown>): { amount: number; currency: string } | null {
-  const cp = asRecord(variant.calculated_price);
-  if (cp) {
-    const raw = cp.calculated_amount;
-    const currency = String(cp.currency_code ?? "usd");
-    if (typeof raw === "number" && Number.isFinite(raw)) {
-      return { amount: raw, currency };
-    }
-    if (typeof raw === "string") {
-      const n = parseFloat(raw);
-      if (Number.isFinite(n)) return { amount: n, currency };
-    }
-  }
-  return null;
-}
-
-function formatMoney(amount: number, currencyCode: string): string {
-  const code = currencyCode.length === 3 ? currencyCode.toUpperCase() : "USD";
-  try {
-    return new Intl.NumberFormat("en-SG", { style: "currency", currency: code }).format(amount);
-  } catch {
-    return `${code} ${amount.toFixed(2)}`;
-  }
-}
-
 /**
  * Default variant: prefer purchasable variants, then lowest calculated price.
  * Documented choice for multi-variant products until a variant picker exists.
@@ -69,7 +45,7 @@ export function pickDefaultVariant(variants: unknown): Record<string, unknown> |
   const pool = purchasable.length ? purchasable : list;
 
   const scored = pool.map((v) => {
-    const m = extractVariantMoney(v);
+    const m = moneyFromVariantCalculatedPrice(v);
     const amt = m?.amount ?? Number.POSITIVE_INFINITY;
     return { v, amt };
   });
@@ -85,8 +61,8 @@ export function mapMedusaProductToView(product: unknown): MoondkMedusaProductVie
   const variant = pickDefaultVariant(p.variants);
   if (!variant || typeof variant.id !== "string") return null;
 
-  const money = extractVariantMoney(variant);
-  const price = money ? formatMoney(money.amount, money.currency) : "—";
+  const money = moneyFromVariantCalculatedPrice(variant);
+  const price = money ? formatMedusaCurrencyAmount(money.amount, money.currency) : "—";
 
   const thumb =
     typeof p.thumbnail === "string" && p.thumbnail

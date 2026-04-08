@@ -8,7 +8,11 @@ export {
   pickDefaultVariant,
   type MoondkMedusaProductView,
 } from "./mapProduct";
-export { mapMedusaCartLineItemsToCartItems } from "./mapCartItems";
+export {
+  applyMedusaCartPriceHint,
+  mapMedusaCartLineItemsToCartItems,
+  preserveMedusaCartDisplayPrices,
+} from "./mapCartItems";
 export {
   MOONDK_MEDUSA_PRODUCT_LIST_FIELDS,
   MOONDK_MEDUSA_PRODUCT_DETAIL_FIELDS,
@@ -32,4 +36,4 @@ export {
   type MedusaCheckoutAddressInput,
   type MoondkMedusaCheckoutResult,
 } from "./checkoutFlow";
-export { medusaDisplayAmount } from "./money";
+export { medusaDisplayAmount, parseMoondkDisplayPriceForSum } from "./money";

@@ -12,6 +12,7 @@ import {
   getMoondkMedusa,
   runMoondkMedusaCheckout,
   medusaDisplayAmount,
+  parseMoondkDisplayPriceForSum,
   isMoondkHitPayReturnSearchParams,
   pollMoondkMedusaCartToOrder,
   fetchMoondkMedusaPaymentProviderOptions,
@@ -205,10 +206,13 @@ export default function CheckoutPage() {
           fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS,
         });
         if (cancelled || !cart) return;
+        const item = medusaDisplayAmount(cart.item_subtotal ?? cart.subtotal);
+        const shipping = medusaDisplayAmount(cart.shipping_total);
+        const total = medusaDisplayAmount(cart.total);
         setMedusaCartTotals({
-          item: medusaDisplayAmount(cart.item_subtotal ?? cart.subtotal),
-          shipping: medusaDisplayAmount(cart.shipping_total),
-          total: medusaDisplayAmount(cart.total),
+          item: Number.isFinite(item) ? item : 0,
+          shipping: Number.isFinite(shipping) ? shipping : 0,
+          total: Number.isFinite(total) ? total : 0,
         });
       } catch (e) {
         debugError("Medusa cart.retrieve (checkout totals) failed:", e);
@@ -259,8 +263,7 @@ export default function CheckoutPage() {
       return medusaCartTotals.item;
     }
     return cartItems.reduce((sum, item) => {
-      const price = parseFloat(item.price.replace("$", "").replace(",", ""));
-      return sum + price * item.quantity;
+      return sum + parseMoondkDisplayPriceForSum(item.price) * item.quantity;
     }, 0);
   }, [medusaMode, medusaCartId, medusaCartTotals.item, cartItems]);
 

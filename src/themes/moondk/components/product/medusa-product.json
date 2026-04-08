@@ -1,0 +1,190 @@
+{
+    "product": {
+        "id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
+        "title": "Barley Tea",
+        "subtitle": null,
+        "description": "Earthy, toasty, and endlessly comforting — this is the flavor that feels like coming home. Our roasted barley tea is slow-brewed for depth and smoothness, offering that calm, nutty aroma that softens even the busiest days.<br data-start=\"768\" data-end=\"771\" />Serve it hot or cold, and feel that quiet nostalgia take over — one sip at a time.",
+        "handle": "barley-tea",
+        "is_giftcard": false,
+        "discountable": true,
+        "thumbnail": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea5-scaled.jpg",
+        "collection_id": null,
+        "type_id": null,
+        "weight": null,
+        "length": null,
+        "height": null,
+        "width": null,
+        "hs_code": null,
+        "origin_country": null,
+        "mid_code": null,
+        "material": null,
+        "created_at": "2026-04-07T06:25:16.667Z",
+        "updated_at": "2026-04-08T00:08:53.708Z",
+        "variants": [{
+            "id": "variant_01KNK9VRY5QH2Y8PZVEW6DYX1P",
+            "title": "Default Variant",
+            "sku": null,
+            "barcode": null,
+            "ean": null,
+            "upc": null,
+            "allow_backorder": false,
+            "manage_inventory": false,
+            "hs_code": null,
+            "origin_country": null,
+            "mid_code": null,
+            "material": null,
+            "weight": null,
+            "length": null,
+            "height": null,
+            "width": null,
+            "metadata": {},
+            "variant_rank": 0,
+            "thumbnail": null,
+            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
+            "created_at": "2026-04-07T06:25:16.741Z",
+            "updated_at": "2026-04-07T06:25:16.741Z",
+            "deleted_at": null,
+            "options": [{
+                "id": "optval_01KNK9VRVTAFYS8K0Z8GH0Z1M3",
+                "value": "Default Value",
+                "metadata": null,
+                "option_id": "opt_01KNK9VRVVBJMX36BA53VHCAB9",
+                "option": {
+                    "id": "opt_01KNK9VRVVBJMX36BA53VHCAB9",
+                    "title": "Default Option",
+                    "metadata": null,
+                    "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
+                    "created_at": "2026-04-07T06:25:16.667Z",
+                    "updated_at": "2026-04-07T06:25:16.667Z",
+                    "deleted_at": null
+                },
+                "created_at": "2026-04-07T06:25:16.667Z",
+                "updated_at": "2026-04-07T06:25:16.667Z",
+                "deleted_at": null
+            }],
+            "calculated_price": {
+                "id": "pset_01KNK9VRZZPEAZ27QJWETWTN4X",
+                "is_calculated_price_price_list": false,
+                "is_calculated_price_tax_inclusive": false,
+                "calculated_amount": 32,
+                "raw_calculated_amount": {
+                    "value": "32",
+                    "precision": 20
+                },
+                "is_original_price_price_list": false,
+                "is_original_price_tax_inclusive": false,
+                "original_amount": 32,
+                "raw_original_amount": {
+                    "value": "32",
+                    "precision": 20
+                },
+                "currency_code": "usd",
+                "calculated_price": {
+                    "id": "price_01KNK9VRZZ7C8ENJV0WB85Z0RP",
+                    "price_list_id": null,
+                    "price_list_type": null,
+                    "min_quantity": null,
+                    "max_quantity": null
+                },
+                "original_price": {
+                    "id": "price_01KNK9VRZZ7C8ENJV0WB85Z0RP",
+                    "price_list_id": null,
+                    "price_list_type": null,
+                    "min_quantity": null,
+                    "max_quantity": null
+                }
+            },
+            "prices": [{
+                "id": "price_01KNK9VRZZ7C8ENJV0WB85Z0RP",
+                "title": null,
+                "currency_code": "usd",
+                "min_quantity": null,
+                "max_quantity": null,
+                "rules_count": 0,
+                "price_set_id": "pset_01KNK9VRZZPEAZ27QJWETWTN4X",
+                "price_list_id": null,
+                "price_list": null,
+                "raw_amount": {
+                    "value": "32",
+                    "precision": 20
+                },
+                "created_at": "2026-04-07T06:25:16.799Z",
+                "updated_at": "2026-04-07T06:25:16.799Z",
+                "deleted_at": null,
+                "amount": 32
+            }]
+        }],
+        "type": null,
+        "collection": null,
+        "options": [{
+            "id": "opt_01KNK9VRVVBJMX36BA53VHCAB9",
+            "title": "Default Option",
+            "metadata": null,
+            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
+            "created_at": "2026-04-07T06:25:16.667Z",
+            "updated_at": "2026-04-07T06:25:16.667Z",
+            "deleted_at": null,
+            "values": [{
+                "id": "optval_01KNK9VRVTAFYS8K0Z8GH0Z1M3",
+                "value": "Default Value",
+                "metadata": null,
+                "option_id": "opt_01KNK9VRVVBJMX36BA53VHCAB9",
+                "created_at": "2026-04-07T06:25:16.667Z",
+                "updated_at": "2026-04-07T06:25:16.667Z",
+                "deleted_at": null
+            }]
+        }],
+        "tags": [],
+        "images": [{
+            "id": "img_01KNK9VRVVSD7H69B740BMJVRR",
+            "url": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea5-scaled.jpg",
+            "metadata": null,
+            "rank": 0,
+            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
+            "created_at": "2026-04-07T06:25:16.667Z",
+            "updated_at": "2026-04-07T06:25:16.667Z",
+            "deleted_at": null
+        }, {
+            "id": "img_01KNK9VRVVAE68ADKVEV76PE3X",
+            "url": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea9-scaled.jpg",
+            "metadata": null,
+            "rank": 1,
+            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
+            "created_at": "2026-04-07T06:25:16.667Z",
+            "updated_at": "2026-04-07T06:25:16.667Z",
+            "deleted_at": null
+        }, {
+            "id": "img_01KNK9VRVV7T68729C45RERTVC",
+            "url": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea7-scaled.jpg",
+            "metadata": null,
+            "rank": 2,
+            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
+            "created_at": "2026-04-07T06:25:16.667Z",
+            "updated_at": "2026-04-07T06:25:16.667Z",
+            "deleted_at": null
+        }, {
+            "id": "img_01KNK9VRVVDNYKYFXQZE9DZHKT",
+            "url": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea6-scaled.jpg",
+            "metadata": null,
+            "rank": 3,
+            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
+            "created_at": "2026-04-07T06:25:16.667Z",
+            "updated_at": "2026-04-07T06:25:16.667Z",
+            "deleted_at": null
+        }, {
+            "id": "img_01KNK9VRVVJMAVQAXND8H0TECR",
+            "url": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea1.jpg",
+            "metadata": null,
+            "rank": 4,
+            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
+            "created_at": "2026-04-07T06:25:16.667Z",
+            "updated_at": "2026-04-07T06:25:16.667Z",
+            "deleted_at": null
+        }],
+        "categories": [{
+            "is_internal": false
+        }, {
+            "is_internal": false
+        }]
+    }
+}

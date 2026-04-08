@@ -1,4 +1,5 @@
 import { medusaAssetUrl } from "./assetUrl";
+import { formatCartLineDisplayPrice } from "./money";
 import type { CartItem } from "../../components/header/ShoppingBag";
 
 function medusaPublicBase(): string {
@@ -12,21 +13,6 @@ function medusaPublicBase(): string {
 
 function asRecord(v: unknown): Record<string, unknown> | null {
   return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : null;
-}
-
-function formatLineUnitPrice(unitPrice: unknown): string {
-  const o = asRecord(unitPrice);
-  if (!o) return "—";
-  const amount = o.amount;
-  const currency = typeof o.currency_code === "string" ? o.currency_code : "usd";
-  const n = typeof amount === "number" ? amount : typeof amount === "string" ? parseFloat(amount) : NaN;
-  if (!Number.isFinite(n)) return "—";
-  const code = currency.length === 3 ? currency.toUpperCase() : "USD";
-  try {
-    return new Intl.NumberFormat("en-SG", { style: "currency", currency: code }).format(n);
-  } catch {
-    return `${code} ${n.toFixed(2)}`;
-  }
 }
 
 /** Map Store cart line items to moondk `CartItem` (id = line item id). */
@@ -56,7 +42,7 @@ export function mapMedusaCartLineItemsToCartItems(items: unknown[] | undefined):
         : "";
     const image = thumb || prodThumb || "";
 
-    const price = formatLineUnitPrice(li?.unit_price);
+    const price = formatCartLineDisplayPrice(li ?? {}, variant);
 
     return {
       id,
@@ -68,5 +54,33 @@ export function mapMedusaCartLineItemsToCartItems(items: unknown[] | undefined):
       lineItemId: id,
       variantId,
     };
+  });
+}
+
+/**
+ * When the cart API omits line `unit_price`, fill display price from the PDP row (same variant) so the bag/checkout stay usable.
+ */
+export function applyMedusaCartPriceHint(
+  items: CartItem[],
+  hint: { variantId?: string; price: string },
+): CartItem[] {
+  const { variantId, price } = hint;
+  if (!variantId || !price || price === "—") return items;
+  return items.map((row) =>
+    row.price === "—" && row.variantId === variantId ? { ...row, price } : row,
+  );
+}
+
+/** Keep prior UI prices when a cart refresh still omits `unit_price` (same line id or variant). */
+export function preserveMedusaCartDisplayPrices(mapped: CartItem[], previous: CartItem[]): CartItem[] {
+  return mapped.map((row) => {
+    if (row.price !== "—") return row;
+    const byId = previous.find((p) => p.id === row.id && p.price !== "—");
+    if (byId) return { ...row, price: byId.price };
+    if (row.variantId) {
+      const byVar = previous.find((p) => p.variantId === row.variantId && p.price !== "—");
+      if (byVar) return { ...row, price: byVar.price };
+    }
+    return row;
   });
 }

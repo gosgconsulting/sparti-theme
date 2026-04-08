@@ -2,10 +2,12 @@ import React, { createContext, useContext, useState, useEffect, useCallback, Rea
 import { CartItem } from "../components/header/ShoppingBag";
 import { debugError } from "@/utils/debugLogger";
 import {
+  applyMedusaCartPriceHint,
   getMoondkMedusa,
   isMoondkMedusaEnabled,
   mapMedusaCartLineItemsToCartItems,
   MOONDK_MEDUSA_CART_RETRIEVE_FIELDS,
+  preserveMedusaCartDisplayPrices,
   resolveMoondkMedusaRegionId,
 } from "../lib/medusa";
 
@@ -119,7 +121,12 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       const api = getMoondkMedusa();
       const { cart } = await api.cart.retrieve(id, { fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS });
       setMedusaCartId(cart?.id ?? id);
-      setCartItems(mapMedusaCartLineItemsToCartItems(cart?.items as unknown[]));
+      setCartItems((prev) =>
+        preserveMedusaCartDisplayPrices(
+          mapMedusaCartLineItemsToCartItems(cart?.items as unknown[]),
+          prev,
+        ),
+      );
     } catch (e) {
       debugError("refreshMedusaCart failed:", e);
       writeMedusaCartId(null);
@@ -199,14 +206,30 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
           { quantity: sameVariant.quantity + item.quantity },
           { fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS },
         );
-        setCartItems(mapMedusaCartLineItemsToCartItems(cart?.items as unknown[]));
+        setCartItems((prev) =>
+          preserveMedusaCartDisplayPrices(
+            applyMedusaCartPriceHint(
+              mapMedusaCartLineItemsToCartItems(cart?.items as unknown[]),
+              item,
+            ),
+            prev,
+          ),
+        );
       } else {
         const { cart } = await api.cart.addLineItem(
           cartId,
           { variant_id: item.variantId, quantity: item.quantity },
           { fields: MOONDK_MEDUSA_CART_RETRIEVE_FIELDS },
         );
-        setCartItems(mapMedusaCartLineItemsToCartItems(cart?.items as unknown[]));
+        setCartItems((prev) =>
+          preserveMedusaCartDisplayPrices(
+            applyMedusaCartPriceHint(
+              mapMedusaCartLineItemsToCartItems(cart?.items as unknown[]),
+              item,
+            ),
+            prev,
+          ),
+        );
       }
       if (cartId) setMedusaCartId(cartId);
       if (openCartAfterAdd) setIsCartOpen(true);

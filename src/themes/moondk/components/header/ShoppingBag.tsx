@@ -2,6 +2,7 @@ import { X, Minus, Plus } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { ThemeLink } from "@/components/ThemeLink";
 import { DELIVERY_FEE } from "../../constants";
+import { parseMoondkDisplayPriceForSum } from "../../lib/medusa";
 
 export interface CartItem {
   /** Line item id (Medusa) or local cart row id (stringified number). */
@@ -33,8 +34,7 @@ const ShoppingBag = ({
   if (!isOpen) return null;
 
   const subtotal = cartItems.reduce((sum, item) => {
-    const price = parseFloat(item.price.replace("$", "").replace(",", ""));
-    return sum + price * item.quantity;
+    return sum + parseMoondkDisplayPriceForSum(item.price) * item.quantity;
   }, 0);
 
   return (

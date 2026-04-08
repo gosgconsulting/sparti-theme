@@ -1,5 +1,5 @@
 import { describe, it, expect } from "vitest";
-import { medusaDisplayAmount } from "./money";
+import { medusaDisplayAmount, parseMoondkDisplayPriceForSum } from "./money";
 
 describe("medusaDisplayAmount", () => {
   it("passes through decimal amounts", () => {
@@ -17,5 +17,17 @@ describe("medusaDisplayAmount", () => {
   it("returns 0 for invalid input", () => {
     expect(medusaDisplayAmount(undefined)).toBe(0);
     expect(medusaDisplayAmount("x")).toBe(0);
+  });
+});
+
+describe("parseMoondkDisplayPriceForSum", () => {
+  it("parses en-SG style currency strings", () => {
+    expect(parseMoondkDisplayPriceForSum("S$32.00")).toBe(32);
+    expect(parseMoondkDisplayPriceForSum("US$1,234.50")).toBe(1234.5);
+  });
+
+  it("handles simple $ prices and em dash", () => {
+    expect(parseMoondkDisplayPriceForSum("$37")).toBe(37);
+    expect(parseMoondkDisplayPriceForSum("—")).toBe(0);
   });
 });

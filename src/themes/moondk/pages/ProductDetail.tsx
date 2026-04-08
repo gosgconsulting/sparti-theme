@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useMemo, useState } from "react";
 import type { CarouselApi } from "@/components/ui/carousel";
 import { ChevronLeft, ChevronRight } from "lucide-react";
 import Header from "../components/header/Header";
@@ -19,6 +19,22 @@ export default function ProductDetailPage({ productId }: { productId: string }) 
   const productName = medusa
     ? medusaProduct?.name ?? FALLBACK_PRODUCT_DISPLAY_NAME
     : staticProduct?.name ?? FALLBACK_PRODUCT_DISPLAY_NAME;
+
+  const { sameCategoryNames, sameCategoryIds } = useMemo(() => {
+    if (medusa && medusaProduct) {
+      const names =
+        medusaProduct.categoryNames.length > 0
+          ? medusaProduct.categoryNames
+          : medusaProduct.category !== "Product"
+            ? [medusaProduct.category]
+            : [];
+      return { sameCategoryNames: names, sameCategoryIds: medusaProduct.categoryIds };
+    }
+    if (!medusa && staticProduct) {
+      return { sameCategoryNames: [staticProduct.category], sameCategoryIds: [] as string[] };
+    }
+    return { sameCategoryNames: [] as string[], sameCategoryIds: [] as string[] };
+  }, [medusa, medusaProduct, staticProduct]);
 
   const [carouselApi, setCarouselApi] = useState<CarouselApi>();
 
@@ -69,7 +85,12 @@ export default function ProductDetailPage({ productId }: { productId: string }) 
               </button>
             </div>
           </div>
-          <ProductCarousel excludeProductId={productId} onApiChange={setCarouselApi} />
+          <ProductCarousel
+            excludeProductId={productId}
+            sameCategoryNames={sameCategoryNames}
+            sameCategoryIds={sameCategoryIds}
+            onApiChange={setCarouselApi}
+          />
         </section>
       </main>
 

@@ -10,10 +10,53 @@ import { useMoondkMedusaProductsListQuery } from "../../hooks/useMoondkMedusaCat
 
 interface ProductCarouselProps {
   excludeProductId?: string | number;
+  /** Category names from the current product (all Medusa categories, or `[category]` for static). */
+  sameCategoryNames?: string[];
+  /** Medusa category ids from the current product (matches when list/detail order or names differ). */
+  sameCategoryIds?: string[];
   onApiChange?: (api: CarouselApi | undefined) => void;
 }
 
-const ProductCarousel = ({ excludeProductId, onApiChange }: ProductCarouselProps) => {
+function categoryKey(label: string | undefined): string | null {
+  const t = label?.trim();
+  return t ? t.toLowerCase() : null;
+}
+
+function normalizeNameKeys(labels: string[]): string[] {
+  const out: string[] = [];
+  const seen = new Set<string>();
+  for (const l of labels) {
+    const k = categoryKey(l);
+    if (k && !seen.has(k)) {
+      seen.add(k);
+      out.push(k);
+    }
+  }
+  return out;
+}
+
+type CarouselRow = Pick<
+  MoondkMedusaProductView,
+  "id" | "name" | "image" | "category" | "categoryNames" | "categoryIds" | "price" | "isNew"
+>;
+
+function rowMatchesCategories(row: CarouselRow, wantNameKeys: string[], wantIds: string[]): boolean {
+  if (wantIds.length) {
+    const rowIdSet = new Set(row.categoryIds);
+    if (wantIds.some((id) => rowIdSet.has(id))) return true;
+  }
+  if (!wantNameKeys.length) return false;
+  const rowLabels = row.categoryNames.length ? row.categoryNames : [row.category];
+  const rowKeys = normalizeNameKeys(rowLabels);
+  return wantNameKeys.some((k) => rowKeys.includes(k));
+}
+
+const ProductCarousel = ({
+  excludeProductId,
+  sameCategoryNames,
+  sameCategoryIds,
+  onApiChange,
+}: ProductCarouselProps) => {
   const medusa = isMoondkMedusaEnabled();
   const { data: medusaViews } = useMoondkMedusaProductsListQuery(medusa);
   const [api, setApi] = useState<CarouselApi>();
@@ -22,22 +65,35 @@ const ProductCarousel = ({ excludeProductId, onApiChange }: ProductCarouselProps
     onApiChange?.(api);
   }, [api, onApiChange]);
 
-  type Row = Pick<MoondkMedusaProductView, "id" | "name" | "image" | "category" | "price" | "isNew">;
+  const displayProducts: CarouselRow[] = useMemo(() => {
+    const wantIds = (sameCategoryIds ?? []).map((id) => id.trim()).filter(Boolean);
+    const wantNameKeys = normalizeNameKeys(sameCategoryNames ?? []);
+    const applyFilter = wantIds.length > 0 || wantNameKeys.length > 0;
 
-  const displayProducts: Row[] = useMemo(() => {
-    if (medusa && medusaViews) {
+    const mapMedusaRows = (views: typeof medusaViews): CarouselRow[] => {
+      if (!views) return [];
       const ex = excludeProductId != null ? String(excludeProductId) : "";
-      return medusaViews
+      const rows = views
         .filter((p) => String(p.id) !== ex)
         .map((p) => ({
           id: p.id,
           name: p.name,
           image: p.image,
           category: p.category,
+          categoryNames: p.categoryNames,
+          categoryIds: p.categoryIds,
           price: p.price,
           isNew: p.isNew,
         }));
+      if (!applyFilter) return rows;
+      const same = rows.filter((p) => rowMatchesCategories(p, wantNameKeys, wantIds));
+      return same.length ? same : rows;
+    };
+
+    if (medusa && medusaViews) {
+      return mapMedusaRows(medusaViews);
     }
+
     const list: Product[] =
       excludeProductId != null
         ? products.filter((product) => {
@@ -48,15 +104,20 @@ const ProductCarousel = ({ excludeProductId, onApiChange }: ProductCarouselProps
             return product.id !== currentId;
           })
         : products;
-    return list.map((p) => ({
+    const rows: CarouselRow[] = list.map((p) => ({
       id: String(p.id),
       name: p.name,
       image: p.image,
       category: p.category,
+      categoryNames: [p.category],
+      categoryIds: [],
       price: p.price,
       isNew: p.isNew,
     }));
-  }, [medusa, medusaViews, excludeProductId]);
+    if (!applyFilter) return rows;
+    const same = rows.filter((p) => rowMatchesCategories(p, wantNameKeys, wantIds));
+    return same.length ? same : rows;
+  }, [medusa, medusaViews, excludeProductId, sameCategoryNames, sameCategoryIds]);
 
   useEffect(() => {
     if (!api) return;
@@ -96,9 +157,9 @@ const ProductCarousel = ({ excludeProductId, onApiChange }: ProductCarouselProps
                           </div>
                         )}
                         {isNew && (
-                          <span className="absolute left-3 top-3 z-10 rounded-full bg-primary/92 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground shadow-sm">
+                          <div className="absolute left-3 top-3 z-10 rounded-full bg-primary/92 px-2.5 py-0.5 text-[10px] font-semibold uppercase tracking-wider text-primary-foreground shadow-sm">
                             New
-                          </span>
+                          </div>
                         )}
                       </div>
                       <div className="space-y-1.5 px-0.5">

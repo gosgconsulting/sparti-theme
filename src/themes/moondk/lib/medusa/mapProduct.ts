@@ -7,7 +7,12 @@ export interface MoondkMedusaProductView {
   image: string;
   /** All product images for gallery (URLs). */
   galleryImages: string[];
+  /** First category name for display (eyebrow, cards). */
   category: string;
+  /** All Medusa category names on this product (for filters; order may differ from list vs detail). */
+  categoryNames: string[];
+  /** Medusa category ids when present (match when API omits names on list). */
+  categoryIds: string[];
   variantId: string;
   isNew?: boolean;
   /** Raw description for detail page */
@@ -102,11 +107,14 @@ export function mapMedusaProductToView(product: unknown): MoondkMedusaProductVie
   const image = thumb || imageFromImages || galleryImages[0] || "";
 
   const categories = Array.isArray(p.categories) ? p.categories : [];
-  const firstCat = asRecord(categories[0]);
-  const category =
-    firstCat && typeof firstCat.name === "string" && firstCat.name.trim()
-      ? firstCat.name.trim()
-      : "Product";
+  const categoryNames: string[] = [];
+  const categoryIds: string[] = [];
+  for (const cat of categories) {
+    const cr = asRecord(cat);
+    if (cr && typeof cr.id === "string" && cr.id.trim()) categoryIds.push(cr.id.trim());
+    if (cr && typeof cr.name === "string" && cr.name.trim()) categoryNames.push(cr.name.trim());
+  }
+  const category = categoryNames[0] ?? "Product";
 
   const meta = asRecord(p.metadata);
   const isNew =
@@ -124,6 +132,8 @@ export function mapMedusaProductToView(product: unknown): MoondkMedusaProductVie
     image,
     galleryImages: galleryImages.length ? galleryImages : image ? [image] : [],
     category,
+    categoryNames,
+    categoryIds,
     variantId: variant.id,
     isNew: Boolean(isNew),
     description,

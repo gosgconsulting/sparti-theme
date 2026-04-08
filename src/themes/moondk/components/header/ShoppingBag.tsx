@@ -99,6 +99,7 @@ const ShoppingBag = ({
                 {cartItems.map((item) => (
                   <div
                     key={item.id}
+                    data-id={item.id}
                     className="bg-secondary rounded-2xl p-4 relative"
                   >
                     {/* Remove button */}
@@ -126,6 +127,7 @@ const ShoppingBag = ({
                         <p className="text-xs text-muted-foreground mb-3">
                           Volume {item.category}
                         </p>
+                        <p className="text-sm font-medium text-foreground mb-1">{item.price}</p>
 
                         {/* Quantity selector and price */}
                         <div className="flex items-center justify-between">

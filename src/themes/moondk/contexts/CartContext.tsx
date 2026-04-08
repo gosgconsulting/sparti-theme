@@ -88,6 +88,15 @@ function writeMedusaCartId(id: string | null) {
   else localStorage.removeItem(MEDUSA_CART_STORAGE_KEY);
 }
 
+function applyCartItemQuantity(items: CartItem[], lineId: string, newQuantity: number): CartItem[] {
+  if (newQuantity <= 0) {
+    return items.filter((item) => item.id !== lineId);
+  }
+  return items.map((item) =>
+    item.id === lineId ? { ...item, quantity: newQuantity } : item,
+  );
+}
+
 export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
   const medusaMode = isMoondkMedusaEnabled();
   const [cartItems, setCartItems] = useState<CartItem[]>(() =>
@@ -221,6 +230,9 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
     const cartId = readMedusaCartId();
     if (!cartId) return;
 
+    const previousItems = cartItems;
+    setCartItems((items) => applyCartItemQuantity(items, id, newQuantity));
+
     try {
       const api = getMoondkMedusa();
       if (newQuantity <= 0) {
@@ -236,6 +248,7 @@ export const CartProvider: React.FC<CartProviderProps> = ({ children }) => {
       await refreshMedusaCart();
     } catch (e) {
       debugError("updateQuantity (Medusa) failed:", e);
+      setCartItems(previousItems);
     }
   };
 

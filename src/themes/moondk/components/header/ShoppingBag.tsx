@@ -173,14 +173,14 @@ const ShoppingBag = ({
                       ${subtotal.toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
-                  <div className="flex justify-between items-center">
+                  {/* <div className="flex justify-between items-center">
                     <span className="text-sm font-light text-foreground">Delivery fee</span>
                     <span className="text-sm font-light text-foreground">${DELIVERY_FEE}</span>
-                  </div>
+                  </div> */}
                   <div className="flex justify-between items-center pt-2 border-t border-border/20">
                     <span className="text-base font-semibold text-foreground">Total</span>
                     <span className="text-base font-semibold text-foreground">
-                      ${(subtotal + DELIVERY_FEE).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
+                      ${(subtotal).toLocaleString("en-US", { minimumFractionDigits: 2, maximumFractionDigits: 2 })}
                     </span>
                   </div>
                 </div>

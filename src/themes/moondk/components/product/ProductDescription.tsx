@@ -1,6 +1,32 @@
 import ProductAccordion from "./ProductAccordion";
 import { getProductLongDescription } from "../category/products";
 
+/** Treat as HTML when it looks like markup (Medusa/admin rich text); otherwise escape and paragraph plain text. */
+function looksLikeHtmlFragment(s: string): boolean {
+  return /<[a-z][\s\S]*>/i.test(s);
+}
+
+function escapeHtml(text: string): string {
+  return text
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+function medusaDescriptionToSafeHtml(description: string): string {
+  const trimmed = description.trim();
+  if (!trimmed) return "";
+  if (looksLikeHtmlFragment(trimmed)) return trimmed;
+  return trimmed
+    .split("\n\n")
+    .map((p) => p.trim())
+    .filter(Boolean)
+    .map((p) => `<p class="whitespace-pre-line">${escapeHtml(p)}</p>`)
+    .join("");
+}
+
 interface ProductDescriptionProps {
   productId?: string;
   /** When true, show Medusa description + generic panels only (no static 1–13 copy). */
@@ -20,15 +46,10 @@ const ProductDescription = ({
         id: "description",
         title: "Description",
         content: (
-          <div className="space-y-4">
-            {desc.split("\n\n").map((paragraph, idx) =>
-              paragraph.trim() ? (
-                <p key={idx} className="whitespace-pre-line">
-                  {paragraph}
-                </p>
-              ) : null,
-            )}
-          </div>
+          <div
+            className="prose prose-neutral max-w-none text-foreground prose-p:my-3 prose-headings:text-foreground prose-a:text-primary prose-strong:text-foreground dark:prose-invert"
+            dangerouslySetInnerHTML={{ __html: medusaDescriptionToSafeHtml(desc) }}
+          />
         ),
       },
       {

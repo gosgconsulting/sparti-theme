@@ -6,6 +6,7 @@ export {
   mapMedusaProductToView,
   mapMedusaProductsToViews,
   pickDefaultVariant,
+  type MoondkMedusaProductMetaHtml,
   type MoondkMedusaProductView,
 } from "./mapProduct";
 export {

@@ -58,6 +58,7 @@ export default function ProductDetailPage({ productId }: { productId: string }) 
                 productId={productId}
                 isMedusaProduct={Boolean(medusa && medusaProduct)}
                 medusaDescription={medusaProduct?.description}
+                medusaMetaHtml={medusaProduct?.metaHtml}
               />
             </div>
           </div>

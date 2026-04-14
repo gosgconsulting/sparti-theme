@@ -313,3 +313,9 @@
 .moondk-theme .element-spacing {
   margin-bottom: var(--spacing-element);
 }
+
+/* Product accordion — HTML/prose lists from Medusa metadata */
+.moondk-theme .product-accordion ul {
+  list-style: disc;
+  padding-left: 1.25em;
+}

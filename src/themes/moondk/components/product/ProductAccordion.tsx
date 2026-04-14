@@ -46,7 +46,7 @@ export default function ProductAccordion({ items, defaultOpenIndex = null }: Pro
     : false;
 
   return (
-    <div className="space-y-0">
+    <div className="product-accordion space-y-0">
       {items.map((item, index) => {
         const isOpen = openIndex === index;
         const contentRef = (el: HTMLDivElement | null) => {

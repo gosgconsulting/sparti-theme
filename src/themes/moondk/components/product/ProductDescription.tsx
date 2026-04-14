@@ -1,5 +1,6 @@
 import ProductAccordion from "./ProductAccordion";
 import { getProductLongDescription } from "../category/products";
+import type { MoondkMedusaProductMetaHtml } from "../../lib/medusa";
 
 /** Treat as HTML when it looks like markup (Medusa/admin rich text); otherwise escape and paragraph plain text. */
 function looksLikeHtmlFragment(s: string): boolean {
@@ -15,16 +16,48 @@ function escapeHtml(text: string): string {
     .replace(/'/g, "&#039;");
 }
 
+function normalizeNewlines(s: string): string {
+  return s.replace(/\r\n/g, "\n").replace(/\r/g, "\n");
+}
+
+/** CMS/API sometimes stores line breaks as the two characters `\` + `n` instead of a real newline. */
+function decodeLiteralEscapedNewlines(s: string): string {
+  return s.replace(/\\r\\n/g, "\n").replace(/\\n/g, "\n").replace(/\\r/g, "\n");
+}
+
+/**
+ * Turn single newlines into line breaks without inserting `<br />` in typical `>\n<` markup gaps.
+ */
+function newlinesToBrInHtml(html: string): string {
+  const n = normalizeNewlines(html);
+  return n.replace(/(?<![>\n])\n(?![<\n])/g, "<br />");
+}
+
 function medusaDescriptionToSafeHtml(description: string): string {
-  const trimmed = description.trim();
+  const trimmed = normalizeNewlines(decodeLiteralEscapedNewlines(description)).trim();
   if (!trimmed) return "";
-  if (looksLikeHtmlFragment(trimmed)) return trimmed;
+  if (looksLikeHtmlFragment(trimmed)) return newlinesToBrInHtml(trimmed);
   return trimmed
     .split("\n\n")
     .map((p) => p.trim())
     .filter(Boolean)
-    .map((p) => `<p class="whitespace-pre-line">${escapeHtml(p)}</p>`)
+    .map((p) => {
+      const withBr = escapeHtml(p).replace(/\n/g, "<br />");
+      return `<p>${withBr}</p>`;
+    })
     .join("");
+}
+
+const MOONDK_MEDUSA_PROSE_BODY_CLASS =
+  "prose prose-neutral max-w-none text-foreground prose-p:my-3 prose-headings:text-foreground prose-a:text-primary prose-strong:text-foreground prose-ul:my-3 dark:prose-invert";
+
+function medusaRichTextBlock(html: string) {
+  return (
+    <div
+      className={MOONDK_MEDUSA_PROSE_BODY_CLASS}
+      dangerouslySetInnerHTML={{ __html: medusaDescriptionToSafeHtml(html) }}
+    />
+  );
 }
 
 interface ProductDescriptionProps {
@@ -32,12 +65,15 @@ interface ProductDescriptionProps {
   /** When true, show Medusa description + generic panels only (no static 1–13 copy). */
   isMedusaProduct?: boolean;
   medusaDescription?: string | null;
+  /** Metadata-backed HTML for extra accordion panels (Medusa `product.metadata`). */
+  medusaMetaHtml?: MoondkMedusaProductMetaHtml | null;
 }
 
 const ProductDescription = ({
   productId,
   isMedusaProduct,
   medusaDescription,
+  medusaMetaHtml,
 }: ProductDescriptionProps) => {
   if (isMedusaProduct) {
     const desc = (medusaDescription ?? "").trim() || "No description available.";
@@ -45,29 +81,42 @@ const ProductDescription = ({
       {
         id: "description",
         title: "Description",
-        content: (
-          <div
-            className="prose prose-neutral max-w-none text-foreground prose-p:my-3 prose-headings:text-foreground prose-a:text-primary prose-strong:text-foreground dark:prose-invert"
-            dangerouslySetInnerHTML={{ __html: medusaDescriptionToSafeHtml(desc) }}
-          />
-        ),
-      },
-      {
-        id: "storage-usage",
-        title: "Storage & Usage",
-        content: (
-          <div className="space-y-4">
-            <ul className="space-y-3">
-              <li>• Store in a cool, dry place away from direct sunlight</li>
-              <li>• Refrigerate after opening when indicated on the product label</li>
-              <li>• Follow the producer&apos;s instructions on the packaging</li>
-            </ul>
-          </div>
-        ),
+        content: medusaRichTextBlock(desc),
       },
     ];
+
+    const m = medusaMetaHtml ?? undefined;
+    if (m?.fabrication_et_composition) {
+      medusaItems.push({
+        id: "product-details",
+        title: "Product Details",
+        content: medusaRichTextBlock(m.fabrication_et_composition),
+      });
+    }
+    if (m?.product_information_detail) {
+      medusaItems.push({
+        id: "chefs-notes",
+        title: "Chef's Notes",
+        content: medusaRichTextBlock(m.product_information_detail),
+      });
+    }
+    if (m?.size_guide_description) {
+      medusaItems.push({
+        id: "their-story",
+        title: "Their Story",
+        content: medusaRichTextBlock(m.size_guide_description),
+      });
+    }
+    if (m?.storage) {
+      medusaItems.push({
+        id: "storage-usage",
+        title: "Storage & Usage",
+        content: medusaRichTextBlock(m.storage),
+      });
+    }
+
     return (
-      <div className="mt-10 md:mt-12">
+      <div className="mt-10 md:mt-12 product-accordion">
         <ProductAccordion items={medusaItems} />
       </div>
     );

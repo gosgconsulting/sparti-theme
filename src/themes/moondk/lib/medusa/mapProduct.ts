@@ -1,6 +1,14 @@
 import { medusaAssetUrl } from "./assetUrl";
 import { formatMedusaCurrencyAmount, moneyFromVariantCalculatedPrice } from "./money";
 
+/** Rich HTML snippets from `product.metadata` (legacy custom keys from another storefront). */
+export interface MoondkMedusaProductMetaHtml {
+  storage?: string;
+  fabrication_et_composition?: string;
+  product_information_detail?: string;
+  size_guide_description?: string;
+}
+
 export interface MoondkMedusaProductView {
   id: string;
   name: string;
@@ -19,6 +27,8 @@ export interface MoondkMedusaProductView {
   /** Raw description for detail page */
   description?: string;
   createdAt?: string;
+  /** Optional metadata-backed HTML blocks for the product detail accordion. */
+  metaHtml?: MoondkMedusaProductMetaHtml;
 }
 
 function medusaPublicBase(): string {
@@ -32,6 +42,23 @@ function medusaPublicBase(): string {
 
 function asRecord(v: unknown): Record<string, unknown> | null {
   return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : null;
+}
+
+const META_HTML_KEYS: (keyof MoondkMedusaProductMetaHtml)[] = [
+  "storage",
+  "fabrication_et_composition",
+  "product_information_detail",
+  "size_guide_description",
+];
+
+function readMetaHtmlFromMetadata(meta: Record<string, unknown> | null): MoondkMedusaProductMetaHtml | undefined {
+  if (!meta) return undefined;
+  const out: MoondkMedusaProductMetaHtml = {};
+  for (const key of META_HTML_KEYS) {
+    const v = meta[key];
+    if (typeof v === "string" && v.trim()) out[key] = v.trim();
+  }
+  return Object.keys(out).length > 0 ? out : undefined;
 }
 
 /**
@@ -100,6 +127,7 @@ export function mapMedusaProductToView(product: unknown): MoondkMedusaProductVie
 
   const createdAt = typeof p.created_at === "string" ? p.created_at : undefined;
   const description = typeof p.description === "string" ? p.description : undefined;
+  const metaHtml = readMetaHtmlFromMetadata(meta);
 
   return {
     id: p.id,
@@ -114,6 +142,7 @@ export function mapMedusaProductToView(product: unknown): MoondkMedusaProductVie
     isNew: Boolean(isNew),
     description,
     createdAt,
+    ...(metaHtml ? { metaHtml } : {}),
   };
 }
 

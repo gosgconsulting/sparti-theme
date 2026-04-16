@@ -1,190 +1,146 @@
-{
-    "product": {
-        "id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
-        "title": "Barley Tea",
-        "subtitle": null,
-        "description": "Earthy, toasty, and endlessly comforting — this is the flavor that feels like coming home. Our roasted barley tea is slow-brewed for depth and smoothness, offering that calm, nutty aroma that softens even the busiest days.<br data-start=\"768\" data-end=\"771\" />Serve it hot or cold, and feel that quiet nostalgia take over — one sip at a time.",
-        "handle": "barley-tea",
-        "is_giftcard": false,
-        "discountable": true,
-        "thumbnail": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea5-scaled.jpg",
-        "collection_id": null,
-        "type_id": null,
-        "weight": null,
-        "length": null,
-        "height": null,
-        "width": null,
-        "hs_code": null,
-        "origin_country": null,
-        "mid_code": null,
-        "material": null,
-        "created_at": "2026-04-07T06:25:16.667Z",
-        "updated_at": "2026-04-08T00:08:53.708Z",
-        "variants": [{
-            "id": "variant_01KNK9VRY5QH2Y8PZVEW6DYX1P",
-            "title": "Default Variant",
-            "sku": null,
-            "barcode": null,
-            "ean": null,
-            "upc": null,
-            "allow_backorder": false,
-            "manage_inventory": false,
-            "hs_code": null,
-            "origin_country": null,
-            "mid_code": null,
-            "material": null,
-            "weight": null,
-            "length": null,
-            "height": null,
-            "width": null,
-            "metadata": {},
-            "variant_rank": 0,
-            "thumbnail": null,
-            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
-            "created_at": "2026-04-07T06:25:16.741Z",
-            "updated_at": "2026-04-07T06:25:16.741Z",
-            "deleted_at": null,
-            "options": [{
-                "id": "optval_01KNK9VRVTAFYS8K0Z8GH0Z1M3",
-                "value": "Default Value",
-                "metadata": null,
-                "option_id": "opt_01KNK9VRVVBJMX36BA53VHCAB9",
-                "option": {
-                    "id": "opt_01KNK9VRVVBJMX36BA53VHCAB9",
-                    "title": "Default Option",
-                    "metadata": null,
-                    "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
-                    "created_at": "2026-04-07T06:25:16.667Z",
-                    "updated_at": "2026-04-07T06:25:16.667Z",
-                    "deleted_at": null
-                },
-                "created_at": "2026-04-07T06:25:16.667Z",
-                "updated_at": "2026-04-07T06:25:16.667Z",
-                "deleted_at": null
-            }],
-            "calculated_price": {
-                "id": "pset_01KNK9VRZZPEAZ27QJWETWTN4X",
-                "is_calculated_price_price_list": false,
-                "is_calculated_price_tax_inclusive": false,
-                "calculated_amount": 32,
-                "raw_calculated_amount": {
-                    "value": "32",
-                    "precision": 20
-                },
-                "is_original_price_price_list": false,
-                "is_original_price_tax_inclusive": false,
-                "original_amount": 32,
-                "raw_original_amount": {
-                    "value": "32",
-                    "precision": 20
-                },
-                "currency_code": "usd",
-                "calculated_price": {
-                    "id": "price_01KNK9VRZZ7C8ENJV0WB85Z0RP",
-                    "price_list_id": null,
-                    "price_list_type": null,
-                    "min_quantity": null,
-                    "max_quantity": null
-                },
-                "original_price": {
-                    "id": "price_01KNK9VRZZ7C8ENJV0WB85Z0RP",
-                    "price_list_id": null,
-                    "price_list_type": null,
-                    "min_quantity": null,
-                    "max_quantity": null
-                }
-            },
-            "prices": [{
-                "id": "price_01KNK9VRZZ7C8ENJV0WB85Z0RP",
-                "title": null,
-                "currency_code": "usd",
-                "min_quantity": null,
-                "max_quantity": null,
-                "rules_count": 0,
-                "price_set_id": "pset_01KNK9VRZZPEAZ27QJWETWTN4X",
-                "price_list_id": null,
-                "price_list": null,
-                "raw_amount": {
-                    "value": "32",
-                    "precision": 20
-                },
-                "created_at": "2026-04-07T06:25:16.799Z",
-                "updated_at": "2026-04-07T06:25:16.799Z",
-                "deleted_at": null,
-                "amount": 32
-            }]
-        }],
-        "type": null,
-        "collection": null,
-        "options": [{
-            "id": "opt_01KNK9VRVVBJMX36BA53VHCAB9",
-            "title": "Default Option",
-            "metadata": null,
-            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
-            "created_at": "2026-04-07T06:25:16.667Z",
-            "updated_at": "2026-04-07T06:25:16.667Z",
-            "deleted_at": null,
-            "values": [{
-                "id": "optval_01KNK9VRVTAFYS8K0Z8GH0Z1M3",
-                "value": "Default Value",
-                "metadata": null,
-                "option_id": "opt_01KNK9VRVVBJMX36BA53VHCAB9",
-                "created_at": "2026-04-07T06:25:16.667Z",
-                "updated_at": "2026-04-07T06:25:16.667Z",
-                "deleted_at": null
-            }]
-        }],
-        "tags": [],
-        "images": [{
-            "id": "img_01KNK9VRVVSD7H69B740BMJVRR",
-            "url": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea5-scaled.jpg",
-            "metadata": null,
-            "rank": 0,
-            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
-            "created_at": "2026-04-07T06:25:16.667Z",
-            "updated_at": "2026-04-07T06:25:16.667Z",
-            "deleted_at": null
-        }, {
-            "id": "img_01KNK9VRVVAE68ADKVEV76PE3X",
-            "url": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea9-scaled.jpg",
-            "metadata": null,
-            "rank": 1,
-            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
-            "created_at": "2026-04-07T06:25:16.667Z",
-            "updated_at": "2026-04-07T06:25:16.667Z",
-            "deleted_at": null
-        }, {
-            "id": "img_01KNK9VRVV7T68729C45RERTVC",
-            "url": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea7-scaled.jpg",
-            "metadata": null,
-            "rank": 2,
-            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
-            "created_at": "2026-04-07T06:25:16.667Z",
-            "updated_at": "2026-04-07T06:25:16.667Z",
-            "deleted_at": null
-        }, {
-            "id": "img_01KNK9VRVVDNYKYFXQZE9DZHKT",
-            "url": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea6-scaled.jpg",
-            "metadata": null,
-            "rank": 3,
-            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
-            "created_at": "2026-04-07T06:25:16.667Z",
-            "updated_at": "2026-04-07T06:25:16.667Z",
-            "deleted_at": null
-        }, {
-            "id": "img_01KNK9VRVVJMAVQAXND8H0TECR",
-            "url": "https://wordpress-production-1a53.up.railway.app/wp-content/uploads/2025/10/BEOK-Barleytea1.jpg",
-            "metadata": null,
-            "rank": 4,
-            "product_id": "prod_01KNK9VRVTB490G0QRKD76X5KZ",
-            "created_at": "2026-04-07T06:25:16.667Z",
-            "updated_at": "2026-04-07T06:25:16.667Z",
-            "deleted_at": null
-        }],
-        "categories": [{
-            "is_internal": false
-        }, {
-            "is_internal": false
-        }]
+[
+    {
+      "productID": "1",
+      "title": "Hovenia Dulcis Extract (헛개수)",
+      "categories": ["Tea", "Drinks"],
+      "price": "37",
+      "description": "A restorative concentrate derived from the Oriental Raisin Tree, traditionally used in Korea for liver support and recovery. It has a bold, earthy character with unique bittersweet undertones, perfect for hydration after physical activity or a long night.",
+      "details": "• Size: 420g\n• Calories: 875kcal per bottle\n• Ingredients: Hovenia fruit base 97% [Fructooligosaccharide, Purified water, Hovenia tree fruit extract concentrate, Glucose, Flavoring (Hovenia fruit flavor)]",
+      "chefsNotes": "The Hovenia fruit is a nutritional powerhouse traditionally prized for its ability to support liver health. I've designed this to be a robust, earthy concentrate that isn't just about flavor, but about restoration. The deep, woody undertones are best revealed when mixed with plenty of water. It is my top recommendation for those seeking a daily liver cleanse or a powerful 'morning-after' hydration boost.",
+      "story": "Byulhasu\n\nByulhasu is a South Korean \"emotional food brand\" that operates under the motto, \"Half of memories are taste.\"\n\nLed by CEO Noh Hae-woon, the company focuses on \"1-second\" convenience, modernizing traditional Korean flavors for a busy global lifestyle.",
+      "storage_usage": "• Usage: The liquid dissolves instantly in both hot and cold water; simply use the included pump for easy dispensing.\n• Storage: Must be refrigerated unconditionally after opening and stored in a cool place away from direct sunlight.\n• Shelf Life: The product has an expiration date of 24 months (2 years) from the date of manufacture."
+    },
+    {
+      "productID": "2",
+      "title": "Corn Silk Tea Extract (옥미수/옥수수 수염차)",
+      "categories": ["Tea", "Drinks"],
+      "price": "58",
+      "description": "Known for its smooth, mild, and naturally sweet profile, this \"Okmisu\" extract is a favorite in K-beauty for its reputation in supporting a slim \"V-line\" and reducing bloating. It transforms ordinary water into a delicate herbal infusion that is both hydrating and light on the stomach.",
+      "details": "• Size: 870g\n• Calories: 1,930kcal per bottle\n• Ingredients: Corn silk tea base 97% [Other sugars, Purified water, Corn silk extract (Corn silk: Domestic), Roasted brown rice extract concentrate (Roasted brown rice: Domestic), Flavoring (Corn flavor), Glucose]",
+      "chefsNotes": "The beauty of Corn Silk tea lies in its subtle, silky texture. I recommend this as a morning ritual to gently awaken the body. Its light sweetness is purely natural, so it doesn't overpower your breakfast, making it a sophisticated alternative to juice",
+      "story": "Byulhasu\n\nByulhasu is a South Korean \"emotional food brand\" that operates under the motto, \"Half of memories are taste.\"\n\nLed by CEO Noh Hae-woon, the company focuses on \"1-second\" convenience, modernizing traditional Korean flavors for a busy global lifestyle.",
+      "storage_usage": "• Usage: The liquid dissolves instantly in both hot and cold water; simply use the included pump for easy dispensing.\n• Storage: Must be refrigerated unconditionally after opening and stored in a cool place away from direct sunlight.\n• Shelf Life: The product has an expiration date of 24 months (2 years) from the date of manufacture."
+    },
+    {
+      "productID": "3",
+      "title": "Black Bean Tea Extract (검은콩차 진액)",
+      "categories": ["Tea", "Drinks"],
+      "price": "58",
+      "description": "High Concentration: This extract features a 97% authentic black bean tea base, offering a deep and savory taste without the wait of brewing.\n\n• Korean Superfood: Made from 100% domestic Korean black soybeans, often referred to as \"Beef from the Field\" for its incredible nutrient density.\n\n• Nutritional Powerhouse: Naturally rich in plant-based protein, dietary fiber, vitamins (A, B, C, E), beta-carotene, and essential minerals.",
+      "details": "• Size: 870g\n• Calories: 2,025kcal per bottle\nIngredients - 97% Korean Black Bean Tea Base [Black Bean Concentrate, Fructooligosaccharide], Water, Black Bean flavor, Citric Acid, Enzyme-treated Stevia\nSize - 870g (2,025Kcal)",
+      "chefsNotes": "Start with 1 pump for every 1 litre of water and adjust to your preferred \"nutty\" intensity\n\nWhile it's excellent cold for Singapore's heat, drinking it warm before bed helps highlight the Vitamin E and mineral notes for a soothing nightcap.",
+      "story": "Byulhasu\n\nByulhasu is a South Korean \"emotional food brand\" that operates under the motto, \"Half of memories are taste.\"\n\nLed by CEO Noh Hae-woon, the company focuses on \"1-second\" convenience, modernizing traditional Korean flavors for a busy global lifestyle.",
+      "storage_usage": "• Usage: The liquid dissolves instantly in both hot and cold water; simply use the included pump for easy dispensing.\n• Storage: Must be refrigerated unconditionally after opening and stored in a cool place away from direct sunlight.\n• Shelf Life: The product has an expiration date of 24 months (2 years) from the date of manufacture."
+    },
+    {
+      "productID": "4",
+      "title": "Barley Tea Extract (보리차 진액)",
+      "categories": ["Tea", "Drinks"],
+      "price": "32",
+      "description": "A modern take on Korea's most beloved daily tea, this extract offers the authentic, nutty flavor of traditionally roasted barley without the hassle of boiling grains. It provides a clean, savory finish that refreshes the palate and is naturally caffeine-free, making it the perfect \"all-day\" water substitute for families.",
+      "details": "• Size: 290g\n• Calories: 595kcal per bottle.\n• Ingredients: Barley base 97% [Fructooligosaccharide, Barley extract concentrate (Barley: Domestic, solids), Purified water, Malt extract powder (Barley: 100%), Glucose], Flavoring (Roasted barley flavor, Barley flavor)",
+      "chefsNotes": "This is the 'comfort food' of Korean teas. For a premium experience, serve it ice-cold in a chilled glass to highlight its crisp, roasted notes. It pairs excellently with spicy Singaporean dishes, as the grain's natural sweetness helps soothe the heat.",
+      "story": "Byulhasu\n\nByulhasu is a South Korean \"emotional food brand\" that operates under the motto, \"Half of memories are taste.\"\n\nLed by CEO Noh Hae-woon, the company focuses on \"1-second\" convenience, modernizing traditional Korean flavors for a busy global lifestyle.",
+      "storage_usage": "• Usage: The liquid dissolves instantly in both hot and cold water; simply use the included pump for easy dispensing.\n• Storage: Must be refrigerated unconditionally after opening and stored in a cool place away from direct sunlight.\n• Shelf Life: The product has an expiration date of 24 months (2 years) from the date of manufacture."
+    },
+    {
+      "productID": "5",
+      "title": "Cold Pressed Sesame Oil",
+      "categories": ["Oil"],
+      "price": "36",
+      "description": "A highly aromatic, traditional oil that is essential for adding a rich, nutty finish to Korean cuisine. It is particularly effective at enhancing the absorption of vitamins in leafy greens.\n\nLow-Temperature Mastery: Unlike standard oils that can be roasted at high heat to increase yield, Kkosi Kkosi uses low-temperature roasting to maximize flavor while preventing the formation of benzopyrene.",
+      "details": "Ingredients : Sesame Oil 100% (Korea)\nSize : 180ml",
+      "chefsNotes": "Kkosi Kkosi oils are the 'liquid gold' of the Korean pantry. For the Sesame Oil, I highly recommend drizzling it over fresh spinach namul; the oil actually helps your body absorb more vitamins from the greens.",
+      "story": "Kkosi Kkosi\n\n• A New Generation of Farming: The owner is a \"Young Successor Farmer\" officially selected by the Ministry of Agriculture, Food, and Rural Affairs.\n\n• Direct Sourcing: The owner grows his own crops and personally selects seeds from neighboring farms to ensure absolute quality.",
+      "storage_usage": "• Sesame Oil: Store in a cool, dark place at room temperature away from direct sunlight.\n• Perilla Oil: Must be refrigerated (0-5C) to maintain freshness and prevent oxidation.\n\nThe natural sediment at the bottom of the oil is perfectly safe to consume. It consists of edible proteins and is rich in Vitamin E and essential minerals that are beneficial for your health. We recommend shaking the bottle gently before use to enjoy the full nutritional value"
+    },
+    {
+      "productID": "6",
+      "title": "Hanwoo & premium barbecue cuts",
+      "categories": ["Meat", "Food"],
+      "price": "—",
+      "description": "Marbled, tender, and rich with umami — this is more than meat; it's the taste that defines Korean tables.\n\nFrom hanwoo cuts to barbecue-ready selections, every piece is curated for perfect sear and unforgettable savor. The kind of flavor that stops conversation mid-sentence — because everyone's too busy tasting.",
+      "details": "SKU: MDK-CSB-001\nCollection: Chef's Selection\nShelf Life: 6-12 months\nStorage: Cool, dry place",
+      "chefsNotes": "Hovenia Dulcis has been cherished in Korean tradition for generations. This premium extract captures the essence of this unique fruit, perfect for creating authentic Korean home dining experiences.",
+      "story": "",
+      "storage_usage": "• Store in a cool, dry place away from direct sunlight\n• Refrigerate after opening for best quality\n• Use clean utensils to prevent contamination\n• Follow recipe guide for best results\n\nFor questions about storage or usage, contact our customer service team or refer to the included recipe guide."
+    },
+    {
+      "productID": "7",
+      "title": "Cold Pressed Perilla Oil",
+      "categories": ["Oil"],
+      "price": "36",
+      "description": "Known for its unique, earthy, and deep savory profile. It is a nutritional powerhouse often used to balance the flavors of wild or dried mountain herbs.\n\nLow-Temperature Mastery: Unlike standard oils that can be roasted at high heat to increase yield, Kkosi Kkosi uses low-temperature roasting to maximize flavor while preventing the formation of benzopyrene.",
+      "details": "Ingredients : Perilla oil 100% (Korea)\nSize : 180ml",
+      "chefsNotes": "For the Perilla Oil, try using it when stir-frying dried or mountain vegetables; it has a magical ability to remove bitterness and replace it with a deep, savory richness. Because these are cold-pressed from whole seeds, remember to give the bottle a gentle shake before use to incorporate the nutritious minerals at the bottom",
+      "story": "Kkosi Kkosi\n\n• A New Generation of Farming: The owner is a \"Young Successor Farmer\" officially selected by the Ministry of Agriculture, Food, and Rural Affairs.\n\n• Direct Sourcing: The owner grows his own crops and personally selects seeds from neighboring farms to ensure absolute quality.",
+      "storage_usage": "• Sesame Oil: Store in a cool, dark place at room temperature away from direct sunlight.\n• Perilla Oil: Must be refrigerated (0-5C) to maintain freshness and prevent oxidation.\n\nThe natural sediment at the bottom of the oil is perfectly safe to consume. It consists of edible proteins and is rich in Vitamin E and essential minerals that are beneficial for your health. We recommend shaking the bottle gently before use to enjoy the full nutritional value"
+    },
+    {
+      "productID": "8",
+      "title": "Cold Pressed Oil Gift Set",
+      "categories": ["Oil"],
+      "price": "68",
+      "description": "Includes Sesame Oil (180ml) and Perilla Oil (180ml)\n\nThe Kkosi Kkosi Premium Set is a curated duo of Korea's most essential culinary oils, representing the pinnacle of \"Young Farmer\" craftsmanship. Both the Sesame and Perilla oils are produced using a strict \"One-Press\" rule—extracting from 100% whole seeds just once to ensure maximum freshness and nutritional density. Unlike mass-produced oils, these are cold-pressed at low temperatures to preserve their delicate, natural aromas and to prevent the formation of harmful substances like benzopyrene.",
+      "details": "1 x Sesame oil\nIngredients : Sesame Oil 100% (Korea)\nSize : 180ml\n\n1 x Perilla oil\nIngredients : Perilla oil 100% (Korea)\nSize : 180ml",
+      "chefsNotes": "The magic of this set lies in its purity. The Sesame Oil is incredibly potent—a single drop can transform a simple bowl of rice into a gourmet experience. For the Perilla Oil, I recommend using it with dried vegetables; its unique profile removes bitterness and adds a sophisticated, buttery finish. Since these are high-protein oils, remember to 'shake to wake' the nutrients at the bottom for the full health benefit.",
+      "story": "Kkosi Kkosi\n\n• A New Generation of Farming: The owner is a \"Young Successor Farmer\" officially selected by the Ministry of Agriculture, Food, and Rural Affairs.\n\n• Direct Sourcing: The owner grows his own crops and personally selects seeds from neighboring farms to ensure absolute quality.",
+      "storage_usage": "• Sesame Oil: Store in a cool, dark place at room temperature away from direct sunlight.\n• Perilla Oil: Must be refrigerated (0-5C) to maintain freshness and prevent oxidation.\n\nThe natural sediment at the bottom of the oil is perfectly safe to consume. It consists of edible proteins and is rich in Vitamin E and essential minerals that are beneficial for your health. We recommend shaking the bottle gently before use to enjoy the full nutritional value"
+    },
+    {
+      "productID": "9",
+      "title": "Seoriju",
+      "categories": ["Alcohol","Drinks"],
+      "price": "58",
+      "description": "• A Fortified Masterpiece: Seoriju is made through the careful fermentation of glutinous rice with nuruk (traditional Korean fermentation starter), which is then fortified with Korean traditional soju\n\n• Complex Flavor Profile: Despite being unfiltered to preserve its soul, it delivers light, fruity, and intricate flavors with a pleasant, slightly sweet taste and grounded earthy undertones.",
+      "details": "• Category: Fortified Rice Wine (Gwahaju).\n• Volume: 375ml.\n• ABV (Alcohol by Volume): 20%.\n• Ingredients: Water, Glutinous Rice, Yeast (Nuruk), and Distilled Soju (Alcohol).\n• Manufacturer: Agricultural Corporation Baekkyung Distillery Inc., Sejong-si, South Korea.",
+      "chefsNotes": "Seoriju is a hidden gem in the world of Korean spirits. Because it is a Gwahaju, it has a beautiful, 'fortified' body that sits between a refined sake and a delicate brandy. I suggest pairing it with savory Korean pancakes (Jeon) or even a rich cheese platter. The subtle sweetness and higher ABV make it an excellent palate cleanser. For a truly 'Moondk' experience, serve it straight from the refrigerator on a quiet evening—the 'Frost' in its name really comes to life when the glass starts to mist.",
+      "story": "Beok's Seoriju\n\nThe Name: \"Seori\" (서리) translates to \"Frost,\" evoking a sense of crisp purity, while \"Ju\" (주) stands for traditional Korean alcohol.\n\n• A Summer Legacy: Seoriju belongs to the rare category of Gwahaju (과하주), which literally means \"Passing through Summer\". This traditional variety was historically brewed to withstand the intense summer heat without spoiling, making it a \"fortified\" masterpiece.\n\n• Crafted Partnership: Produced as a premium OEM through a specialized Korean brewery (Agricultural Corporation Baekkyung Distillery Inc.), Seoriju represents the bridge between ancient fermentation secrets and modern aesthetic lifestyle.",
+      "storage_usage": "• Optimal Environment: Store in a cool and dry place away from direct sunlight.\n• Pro-Tip: For the best tasting experience and to preserve its delicate fruity notes, refrigeration is highly recommended.\n• Serving Suggestion: Best enjoyed Chilled or Warm. Serve in a small glass to appreciate the intricate earthy aromas."
+    },
+    {
+      "productID": "10",
+      "title": "Myeongawon Hand-Stretched Red Rice Noodle",
+      "categories": ["Noodles", "Food"],
+      "price": "12",
+      "description": "These vibrant noodles are made using domestic Korean wheat and red rice for a distinct, high-quality profile. Through Myeongawon's specialized aging process, these noodles achieve a premium chewy texture that holds its shape and won't become mushy even if you slightly miss the timing.",
+      "details": "Size : 200g (2 serving)\nIngredients : Flour(Domastic), Red rice powder(Domastic), Refined salt, Canola oil",
+      "chefsNotes": "The red rice gives these noodles a stunning natural hue that elevates any dish. I highly recommend using these for a cold 'Bibim-guksu' (spicy mixed noodles); the firm texture provides a wonderful 'al dente' bite that beautifully complements fresh, crunchy vegetables.",
+      "story": "Myeongawon\n\n• A Master's Legacy: Founded in 1975 by Chairman Kang Hee-tak, a former Navy spy officer who mastered the art of \"Sooyeon\" (hand-stretched) noodles with incredible stubbornness.\n\n• The 150,000-Hour Rule: CEO Choi Woo-guk has dedicated over 150,000 hours to perfecting handmade somen, believing that while shape can be imitated, authentic taste cannot be replicated.\n\n• Artisanal Process: Every strand is created through a rigorous 12-step HACCP-certified process and 8 distinct aging stages to ensure a superior, chewy texture.",
+      "storage_usage": "• Shelf Life: 2 years from manufacture.\n• Storage : Store in a cool, dry area to prevent the noodles from absorbing moisture.\n• Key Feature: Fast-cooking and convenient—ready in just 2 minutes and 30 seconds."
+    },
+    {
+      "productID": "11",
+      "title": "Myeongawon 5 Color Noodle Gift Set",
+      "categories": ["Noodles", "Food"],
+      "price": "26",
+      "description": "A luxurious collection of hand-stretched noodles featuring a variety of natural colors and flavors derived from traditional ingredients like plum, matcha, and sweet pumpkin. This set is the pinnacle of Sooyeon craftsmanship, offering a diverse tasting experience in one elegant package.",
+      "details": "Size : 500g (5 servings)\nIngredients : Flour, Plum powder (Korea), Sweet pumpkin powder (Korea), Matecha(Korea), Black rice powder(Korea), Honey, Gardenia natural color, Refined salt, Canola oil",
+      "chefsNotes": "This set is truly a work of art. The different natural flavors, like the subtle earthiness of matecha or the sweetness of pumpkin, add a sophisticated layer to your meal. For a Michelin-star presentation at home, serve each color in small, individual nests topped with delicate garnishes.",
+      "story": "Myeongawon\n\n• A Master's Legacy: Founded in 1975 by Chairman Kang Hee-tak, a former Navy spy officer who mastered the art of \"Sooyeon\" (hand-stretched) noodles with incredible stubbornness.\n\n• The 150,000-Hour Rule: CEO Choi Woo-guk has dedicated over 150,000 hours to perfecting handmade somen, believing that while shape can be imitated, authentic taste cannot be replicated.\n\n• Artisanal Process: Every strand is created through a rigorous 12-step HACCP-certified process and 8 distinct aging stages to ensure a superior, chewy texture.",
+      "storage_usage": "• Shelf Life: 2 years from manufacture.\n• Storage : Store in a cool, dry area to prevent the noodles from absorbing moisture.\n• Key Feature: Fast-cooking and convenient—ready in just 2 minutes and 30 seconds."
+    },
+    {
+      "productID": "12",
+      "title": "Potato Noodle",
+      "categories": ["Noodles", "Food"],
+      "price": "22",
+      "description": "These noodles are crafted with 25% domestic potatoes, providing an earthy depth and a remarkably clean, savory finish. The addition of potato starch creates a superior chewiness and a smooth \"slip\" that is more satisfying than traditional wheat-only somen.",
+      "details": "• Weight: 500g.\n• Calories: 338 kcal per 100g (Total 1,690 kcal).\n• Ingredients: Flour 62% (Australia, USA), Potato (Domestic) 25%, Rice (Domestic) 10%, Sea salt (Domestic) 2.3%, Alcohol.",
+      "chefsNotes": "The Potato Noodle is the ultimate choice for savory comfort. Its resilient texture holds up beautifully in warm broths without becoming mushy. I recommend serving it in a clear Anchovy broth or a 'Janchi-guksu' style soup where its clean, nutty flavor can truly shine",
+      "story": "Grande Noodle\n\n• Heritage of Patience: Since 1987, this brand has practiced \"the aesthetics of waiting\" in Geochang, Gyeongnam, using natural wind and sunlight to dry their noodles instead of artificial machines.\n\n• Artisanal Mastery: Led by Master Artisan Kim Hyun-gyu, who brings over 40 years of experience to every batch, ensuring a texture that is uniquely chewy and resilient.\n\n• Whole-Ingredient Philosophy: Unlike standard noodles that use powdered additives, Geochanghan Guksu grinds fresh, seasonal ingredients whole and kneads them directly into the dough to capture authentic flavors and colors.\n\n• No Artificial Colors: All vibrant hues are derived naturally from the primary ingredients, reflecting the brand's commitment to honest, premium food.",
+      "storage_usage": "• Standard Storage: Store in a cool, dry place at room temperature, away from direct sunlight and humidity.\n• Post-Opening: It is recommended to consume as soon as possible after opening; store any remaining noodles in an airtight container to maintain the best dry texture.\n• Cooking Tip: Due to the high content of whole ingredients, the cooking time may vary slightly from standard somen. Rinse thoroughly in ice-cold water after boiling to maximize the \"springy\" artisanal texture."
+    },
+    {
+      "productID": "13",
+      "title": "Hallabong Noodle",
+      "categories": ["Noodles", "Food"],
+      "price": "22",
+      "description": "Infused with a staggering 35% of domestic Hallabong (premium Jeju citrus), these noodles carry a bright, refreshing aroma and a beautiful natural yellow hue. The citrus acidity adds a unique bounce to the noodle's texture, making it a refreshing sensory experience.",
+      "details": "• Weight: 500g.\n• Calories: 330 kcal per 100g (Total 1,650 kcal).\n• Ingredients: Flour 52% (Australia, USA), Hallabong (Domestic) 35%, Rice (Domestic) 10%, Sea salt (Domestic) 2.3%, Alcohol 0.7%.",
+      "chefsNotes": "This is a masterpiece for warm weather. The subtle citrus fragrance is best highlighted in a cold salad pasta. Toss these noodles with fresh arugula, a drizzle of our Kkosi Kkosi Perilla Oil, and a squeeze of lemon to create a vibrant, Michelin-quality meal at home",
+      "story": "Grande Noodle\n\n• Heritage of Patience: Since 1987, this brand has practiced \"the aesthetics of waiting\" in Geochang, Gyeongnam, using natural wind and sunlight to dry their noodles instead of artificial machines.\n\n• Artisanal Mastery: Led by Master Artisan Kim Hyun-gyu, who brings over 40 years of experience to every batch, ensuring a texture that is uniquely chewy and resilient.\n\n• Whole-Ingredient Philosophy: Unlike standard noodles that use powdered additives, Geochanghan Guksu grinds fresh, seasonal ingredients whole and kneads them directly into the dough to capture authentic flavors and colors.\n\n• No Artificial Colors: All vibrant hues are derived naturally from the primary ingredients, reflecting the brand's commitment to honest, premium food.",
+      "storage_usage": "• Standard Storage: Store in a cool, dry place at room temperature, away from direct sunlight and humidity.\n• Post-Opening: It is recommended to consume as soon as possible after opening; store any remaining noodles in an airtight container to maintain the best dry texture.\n• Cooking Tip: Due to the high content of whole ingredients, the cooking time may vary slightly from standard somen. Rinse thoroughly in ice-cold water after boiling to maximize the \"springy\" artisanal texture."
     }
-}
+  ]
+  

@@ -23,6 +23,12 @@ function splitProductDisplayTitle(name: string): { primary: string; paren?: stri
   return { primary: m[1].trim(), paren: m[2].trim() };
 }
 
+/** Medusa: same pattern as product grid — append subtitle with " - " when set. */
+function withOptionalSubtitle(primary: string, subtitle?: string): string {
+  const s = subtitle?.trim();
+  return s ? `${primary} ( ${s} )` : primary;
+}
+
 const ProductInfo = ({ productId }: ProductInfoProps) => {
   const medusa = isMoondkMedusaEnabled();
   const { data: medusaView, isLoading, isError } = useMoondkMedusaProductQuery(
@@ -72,6 +78,8 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
   };
 
   const { primary: titlePrimary, paren: titleParen } = splitProductDisplayTitle(productName);
+  const medusaSubtitle = medusa && medusaView?.subtitle?.trim() ? medusaView.subtitle.trim() : undefined;
+  const titleMainLine = withOptionalSubtitle(titlePrimary, medusaSubtitle);
 
   if (medusa && isLoading) {
     return (
@@ -122,7 +130,7 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
             {titleParen ? (
               <h1 className="text-balance text-foreground">
                 <span className="block text-[1.4375rem] font-medium leading-[1.3] tracking-[-0.02em] sm:text-[1.5625rem] md:text-[1.6875rem]">
-                  {titlePrimary}
+                  {titleMainLine}
                 </span>
                 <span className="mt-2 block text-sm font-normal leading-relaxed text-foreground/65 sm:text-[0.9375rem] md:text-base">
                   ({titleParen})
@@ -130,7 +138,7 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
               </h1>
             ) : (
               <h1 className="text-balance text-[1.4375rem] font-medium leading-[1.3] tracking-[-0.02em] text-foreground sm:text-[1.5625rem] md:text-[1.6875rem]">
-                {titlePrimary}
+                {titleMainLine}
               </h1>
             )}
 

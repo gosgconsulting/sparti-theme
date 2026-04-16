@@ -17,12 +17,19 @@ interface ProductGridProps {
 type GridRow = {
   id: string;
   name: string;
+  /** Medusa-only; shown after title with " - " when set. */
+  subtitle?: string;
   price: string;
   image: string;
   category: string;
   isNew?: boolean;
   createdAt?: string;
 };
+
+function formatProductCardTitle(name: string, subtitle?: string): string {
+  const s = subtitle?.trim();
+  return s ? `${name}  ( ${s} )` : name;
+}
 
 function productToRow(p: Product): GridRow {
   return {
@@ -75,6 +82,7 @@ function viewToRow(v: MoondkMedusaProductView): GridRow {
   return {
     id: v.id,
     name: v.name,
+    subtitle: v.subtitle,
     price: v.price,
     image: v.image,
     category: v.category,
@@ -167,7 +175,7 @@ export default function ProductGrid({
                     {product.image ? (
                       <img
                         src={product.image}
-                        alt={product.name}
+                        alt={formatProductCardTitle(product.name, product.subtitle)}
                         className={`w-full h-full ${
                           product.category === "Tea" ? "object-contain" : "object-cover"
                         }`}
@@ -184,7 +192,7 @@ export default function ProductGrid({
                   <ThemeLink to={`/product/${product.id}`} className="block">
                     <div className="flex items-start justify-between gap-3">
                       <h3 className="text-base font-heading leading-tight hover:underline underline-offset-4 flex-1">
-                        {product.name}
+                        {formatProductCardTitle(product.name, product.subtitle)}
                       </h3>
                       <span className="text-lg font-body font-medium text-foreground whitespace-nowrap">
                         {product.price}

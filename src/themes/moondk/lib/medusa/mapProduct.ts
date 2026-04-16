@@ -26,6 +26,8 @@ export interface MoondkMedusaProductView {
   isNew?: boolean;
   /** Raw description for detail page */
   description?: string;
+  /** Product or metadata `subtitle` when present (e.g. storefront cards). */
+  subtitle?: string;
   createdAt?: string;
   /** Optional metadata-backed HTML blocks for the product detail accordion. */
   metaHtml?: MoondkMedusaProductMetaHtml;
@@ -50,6 +52,16 @@ const META_HTML_KEYS: (keyof MoondkMedusaProductMetaHtml)[] = [
   "product_information_detail",
   "size_guide_description",
 ];
+
+function readProductSubtitle(
+  product: Record<string, unknown>,
+  meta: Record<string, unknown> | null,
+): string | undefined {
+  const top = product.subtitle;
+  if (typeof top === "string" && top.trim()) return top.trim();
+  if (typeof meta?.subtitle === "string" && meta.subtitle.trim()) return meta.subtitle.trim();
+  return undefined;
+}
 
 function readMetaHtmlFromMetadata(meta: Record<string, unknown> | null): MoondkMedusaProductMetaHtml | undefined {
   if (!meta) return undefined;
@@ -128,10 +140,12 @@ export function mapMedusaProductToView(product: unknown): MoondkMedusaProductVie
   const createdAt = typeof p.created_at === "string" ? p.created_at : undefined;
   const description = typeof p.description === "string" ? p.description : undefined;
   const metaHtml = readMetaHtmlFromMetadata(meta);
+  const subtitle = readProductSubtitle(p, meta);
 
   return {
     id: p.id,
     name: typeof p.title === "string" ? p.title : "Product",
+    ...(subtitle ? { subtitle } : {}),
     price,
     image,
     galleryImages: galleryImages.length ? galleryImages : image ? [image] : [],

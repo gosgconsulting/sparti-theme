@@ -319,3 +319,21 @@
   list-style: disc;
   padding-left: 1.25em;
 }
+
+.moondk-theme .product-accordion h4 {
+  font-family: inherit;
+  font-weight: 500;
+}
+
+
+.moondk-theme p:not(:first-child) {
+  margin-top: 1em;
+}
+
+.moondk-theme li {
+  margin-top: .5em;
+}
+
+#accordion-content-chefs-notes p {
+  font-style: italic;
+}

@@ -415,7 +415,7 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
         </div>
 
         <div id="features" className="scroll-mt-20">
-          <TabFeaturesSection />
+          <TabFeaturesSection themeSlug={themeSlug} />
         </div>
 
         <div id="testimonials" className="scroll-mt-20">

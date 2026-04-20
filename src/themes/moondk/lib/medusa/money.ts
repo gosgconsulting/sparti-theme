@@ -5,9 +5,11 @@ function asRecord(v: unknown): Record<string, unknown> | null {
 }
 
 export function formatMedusaCurrencyAmount(amount: number, currencyCode: string): string {
-  const code = currencyCode.length === 3 ? currencyCode.toUpperCase() : "USD";
+  const raw = String(currencyCode ?? "").trim();
+  const code = /^[a-z]{3}$/i.test(raw) ? raw.toUpperCase() : "USD";
   try {
-    return new Intl.NumberFormat("en-SG", { style: "currency", currency: code }).format(amount);
+    // Use runtime locale, but Medusa-provided currency code (USD fallback).
+    return new Intl.NumberFormat(undefined, { style: "currency", currency: code }).format(amount);
   } catch {
     return `${code} ${amount.toFixed(2)}`;
   }

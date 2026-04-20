@@ -5,7 +5,6 @@ import { useCart } from "../../contexts/CartContext";
 import {
   FALLBACK_PRODUCT_DISPLAY_NAME,
   getProductByRouteId,
-  productShowsLowStockBadge,
 } from "../category/products";
 import { AddToBagNotification } from "../ui/AddToBagNotification";
 import { ProductDetailBreadcrumb } from "./ProductDetailBreadcrumb";
@@ -51,13 +50,8 @@ const ProductInfo = ({ productId }: ProductInfoProps) => {
     : staticProduct?.category || "Product";
   const variantId = medusa ? medusaView?.variantId : undefined;
 
-  const showLowStock = medusa
-    ? productId
-      ? productShowsLowStockBadge(productId)
-      : false
-    : staticProduct
-      ? productShowsLowStockBadge(staticProduct.id)
-      : false;
+  const productStock = medusa ? medusaView?.stock : staticProduct?.stock;
+  const showLowStock = typeof productStock === "number" && productStock <= 10;
 
   const incrementQuantity = () => setQuantity((prev) => prev + 1);
   const decrementQuantity = () => setQuantity((prev) => Math.max(1, prev - 1));

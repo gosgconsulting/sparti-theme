@@ -23,6 +23,8 @@ export interface MoondkMedusaProductView {
   /** Medusa category ids when present (match when API omits names on list). */
   categoryIds: string[];
   variantId: string;
+  /** Default variant inventory quantity when present. */
+  stock?: number;
   isNew?: boolean;
   /** Raw description for detail page */
   description?: string;
@@ -102,6 +104,7 @@ export function mapMedusaProductToView(product: unknown): MoondkMedusaProductVie
 
   const money = moneyFromVariantCalculatedPrice(variant);
   const price = money ? formatMedusaCurrencyAmount(money.amount, money.currency) : "—";
+  const stock = typeof variant.inventory_quantity === "number" ? variant.inventory_quantity : undefined;
 
   const thumb =
     typeof p.thumbnail === "string" && p.thumbnail
@@ -153,6 +156,7 @@ export function mapMedusaProductToView(product: unknown): MoondkMedusaProductVie
     categoryNames,
     categoryIds,
     variantId: variant.id,
+    ...(typeof stock === "number" ? { stock } : {}),
     isNew: Boolean(isNew),
     description,
     createdAt,

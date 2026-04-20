@@ -1,6 +1,6 @@
 /** Fields for storefront pricing, categories, and media (Medusa v2 Store API). */
 export const MOONDK_MEDUSA_PRODUCT_LIST_FIELDS =
-  "id,title,subtitle,handle,description,thumbnail,metadata,*images,*categories,*variants,*variants.calculated_price";
+  "id,title,subtitle,handle,description,thumbnail,metadata,*images,*categories,*variants,*variants.calculated_price,*variants.inventory_quantity";
 
 export const MOONDK_MEDUSA_PRODUCT_DETAIL_FIELDS = MOONDK_MEDUSA_PRODUCT_LIST_FIELDS;
 

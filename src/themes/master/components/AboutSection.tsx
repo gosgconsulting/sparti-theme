@@ -96,13 +96,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ component }) => {
           <div className="space-y-6">
             {badge && (
               <Reveal direction="up" delayMs={0}>
-                <span
-                  className="inline-block text-xs font-bold uppercase tracking-widest px-3 py-1 rounded-full"
-                  style={{
-                    color: "var(--brand-primary)",
-                    backgroundColor: "color-mix(in srgb, var(--brand-primary) 10%, transparent)",
-                  }}
-                >
+                <span className="label-section">
                   {badge}
                 </span>
               </Reveal>
@@ -110,7 +104,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ component }) => {
 
             {title && (
               <Reveal direction="up" delayMs={60}>
-                <h2 className="text-3xl sm:text-4xl font-bold text-gray-900 leading-tight">
+                <h2 className="text-3xl sm:text-4xl font-bold text-[color:var(--text-primary)] leading-tight">
                   {title}
                 </h2>
               </Reveal>
@@ -118,7 +112,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ component }) => {
 
             {paragraphs.map((text, i) => (
               <Reveal key={i} direction="up" delayMs={100 + i * 40}>
-                <p className="text-gray-500 leading-relaxed">{text}</p>
+                <p className="text-[color:var(--text-muted)] leading-relaxed">{text}</p>
               </Reveal>
             ))}
 
@@ -126,7 +120,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ component }) => {
               <Reveal direction="up" delayMs={160}>
                 <ul className="space-y-2.5">
                   {bullets.map((b) => (
-                    <li key={b} className="flex items-start gap-3 text-sm text-gray-700">
+                    <li key={b} className="flex items-start gap-3 text-sm text-[color:var(--text-secondary)]">
                       <span
                         className="mt-1.5 h-2 w-2 rounded-full shrink-0"
                         style={{ backgroundColor: "var(--brand-primary)" }}
@@ -149,7 +143,7 @@ const AboutSection: React.FC<AboutSectionProps> = ({ component }) => {
                       >
                         {s.value}
                       </p>
-                      <p className="text-xs text-gray-500 mt-1">{s.label}</p>
+                      <p className="text-xs text-[color:var(--text-muted)] mt-1">{s.label}</p>
                     </div>
                   ))}
                 </div>

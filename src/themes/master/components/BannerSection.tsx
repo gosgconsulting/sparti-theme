@@ -64,7 +64,7 @@ const BannerSection: React.FC<BannerSectionProps> = ({
         {/* Badge pill */}
         {subtitle && (
           <Reveal direction="up" delayMs={0}>
-            <div className="inline-flex items-center gap-2 px-4 py-1.5 rounded-full border border-gray-200 bg-white text-sm text-gray-600 mb-8 shadow-sm">
+            <div className="label-section gap-2 mb-8 shadow-sm">
               <svg
                 viewBox="0 0 16 16"
                 className="h-4 w-4 shrink-0"
@@ -103,7 +103,7 @@ const BannerSection: React.FC<BannerSectionProps> = ({
         {/* Description */}
         {description && (
           <Reveal direction="up" delayMs={160}>
-            <p className="text-lg sm:text-xl text-gray-500 mb-10 max-w-2xl mx-auto leading-relaxed">
+            <p className="text-lg sm:text-xl text-[color:var(--text-muted)] mb-10 max-w-2xl mx-auto leading-relaxed">
               {description}
             </p>
           </Reveal>

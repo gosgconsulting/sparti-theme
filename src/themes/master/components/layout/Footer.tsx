@@ -43,7 +43,7 @@ const Footer: React.FC<FooterProps> = ({
               <a
                 key={`${link.label}-${idx}`}
                 href={link.href}
-                className="text-sm text-gray-600 hover:text-gray-900 transition-colors"
+                className="text-sm text-[color:var(--text-muted)] hover:text-[color:var(--text-primary)] transition-colors"
               >
                 {link.label}
               </a>
@@ -54,7 +54,7 @@ const Footer: React.FC<FooterProps> = ({
           <div className="w-full max-w-4xl border-t border-black/10" />
 
           {/* Copyright */}
-          <div className="text-center text-sm text-gray-600">
+          <div className="text-center text-sm text-[color:var(--text-muted)]">
             © {new Date().getFullYear()} {tenantName}. All rights reserved.
           </div>
         </div>

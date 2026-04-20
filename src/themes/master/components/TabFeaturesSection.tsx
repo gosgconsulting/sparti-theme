@@ -87,7 +87,7 @@ const TabFeaturesSection: React.FC<TabFeaturesSectionProps> = ({ themeSlug = "ma
   const imageSrc = `/theme/${themeSlug}/assets/placeholder.svg`;
 
   return (
-    <section className="py-20 sm:py-28 bg-[#f8f9fc]">
+    <section className="py-20 sm:py-28 bg-(--brand-background-alt)">
       <div className="container mx-auto px-4 sm:px-6 max-w-6xl">
 
         {/* Tabs */}
@@ -101,8 +101,8 @@ const TabFeaturesSection: React.FC<TabFeaturesSectionProps> = ({ themeSlug = "ma
                   onClick={() => setActiveId(tab.id)}
                   className={`flex items-center gap-2 px-6 py-3 text-sm font-medium transition-colors relative
                     ${isActive
-                      ? "text-gray-900"
-                      : "text-gray-500 hover:text-gray-700"
+                      ? "text-[color:var(--text-primary)]"
+                      : "text-[color:var(--text-muted)] hover:text-[color:var(--text-secondary)]"
                     }`}
                 >
                   {tab.icon}
@@ -136,17 +136,17 @@ const TabFeaturesSection: React.FC<TabFeaturesSectionProps> = ({ themeSlug = "ma
 
           {/* Right — text */}
           <div>
-            <h2 className="text-2xl sm:text-3xl font-bold text-gray-900 mb-4">
+            <h2 className="text-2xl sm:text-3xl font-bold text-[color:var(--text-primary)] mb-4">
               {active.title}
             </h2>
-            <p className="text-gray-500 leading-relaxed mb-6">
+            <p className="text-[color:var(--text-muted)] leading-relaxed mb-6">
               {active.description}
             </p>
             <ul className="space-y-3 mb-6">
               {active.bullets.map((b) => (
-                <li key={b} className="flex items-start gap-3 text-gray-700 text-sm">
+                <li key={b} className="flex items-start gap-3 text-[color:var(--text-secondary)] text-sm">
                   <span
-                    className="mt-1 h-2 w-2 rounded-full shrink-0"
+                    className="mt-1.5 h-2 w-2 rounded-full shrink-0"
                     style={{ backgroundColor: "var(--brand-primary)" }}
                   />
                   {b}
@@ -154,7 +154,7 @@ const TabFeaturesSection: React.FC<TabFeaturesSectionProps> = ({ themeSlug = "ma
               ))}
             </ul>
             {active.footer && (
-              <p className="text-sm text-gray-400 leading-relaxed">{active.footer}</p>
+              <p className="text-sm text-[color:var(--text-muted)] leading-relaxed">{active.footer}</p>
             )}
           </div>
         </div>

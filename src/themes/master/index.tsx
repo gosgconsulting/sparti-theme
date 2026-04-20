@@ -4,6 +4,7 @@ import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import type { ComponentSchema } from "@/types/schema";
 import BannerSection from "./components/BannerSection";
 import TabFeaturesSection from "./components/TabFeaturesSection";
+import AboutSection from "./components/AboutSection";
 import FlowbiteTestimonialsSection from "@/libraries/flowbite/components/FlowbiteTestimonialsSection";
 import FlowbiteFAQSection from "@/libraries/flowbite/components/FlowbiteFAQSection";
 import { initFlowbiteTheme } from "@/utils/flowbiteThemeManager";
@@ -259,6 +260,27 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
     ],
   };
 
+  const aboutSchema: ComponentSchema = {
+    type: "about-section",
+    props: {
+      imageSrc: `/theme/${themeSlug}/assets/placeholder.svg`,
+      imageAlt: "About us",
+    },
+    items: [
+      { key: "badge", type: "text", content: "About us" },
+      { key: "title", type: "heading", level: 2, content: "We Are Your Growth Team And We Will Take You Further" },
+      { key: "content1", type: "text", content: "We handle the full funnel end-to-end: positioning, website conversion, SEO, paid ads, creatives, and tracking — so every channel works together to drive revenue." },
+      { key: "content2", type: "text", content: "Our proven systems generate leads and revenue month after month, while you stay focused on running the business." },
+      { key: "bullet1", type: "text", content: "Full-funnel strategy from day one" },
+      { key: "bullet2", type: "text", content: "Dedicated growth team, not freelancers" },
+      { key: "bullet3", type: "text", content: "Transparent reporting every month" },
+      { key: "stat1", type: "stat", props: { value: "3×", label: "Average revenue growth" } },
+      { key: "stat2", type: "stat", props: { value: "90%", label: "Client retention rate" } },
+      { key: "stat3", type: "stat", props: { value: "50+", label: "Brands scaled" } },
+      { key: "cta", type: "button", content: "Work with us", link: "#contact" },
+    ],
+  };
+
   const faqSchema: ComponentSchema = faqSchemaOverride || {
     type: "flowbite-faq-section",
     props: {},
@@ -374,6 +396,10 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
 
         <div id="testimonials" className="scroll-mt-20">
           <FlowbiteTestimonialsSection component={testimonialsSchema} />
+        </div>
+
+        <div id="about" className="scroll-mt-20">
+          <AboutSection component={aboutSchema} />
         </div>
 
         <div id="faq" className="scroll-mt-20">

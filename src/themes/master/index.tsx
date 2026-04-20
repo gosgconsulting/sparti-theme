@@ -3,6 +3,8 @@ import { useLocation, useParams } from "react-router-dom";
 import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import type { ComponentSchema } from "@/types/schema";
 import BannerSection from "./components/BannerSection";
+import TabFeaturesSection from "./components/TabFeaturesSection";
+import FlowbiteTestimonialsSection from "@/libraries/flowbite/components/FlowbiteTestimonialsSection";
 import FlowbiteFAQSection from "@/libraries/flowbite/components/FlowbiteFAQSection";
 import { initFlowbiteTheme } from "@/utils/flowbiteThemeManager";
 import { useThemeBranding } from "../../hooks/useThemeSettings";
@@ -238,6 +240,25 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
     ],
   };
 
+  const testimonialsSchema: ComponentSchema = {
+    type: "flowbite-testimonials-section",
+    props: {},
+    items: [
+      { key: "title", type: "heading", level: 2, content: "Loved by growing brands" },
+      { key: "subtitle", type: "text", content: "Real feedback from teams we've helped." },
+      {
+        key: "reviews",
+        type: "array",
+        items: [
+          { key: "r1", type: "review", props: { content: "Our landing page went from 'nice' to 'high converting' in a week. Clean sections, fast results.", name: "Sarah C.", title: "Founder" } },
+          { key: "r2", type: "review", props: { content: "The design looks premium and the SEO content we generate ranks within days.", name: "Marcus T.", title: "Marketing Lead" } },
+          { key: "r3", type: "review", props: { content: "We finally have a consistent brand system we can iterate on without redoing everything.", name: "Priya S.", title: "Operations" } },
+          { key: "r4", type: "review", props: { content: "The layout feels modern and fast. Great UX on mobile, great results on desktop.", name: "David L.", title: "CEO" } },
+        ],
+      },
+    ],
+  };
+
   const faqSchema: ComponentSchema = faqSchemaOverride || {
     type: "flowbite-faq-section",
     props: {},
@@ -345,6 +366,14 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
       <>
         <div id="hero">
           <BannerSection component={heroSchema} />
+        </div>
+
+        <div id="features" className="scroll-mt-20">
+          <TabFeaturesSection />
+        </div>
+
+        <div id="testimonials" className="scroll-mt-20">
+          <FlowbiteTestimonialsSection component={testimonialsSchema} />
         </div>
 
         <div id="faq" className="scroll-mt-20">

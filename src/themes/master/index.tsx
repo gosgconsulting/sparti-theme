@@ -3,18 +3,13 @@ import { useLocation, useParams } from "react-router-dom";
 import { ThemeBasePathContext } from "../../context/ThemeBasePathContext";
 import type { ComponentSchema } from "@/types/schema";
 import BannerSection from "./components/BannerSection";
-import FlowbiteTestimonialsSection from "@/libraries/flowbite/components/FlowbiteTestimonialsSection";
-import FlowbitePainPointSection from "@/libraries/flowbite/components/FlowbitePainPointSection";
-import FlowbiteContentSection from "@/libraries/flowbite/components/FlowbiteContentSection";
-import FlowbiteWhatsIncludedSection from "@/libraries/flowbite/components/FlowbiteWhatsIncludedSection";
 import FlowbiteFAQSection from "@/libraries/flowbite/components/FlowbiteFAQSection";
-import FlowbiteCTASection from "@/libraries/flowbite/components/FlowbiteCTASection";
 import { initFlowbiteTheme } from "@/utils/flowbiteThemeManager";
 import { useThemeBranding } from "../../hooks/useThemeSettings";
 import Header from "./components/layout/Header";
 import Footer from "./components/layout/Footer";
 import ContactFormModal from "./components/modals/ContactFormModal";
-import OurServicesSection from "./components/OurServicesSection";
+
 import { ThankYouPage } from "./pages/ThankYouPage";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import TermsAndConditionsPage from "./pages/TermsAndConditionsPage";
@@ -41,12 +36,7 @@ interface MasterThemeProps {
   designSystemTheme?: "default" | "minimal" | "enterprise" | "playful" | "mono";
   logoSrc?: string;
   heroSchemaOverride?: ComponentSchema;
-  challengeSchemaOverride?: ComponentSchema;
-  aboutSchemaOverride?: ComponentSchema;
-  servicesSchemaOverride?: ComponentSchema;
   faqSchemaOverride?: ComponentSchema;
-  ctaSchemaOverride?: ComponentSchema;
-  testimonialsSchemaOverride?: ComponentSchema;
 }
 
 const normalizeSlug = (slug?: string) => {
@@ -78,12 +68,7 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
   designSystemTheme = "default",
   logoSrc: logoSrcProp,
   heroSchemaOverride,
-  challengeSchemaOverride,
-  aboutSchemaOverride,
-  servicesSchemaOverride,
   faqSchemaOverride,
-  ctaSchemaOverride,
-  testimonialsSchemaOverride,
 }) => {
   const location = useLocation();
   const params = useParams<{ pageSlug?: string }>();
@@ -253,217 +238,6 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
     ],
   };
 
-  const testimonialsSchema: ComponentSchema = testimonialsSchemaOverride || {
-    type: "flowbite-testimonials-section",
-    props: {
-      title: "Loved by founders",
-      subtitle: "Short, sharp feedback from teams we've helped convert more visitors.",
-    },
-    items: [
-      {
-        key: "title",
-        type: "heading",
-        level: 2,
-        content: "Loved by founders",
-      },
-      {
-        key: "subtitle",
-        type: "text",
-        content: "Short, sharp feedback from teams we've helped convert more visitors.",
-      },
-      {
-        key: "reviews",
-        type: "array",
-        items: [
-          {
-            key: "r1",
-            type: "review",
-            props: {
-              content:
-                "Our landing page went from 'nice' to 'high converting' in a week. The new hero + sections are super clean.",
-              name: "Sarah C.",
-              title: "Founder",
-            },
-          },
-          {
-            key: "r2",
-            type: "review",
-            props: {
-              content: "The design looks premium, and the slider helped us show proof instantly.",
-              name: "Marcus T.",
-              title: "Marketing Lead",
-            },
-          },
-          {
-            key: "r3",
-            type: "review",
-            props: {
-              content:
-                "We finally have a consistent design system we can iterate on without redoing everything.",
-              name: "Priya S.",
-              title: "Operations",
-            },
-          },
-          {
-            key: "r4",
-            type: "review",
-            props: {
-              content: "The layout feels modern and fast. Great UX on mobile.",
-              name: "David L.",
-              title: "CEO",
-            },
-          },
-        ],
-      },
-    ],
-  };
-
-  const challengeSchema: ComponentSchema = challengeSchemaOverride || {
-    type: "flowbite-pain-point-section",
-    props: {},
-    items: [
-      {
-        key: "hint",
-        type: "text",
-        content: "You have a great business but struggle online?",
-      },
-      {
-        key: "heading",
-        type: "heading",
-        level: 2,
-        content: "Your Business Works… Your Marketing Doesn't",
-      },
-      {
-        key: "bullets",
-        type: "array",
-        items: [
-          {
-            key: "b1",
-            type: "text",
-            content: "You know your craft — but not SEO, ads, funnels",
-            icon: "x",
-          },
-          {
-            key: "b2",
-            type: "text",
-            content: "Leads don't grow month after month",
-            icon: "sparkles",
-          },
-          {
-            key: "b3",
-            type: "text",
-            content: "Ad money burns without profit",
-            icon: "barChart3",
-          },
-        ],
-      },
-    ],
-  };
-
-  const aboutSchema: ComponentSchema = aboutSchemaOverride || {
-    type: "flowbite-content-section",
-    props: {
-      variant: "about",
-      badge: "About us",
-      imageSrc: `/theme/${themeSlug}/assets/placeholder.svg`,
-      reviewLabel: "5 Star",
-      reviewSub: "Review",
-    },
-    items: [
-      {
-        key: "title",
-        type: "heading",
-        level: 2,
-        content: "We Are Your Growth Team And We Will Take You Further",
-      },
-      {
-        key: "content",
-        type: "text",
-        content:
-          "We handle the full funnel end-to-end: positioning, website conversion, SEO, paid ads, creatives, and tracking—so every channel works together to drive revenue.\n\nOur proven systems generate leads and revenue month after month, while you stay focused on running the business.",
-      },
-      {
-        key: "button",
-        type: "button",
-        content: "Get Started",
-        link: "#contact",
-      },
-    ],
-  };
-
-  const servicesSchema: ComponentSchema = servicesSchemaOverride || {
-    type: "flowbite-whats-included-section",
-    props: {},
-    items: [
-      {
-        key: "badge",
-        type: "text",
-        content: "Services",
-      },
-      {
-        key: "title",
-        type: "heading",
-        level: 2,
-        content: "Increase your revenue with a full‑stack growth package",
-      },
-      {
-        key: "description",
-        type: "text",
-        content:
-          "A focused breakdown of the core areas driving results, each tailored to your goals.",
-      },
-      {
-        key: "features",
-        type: "array",
-        items: [
-          {
-            key: "s1",
-            type: "feature",
-            items: [
-              { key: "title", type: "heading", level: 3, content: "Website & Conversion" },
-              {
-                key: "description",
-                type: "text",
-                content:
-                  "High‑converting landing pages, A/B test ideas, and conversion tracking.",
-              },
-            ],
-          },
-          {
-            key: "s2",
-            type: "feature",
-            items: [
-              { key: "title", type: "heading", level: 3, content: "Acquisition" },
-              {
-                key: "description",
-                type: "text",
-                content: "SEM + social ads, plus smart retargeting that doesn't waste spend.",
-              },
-            ],
-          },
-          {
-            key: "s3",
-            type: "feature",
-            items: [
-              { key: "title", type: "heading", level: 3, content: "Creative & Content" },
-              {
-                key: "description",
-                type: "text",
-                content: "Creative assets and copy that match your brand and convert.",
-              },
-            ],
-          },
-        ],
-      },
-      {
-        key: "cta",
-        type: "button",
-        content: "Get free consultation",
-        link: "#contact",
-      },
-    ],
-  };
-
   const faqSchema: ComponentSchema = faqSchemaOverride || {
     type: "flowbite-faq-section",
     props: {},
@@ -545,34 +319,6 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
     ],
   };
 
-  const ctaSchema: ComponentSchema = ctaSchemaOverride || {
-    type: "flowbite-cta-section",
-    props: {
-      // Use the master theme's standard CTA styling (green button) and keep it a normal size
-      ctaVariant: "primary",
-      ctaFullWidth: false,
-    },
-    items: [
-      {
-        key: "title",
-        type: "heading",
-        level: 2,
-        content: "Ready to turn traffic into revenue?",
-      },
-      {
-        key: "description",
-        type: "text",
-        content: "Get a clear growth plan tailored to your business in a free strategy call.",
-      },
-      {
-        key: "cta",
-        type: "button",
-        content: "Get free consultation",
-        link: "#contact",
-      },
-    ],
-  };
-
   const renderMain = () => {
     if (topLevelSlug === "blog") {
       if (slugParts.length === 1) {
@@ -601,32 +347,8 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
           <BannerSection component={heroSchema} />
         </div>
 
-        <div id="challenge" className="scroll-mt-20">
-          <FlowbitePainPointSection component={challengeSchema} />
-        </div>
-
-        <div id="about" className="scroll-mt-20">
-          <FlowbiteContentSection component={aboutSchema} />
-        </div>
-
-        <div id="services" className="scroll-mt-20">
-          <FlowbiteWhatsIncludedSection component={servicesSchema} />
-        </div>
-
-        <div id="testimonials" className="scroll-mt-20">
-          <FlowbiteTestimonialsSection component={testimonialsSchema} />
-        </div>
-
-        <div id="our-services" className="scroll-mt-20">
-          <OurServicesSection themeSlug={themeSlug} />
-        </div>
-
         <div id="faq" className="scroll-mt-20">
           <FlowbiteFAQSection component={faqSchema} />
-        </div>
-
-        <div id="contact" className="scroll-mt-20">
-          <FlowbiteCTASection component={ctaSchema} />
         </div>
       </>
     );

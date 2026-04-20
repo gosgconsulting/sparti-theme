@@ -5,6 +5,7 @@ import type { ComponentSchema } from "@/types/schema";
 import BannerSection from "./components/BannerSection";
 import TabFeaturesSection from "./components/TabFeaturesSection";
 import AboutSection from "./components/AboutSection";
+import ContactSection from "./components/ContactSection";
 import FlowbiteTestimonialsSection from "@/libraries/flowbite/components/FlowbiteTestimonialsSection";
 import FlowbiteFAQSection from "@/libraries/flowbite/components/FlowbiteFAQSection";
 import { initFlowbiteTheme } from "@/utils/flowbiteThemeManager";
@@ -281,6 +282,29 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
     ],
   };
 
+  const contactSchema: ComponentSchema = {
+    type: "contact-section",
+    props: {},
+    items: [
+      {
+        key: "headline",
+        type: "text",
+        content: "Scale Your Revenue 10x Faster Than In-House",
+      },
+      {
+        key: "description",
+        type: "text",
+        content:
+          "Fill out this form and we will get back to you to understand your business and goals. If we can help, we will develop a free customised growth strategy.",
+      },
+      {
+        key: "buttonLabel",
+        type: "text",
+        content: "Get My Free Strategy",
+      },
+    ],
+  };
+
   const faqSchema: ComponentSchema = faqSchemaOverride || {
     type: "flowbite-faq-section",
     props: {},
@@ -405,6 +429,12 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
         <div id="faq" className="scroll-mt-20">
           <FlowbiteFAQSection component={faqSchema} />
         </div>
+
+        <ContactSection
+          component={contactSchema}
+          tenantName={tenantName}
+          themeSlug={themeSlug}
+        />
       </>
     );
   };

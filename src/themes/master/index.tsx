@@ -225,22 +225,24 @@ const MasterTheme: React.FC<MasterThemeProps> = ({
   // Landing page schemas - use overrides if provided, otherwise use defaults
   const heroSchema: ComponentSchema = heroSchemaOverride || {
     type: "banner-section",
-    props: {
-      backgroundColor: "#2A2C2E",
-      backgroundImage: `/theme/${themeSlug}/assets/placeholder.svg`,
-    },
+    props: {},
     items: [
+      {
+        key: "subtitle",
+        type: "text",
+        content: "Web Platform for Growing Brands",
+      },
       {
         key: "title",
         type: "heading",
         level: 1,
-        content: "Your Business Needs More Than a Website — It Needs Growth.",
+        content: "Your Business Needs More Than a Website.\nIt Needs Growth.",
       },
       {
         key: "description",
         type: "text",
         content:
-          "We craft high‑performance pages using Flowbite components, strong messaging, and conversion-first UX — so every visit has a clear path to revenue.",
+          "High‑performance pages, strong messaging, and conversion-first UX — so every visit has a clear path to revenue.",
       },
       {
         key: "cta",

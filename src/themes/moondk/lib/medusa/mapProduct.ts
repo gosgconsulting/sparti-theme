@@ -48,6 +48,16 @@ function asRecord(v: unknown): Record<string, unknown> | null {
   return v && typeof v === "object" && !Array.isArray(v) ? (v as Record<string, unknown>) : null;
 }
 
+function readProductMetadataQty(meta: Record<string, unknown> | null): number | undefined {
+  const raw = meta?.qty;
+  if (typeof raw === "number" && Number.isFinite(raw)) return raw;
+  if (typeof raw === "string" && raw.trim()) {
+    const n = Number(raw);
+    if (Number.isFinite(n)) return n;
+  }
+  return undefined;
+}
+
 const META_HTML_KEYS: (keyof MoondkMedusaProductMetaHtml)[] = [
   "storage",
   "fabrication_et_composition",
@@ -104,7 +114,6 @@ export function mapMedusaProductToView(product: unknown): MoondkMedusaProductVie
 
   const money = moneyFromVariantCalculatedPrice(variant);
   const price = money ? formatMedusaCurrencyAmount(money.amount, money.currency) : "—";
-  const stock = typeof variant.inventory_quantity === "number" ? variant.inventory_quantity : undefined;
 
   const thumb =
     typeof p.thumbnail === "string" && p.thumbnail
@@ -135,6 +144,7 @@ export function mapMedusaProductToView(product: unknown): MoondkMedusaProductVie
   const category = categoryNames[0] ?? "Product";
 
   const meta = asRecord(p.metadata);
+  const stock = readProductMetadataQty(meta);
   const isNew =
     meta?.is_new === true ||
     meta?.new === true ||

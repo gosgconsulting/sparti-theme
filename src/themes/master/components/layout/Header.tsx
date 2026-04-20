@@ -43,26 +43,15 @@ const Header: React.FC<HeaderProps> = ({
               onClick={handleLogoClick}
               className="cursor-pointer bg-transparent border-none"
             >
-              {logoSrc ? (
-                <img
-                  src={logoSrc}
-                  alt={tenantName}
-                  className="h-8 w-auto"
-                  loading="eager"
-                  onError={(e) => {
-                    const target = e.target as HTMLImageElement;
-                    target.style.display = "none";
-                    const parent = target.parentElement;
-                    if (parent) {
-                      parent.innerHTML = `<span class="h-8 inline-flex items-center font-bold text-xl text-gray-900">${tenantName}</span>`;
-                    }
-                  }}
-                />
-              ) : (
-                <span className="h-8 inline-flex items-center font-bold text-xl text-gray-900">
-                  {tenantName}
-                </span>
-              )}
+              <img
+                src={logoSrc || `/theme/${tenantSlug}/assets/placeholder.svg`}
+                alt={tenantName}
+                className="h-8 w-auto"
+                loading="eager"
+                onError={(e) => {
+                  (e.target as HTMLImageElement).src = "/placeholder.svg";
+                }}
+              />
             </button>
           </div>
 
